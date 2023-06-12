@@ -58,6 +58,8 @@ contract CounterTest is Test {
         assertEq(tankGame.playersCount(), 8);
     }
 
+    ///// tests for move() ///// 
+
     function testMove() public {
         initGame();
         (uint x, uint y) = tankGame.tankToPosition(1);
@@ -95,7 +97,6 @@ contract CounterTest is Test {
 
     function testMoveOutOfBounds() public {
         initGame();
-        (uint x, uint y) = tankGame.tankToPosition(1);
         uint boardSize = tankGame.settings().boardSize;
         vm.prank(address(1));
         vm.expectRevert("out of bounds");
@@ -114,7 +115,6 @@ contract CounterTest is Test {
     function testMoveNowhere() public {
         initGame();
         (uint x, uint y) = tankGame.tankToPosition(1);
-        (, , uint apsBefore, ) = tankGame.tanks(1);
         vm.prank(address(1));
         vm.expectRevert("position occupied");
         tankGame.move(1, ITankGame.Point(x, y));
@@ -134,6 +134,30 @@ contract CounterTest is Test {
                     vm.prank(address(j));
                     vm.expectRevert("position occupied");
                     tankGame.move(j, ITankGame.Point(x, y));
+                }
+            }
+        }
+    }
+
+
+    ///// TESTs for shoot ///// 
+    function testShoot() public {
+        initGame(); 
+        // check if any are in range to collide. if not do multiple move to make this happen
+        for (uint160 i = 1; i < 9; i++) {
+            for (uint160 j = 1; j < 9; j++) {
+                if (i == j) {
+                    continue;
+                }
+                uint distance = tankGame.getDistance(i, j);
+                if (distance < 3) {
+                    vm.prank(address(i));
+                    tankGame.shoot(i, j);
+                    (, uint hearts, , ) = tankGame.tanks(j);
+                    assertEq(hearts, 2);
+                    (, , uint aps, ) = tankGame.tanks(i);
+                    assertEq(aps, 2);
+                    return;
                 }
             }
         }

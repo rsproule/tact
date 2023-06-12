@@ -153,7 +153,13 @@ contract TankGame is ITankGame {
     function shoot(
         uint fromId,
         uint toId
-    ) external gameStarted isTankOwner(fromId) isTankAlive(fromId) {
+    )
+        external
+        gameStarted
+        isTankOwner(fromId)
+        isTankAlive(fromId)
+        isTankAlive(toId)
+    {
         Point memory from = tankToPosition[fromId];
         Point memory to = tankToPosition[toId];
 
