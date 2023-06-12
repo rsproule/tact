@@ -1,13 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
+import "forge-std/Test.sol";
 import "./ITankGame.sol";
 
 contract TankGame is ITankGame {
+    // mapping of owner to tank id
     mapping(address => uint) public players;
+    // tanks by id
     mapping(uint => Tank) public tanks;
-    mapping(uint => Point) public positions;
+    // tank id to position
+    mapping(uint => Point) public tankToPosition;
+    // position to hearts on board
     mapping(uint => uint) public heartsOnBoard;
+    // position to tanks id on board
+    mapping(uint => uint) public tanksOnBoard;
     // mapping(uint => uint) public actionPointsOnBoard;
     mapping(uint => mapping(uint => uint)) public votesPerEpoch;
     mapping(uint => mapping(uint => bool)) public votedThisEpoch;
@@ -70,6 +77,10 @@ contract TankGame is ITankGame {
 
         // this should make sure not to collide
         (uint x, uint y) = _randomPoint();
+        if (tanksOnBoard[pointToIndex(x, y)] != 0) {
+            // TODO: loop here or something. or just move over 1
+            revert("point is taken");
+        }
         Tank memory tank = Tank(
             msg.sender,
             this.settings().initHearts,
@@ -77,11 +88,13 @@ contract TankGame is ITankGame {
             this.settings().initShootRange
         );
 
-        uint tankId = pointToIndex(x, y);
-        tanks[tankId] = tank;
-        players[msg.sender] = tankId;
         playersCount++;
-        if (playersCount == this.settings().playerCount) {
+        uint position = pointToIndex(x, y);
+        tanksOnBoard[position] = playersCount;
+        tanks[playersCount] = tank;
+        tankToPosition[playersCount] = Point(x, y);
+        players[msg.sender] = playersCount;
+        if (playersCount >= this.settings().playerCount) {
             epochStart = block.timestamp;
             state = GameState.Started;
             emit GameStarted();
@@ -113,14 +126,26 @@ contract TankGame is ITankGame {
         uint tankId,
         Point calldata to
     ) external gameStarted isTankOwner(tankId) isTankAlive(tankId) {
-        Point memory p = positions[tankId];
+        if (
+            to.x >= this.settings().boardSize ||
+            to.y >= this.settings().boardSize
+        ) {
+            revert("out of bounds");
+        }
+        if (tanksOnBoard[pointToIndex(to.x, to.y)] != 0) {
+            revert("position occupied");
+        }
+
+        Point memory p = tankToPosition[tankId];
         uint apsRequired = getDistance(p, to);
         if (apsRequired > tanks[tankId].aps) {
             revert("not enough action points");
         }
 
         tanks[tankId].aps -= apsRequired;
-        positions[tankId] = to;
+        tankToPosition[tankId] = to;
+        tanksOnBoard[pointToIndex(to.x, to.y)] = tankId;
+        tanksOnBoard[pointToIndex(p.x, p.y)] = 0; // clear old position
         lastActionTimestamp = block.timestamp;
         emit Move(tankId, to.x, to.y);
     }
@@ -129,8 +154,8 @@ contract TankGame is ITankGame {
         uint fromId,
         uint toId
     ) external gameStarted isTankOwner(fromId) isTankAlive(fromId) {
-        Point memory from = positions[fromId];
-        Point memory to = positions[toId];
+        Point memory from = tankToPosition[fromId];
+        Point memory to = tankToPosition[toId];
 
         uint distance = getDistance(from, to);
         if (distance > tanks[fromId].range) {
@@ -143,7 +168,7 @@ contract TankGame is ITankGame {
             revert("target is already dead");
         }
 
-        tanks[fromId].aps -= distance;
+        tanks[fromId].aps -= 1;
         tanks[toId].hearts -= 1;
 
         lastActionTimestamp = block.timestamp;
@@ -162,7 +187,10 @@ contract TankGame is ITankGame {
         if (aps > tanks[fromId].aps) {
             revert("not enough action points");
         }
-        uint distance = getDistance(positions[fromId], positions[toId]);
+        uint distance = getDistance(
+            tankToPosition[fromId],
+            tankToPosition[toId]
+        );
         if (distance > tanks[fromId].range) {
             revert("target out of range");
         }
@@ -242,7 +270,11 @@ contract TankGame is ITankGame {
         // TODO: use randao to make this more reliable randomness
         uint seed = uint(
             keccak256(
-                abi.encodePacked(block.timestamp, block.prevrandao, msg.sender)
+                abi.encodePacked(
+                    block.timestamp,
+                    block.prevrandao,
+                    playersCount
+                )
             )
         );
         x = seed % this.settings().boardSize;
@@ -250,16 +282,33 @@ contract TankGame is ITankGame {
         return (x, y);
     }
 
+    function pointToIndex(Point memory p) external view returns (uint) {
+        return pointToIndex(p.x, p.y);
+    }
+
     function pointToIndex(uint x, uint y) internal view returns (uint) {
         return x + y * this.settings().boardSize;
+    }
+
+    function getDistance(uint tankA, uint tankB) external view returns (uint) {
+        return getDistance(tankToPosition[tankA], tankToPosition[tankB]);
     }
 
     function getDistance(
         Point memory a,
         Point memory b
     ) internal pure returns (uint) {
-        uint x = a.x > b.x ? a.x - b.x : b.x - a.x;
-        uint y = a.y > b.y ? a.y - b.y : b.y - a.y;
+        return getDistance(a.x, a.y, b.x, b.y);
+    }
+
+    function getDistance(
+        uint ax,
+        uint ay,
+        uint bx,
+        uint by
+    ) internal pure returns (uint) {
+        uint x = ax > bx ? ax - bx : bx - ax;
+        uint y = ay > by ? ay - by : by - ay;
         return x > y ? x : y;
     }
 }
