@@ -77,7 +77,7 @@ contract TankGame is ITankGame {
 
         // this should make sure not to collide
         (uint x, uint y) = _randomPoint();
-        if (tanksOnBoard[pointToIndex(x, y)] != 0) {
+        if (tanksOnBoard[_pointToIndex(x, y)] != 0) {
             // TODO: loop here or something. or just move over 1
             revert("point is taken");
         }
@@ -89,13 +89,13 @@ contract TankGame is ITankGame {
         );
 
         playersCount++;
-        uint position = pointToIndex(x, y);
+        uint position = _pointToIndex(x, y);
         tanksOnBoard[position] = playersCount;
         tanks[playersCount] = tank;
         tankToPosition[playersCount] = Point(x, y);
         players[msg.sender] = playersCount;
         if (playersCount >= this.settings().playerCount) {
-            epochStart = block.timestamp;
+            epochStart = _getEpoch();
             state = GameState.Started;
             emit GameStarted();
         }
@@ -132,20 +132,20 @@ contract TankGame is ITankGame {
         ) {
             revert("out of bounds");
         }
-        if (tanksOnBoard[pointToIndex(to.x, to.y)] != 0) {
+        if (tanksOnBoard[_pointToIndex(to.x, to.y)] != 0) {
             revert("position occupied");
         }
 
         Point memory p = tankToPosition[tankId];
-        uint apsRequired = getDistance(p, to);
+        uint apsRequired = _getDistance(p, to);
         if (apsRequired > tanks[tankId].aps) {
             revert("not enough action points");
         }
 
         tanks[tankId].aps -= apsRequired;
         tankToPosition[tankId] = to;
-        tanksOnBoard[pointToIndex(to.x, to.y)] = tankId;
-        tanksOnBoard[pointToIndex(p.x, p.y)] = 0; // clear old position
+        tanksOnBoard[_pointToIndex(to.x, to.y)] = tankId;
+        tanksOnBoard[_pointToIndex(p.x, p.y)] = 0; // clear old position
         lastActionTimestamp = block.timestamp;
         emit Move(tankId, to.x, to.y);
     }
@@ -163,15 +163,12 @@ contract TankGame is ITankGame {
         Point memory from = tankToPosition[fromId];
         Point memory to = tankToPosition[toId];
 
-        uint distance = getDistance(from, to);
+        uint distance = _getDistance(from, to);
         if (distance > tanks[fromId].range) {
             revert("target out of range");
         }
         if (distance > tanks[fromId].aps) {
             revert("not enough action points");
-        }
-        if (tanks[toId].hearts == 0) {
-            revert("target is already dead");
         }
 
         tanks[fromId].aps -= 1;
@@ -193,7 +190,7 @@ contract TankGame is ITankGame {
         if (aps > tanks[fromId].aps) {
             revert("not enough action points");
         }
-        uint distance = getDistance(
+        uint distance = _getDistance(
             tankToPosition[fromId],
             tankToPosition[toId]
         );
@@ -226,8 +223,7 @@ contract TankGame is ITankGame {
         uint voter,
         uint cursed
     ) external gameStarted isTankDead(voter) {
-        uint epoch = (block.timestamp - epochStart) /
-            this.settings().epochSeconds;
+        uint epoch = _getEpoch();
         if (votesPerEpoch[epoch][voter] != 0) {
             revert("already voted");
         }
@@ -242,12 +238,16 @@ contract TankGame is ITankGame {
     function drip(uint tankId) external gameStarted {
         uint epoch = (block.timestamp - epochStart) /
             this.settings().epochSeconds;
+        if (epoch == epochStart) {
+            revert("too early to drip");
+        }
         uint lastDrippedEpoch = lastDripEpoch[tankId];
         if (epoch == lastDrippedEpoch) {
             revert("already dripped");
         }
 
-        uint amount = lastDrippedEpoch - epoch;
+        lastDrippedEpoch = lastDrippedEpoch > 0 ? lastDrippedEpoch : epochStart;
+        uint amount = epoch - lastDrippedEpoch;
         tanks[tankId].aps += amount;
 
         lastDripEpoch[tankId] = epoch;
@@ -271,6 +271,9 @@ contract TankGame is ITankGame {
     }
 
     /// helpers ///
+    function _getEpoch() internal view returns (uint) {
+        return (block.timestamp - epochStart) / this.settings().epochSeconds;
+    }
 
     function _randomPoint() internal view returns (uint x, uint y) {
         // TODO: use randao to make this more reliable randomness
@@ -289,25 +292,25 @@ contract TankGame is ITankGame {
     }
 
     function pointToIndex(Point memory p) external view returns (uint) {
-        return pointToIndex(p.x, p.y);
+        return _pointToIndex(p.x, p.y);
     }
 
-    function pointToIndex(uint x, uint y) internal view returns (uint) {
+    function _pointToIndex(uint x, uint y) internal view returns (uint) {
         return x + y * this.settings().boardSize;
     }
 
     function getDistance(uint tankA, uint tankB) external view returns (uint) {
-        return getDistance(tankToPosition[tankA], tankToPosition[tankB]);
+        return _getDistance(tankToPosition[tankA], tankToPosition[tankB]);
     }
 
-    function getDistance(
+    function _getDistance(
         Point memory a,
         Point memory b
     ) internal pure returns (uint) {
-        return getDistance(a.x, a.y, b.x, b.y);
+        return _getDistance(a.x, a.y, b.x, b.y);
     }
 
-    function getDistance(
+    function _getDistance(
         uint ax,
         uint ay,
         uint bx,
