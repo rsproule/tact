@@ -27,6 +27,7 @@ export function TankGame() {
     enabled: gameState.data === 0,
   });
   const { write, data, error, isLoading, isError } = useTankGameJoin(config);
+  console.log(gameState.data);
   const {
     data: receipt,
     isLoading: isPending,
@@ -42,7 +43,7 @@ export function TankGame() {
         onClick={() => {
           write?.();
         }}
-        disabled={gameState.data === 0}
+        disabled={gameState.data !== 0}
       >
         join game
       </Button>
@@ -122,6 +123,14 @@ export function Board(props: BoardProps) {
       >
         Shoot
       </Button>
+      <Button
+        disabled={!shoot}
+        onClick={() => {
+          alert("Upgrade.. TODO wire this up ")
+        }}
+      >
+       Upgrade 
+      </Button>
     </div>
   );
 }
@@ -185,6 +194,7 @@ function Tank(props: TankProps) {
       {props.owner === address
         ? "💚".repeat(Number(props.hearts))
         : "❤️".repeat(Number(props.hearts))}
+      {props.hearts === BigInt(0) ? "💀" : ""}
     </div>
   );
 }

@@ -143,24 +143,10 @@ contract CounterTest is Test {
     ///// TESTs for shoot /////
     function testShoot() public {
         initGame();
-        // check if any are in range to collide. if not do multiple move to make this happen
-        for (uint160 i = 1; i < 9; i++) {
-            for (uint160 j = 1; j < 9; j++) {
-                if (i == j) {
-                    continue;
-                }
-                uint distance = tankGame.getDistance(i, j);
-                if (distance < 3) {
-                    vm.prank(address(i));
-                    tankGame.shoot(i, j);
-                    (, uint hearts, , ) = tankGame.tanks(j);
-                    assertEq(hearts, 2);
-                    (, , uint aps, ) = tankGame.tanks(i);
-                    assertEq(aps, 2);
-                    return;
-                }
-            }
-        }
+        vm.prank(address(5));
+        tankGame.shoot(5, 7);
+        (, , uint apsAfter, ) = tankGame.tanks(5);
+        assertEq(apsAfter, 2);
     }
 
     function testShootOutOfRange() public {

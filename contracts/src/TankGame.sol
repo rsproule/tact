@@ -167,7 +167,7 @@ contract TankGame is ITankGame {
         if (distance > tanks[fromId].range) {
             revert("target out of range");
         }
-        if (distance > tanks[fromId].aps) {
+        if (tanks[fromId].aps < 1) {
             revert("not enough action points");
         }
 
