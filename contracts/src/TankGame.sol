@@ -48,7 +48,7 @@ contract TankGame is ITankGame {
     event Vote(uint voter, uint cursed, uint epoch);
     event Drip(uint tankId, uint amount);
 
-    ITankGame.GameSettings public _settings;
+    ITankGame.GameSettings private _settings;
 
     constructor(ITankGame.GameSettings memory gs) payable {
         _settings = gs;
