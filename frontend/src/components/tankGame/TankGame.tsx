@@ -16,7 +16,7 @@ import { Button } from "../ui/button";
 import { stringify } from "../../utils/stringify";
 import { BaseError } from "viem";
 import { Dispatch, SetStateAction, useState } from "react";
-const CONTRACT_ADDRESS = "0xdc64a140aa3e981100a9beca4e685f962f0cf6c9";
+const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 export function TankGame() {
   let gameState = useTankGameState({
     address: CONTRACT_ADDRESS,
