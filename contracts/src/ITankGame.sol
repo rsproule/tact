@@ -46,7 +46,7 @@ interface ITankGame {
     // dead man actions
     function vote(uint voter, uint cursed) external;
 
-    function claim() external;
+    function claim(uint tankId, address claimer) external;
 
     // game settings
     function settings() external view returns (GameSettings memory);

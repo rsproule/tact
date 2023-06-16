@@ -22,14 +22,22 @@ contract CounterTest is Test {
             voteThreshold: 3,
             actionDelaySeconds: 0
         });
-        tankGame = new TankGame(gs);
+        tankGame = new TankGame{value: 10 ether}(gs);
+    }
+
+    function initGame(uint160 offset) public {
+        for (uint160 i = 1; i < 9; i++) {
+            vm.label(
+                address(i + offset),
+                string(abi.encodePacked("tank", Strings.toString(i)))
+            );
+            vm.prank(address(i + offset));
+            tankGame.join();
+        }
     }
 
     function initGame() public {
-        for (uint160 i = 1; i < 9; i++) {
-            vm.prank(address(i));
-            tankGame.join();
-        }
+        initGame(0);
     }
 
     function testJoinGame() public {
@@ -287,8 +295,64 @@ contract CounterTest is Test {
         tankGame.drip(1);
     }
 
-    /// end game tests 
+    /// end game tests
+    function testClaim() public {
+        uint160 precompileOffset = 10_000;
+        initGame(precompileOffset);
+        // give everyone infinite range
+        skip(tankGame.settings().epochSeconds);
+        for (uint j = 1; j <= 1000; j++) {
+            for (uint160 i = 1; i <= 8; i++) {
+                vm.startPrank(address(i + precompileOffset));
+                tankGame.drip(i);
+                if (j % 3 == 0) {
+                    tankGame.upgrade(i);
+                }
+                skip(tankGame.settings().epochSeconds);
+                vm.stopPrank();
+            }
+        }
+        // kill everyone
+        vm.startPrank(address(1 + precompileOffset));
+        for (uint160 i = 2; i <= 8; i++) {
+            tankGame.shoot(1, i);
+            tankGame.shoot(1, i);
+            tankGame.shoot(1, i);
+        }
 
+        // number 1 wins, second is 7 and third is 8
+        assertTrue(tankGame.state() == TankGame.GameState.Ended, "game not ended");
+        assertEq(tankGame.podium(0), 1, "first place is wrong");
+        assertEq(tankGame.podium(1), 8, "second place is wrong");
+        assertEq(tankGame.podium(2), 7, "third place is wrong");
+
+        // do some claims
+        vm.prank(address(1 + precompileOffset));
+        tankGame.claim(1, address(1 + precompileOffset));
+
+        vm.prank(address(8 + precompileOffset));
+        tankGame.claim(8, address(8 + precompileOffset));
+
+        vm.prank(address(7 + precompileOffset));
+        tankGame.claim(7, address(7 + precompileOffset));
+
+
+        assertEq(
+            address(1 + precompileOffset).balance,
+            6 ether,
+            "first place reward is wrong"
+        );
+        assertEq(
+            address(8 + precompileOffset).balance,
+            3 ether,
+            "second place reward is wrong"
+        );
+        assertEq(
+            address(7 + precompileOffset).balance,
+            1 ether,
+            "third place reward is wrong"
+        );
+    }
 
     /// helper
 

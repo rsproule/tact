@@ -183,9 +183,10 @@ contract TankGame is ITankGame {
         tanks[toId].hearts -= 1;
         if (tanks[toId].hearts == 0) {
             numTanksAlive--;
-            if (numTanksAlive <= 3) {
-                podium[numTanksAlive - 1] = toId;
+            if (numTanksAlive <= 2) {
+                podium[numTanksAlive] = toId;
                 if (numTanksAlive == 1) {
+                    podium[0] = fromId; // winner
                     state = GameState.Ended;
                 }
             }
@@ -272,22 +273,23 @@ contract TankGame is ITankGame {
         emit Drip(tankId, amount);
     }
 
-    function claim() external {
+    function claim(uint tankId, address claimer) external isTankOwner(tankId) {
         if (state != GameState.Ended) {
             revert("game not ended");
         }
-
-        // should we just pay the claimer?
+        // loop is a bit gross, could do a mapping of tank to position on podium
         for (uint i = 0; i < podium.length; i++) {
-            uint tankId = players[msg.sender];
             if (podium[i] == tankId) {
-                // payout structure is 60% 30% 10%
-                uint place_prize = ((prizePool * (60 / (i + 1))) / 100);
+                // payout structure is 60% 30% 10%. would be nice if there was a sequence
                 podium[i] = 0; // clear podium for reentrency
-                payable(msg.sender).transfer(place_prize);
-                emit Claim(msg.sender, tankId, place_prize);
+                uint p = i == 0 ? 60 : i == 1 ? 30 : 10;
+                uint place_prize = (prizePool * p) / 100;
+                payable(claimer).transfer(place_prize);
+                emit Claim(claimer, tankId, place_prize);
+                return;
             }
         }
+        revert("tank not on podium");
     }
 
     /// helpers ///
