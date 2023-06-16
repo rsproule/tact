@@ -21,9 +21,11 @@ contract TankGame is ITankGame {
     mapping(uint => uint) public lastDripEpoch;
     uint public lastActionTimestamp;
     uint public playersCount;
+    uint public numTanksAlive;
     uint public prizePool;
     GameState public state;
     uint public epochStart;
+    uint[3] public podium;
 
     struct Tank {
         address owner;
@@ -47,6 +49,7 @@ contract TankGame is ITankGame {
     event Upgrade(uint tankId, uint range);
     event Vote(uint voter, uint cursed, uint epoch);
     event Drip(uint tankId, uint amount);
+    event Claim(address reciever, uint tankId, uint amount);
 
     ITankGame.GameSettings private _settings;
 
@@ -67,7 +70,9 @@ contract TankGame is ITankGame {
         // prizePool = msg.value;
     }
 
-    function join() external {
+    // should do some sort of commit reveal thing for the randomness instead of this
+    // random point thing
+    function join() external payable {
         if (players[msg.sender] != 0) {
             revert("already joined");
         }
@@ -75,12 +80,14 @@ contract TankGame is ITankGame {
             revert("game is full");
         }
 
-        // this should make sure not to collide
-        (uint x, uint y) = _randomPoint();
-        if (tanksOnBoard[_pointToIndex(x, y)] != 0) {
-            // TODO: loop here or something. or just move over 1
-            revert("point is taken");
-        }
+        // this pattern sucks
+        uint tries = 0;
+        uint x;
+        uint y;
+        do {
+            (x, y) = _randomPoint(tries);
+            tries++;
+        } while (tanksOnBoard[_pointToIndex(x, y)] != 0);
         Tank memory tank = Tank(
             msg.sender,
             this.settings().initHearts,
@@ -89,6 +96,7 @@ contract TankGame is ITankGame {
         );
 
         playersCount++;
+        numTanksAlive++;
         uint position = _pointToIndex(x, y);
         tanksOnBoard[position] = playersCount;
         tanks[playersCount] = tank;
@@ -173,6 +181,15 @@ contract TankGame is ITankGame {
 
         tanks[fromId].aps -= 1;
         tanks[toId].hearts -= 1;
+        if (tanks[toId].hearts == 0) {
+            numTanksAlive--;
+            if (numTanksAlive <= 3) {
+                podium[numTanksAlive - 1] = toId;
+                if (numTanksAlive == 1) {
+                    state = GameState.Ended;
+                }
+            }
+        }
 
         lastActionTimestamp = block.timestamp;
         emit Shoot(fromId, toId);
@@ -260,14 +277,17 @@ contract TankGame is ITankGame {
             revert("game not ended");
         }
 
-        if (tanks[players[msg.sender]].hearts <= 0) {
-            revert("not a winner");
+        // should we just pay the claimer?
+        for (uint i = 0; i < podium.length; i++) {
+            uint tankId = players[msg.sender];
+            if (podium[i] == tankId) {
+                // payout structure is 60% 30% 10%
+                uint place_prize = ((prizePool * (60 / (i + 1))) / 100);
+                podium[i] = 0; // clear podium for reentrency
+                payable(msg.sender).transfer(place_prize);
+                emit Claim(msg.sender, tankId, place_prize);
+            }
         }
-
-        // need to calculate if you are first second or third somehow
-        uint prize = address(this).balance;
-
-        payable(msg.sender).transfer(prize);
     }
 
     /// helpers ///
@@ -275,14 +295,15 @@ contract TankGame is ITankGame {
         return (block.timestamp - epochStart) / this.settings().epochSeconds;
     }
 
-    function _randomPoint() internal view returns (uint x, uint y) {
+    function _randomPoint(uint salt) internal view returns (uint x, uint y) {
         // TODO: use randao to make this more reliable randomness
         uint seed = uint(
             keccak256(
                 abi.encodePacked(
                     block.timestamp,
                     block.prevrandao,
-                    playersCount
+                    playersCount,
+                    salt
                 )
             )
         );
