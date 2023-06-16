@@ -2,17 +2,6 @@
 pragma solidity ^0.8.13;
 
 interface ITankGame {
-    enum Direction {
-        N,
-        E,
-        S,
-        W,
-        NE,
-        SE,
-        SW,
-        NW
-    }
-
     struct Point {
         uint x;
         uint y;
@@ -37,7 +26,7 @@ interface ITankGame {
 
     function init() external payable;
 
-    function join() external;
+    function join() external payable;
 
     function move(uint fromId, Point calldata to) external;
 

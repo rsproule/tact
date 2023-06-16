@@ -143,10 +143,12 @@ contract CounterTest is Test {
     ///// TESTs for shoot /////
     function testShoot() public {
         initGame();
-        vm.prank(address(5));
-        tankGame.shoot(5, 7);
-        (, , uint apsAfter, ) = tankGame.tanks(5);
+        vm.prank(address(8));
+        tankGame.shoot(8, 6);
+        (, , uint apsAfter, ) = tankGame.tanks(8);
+        (, uint hearts, , ) = tankGame.tanks(6);
         assertEq(apsAfter, 2);
+        assertEq(hearts, 2);
     }
 
     function testShootOutOfRange() public {
@@ -158,57 +160,57 @@ contract CounterTest is Test {
 
     function testShootNotEnoughAP() public {
         initGame();
-        vm.prank(address(5));
-        tankGame.shoot(5, 7);
-        vm.prank(address(5));
-        tankGame.shoot(5, 7);
-        vm.prank(address(5));
-        tankGame.shoot(5, 7);
-        vm.prank(address(5));
+        vm.prank(address(3));
+        tankGame.shoot(3, 5);
+        vm.prank(address(3));
+        tankGame.shoot(3, 5);
+        vm.prank(address(3));
+        tankGame.shoot(3, 5);
+        vm.prank(address(3));
         vm.expectRevert("not enough action points");
-        tankGame.shoot(5, 3);
+        tankGame.shoot(3, 4);
     }
 
     function testShootDeadTank() public {
         initGame();
         vm.prank(address(5));
-        tankGame.shoot(5, 7);
+        tankGame.shoot(5, 3);
         vm.prank(address(5));
-        tankGame.shoot(5, 7);
+        tankGame.shoot(5, 3);
         vm.prank(address(5));
-        tankGame.shoot(5, 7);
-        vm.prank(address(3));
+        tankGame.shoot(5, 3);
+        vm.prank(address(4));
         vm.expectRevert("tank is dead");
-        tankGame.shoot(3, 7);
+        tankGame.shoot(4, 3);
     }
 
     function testShootNonexistentTank() public {
         initGame();
-        vm.prank(address(1));
+        vm.prank(address(5));
         vm.expectRevert("tank is dead");
-        tankGame.shoot(1, 0);
+        tankGame.shoot(5, 0);
     }
 
     /// give tests ///
 
     function testGiveHeart() public {
         initGame();
-        vm.prank(address(7));
-        tankGame.give(7, 5, 1, 0);
-        (, uint hearts, , ) = tankGame.tanks(5);
-        assertEq(hearts, 4);
-        (, uint giverHearts, , ) = tankGame.tanks(7);
-        assertEq(giverHearts, 2);
+        vm.prank(address(8));
+        tankGame.give(8, 6, 1, 0);
+        (, uint hearts, , ) = tankGame.tanks(8);
+        assertEq(hearts, 2);
+        (, uint giverHearts, , ) = tankGame.tanks(6);
+        assertEq(giverHearts, 4);
     }
 
     function testGiveAps() public {
         initGame();
-        vm.prank(address(7));
-        tankGame.give(7, 5, 0, 1);
-        (, , uint ap, ) = tankGame.tanks(5);
-        assertEq(ap, 4);
-        (, , uint aps, ) = tankGame.tanks(7);
-        assertEq(aps, 2);
+        vm.prank(address(8));
+        tankGame.give(8, 6, 0, 1);
+        (, , uint ap, ) = tankGame.tanks(8);
+        assertEq(ap, 2);
+        (, , uint aps, ) = tankGame.tanks(6);
+        assertEq(aps, 4);
     }
 
     function testGiveOutOfRange() public {
@@ -220,16 +222,16 @@ contract CounterTest is Test {
 
     function testGiveTooMuchAp() public {
         initGame();
-        vm.prank(address(7));
+        vm.prank(address(8));
         vm.expectRevert("not enough action points");
-        tankGame.give(7, 5, 0, 4);
+        tankGame.give(8, 6, 0, 4);
     }
 
     function testGiveTooMuchHearts() public {
         initGame();
-        vm.prank(address(7));
+        vm.prank(address(8));
         vm.expectRevert("not enough hearts");
-        tankGame.give(7, 5, 4, 0);
+        tankGame.give(8, 6, 4, 0);
     }
 
     /// upgrade tests ///
@@ -284,6 +286,9 @@ contract CounterTest is Test {
         vm.expectRevert("already dripped");
         tankGame.drip(1);
     }
+
+    /// end game tests 
+
 
     /// helper
 
