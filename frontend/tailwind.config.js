@@ -4,6 +4,7 @@ const { fontFamily } = require("tailwindcss/defaultTheme")
 module.exports = {
   darkMode: ["class"],
   content: ["src/**/*.{ts,tsx}"], 
+  mode: 'jit',
   theme: {
     container: {
       center: true,
@@ -72,5 +73,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+      require("tailwindcss-animate"),
+      require('@tailwindcss/aspect-ratio'),
+  ],
 }

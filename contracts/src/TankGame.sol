@@ -325,6 +325,11 @@ contract TankGame is ITankGame {
     function getDistance(uint tankA, uint tankB) external view returns (uint) {
         return _getDistance(tankToPosition[tankA], tankToPosition[tankB]);
     }
+    
+    function getDistance(uint tankA, Point memory p) external view returns (uint) {
+        Point memory b = tankToPosition[tankA];
+        return _getDistance(b.x, b.y, p.x, p.y);
+    }
 
     function _getDistance(
         Point memory a,
