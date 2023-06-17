@@ -10,8 +10,10 @@ import {
   usePrepareTankGameShoot,
   usePrepareTankGameGive,
   useTankGameGive,
-  useTankGameGetDistance,
+  usePrepareTankGameDrip,
+  useTankGameDrip,
   useTankGameTankToPosition,
+  useTankGameGetDistance,
 } from "@/src/generated";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Tank } from "./Tank";
@@ -30,6 +32,7 @@ import {
   Move,
   Rocket,
   Crosshair,
+  Droplet,
 } from "lucide-react";
 import { useAccount } from "wagmi";
 
@@ -57,21 +60,17 @@ export function Square(props: SquareProps) {
     enabled: !!address,
   });
 
-  // let ownersTank = useTankGameTanks({
-  //   args: [ownersTankId.data!],
-  //   enabled: !!ownersTankId.data,
-  // });
+  let ownersTank = useTankGameTanks({
+    args: [ownersTankId.data!],
+    enabled: !!ownersTankId.data,
+  });
 
-  // let ownersTankLocation = useTankGameTankToPosition({
-  //   args: [ownersTankId.data!],
-  //   enabled: !!ownersTankId.data,
-  //   watch: true
-  // })
-
-  // let distanceFromOwner = useTankGameGetDistance({
-  //   args: [ownersTankId.data!, { x: BigInt(props.x), y: BigInt(props.y) }],
-  //   enabled: !!ownersTankLocation && !!ownersTankId.data,
-  // });
+  let distanceFromOwner = useTankGameGetDistance({
+    args: [ownersTankId.data!, { x: BigInt(props.x), y: BigInt(props.y) }],
+    enabled: !!ownersTankId.data,
+    watch: true,
+    cacheTime: 0
+  });
 
   return (
     <DropdownMenu>
@@ -110,6 +109,8 @@ export function Square(props: SquareProps) {
         <EnemySquareMenu
           ownersTank={ownersTankId.data!}
           enemyTank={tankId.data!}
+          distanceFromOwner={distanceFromOwner.data}
+          ownerTankRange={ownersTank.data && ownersTank.data![3]}
         />
       )}
     </DropdownMenu>
@@ -119,35 +120,53 @@ export function Square(props: SquareProps) {
 function EnemySquareMenu({
   ownersTank,
   enemyTank,
+  distanceFromOwner,
+  ownerTankRange,
 }: {
   ownersTank: bigint | undefined;
   enemyTank: bigint | undefined;
+  distanceFromOwner: bigint | undefined;
+  ownerTankRange: bigint | undefined;
 }) {
   let { config: shootConfig } = usePrepareTankGameShoot({
     args: [ownersTank!, enemyTank!],
-    enabled: !!ownersTank && !!enemyTank,
+    enabled:
+      !!ownersTank &&
+      !!enemyTank &&
+      !!distanceFromOwner &&
+      !!ownerTankRange &&
+      distanceFromOwner! <= ownerTankRange!,
   });
   const { write: shoot } = useTankGameShoot(shootConfig);
 
   let { config: giftHeartConfig } = usePrepareTankGameGive({
     args: [ownersTank!, enemyTank!, BigInt(1), BigInt(0)],
-    enabled: !!ownersTank && !!enemyTank,
+    enabled:
+      !!ownersTank &&
+      !!enemyTank &&
+      !!distanceFromOwner &&
+      !!ownerTankRange &&
+      distanceFromOwner! <= ownerTankRange!,
   });
   const { write: giveHeart } = useTankGameGive(giftHeartConfig);
   let { config: giveAPConfig } = usePrepareTankGameGive({
     args: [ownersTank!, enemyTank!, BigInt(0), BigInt(1)],
-    enabled: !!ownersTank && !!enemyTank,
+    enabled:
+      !!ownersTank &&
+      !!enemyTank &&
+      !!distanceFromOwner &&
+      !!ownerTankRange &&
+      distanceFromOwner! <= ownerTankRange!,
   });
   const { write: giveAp } = useTankGameGive(giveAPConfig);
   return (
     <DropdownMenuContent className="w-56">
-      <DropdownMenuLabel>Action Menu</DropdownMenuLabel>
-      <DropdownMenuSeparator />
       <DropdownMenuGroup>
         <DropdownMenuItem disabled={!shoot} onSelect={() => shoot?.()}>
           <Crosshair className="mr-2 h-4 w-4" />
           <span>Shoot</span>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem disabled={!giveHeart} onSelect={() => giveHeart?.()}>
           <HeartHandshake className="mr-2 h-4 w-4" />
           <span>Give heart</span>
@@ -177,12 +196,10 @@ function EmptySquareMenu({
   const { write: move } = useTankGameMove(config);
   return (
     <DropdownMenuContent className="w-56">
-      <DropdownMenuLabel>Action Menu</DropdownMenuLabel>
-      <DropdownMenuSeparator />
       <DropdownMenuGroup>
         <DropdownMenuItem disabled={!move} onSelect={() => move?.()}>
           <Move className="mr-2 h-4 w-4" />
-          <span>Move</span>
+          <span>Move here</span>
         </DropdownMenuItem>
       </DropdownMenuGroup>
     </DropdownMenuContent>
@@ -195,14 +212,22 @@ function SelfSquareMenu({ ownersTank }: { ownersTank: bigint }) {
     enabled: !!ownersTank,
   });
   const { write: upgrade } = useTankGameUpgrade(upgradeConfig);
+
+  let { config: dripConfig } = usePrepareTankGameDrip({
+    args: [ownersTank],
+    enabled: !!ownersTank,
+  });
+  const { write: drip } = useTankGameDrip(dripConfig);
   return (
     <DropdownMenuContent className="w-56">
-      <DropdownMenuLabel>Action Menu</DropdownMenuLabel>
-      <DropdownMenuSeparator />
       <DropdownMenuGroup>
         <DropdownMenuItem disabled={!upgrade} onSelect={() => upgrade?.()}>
           <Rocket className="mr-2 h-4 w-4" />
           <span>Upgrade Range</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem disabled={!drip} onSelect={() => drip?.()}>
+          <Droplet className="mr-2 h-4 w-4" />
+          <span>Claim APs</span>
         </DropdownMenuItem>
       </DropdownMenuGroup>
     </DropdownMenuContent>

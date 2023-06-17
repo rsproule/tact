@@ -3,26 +3,39 @@ import { useWaitForTransaction } from "wagmi";
 import {
   usePrepareTankGameJoin,
   useTankGameJoin,
+  useTankGameSettings,
   useTankGameState,
 } from "../../generated";
 import { Button } from "../ui/button";
 import { BaseError } from "viem";
 import { Board } from "./GameBoard";
+import { EventStream } from "./EventsStream";
 export function TankGame() {
   let gameState = useTankGameState({
     watch: true,
   });
 
+  let settings = useTankGameSettings();
+
   return (
-    <div className={`container mx-auto `}>
-      {gameState.data === 0 && <WaitingForPlayers />}
-      {gameState.data === 1 && <Board boardSize={10} />}
+    <div className={`w-full lg:w-3/4`}>
+      {gameState.data === 0 && (
+        <WaitingForPlayers
+          boardSize={settings.data && settings.data!.boardSize}
+        />
+      )}
+      {gameState.data === 1 && (
+        <>
+          <Board boardSize={settings.data && settings.data!.boardSize} />
+        </>
+      )}
       {gameState.data === 2 && <GameOver />}
+      <EventStream />
     </div>
   );
 }
 
-function WaitingForPlayers() {
+function WaitingForPlayers({ boardSize }: { boardSize: bigint | undefined }) {
   let { config } = usePrepareTankGameJoin({
     value: BigInt(0), // TODO: this is the buy in.
   });
@@ -40,15 +53,14 @@ function WaitingForPlayers() {
         onClick={() => {
           write?.();
         }}
+        disabled={!write}
       >
         Join Game
       </Button>
       {isLoading && <div>Sent to wallet...</div>}
       {isPending && <div>Transaction pending...</div>}
       {isError && <div>{(error as BaseError)?.shortMessage}</div>}
-      <div className={`container mx-auto `}>
-        <Board boardSize={10} />
-      </div>
+      <Board boardSize={boardSize} />
     </div>
   );
 }
