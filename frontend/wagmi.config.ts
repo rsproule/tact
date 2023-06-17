@@ -8,8 +8,7 @@ export default defineConfig({
     foundry({
       deployments: {
         TankGame: {
-          [chains.mainnet.id]: "0x1A61839Eb5fC6eBBcAe01eD5E79062E598792Dac",
-          [chains.goerli.id]: "0x78991BB1D194C1235fe285240af8489CFA552151",
+          [chains.mainnet.id]: "0x4cf4dd3f71b67a7622ac250f8b10d266dc5aebce",
           [chains.foundry.id]: "0x5fbdb2315678afecb367f032d93f642f64180aa3",
         },
       },

@@ -1,5 +1,11 @@
 const { fontFamily } = require("tailwindcss/defaultTheme")
-
+function generateGridColumns(lastValue) {
+   let obj = {}
+   for(let i = 13; i < lastValue; i++) {
+     obj[`${i}`] = `repeat(${i}, minmax(0, 1fr))`
+   }
+   return obj
+}
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -14,6 +20,9 @@ module.exports = {
       },
     },
     extend: {
+      gridTemplateColumns: {
+         ...generateGridColumns(100) // This generates the columns from 12 until 100
+      },   
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
