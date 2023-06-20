@@ -1,5 +1,5 @@
 "use client";
-import { useWaitForTransaction } from "wagmi";
+import { useAccount, useWaitForTransaction } from "wagmi";
 import {
   usePrepareTankGameJoin,
   useTankGameJoin,
@@ -42,7 +42,7 @@ function WaitingForPlayers({
   boardSize: bigint | undefined;
   expectedPlayersCount: bigint | undefined;
 }) {
-  let { config } = usePrepareTankGameJoin();
+  let { config, refetch } = usePrepareTankGameJoin();
   let numPlayers = useTankGamePlayersCount({
     watch: true,
   });
@@ -62,6 +62,7 @@ function WaitingForPlayers({
       <Button
         onClick={() => {
           write?.();
+          refetch?.();
         }}
         disabled={!write}
       >
