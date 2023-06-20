@@ -30,7 +30,6 @@ export function TankGame() {
         </>
       )}
       {gameState.data === 2 && <GameOver />}
-      <EventStream />
     </div>
   );
 }
