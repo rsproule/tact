@@ -33,7 +33,7 @@ export function Tank({ tank, tankId }: typeof ITank) {
         <HoverCardContent className="w-80">
           <div className="flex justify-between space-x-4">
             <div className="space-y-1">
-              <h4 className="text-sm font-semibold">Tank {tank.toString()}</h4>
+              <h4 className="text-sm font-semibold">Tank {tankId.toString()}</h4>
               <div className="flex items-center pt-2">
                 <User className="mr-2 h-4 w-4 " />{" "}
                 <span className="text-xs">{tank.owner.toString()}</span>
