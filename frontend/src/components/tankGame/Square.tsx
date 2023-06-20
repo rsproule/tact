@@ -35,83 +35,51 @@ import {
   Droplet,
 } from "lucide-react";
 import { useAccount } from "wagmi";
+import { ITank } from "./GameBoard";
 
 interface SquareProps {
   x: number;
   y: number;
   boardSize: number;
+  tank: typeof ITank | undefined;
+  ownersTankId: bigint | undefined;
 }
 export function Square(props: SquareProps) {
   let [open, setOpen] = useState(false);
-  const { address } = useAccount();
-  let tankId = useTankGameTanksOnBoard({
-    args: [BigInt(props.x + props.y * props.boardSize)],
-    watch: true,
-  });
-
-  let tank = useTankGameTanks({
-    args: [tankId.data!],
-    // watch: true,
-    enabled: tankId.data != BigInt(0),
-  });
-
-  let ownersTankId = useTankGamePlayers({
-    args: [address!],
-    enabled: !!address,
-  });
-  let { config } = usePrepareTankGameMove({
-    args: [ownersTankId.data!, { x: BigInt(props.x), y: BigInt(props.y) }],
-    enabled: !!(ownersTankId.data! && props.x && props.y),
-  });
-  const { write: move } = useTankGameMove(config);
-  let ownersTank = useTankGameTanks({
-    args: [ownersTankId.data!],
-    enabled: !!ownersTankId.data,
-  });
-
-  // let distanceFromOwner = useTankGameGetDistance({
-  //   args: [ownersTankId.data!, { x: BigInt(props.x), y: BigInt(props.y) }],
-  //   enabled: !!ownersTankId.data,
-  //   watch: true,
-  //   cacheTime: 0
-  // });
-
   return (
     <div>
       <DropdownMenu onOpenChange={(o) => setOpen(o)}>
         <DropdownMenuTrigger asChild>
           <div
             className={`border w-full h-0 shadow-sm aspect-w-1 aspect-h-1 rounded-sm ${
-              move ? "bg-green-200" : "bg-gray-100"
+              open ? "bg-green-200" : "bg-ay-100"
             }`}
           >
-            {tank.data && (
+            {props.tank && (
               <Tank
-                tankId={tankId.data!}
-                owner={tank.data[0]}
-                hearts={tank.data[1]}
-                aps={tank.data[2]}
-                range={tank.data[3]}
+                tank={props.tank.tank}
+                tankId={props.tank.tankId}
+                position={props.tank.position}
               />
             )}
           </div>
         </DropdownMenuTrigger>
-        {!tank.data && (
+        {!props.tank && (
           <EmptySquareMenu
             open={open}
-            ownersTank={ownersTankId.data!}
+            ownersTank={props.ownersTankId!}
             x={props.x}
             y={props.y}
           />
         )}
-        {tank.data && tank.data![0] === address && (
-          <SelfSquareMenu open={open} ownersTank={ownersTankId.data!} />
+        {props.tank && props.tank.tankId === props.ownersTankId && (
+          <SelfSquareMenu open={open} ownersTank={props.ownersTankId!} />
         )}
-        {tank.data && tank.data![0] !== address && (
+        {props.tank && props.tank.tankId !== props.ownersTankId && (
           <EnemySquareMenu
-            ownersTank={ownersTankId.data!}
+            ownersTank={props.ownersTankId!}
             open={open}
-            enemyTank={tankId.data!}
+            enemyTank={props.tank.tankId!}
           />
         )}
       </DropdownMenu>

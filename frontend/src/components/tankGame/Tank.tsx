@@ -6,6 +6,7 @@ import {
   HoverCardTrigger,
 } from "../ui/hover-card";
 import { CalendarDays, Heart, Target, User, Zap } from "lucide-react";
+import { ITank } from "./GameBoard";
 
 interface TankProps {
   tankId: bigint;
@@ -15,14 +16,14 @@ interface TankProps {
   range: bigint;
 }
 
-export function Tank(props: TankProps) {
+export function Tank({ tank, tankId }: typeof ITank) {
   let { address } = useAccount();
   return (
     <div>
       <HoverCard>
         <HoverCardTrigger>
           <Image
-            src={`/logos/tank${props.owner == address ? 1 : 2}.png`}
+            src={`/logos/tank${tank.owner == address ? 1 : 2}.png`}
             style={{ objectFit: "contain" }}
             width={200}
             height={200}
@@ -32,24 +33,22 @@ export function Tank(props: TankProps) {
         <HoverCardContent className="w-80">
           <div className="flex justify-between space-x-4">
             <div className="space-y-1">
-              <h4 className="text-sm font-semibold">
-                Tank {props.tankId.toString()}
-              </h4>
+              <h4 className="text-sm font-semibold">Tank {tank.toString()}</h4>
               <div className="flex items-center pt-2">
                 <User className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">{props.owner.toString()}</span>
+                <span className="text-xs">{tank.owner.toString()}</span>
               </div>
               <div className="flex items-center pt-2">
                 <Heart className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">{props.hearts.toString()}</span>
+                <span className="text-xs">{tank.hearts.toString()}</span>
               </div>
               <div className="flex items-center pt-2">
                 <Zap className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">{props.aps.toString()}</span>
+                <span className="text-xs">{tank.aps.toString()}</span>
               </div>
               <div className="flex items-center pt-2">
                 <Target className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">{props.range.toString()}</span>
+                <span className="text-xs">{tank.range.toString()}</span>
               </div>
             </div>
           </div>
