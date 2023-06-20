@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { Square } from "./Square";
 import { useTankGameGetAllTanks, useTankGamePlayers } from "@/src/generated";
-import { Tank as TankComponent } from "./Tank";
 import { useAccount } from "wagmi";
 
 export function Board({ boardSize }: { boardSize: bigint | undefined }) {
@@ -43,42 +41,3 @@ export function Board({ boardSize }: { boardSize: bigint | undefined }) {
   );
 }
 
-function SquareNew({
-  x,
-  y,
-  boardSize,
-  tank,
-}: {
-  x: number;
-  y: number;
-  boardSize: number;
-  tank: typeof ITank | undefined;
-}) {
-  return (
-    <div
-      className={`border w-full h-0 shadow-sm aspect-w-1 aspect-h-1 rounded-sm`}
-    >
-      {tank && (
-        <TankComponent
-          tank={tank.tank}
-          tankId={tank.tankId}
-          position={tank.position}
-        />
-      )}
-    </div>
-  );
-}
-
-export declare const ITank: {
-  tank: {
-    owner: `0x${string}`;
-    hearts: bigint;
-    aps: bigint;
-    range: bigint;
-  };
-  position: {
-    x: bigint;
-    y: bigint;
-  };
-  tankId: bigint;
-};

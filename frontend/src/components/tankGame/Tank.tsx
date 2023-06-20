@@ -5,8 +5,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "../ui/hover-card";
-import { CalendarDays, Heart, Target, User, Zap } from "lucide-react";
-import { ITank } from "./GameBoard";
+import { Heart, Target, User, Zap } from "lucide-react";
+import { ITank } from "./ITank";
 
 interface TankProps {
   tankId: bigint;
