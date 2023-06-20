@@ -3,6 +3,7 @@ import { useWaitForTransaction } from "wagmi";
 import {
   usePrepareTankGameJoin,
   useTankGameJoin,
+  useTankGamePlayersCount,
   useTankGameSettings,
   useTankGameState,
 } from "../../generated";
@@ -11,9 +12,7 @@ import { BaseError } from "viem";
 import { Board } from "./GameBoard";
 import { EventStream } from "./EventsStream";
 export function TankGame() {
-  let gameState = useTankGameState({
-    watch: true,
-  });
+  let gameState = useTankGameState({});
 
   let settings = useTankGameSettings();
 
@@ -21,6 +20,7 @@ export function TankGame() {
     <div className={`w-full lg:w-3/4`}>
       {gameState.data === 0 && (
         <WaitingForPlayers
+          expectedPlayersCount={settings.data && settings.data!.playerCount}
           boardSize={settings.data && settings.data!.boardSize}
         />
       )}
@@ -35,9 +35,16 @@ export function TankGame() {
   );
 }
 
-function WaitingForPlayers({ boardSize }: { boardSize: bigint | undefined }) {
-  let { config } = usePrepareTankGameJoin({
-    value: BigInt(0), // TODO: this is the buy in.
+function WaitingForPlayers({
+  boardSize,
+  expectedPlayersCount,
+}: {
+  boardSize: bigint | undefined;
+  expectedPlayersCount: bigint | undefined;
+}) {
+  let { config } = usePrepareTankGameJoin();
+  let numPlayers = useTankGamePlayersCount({
+    watch: true,
   });
   const { write, data, error, isLoading, isError } = useTankGameJoin(config);
   const {
@@ -47,8 +54,11 @@ function WaitingForPlayers({ boardSize }: { boardSize: bigint | undefined }) {
   } = useWaitForTransaction({ hash: data?.hash });
   return (
     <div>
-      <p>Waiting for players</p>
-
+      <p>
+        Waiting for players:
+        {!!numPlayers.data && numPlayers.data.toString()} /{" "}
+        {!!expectedPlayersCount && expectedPlayersCount.toString()}
+      </p>
       <Button
         onClick={() => {
           write?.();

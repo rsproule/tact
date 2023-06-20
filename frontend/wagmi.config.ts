@@ -8,8 +8,8 @@ export default defineConfig({
     foundry({
       deployments: {
         TankGame: {
-          [chains.mainnet.id]: "0x4cf4dd3f71b67a7622ac250f8b10d266dc5aebce",
-          [chains.foundry.id]: "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+          [chains.mainnet.id]: "0x021dbff4a864aa25c51f0ad2cd73266fde66199d",
+          [chains.foundry.id]: "0xb7f8bc63bbcad18155201308c8f3540b07f84f5e",
         },
       },
       project: "../contracts",
