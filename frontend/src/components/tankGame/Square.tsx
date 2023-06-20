@@ -1,28 +1,22 @@
 import {
-  useTankGameTanksOnBoard,
-  useTankGameTanks,
   usePrepareTankGameMove,
   useTankGameMove,
   usePrepareTankGameUpgrade,
   useTankGameUpgrade,
-  useTankGamePlayers,
   useTankGameShoot,
   usePrepareTankGameShoot,
   usePrepareTankGameGive,
   useTankGameGive,
   usePrepareTankGameDrip,
   useTankGameDrip,
-  useTankGameTankToPosition,
-  useTankGameGetDistance,
 } from "@/src/generated";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { Tank } from "./Tank";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
@@ -34,8 +28,7 @@ import {
   Crosshair,
   Droplet,
 } from "lucide-react";
-import { useAccount } from "wagmi";
-import { ITank } from "./GameBoard";
+import { ITank } from "./ITank";
 
 interface SquareProps {
   x: number;
