@@ -8,14 +8,6 @@ import {
 import { Heart, Target, User, Zap } from "lucide-react";
 import { ITank } from "./ITank";
 
-interface TankProps {
-  tankId: bigint;
-  owner: `0x${string}`;
-  hearts: bigint;
-  aps: bigint;
-  range: bigint;
-}
-
 export function Tank({ tank, tankId }: typeof ITank) {
   let { address } = useAccount();
   return (
