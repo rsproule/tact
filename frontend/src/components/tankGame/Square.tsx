@@ -39,19 +39,19 @@ import { useAccount } from "wagmi";
 interface SquareProps {
   x: number;
   y: number;
-  selected: boolean;
-  setSelected: Dispatch<SetStateAction<{ x: bigint; y: bigint } | undefined>>;
+  boardSize: number;
 }
 export function Square(props: SquareProps) {
+  let [open, setOpen] = useState(false);
   const { address } = useAccount();
   let tankId = useTankGameTanksOnBoard({
-    args: [BigInt(props.x + props.y * 10)],
+    args: [BigInt(props.x + props.y * props.boardSize)],
     watch: true,
   });
 
   let tank = useTankGameTanks({
     args: [tankId.data!],
-    watch: true,
+    // watch: true,
     enabled: tankId.data != BigInt(0),
   });
 
@@ -59,104 +59,89 @@ export function Square(props: SquareProps) {
     args: [address!],
     enabled: !!address,
   });
-
+  let { config } = usePrepareTankGameMove({
+    args: [ownersTankId.data!, { x: BigInt(props.x), y: BigInt(props.y) }],
+    enabled: !!(ownersTankId.data! && props.x && props.y),
+  });
+  const { write: move } = useTankGameMove(config);
   let ownersTank = useTankGameTanks({
     args: [ownersTankId.data!],
     enabled: !!ownersTankId.data,
   });
 
-  let distanceFromOwner = useTankGameGetDistance({
-    args: [ownersTankId.data!, { x: BigInt(props.x), y: BigInt(props.y) }],
-    enabled: !!ownersTankId.data,
-    watch: true,
-    cacheTime: 0
-  });
+  // let distanceFromOwner = useTankGameGetDistance({
+  //   args: [ownersTankId.data!, { x: BigInt(props.x), y: BigInt(props.y) }],
+  //   enabled: !!ownersTankId.data,
+  //   watch: true,
+  //   cacheTime: 0
+  // });
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div
-          className={`border w-full h-0 shadow-sm aspect-w-1 aspect-h-1 rounded-sm ${
-            // distanceFromOwner.data &&
-            // ownersTank.data &&
-            // distanceFromOwner.data! < ownersTank.data![3]
-            //   ? "bg-green-200"
-            "bg-gray-100"
-          }`}
-        >
-          {tank.data && (
-            <Tank
-              tankId={tankId.data!}
-              owner={tank.data[0]}
-              hearts={tank.data[1]}
-              aps={tank.data[2]}
-              range={tank.data[3]}
-            />
-          )}
-        </div>
-      </DropdownMenuTrigger>
-      {!tank.data && (
-        <EmptySquareMenu
-          ownersTank={ownersTankId.data!}
-          x={props.x}
-          y={props.y}
-        />
-      )}
-      {tank.data && tank.data![0] === address && (
-        <SelfSquareMenu ownersTank={ownersTankId.data!} />
-      )}
-      {tank.data && tank.data![0] !== address && (
-        <EnemySquareMenu
-          ownersTank={ownersTankId.data!}
-          enemyTank={tankId.data!}
-          distanceFromOwner={distanceFromOwner.data}
-          ownerTankRange={ownersTank.data && ownersTank.data![3]}
-        />
-      )}
-    </DropdownMenu>
+    <div>
+      <DropdownMenu onOpenChange={(o) => setOpen(o)}>
+        <DropdownMenuTrigger asChild>
+          <div
+            className={`border w-full h-0 shadow-sm aspect-w-1 aspect-h-1 rounded-sm ${
+              move ? "bg-green-200" : "bg-gray-100"
+            }`}
+          >
+            {tank.data && (
+              <Tank
+                tankId={tankId.data!}
+                owner={tank.data[0]}
+                hearts={tank.data[1]}
+                aps={tank.data[2]}
+                range={tank.data[3]}
+              />
+            )}
+          </div>
+        </DropdownMenuTrigger>
+        {!tank.data && (
+          <EmptySquareMenu
+            open={open}
+            ownersTank={ownersTankId.data!}
+            x={props.x}
+            y={props.y}
+          />
+        )}
+        {tank.data && tank.data![0] === address && (
+          <SelfSquareMenu open={open} ownersTank={ownersTankId.data!} />
+        )}
+        {tank.data && tank.data![0] !== address && (
+          <EnemySquareMenu
+            ownersTank={ownersTankId.data!}
+            open={open}
+            enemyTank={tankId.data!}
+          />
+        )}
+      </DropdownMenu>
+    </div>
   );
 }
 
 function EnemySquareMenu({
   ownersTank,
   enemyTank,
-  distanceFromOwner,
-  ownerTankRange,
+  open,
 }: {
   ownersTank: bigint | undefined;
   enemyTank: bigint | undefined;
-  distanceFromOwner: bigint | undefined;
-  ownerTankRange: bigint | undefined;
+  open: boolean;
 }) {
   let { config: shootConfig } = usePrepareTankGameShoot({
     args: [ownersTank!, enemyTank!],
-    enabled:
-      !!ownersTank &&
-      !!enemyTank &&
-      !!distanceFromOwner &&
-      !!ownerTankRange &&
-      distanceFromOwner! <= ownerTankRange!,
+    enabled: open && !!ownersTank && !!enemyTank,
   });
   const { write: shoot } = useTankGameShoot(shootConfig);
 
   let { config: giftHeartConfig } = usePrepareTankGameGive({
     args: [ownersTank!, enemyTank!, BigInt(1), BigInt(0)],
-    enabled:
-      !!ownersTank &&
-      !!enemyTank &&
-      !!distanceFromOwner &&
-      !!ownerTankRange &&
-      distanceFromOwner! <= ownerTankRange!,
+    enabled: open && !!ownersTank && !!enemyTank,
   });
   const { write: giveHeart } = useTankGameGive(giftHeartConfig);
   let { config: giveAPConfig } = usePrepareTankGameGive({
     args: [ownersTank!, enemyTank!, BigInt(0), BigInt(1)],
-    enabled:
-      !!ownersTank &&
-      !!enemyTank &&
-      !!distanceFromOwner &&
-      !!ownerTankRange &&
-      distanceFromOwner! <= ownerTankRange!,
+    enabled: open && !!ownersTank && !!enemyTank,
   });
   const { write: giveAp } = useTankGameGive(giveAPConfig);
   return (
@@ -184,14 +169,16 @@ function EmptySquareMenu({
   ownersTank,
   x,
   y,
+  open,
 }: {
   ownersTank: bigint;
   x: number;
   y: number;
+  open: boolean;
 }) {
   let { config } = usePrepareTankGameMove({
     args: [ownersTank, { x: BigInt(x), y: BigInt(y) }],
-    enabled: !!(ownersTank && x && y),
+    enabled: open && !!(ownersTank && x && y),
   });
   const { write: move } = useTankGameMove(config);
   return (
@@ -206,16 +193,22 @@ function EmptySquareMenu({
   );
 }
 
-function SelfSquareMenu({ ownersTank }: { ownersTank: bigint }) {
+function SelfSquareMenu({
+  ownersTank,
+  open,
+}: {
+  ownersTank: bigint;
+  open: boolean;
+}) {
   let { config: upgradeConfig } = usePrepareTankGameUpgrade({
     args: [ownersTank],
-    enabled: !!ownersTank,
+    enabled: open && !!ownersTank,
   });
   const { write: upgrade } = useTankGameUpgrade(upgradeConfig);
 
   let { config: dripConfig } = usePrepareTankGameDrip({
     args: [ownersTank],
-    enabled: !!ownersTank,
+    enabled: open && !!ownersTank,
   });
   const { write: drip } = useTankGameDrip(dripConfig);
   return (
