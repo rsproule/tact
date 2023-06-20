@@ -352,7 +352,7 @@ contract TankGame is ITankGame {
         return x > y ? x : y;
     }
 
-    /// readonly stuff used for frontend ///
+    /// readonly stuff used for frontend, move this to a view contract ///
     struct TankLocation {
         Tank tank;
         Point position;
