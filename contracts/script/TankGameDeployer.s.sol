@@ -12,8 +12,8 @@ contract TankGameDeployerScript is Script {
         vm.broadcast();
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
             playerCount: 10,
-            boardSize: 20,
-            initAPs: 8,
+            boardSize: 40,
+            initAPs: 3,
             initHearts: 3,
             initShootRange: 3,
             upgradeCost: 3,
