@@ -9,7 +9,7 @@ export default defineConfig({
       deployments: {
         TankGame: {
           [chains.mainnet.id]: "0x021dbff4a864aa25c51f0ad2cd73266fde66199d",
-          [chains.foundry.id]: "0xc5a5c42992decbae36851359345fe25997f5c42d",
+          [chains.foundry.id]: "0x95401dc811bb5740090279ba06cfa8fcf6113778",
         },
       },
       project: "../contracts",

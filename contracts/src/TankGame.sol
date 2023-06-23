@@ -260,17 +260,15 @@ contract TankGame is ITankGame {
     }
 
     function drip(uint tankId) external gameStarted {
-        uint epoch = (block.timestamp - epochStart) /
-            this.settings().epochSeconds;
+        uint epoch = _getEpoch();
         if (epoch == epochStart) {
             revert("too early to drip");
         }
         uint lastDrippedEpoch = lastDripEpoch[tankId];
+        lastDrippedEpoch = lastDrippedEpoch > 0 ? lastDrippedEpoch : epochStart;
         if (epoch == lastDrippedEpoch) {
             revert("already dripped");
         }
-
-        lastDrippedEpoch = lastDrippedEpoch > 0 ? lastDrippedEpoch : epochStart;
         uint amount = epoch - lastDrippedEpoch;
         tanks[tankId].aps += amount;
 
@@ -300,7 +298,11 @@ contract TankGame is ITankGame {
 
     /// helpers ///
     function _getEpoch() internal view returns (uint) {
-        return (block.timestamp - epochStart) / this.settings().epochSeconds;
+        return block.timestamp / this.settings().epochSeconds;
+    }
+
+    function getEpoch() external view returns (uint) {
+        return _getEpoch();
     }
 
     function _randomPoint(uint salt) internal view returns (uint x, uint y) {

@@ -17,7 +17,8 @@ export function Board({ boardSize }: { boardSize: bigint | undefined }) {
   return boardSize === BigInt(0) ? (
     <div></div>
   ) : (
-    <div className={`grid grid-cols-${boardSize}`}>
+    // <div className={`grid grid-cols-${boardSize}`}>
+    <div className={`grid grid-cols-40`}>
       {a.map((x: bigint, i: number) =>
         a.map((y: bigint, j: number) => {
           const tank = tanks.data?.find((tank) => {
