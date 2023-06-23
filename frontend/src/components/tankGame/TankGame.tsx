@@ -1,5 +1,6 @@
 "use client";
-import { useAccount, useWaitForTransaction } from "wagmi";
+import { BaseError } from "viem";
+import { useWaitForTransaction } from "wagmi";
 import {
   usePrepareTankGameJoin,
   useTankGameJoin,
@@ -8,16 +9,16 @@ import {
   useTankGameState,
 } from "../../generated";
 import { Button } from "../ui/button";
-import { BaseError } from "viem";
+import { useToast } from "../ui/use-toast";
 import { Board } from "./GameBoard";
-import { EventStream } from "./EventsStream";
+import Timer from "./Timer";
+import Donate from "./actions/Donate";
 export function TankGame() {
   let gameState = useTankGameState({});
-
   let settings = useTankGameSettings();
-
   return (
     <div className={`w-full lg:w-3/4`}>
+      <Donate />
       {gameState.data === 0 && (
         <WaitingForPlayers
           expectedPlayersCount={settings.data && settings.data!.playerCount}
@@ -26,6 +27,7 @@ export function TankGame() {
       )}
       {gameState.data === 1 && (
         <>
+          <Timer />
           <Board boardSize={settings.data && settings.data!.boardSize} />
         </>
       )}
@@ -42,15 +44,28 @@ function WaitingForPlayers({
   expectedPlayersCount: bigint | undefined;
 }) {
   let { config, refetch } = usePrepareTankGameJoin();
+  let { toast } = useToast();
   let numPlayers = useTankGamePlayersCount({
     watch: true,
   });
-  const { write, data, error, isLoading, isError } = useTankGameJoin(config);
-  const {
-    data: receipt,
-    isLoading: isPending,
-    isSuccess,
-  } = useWaitForTransaction({ hash: data?.hash });
+  const { write, data } = useTankGameJoin(config);
+  useWaitForTransaction({
+    hash: data?.hash,
+    enabled: !!data,
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: (error as BaseError)?.shortMessage,
+      });
+    },
+    onSuccess: (s) => {
+      toast({
+        title: "Transaction Confirmed.",
+        description: s.transactionHash,
+      });
+    },
+  });
   return (
     <div>
       <p>
@@ -67,9 +82,6 @@ function WaitingForPlayers({
       >
         Join Game
       </Button>
-      {isLoading && <div>Sent to wallet...</div>}
-      {isPending && <div>Transaction pending...</div>}
-      {isError && <div>{(error as BaseError)?.shortMessage}</div>}
       <Board boardSize={boardSize} />
     </div>
   );

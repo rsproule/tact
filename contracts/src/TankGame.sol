@@ -50,6 +50,7 @@ contract TankGame is ITankGame {
     event Vote(uint voter, uint cursed, uint epoch);
     event Drip(uint tankId, uint amount);
     event Claim(address reciever, uint tankId, uint amount);
+    event PrizeIncrease(address donator, uint amount);
 
     ITankGame.GameSettings private _settings;
 
@@ -68,6 +69,11 @@ contract TankGame is ITankGame {
         // TODO: Some sort of game initialization if necissary
         // state = GameState.WaitingForPlayers;
         // prizePool = msg.value;
+    }
+
+    function donate() external payable {
+        prizePool += msg.value;
+        emit PrizeIncrease(msg.sender, msg.value);
     }
 
     // should do some sort of commit reveal thing for the randomness instead of this
@@ -254,17 +260,15 @@ contract TankGame is ITankGame {
     }
 
     function drip(uint tankId) external gameStarted {
-        uint epoch = (block.timestamp - epochStart) /
-            this.settings().epochSeconds;
+        uint epoch = _getEpoch();
         if (epoch == epochStart) {
             revert("too early to drip");
         }
         uint lastDrippedEpoch = lastDripEpoch[tankId];
+        lastDrippedEpoch = lastDrippedEpoch > 0 ? lastDrippedEpoch : epochStart;
         if (epoch == lastDrippedEpoch) {
             revert("already dripped");
         }
-
-        lastDrippedEpoch = lastDrippedEpoch > 0 ? lastDrippedEpoch : epochStart;
         uint amount = epoch - lastDrippedEpoch;
         tanks[tankId].aps += amount;
 
@@ -294,7 +298,11 @@ contract TankGame is ITankGame {
 
     /// helpers ///
     function _getEpoch() internal view returns (uint) {
-        return (block.timestamp - epochStart) / this.settings().epochSeconds;
+        return block.timestamp / this.settings().epochSeconds;
+    }
+
+    function getEpoch() external view returns (uint) {
+        return _getEpoch();
     }
 
     function _randomPoint(uint salt) internal view returns (uint x, uint y) {
@@ -366,7 +374,7 @@ contract TankGame is ITankGame {
         for (uint i = 1; i <= playersCount; i++) {
             Point memory position = tankToPosition[i];
             Tank memory tank = tanks[i];
-            tanksWithLocation[i-1] = TankLocation(tank, position, i);
+            tanksWithLocation[i - 1] = TankLocation(tank, position, i);
         }
         return tanksWithLocation;
     }
