@@ -41,18 +41,6 @@ export default function Donate() {
         {prizePool.isSuccess ? formatEther(prizePool.data!) : "0"} ETH in the
         prize pool
       </>
-      <button
-        onClick={() => {
-          console.log("here");
-          console.log(toast);
-          toast({
-            title: "Transaction Confirmed.",
-            description: "test",
-          });
-        }}
-      >
-        click me
-      </button>
       <div className="flex w-full max-w-sm items-center space-x-2">
         <Input
           type="number"

@@ -20,9 +20,6 @@ module.exports = {
       },
     },
     extend: {
-      gridTemplateColumns: {
-         ...generateGridColumns(100) // This generates the columns from 12 until 100
-      },   
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -63,9 +60,9 @@ module.exports = {
         md: `calc(var(--radius) - 2px)`,
         sm: "calc(var(--radius) - 4px)",
       },
-      // fontFamily: {
-      //   sans: ["var(--font-sans)", ...fontFamily.sans],
-      // },
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+      },
       keyframes: {
         "accordion-down": {
           from: { height: 0 },
