@@ -1,34 +1,13 @@
-import {
-  usePrepareTankGameMove,
-  useTankGameMove,
-  usePrepareTankGameUpgrade,
-  useTankGameUpgrade,
-  useTankGameShoot,
-  usePrepareTankGameShoot,
-  usePrepareTankGameGive,
-  useTankGameGive,
-  usePrepareTankGameDrip,
-  useTankGameDrip,
-} from "@/src/generated";
 import { useState } from "react";
 import { Tank } from "./Tank";
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import {
-  GiftIcon,
-  HeartHandshake,
-  Move,
-  Rocket,
-  Crosshair,
-  Droplet,
-} from "lucide-react";
 import { ITank } from "./ITank";
+import EmptySquareMenu from "./actions/EmptySquareMenu";
+import EnemySquareMenu from "./actions/EnemySquareMenu";
+import SelfSquareMenu from "./actions/SelfSquareMenu";
 
 interface SquareProps {
   x: number;
@@ -45,7 +24,7 @@ export function Square(props: SquareProps) {
         <DropdownMenuTrigger asChild>
           <div
             className={`border w-full h-0 shadow-sm aspect-w-1 aspect-h-1 rounded-sm ${
-              open ? "bg-green-200" : "bg-ay-100"
+              open ? "bg-green-200" : "bg-gray-600"
             }`}
           >
             {props.tank && (
@@ -80,110 +59,3 @@ export function Square(props: SquareProps) {
   );
 }
 
-function EnemySquareMenu({
-  ownersTank,
-  enemyTank,
-  open,
-}: {
-  ownersTank: bigint | undefined;
-  enemyTank: bigint | undefined;
-  open: boolean;
-}) {
-  let { config: shootConfig } = usePrepareTankGameShoot({
-    args: [ownersTank!, enemyTank!],
-    enabled: open && !!ownersTank && !!enemyTank,
-  });
-  const { write: shoot } = useTankGameShoot(shootConfig);
-
-  let { config: giftHeartConfig } = usePrepareTankGameGive({
-    args: [ownersTank!, enemyTank!, BigInt(1), BigInt(0)],
-    enabled: open && !!ownersTank && !!enemyTank,
-  });
-  const { write: giveHeart } = useTankGameGive(giftHeartConfig);
-  let { config: giveAPConfig } = usePrepareTankGameGive({
-    args: [ownersTank!, enemyTank!, BigInt(0), BigInt(1)],
-    enabled: open && !!ownersTank && !!enemyTank,
-  });
-  const { write: giveAp } = useTankGameGive(giveAPConfig);
-  return (
-    <DropdownMenuContent className="w-56">
-      <DropdownMenuGroup>
-        <DropdownMenuItem disabled={!shoot} onSelect={() => shoot?.()}>
-          <Crosshair className="mr-2 h-4 w-4" />
-          <span>Shoot</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem disabled={!giveHeart} onSelect={() => giveHeart?.()}>
-          <HeartHandshake className="mr-2 h-4 w-4" />
-          <span>Give heart</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled={!giveAp} onSelect={() => giveAp?.()}>
-          <GiftIcon className="mr-2 h-4 w-4" />
-          <span>Give AP</span>
-        </DropdownMenuItem>
-      </DropdownMenuGroup>
-    </DropdownMenuContent>
-  );
-}
-
-function EmptySquareMenu({
-  ownersTank,
-  x,
-  y,
-  open,
-}: {
-  ownersTank: bigint;
-  x: number;
-  y: number;
-  open: boolean;
-}) {
-  let { config } = usePrepareTankGameMove({
-    args: [ownersTank, { x: BigInt(x), y: BigInt(y) }],
-    enabled: open && !!(ownersTank && x && y),
-  });
-  const { write: move } = useTankGameMove(config);
-  return (
-    <DropdownMenuContent className="w-56">
-      <DropdownMenuGroup>
-        <DropdownMenuItem disabled={!move} onSelect={() => move?.()}>
-          <Move className="mr-2 h-4 w-4" />
-          <span>Move here</span>
-        </DropdownMenuItem>
-      </DropdownMenuGroup>
-    </DropdownMenuContent>
-  );
-}
-
-function SelfSquareMenu({
-  ownersTank,
-  open,
-}: {
-  ownersTank: bigint;
-  open: boolean;
-}) {
-  let { config: upgradeConfig } = usePrepareTankGameUpgrade({
-    args: [ownersTank],
-    enabled: open && !!ownersTank,
-  });
-  const { write: upgrade } = useTankGameUpgrade(upgradeConfig);
-
-  let { config: dripConfig } = usePrepareTankGameDrip({
-    args: [ownersTank],
-    enabled: open && !!ownersTank,
-  });
-  const { write: drip } = useTankGameDrip(dripConfig);
-  return (
-    <DropdownMenuContent className="w-56">
-      <DropdownMenuGroup>
-        <DropdownMenuItem disabled={!upgrade} onSelect={() => upgrade?.()}>
-          <Rocket className="mr-2 h-4 w-4" />
-          <span>Upgrade Range</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled={!drip} onSelect={() => drip?.()}>
-          <Droplet className="mr-2 h-4 w-4" />
-          <span>Claim APs</span>
-        </DropdownMenuItem>
-      </DropdownMenuGroup>
-    </DropdownMenuContent>
-  );
-}

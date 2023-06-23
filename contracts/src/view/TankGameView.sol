@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
+
 import "../TankGame.sol";
 import "../ITankGame.sol";
 
@@ -10,7 +11,6 @@ contract TankGameView {
         tankGame = tg;
     }
 
-    /// readonly stuff used for frontend, move this to a view contract ///
     struct TankLocation {
         TankGame.Tank tank;
         ITankGame.Point position;

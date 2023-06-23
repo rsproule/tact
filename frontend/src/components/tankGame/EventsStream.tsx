@@ -5,6 +5,7 @@ import {
   useTankGameGiveEvent,
   useTankGameMoveEvent,
   useTankGamePlayerJoinedEvent,
+  useTankGamePrizeIncreaseEvent,
   useTankGameShootEvent,
   useTankGameUpgradeEvent,
   useTankGameVoteEvent,
@@ -94,6 +95,18 @@ export function EventStream() {
     listener(e) {
       e.map((event) => {
         let s = `${event.args.player} has joined the game.`;
+        setEvents((prev) => {
+          return [...prev, s];
+        });
+      });
+    },
+  });
+  useTankGamePrizeIncreaseEvent({
+    listener(e) {
+      e.map((event) => {
+        let s = `${event.args.donator} has added ${formatEther(
+          event.args.amount!
+        )} to the prize pool.`;
         setEvents((prev) => {
           return [...prev, s];
         });
