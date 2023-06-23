@@ -7,7 +7,7 @@ import "../src/TankGame.sol";
 import "../src/ITankGame.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract CounterTest is Test {
+contract TankTest is Test {
     TankGame public tankGame;
 
     function setUp() public {
@@ -18,7 +18,7 @@ contract CounterTest is Test {
             initHearts: 3,
             initShootRange: 3,
             upgradeCost: 3,
-            epochSeconds: 24 hours,
+            epochSeconds: 4 hours,
             voteThreshold: 3,
             actionDelaySeconds: 0
         });
@@ -354,9 +354,17 @@ contract CounterTest is Test {
         );
     }
 
+    function testRecievePrizeDonation() public { 
+        uint prizeAmountBefore = tankGame.prizePool();
+        hoax(address(1), 1 ether);
+        tankGame.donate{value: 1 ether}();
+        assertEq(address(tankGame).balance - prizeAmountBefore, 1 ether);
+        assertEq(tankGame.prizePool() - prizeAmountBefore, 1 ether);
+        
+    }
     /// helper
 
-    function _printBoard() private {
+    function _printBoard() public {
         uint boardSize = tankGame.settings().boardSize;
         console.log("_________________________________________");
         for (uint i = 0; i < boardSize; i++) {
@@ -373,6 +381,17 @@ contract CounterTest is Test {
             }
             console.log(line);
             console.log("_________________________________________");
+        }
+    }
+    function _printBoardIndex() public {
+        uint boardSize = tankGame.settings().boardSize;
+        for (uint i = 0; i < boardSize; i++) {
+            for (uint j = 0; j < boardSize; j++) {
+                uint tankId = tankGame.tanksOnBoard(
+                    tankGame.pointToIndex(ITankGame.Point(i, j))
+                );
+                console.log(i, j, tankId);
+            }
         }
     }
 }
