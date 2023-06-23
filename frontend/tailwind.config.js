@@ -20,6 +20,9 @@ module.exports = {
       },
     },
     extend: {
+      gridTemplateColumns: {
+         ...generateGridColumns(100) // This generates the columns from 12 until 100
+      },   
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
