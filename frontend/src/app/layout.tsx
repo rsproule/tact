@@ -2,7 +2,6 @@ import { Providers } from "./providers";
 import "../../globals.css";
 export const metadata = {
   title: "Tank Turn Tactics",
-  
 };
 
 export default function RootLayout({
