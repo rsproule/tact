@@ -11,8 +11,8 @@ export default function HomePage() {
       <div className="flex justify-center">
         <h1 className="text-4xl">Tank Turn Tactics (beta)</h1>
       </div>
+      <Rules />
       <Connected>
-        <Rules />
         <TankGame />
         <EventStream />
         <Toaster />
