@@ -9,7 +9,7 @@ export default function HomePage() {
     <div className="grid container mx-auto p-4">
       <ConnectKitButton showBalance />
       <div className="flex justify-center">
-        <h1 className="text-4xl">Tank Turn Tactics (beta)</h1>
+        <h1 className="text-4xl">Tank Turn Tactics (alpha 0.0.1)</h1>
       </div>
       <Rules />
       <Connected>
