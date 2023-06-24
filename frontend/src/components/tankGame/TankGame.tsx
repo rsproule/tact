@@ -13,12 +13,12 @@ import { useToast } from "../ui/use-toast";
 import { Board } from "./GameBoard";
 import Timer from "./Timer";
 import Donate from "./actions/Donate";
+import { Card, CardHeader } from "../ui/card";
 export function TankGame() {
   let gameState = useTankGameState({});
   let settings = useTankGameSettings();
   return (
-    <div className={`w-full lg:w-3/4`}>
-      <Donate />
+    <div className={`w-full`}>
       {gameState.data === 0 && (
         <WaitingForPlayers
           expectedPlayersCount={settings.data && settings.data!.playerCount}
@@ -32,6 +32,7 @@ export function TankGame() {
         </>
       )}
       {gameState.data === 2 && <GameOver />}
+      <Donate />
     </div>
   );
 }
@@ -68,20 +69,26 @@ function WaitingForPlayers({
   });
   return (
     <div>
-      <p>
-        Waiting for players:
-        {!!numPlayers.data && numPlayers.data.toString()} /{" "}
-        {!!expectedPlayersCount && expectedPlayersCount.toString()}
-      </p>
-      <Button
-        onClick={() => {
-          write?.();
-          refetch?.();
-        }}
-        disabled={!write}
-      >
-        Join Game
-      </Button>
+      <div className="flex justify-center">
+        <Card>
+          <CardHeader>
+            <p>
+              Waiting for players:{" "}
+              <span>{!!numPlayers.data && numPlayers.data.toString()} / </span>
+              {!!expectedPlayersCount && expectedPlayersCount.toString()}
+            </p>
+            <Button
+              onClick={() => {
+                write?.();
+                refetch?.();
+              }}
+              disabled={!write}
+            >
+              Join Game
+            </Button>
+          </CardHeader>
+        </Card>
+      </div>
       <Board boardSize={boardSize} />
     </div>
   );

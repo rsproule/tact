@@ -6,7 +6,7 @@ const walletConnectProjectId = process.env.WALLET_CONNECT_APP!;
 export const config = createConfig(
   getDefaultConfig({
     autoConnect: true,
-    appName: "Tanks",
+    appName: "Tank Turn Tactics",
     walletConnectProjectId,
     // chains: [tenderly],
     chains: [goerli],

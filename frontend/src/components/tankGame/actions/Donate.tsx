@@ -36,7 +36,7 @@ export default function Donate() {
     },
   });
   return (
-    <div>
+    <div className="float-right">
       <>
         {prizePool.isSuccess ? formatEther(prizePool.data!) : "0"} ETH in the
         prize pool
@@ -50,7 +50,6 @@ export default function Donate() {
         <Button
           disabled={!donate}
           onClick={() => {
-            console.log("here");
             donate?.();
           }}
         >

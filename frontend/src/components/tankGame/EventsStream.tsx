@@ -12,6 +12,7 @@ import {
 } from "@/src/generated";
 import { useState } from "react";
 import { formatEther } from "viem";
+import { Card, CardHeader } from "../ui/card";
 
 export function EventStream() {
   const [events, setEvents] = useState<string[]>([]);
@@ -114,15 +115,21 @@ export function EventStream() {
     },
   });
   return (
-    <div className="grid-flow-row auto-rows-max">
-      <h1>Action Feed</h1>
-      {events.reverse().map((event, i) => {
-        return (
-          <div key={i} className="border">
-            {event}
-          </div>
-        );
-      })}
+    <div className="py-4">
+      <Card>
+        <CardHeader>
+          <h1 className="text-xl">Action Feed</h1>
+        </CardHeader>
+        <div className="grid-flow-row auto-rows-max">
+          {events.reverse().map((event, i) => {
+            return (
+              <div key={i} className="border">
+                {event}
+              </div>
+            );
+          })}
+        </div>
+      </Card>
     </div>
   );
 }
