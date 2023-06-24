@@ -8,7 +8,7 @@ import {
 
 export default function Rules() {
   return (
-    <div className="container py-10">
+    <div className="container py-3">
       <Card>
         <CardHeader>
           <CardTitle>Tank Turn Tactics Rules</CardTitle>

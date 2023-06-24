@@ -69,7 +69,7 @@ function WaitingForPlayers({
   });
   return (
     <div>
-      <div className="flex justify-center">
+      <div className="flex justify-center pb-3">
         <Card>
           <CardHeader>
             <p>
