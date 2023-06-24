@@ -24,7 +24,7 @@ export function Tank({ tank, tankId }: typeof ITank) {
             alt="tank"
           />
         </HoverCardTrigger>
-        <HoverCardContent className="w-80">
+        <HoverCardContent className="w-full">
           <div className="flex justify-between space-x-4">
             <div className="space-y-1">
               <h4 className="text-sm font-semibold">
