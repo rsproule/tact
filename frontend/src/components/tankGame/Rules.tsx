@@ -56,7 +56,7 @@ export default function Rules() {
                 [not implemented] Players can buy hearts at any time for 3 APs
               </li>
               <li>
-                [not implemented] Post death <em>cursing </em>jury. Vote on who
+                [not implemented] Post death <em>cursing</em> jury. Vote on who
                 to curse (take ap/heart)
               </li>
             </ul>
