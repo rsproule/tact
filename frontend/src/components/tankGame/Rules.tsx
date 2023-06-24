@@ -44,7 +44,9 @@ export default function Rules() {
               Dead players can be revived by someone who sends them a heart
               (they will have 1 heart and 0 AP)
             </li>
-            <p className="font-medium underline">Rules that are under consideration:</p>
+            <p className="font-medium underline">
+              Rules that are under consideration:
+            </p>
             <ul className="list-none indent-8">
               <li>
                 [not implemented] The player who lays the killing blow is takes
@@ -54,7 +56,8 @@ export default function Rules() {
                 [not implemented] Players can buy hearts at any time for 3 APs
               </li>
               <li>
-                [not implemented] Post death "cursing" jury. Vote on who to curse (take ap/heart)
+                [not implemented] Post death <em>cursing </em>jury. Vote on who
+                to curse (take ap/heart)
               </li>
             </ul>
           </ul>
