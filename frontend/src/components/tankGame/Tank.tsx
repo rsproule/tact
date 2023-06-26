@@ -44,7 +44,7 @@ export function Tank({ tank, tankId }: typeof ITank) {
               </h4>
               <div className="flex items-center pt-2">
                 <User className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">{tank.owner.toString()}</span>
+                <span className="text-xs">Owner {tank.owner.toString()}</span>
               </div>
               <div className="flex items-center pt-2">
                 <User className="mr-2 h-4 w-4 " />
@@ -54,15 +54,15 @@ export function Tank({ tank, tankId }: typeof ITank) {
               </div>
               <div className="flex items-center pt-2">
                 <Heart className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">{tank.hearts.toString()}</span>
+                <span className="text-xs">Hearts {tank.hearts.toString()}</span>
               </div>
               <div className="flex items-center pt-2">
                 <Zap className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">{tank.aps.toString()}</span>
+                <span className="text-xs">APs: {tank.aps.toString()}</span>
               </div>
               <div className="flex items-center pt-2">
                 <Target className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">{tank.range.toString()}</span>
+                <span className="text-xs">Range: {tank.range.toString()}</span>
               </div>
             </div>
           </div>
