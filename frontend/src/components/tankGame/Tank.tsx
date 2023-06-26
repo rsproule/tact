@@ -16,6 +16,7 @@ const OWNERS: Map<String, String> = new Map<string, string>([
   ["0xb7430de9B4D8e5cDB951019d7651cD5fda630498", "Sam"],
   ["0x5CE306109b8de8d001d52F2140383A54AB55CdB2", "Jonah"],
   ["0xDC40CbF86727093c52582405703e5b97D5C64B66", "Mason"],
+  ["0x2CB8636240693B445ac98F2091b58A898e35e60B", "Joe//Osprey"],
 ]);
 export function Tank({ tank, tankId }: typeof ITank) {
   let { address } = useAccount();
