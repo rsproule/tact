@@ -44,17 +44,21 @@ export function Tank({ tank, tankId }: typeof ITank) {
               </h4>
               <div className="flex items-center pt-2">
                 <User className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">Owner {tank.owner.toString()}</span>
+                <span className="text-xs">
+                  Owner address: {tank.owner.toString()}
+                </span>
               </div>
               <div className="flex items-center pt-2">
                 <User className="mr-2 h-4 w-4 " />
                 <span className="text-xs">
-                  {OWNERS.get(tank.owner.toString())}
+                  Owner name: {OWNERS.get(tank.owner.toString())}
                 </span>
               </div>
               <div className="flex items-center pt-2">
                 <Heart className="mr-2 h-4 w-4 " />{" "}
-                <span className="text-xs">Hearts {tank.hearts.toString()}</span>
+                <span className="text-xs">
+                  Hearts: {tank.hearts.toString()}
+                </span>
               </div>
               <div className="flex items-center pt-2">
                 <Zap className="mr-2 h-4 w-4 " />{" "}
