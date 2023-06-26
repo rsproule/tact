@@ -26,7 +26,7 @@ const TANK_MAPPING = [
 ];
 
 const toTankName = (tankId: bigint | undefined) => {
-  if (tankId === undefined) {
+  if (tankId === undefined || tankId! > TANK_MAPPING.length) {
     return "Tank " + tankId!.toString();
   }
   return TANK_MAPPING[Number(tankId!)];
