@@ -1,5 +1,4 @@
 import { useTankGameEpochStart, useTankGameGetEpoch } from "@/src/generated";
-import { useBlockNumber } from "wagmi";
 
 export default function Timer() {
   const startEpoch = useTankGameEpochStart({ watch: true });
