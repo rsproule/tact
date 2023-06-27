@@ -11,7 +11,7 @@ export default function Rules() {
     <div className="container py-3">
       <Card>
         <CardHeader>
-          <CardTitle>Tank Turn Tactics Rules</CardTitle>
+          <CardTitle>Tank Trust Tactics Rules</CardTitle>
           <CardDescription>
             A game of trust in an environment of no trust. Bring your own trust:
             BYOT.
