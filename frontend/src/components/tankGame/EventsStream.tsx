@@ -23,6 +23,7 @@ const TANK_MAPPING = [
   "Yigit",
   "Caleb",
   "Joe",
+  "Sterling",
 ];
 
 const toTankName = (tankId: bigint | undefined) => {
