@@ -215,8 +215,8 @@ const logToText = (event) => {
   }
 };
 const moveString = (event: any) => {
-  return `🏃 ${toTankName(event.args.tankId)} moved to (${event.args.x}, ${
-    event.args.y
+  return `🏃 ${toTankName(event.args.tankId)} moved to (${event.args.y}, ${
+    event.args.x
   })`;
 };
 
