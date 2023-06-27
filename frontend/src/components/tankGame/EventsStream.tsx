@@ -34,7 +34,7 @@ const toTankName = (tankId: bigint | undefined) => {
   if (tankId && tankId! > TANK_MAPPING.length) {
     return "Tank " + tankId!.toString();
   }
-  return TANK_MAPPING[Number(tankId!)];
+  return TANK_MAPPING[Number(tankId!)-1];
 };
 export function EventStream() {
   const [events, setEvents] = useState<string[]>([]);
