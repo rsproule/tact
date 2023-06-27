@@ -18,10 +18,14 @@ export default function Timer() {
           <>
             Time till next epoch:{" "}
             {currentEpoch.data &&
-              getTimeTillNextEpoch(
-                currentEpoch.data!,
-                settings.data?.epochSeconds!
-              ).toString()}
+              secondsToHMS(
+                Number(
+                  getTimeTillNextEpoch(
+                    currentEpoch.data!,
+                    settings.data?.epochSeconds!
+                  )
+                )
+              )}
           </>
         </CardContent>
       </Card>
@@ -36,3 +40,18 @@ const getTimeTillNextEpoch = (currentEpoch: bigint, epochDuration: bigint) => {
   let blocksTillNextEpoch = endBlock - BigInt(nowSeconds);
   return blocksTillNextEpoch;
 };
+
+function secondsToHMS(secs: number) {
+  let hours = Math.floor(secs / 3600);
+  let minutes = Math.floor((secs % 3600) / 60);
+  let seconds = secs % 60;
+
+  // Pad the minutes and seconds with leading zeros, if required
+  let hoursString = hours < 10 ? "0" + hours : hours;
+  let minutesString = minutes < 10 ? "0" + minutes : minutes;
+  let secondsString = seconds < 10 ? "0" + seconds : seconds;
+
+  // Compose the string for display
+  let hms = hoursString + ":" + minutesString + ":" + secondsString;
+  return hms;
+}
