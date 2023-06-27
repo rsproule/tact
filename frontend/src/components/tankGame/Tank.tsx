@@ -8,7 +8,7 @@ import {
 import { Heart, Target, User, Zap } from "lucide-react";
 import { ITank } from "./ITank";
 
-const OWNERS: Map<String, String> = new Map<string, string>([
+export const OWNERS: Map<String, String> = new Map<string, string>([
   ["0x5337122c6b5ce24D970Ce771510D22Aeaf038C44", "Ryan"],
   ["0x425374B4da782f0ec5DeC7b45B0C1e08dc6B5A65", "Caleb"],
   ["0x2a233E71Ba12fE39E587D402Acf4E41e8B008e31", "Spencer"],
