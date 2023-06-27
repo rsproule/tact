@@ -13,12 +13,11 @@ export function Board({ boardSize }: { boardSize: bigint | undefined }) {
     return <div></div>;
   }
 
-  const a = new Array(Number(boardSize)).fill(0);
+  const a = new Array(Number(boardSize + BigInt(1))).fill(0);
   return boardSize === BigInt(0) ? (
     <div></div>
   ) : (
-    // <div className={`grid grid-cols-${boardSize}`}>
-    <div className={`grid grid-cols-40`}>
+    <div className={`grid grid-cols-41`}>
       {a.map((x: bigint, i: number) =>
         a.map((y: bigint, j: number) => {
           const tank = tanks.data?.find((tank) => {
@@ -27,18 +26,27 @@ export function Board({ boardSize }: { boardSize: bigint | undefined }) {
             );
           });
           return (
-            <Square
-              x={i}
-              y={j}
-              boardSize={Number(boardSize)}
-              tank={tank}
-              key={`${i},${j}`}
-              ownersTankId={ownersTankId.data}
-            />
+            <div key={`${i},${j}`}>
+              {BigInt(i) === boardSize && BigInt(j) !== boardSize && (
+                <div>{j}</div>
+              )}
+              {BigInt(j) === boardSize && BigInt(i) !== boardSize && (
+                <div>{i}</div>
+              )}
+              {/* {j === 0 && <div className="grow-0">{i}</div>} */}
+              {BigInt(i) !== boardSize && BigInt(j) !== boardSize && (
+                <Square
+                  x={i}
+                  y={j}
+                  boardSize={Number(boardSize)}
+                  tank={tank}
+                  ownersTankId={ownersTankId.data}
+                />
+              )}
+            </div>
           );
         })
       )}
     </div>
   );
 }
-
