@@ -53,7 +53,7 @@ export function EventStream() {
   useTankGameShootEvent({
     listener(e) {
       e.map((event) => {
-        let s = `${toTankName(event.args.tankId)} shot ${event.args.targetId}`;
+        let s = `${toTankName(event.args.tankId)} shot ${toTankName(event.args.targetId)}`;
         setEvents((prev) => {
           return [...prev, s];
         });
