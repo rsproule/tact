@@ -43,88 +43,88 @@ const toTankName = (tankId: bigint | undefined) => {
   return TANK_MAPPING[Number(tankId!) - 1];
 };
 export function EventStream() {
-  const [events, setEvents] = useState<string[]>([]);
-  useTankGameMoveEvent({
-    listener: (e) => {
-      e.map((event) => {
-        setEvents((prev) => {
-          return [...prev, moveString(event)];
-        });
-      });
-    },
-  });
-  useTankGameShootEvent({
-    listener(e) {
-      e.map((event) => {
-        setEvents((prev) => {
-          return [...prev, shootString(event)];
-        });
-      });
-    },
-  });
-  useTankGameGiveEvent({
-    listener(e) {
-      e.map((event) => {
-        setEvents((prev) => {
-          return [...prev, giveString(event)];
-        });
-      });
-    },
-  });
-  useTankGameUpgradeEvent({
-    listener(e) {
-      e.map((event) => {
-        setEvents((prev) => {
-          return [...prev, upgradeString(event)];
-        });
-      });
-    },
-  });
-  useTankGameVoteEvent({
-    listener(e) {
-      e.map((event) => {
-        setEvents((prev) => {
-          return [...prev, voteString(event)];
-        });
-      });
-    },
-  });
-  useTankGameDripEvent({
-    listener(e) {
-      e.map((event) => {
-        setEvents((prev) => {
-          return [...prev, dripString(event)];
-        });
-      });
-    },
-  });
-  useTankGameClaimEvent({
-    listener(e) {
-      e.map((event) => {
-        setEvents((prev) => {
-          return [...prev, claimString(event)];
-        });
-      });
-    },
-  });
-  useTankGamePlayerJoinedEvent({
-    listener(e) {
-      e.map((event) => {
-        setEvents((prev) => {
-          return [...prev, joinString(event)];
-        });
-      });
-    },
-  });
-  useTankGamePrizeIncreaseEvent({
-    listener(e) {
-      e.map((event) => {
-        setEvents((prev) => {
-          return [...prev, donateString(event)];
-        });
-      });
-    },
-  });
+  // const [events, setEvents] = useState<string[]>([]);
+  // useTankGameMoveEvent({
+  //   listener: (e) => {
+  //     e.map((event) => {
+  //       setEvents((prev) => {
+  //         return [...prev, moveString(event)];
+  //       });
+  //     });
+  //   },
+  // });
+  // useTankGameShootEvent({
+  //   listener(e) {
+  //     e.map((event) => {
+  //       setEvents((prev) => {
+  //         return [...prev, shootString(event)];
+  //       });
+  //     });
+  //   },
+  // });
+  // useTankGameGiveEvent({
+  //   listener(e) {
+  //     e.map((event) => {
+  //       setEvents((prev) => {
+  //         return [...prev, giveString(event)];
+  //       });
+  //     });
+  //   },
+  // });
+  // useTankGameUpgradeEvent({
+  //   listener(e) {
+  //     e.map((event) => {
+  //       setEvents((prev) => {
+  //         return [...prev, upgradeString(event)];
+  //       });
+  //     });
+  //   },
+  // });
+  // useTankGameVoteEvent({
+  //   listener(e) {
+  //     e.map((event) => {
+  //       setEvents((prev) => {
+  //         return [...prev, voteString(event)];
+  //       });
+  //     });
+  //   },
+  // });
+  // useTankGameDripEvent({
+  //   listener(e) {
+  //     e.map((event) => {
+  //       setEvents((prev) => {
+  //         return [...prev, dripString(event)];
+  //       });
+  //     });
+  //   },
+  // });
+  // useTankGameClaimEvent({
+  //   listener(e) {
+  //     e.map((event) => {
+  //       setEvents((prev) => {
+  //         return [...prev, claimString(event)];
+  //       });
+  //     });
+  //   },
+  // });
+  // useTankGamePlayerJoinedEvent({
+  //   listener(e) {
+  //     e.map((event) => {
+  //       setEvents((prev) => {
+  //         return [...prev, joinString(event)];
+  //       });
+  //     });
+  //   },
+  // });
+  // useTankGamePrizeIncreaseEvent({
+  //   listener(e) {
+  //     e.map((event) => {
+  //       setEvents((prev) => {
+  //         return [...prev, donateString(event)];
+  //       });
+  //     });
+  //   },
+  // });
   const [oldLogs, setOldLogs] = useState<string[]>([]);
   const { chain } = useNetwork();
   const getOldLogs = async () => {
@@ -144,7 +144,7 @@ export function EventStream() {
 
   return (
     <div className="py-4">
-      <Card>
+      {/* <Card>
         <CardHeader>
           <h1 className="text-xl">Action Feed</h1>
         </CardHeader>
@@ -158,6 +158,7 @@ export function EventStream() {
           })}
         </div>
       </Card>
+      <Card> */}
       <Card>
         <CardHeader>
           <h1 className="text-xl">Historical logs</h1>
