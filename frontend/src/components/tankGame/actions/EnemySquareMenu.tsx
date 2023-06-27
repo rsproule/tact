@@ -41,6 +41,7 @@ export default function EnemySquareMenu({
     },
     onSuccess: (s) => {
       toast({
+        variant: "success",
         title: "Transaction Confirmed.",
         description: s.transactionHash,
       });
@@ -64,6 +65,7 @@ export default function EnemySquareMenu({
     },
     onSuccess: (s) => {
       toast({
+        variant: "success",
         title: "Transaction Confirmed.",
         description: s.transactionHash,
       });
@@ -85,6 +87,7 @@ export default function EnemySquareMenu({
     },
     onSuccess: (s) => {
       toast({
+        variant: "success",
         title: "Transaction Confirmed.",
         description: s.transactionHash,
       });

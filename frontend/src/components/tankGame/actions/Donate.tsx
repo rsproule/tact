@@ -30,6 +30,7 @@ export default function Donate() {
     },
     onSuccess: (s) => {
       toast({
+        variant: "success",
         title: "Transaction Confirmed.",
         description: s.transactionHash,
       });

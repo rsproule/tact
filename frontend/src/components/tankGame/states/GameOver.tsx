@@ -44,6 +44,7 @@ export function GameOver() {
     },
     onSuccess: (s) => {
       toast({
+        variant: "success",
         title: "Transaction Confirmed.",
         description: s.transactionHash,
       });
