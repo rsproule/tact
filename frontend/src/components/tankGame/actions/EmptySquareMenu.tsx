@@ -49,7 +49,7 @@ export default function EmptySquareMenu({
       <DropdownMenuGroup>
         <DropdownMenuItem disabled={!move} onSelect={() => move?.()}>
           <Move className="mr-2 h-4 w-4" />
-          <span>Move here</span>
+          <span>Move here ({y}, {x})</span>
         </DropdownMenuItem>
       </DropdownMenuGroup>
     </DropdownMenuContent>
