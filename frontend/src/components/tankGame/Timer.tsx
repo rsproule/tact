@@ -1,8 +1,4 @@
-import {
-  useTankGameEpochStart,
-  useTankGameGetEpoch,
-  useTankGameSettings,
-} from "@/src/generated";
+import { useTankGameGetEpoch, useTankGameSettings } from "@/src/generated";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export default function Timer() {
@@ -18,6 +14,7 @@ export default function Timer() {
           <>
             Time till next epoch:{" "}
             {currentEpoch.data &&
+              settings.data &&
               secondsToHMS(
                 Number(
                   getTimeTillNextEpoch(
@@ -35,9 +32,9 @@ export default function Timer() {
 
 const getTimeTillNextEpoch = (currentEpoch: bigint, epochDuration: bigint) => {
   let nowSeconds = Math.floor(Date.now() / 1000);
-  let startBlock = currentEpoch * epochDuration;
-  let endBlock = startBlock + epochDuration;
-  let blocksTillNextEpoch = endBlock - BigInt(nowSeconds);
+  let startTime = currentEpoch * epochDuration;
+  let endTime = startTime + epochDuration;
+  let blocksTillNextEpoch = endTime - BigInt(nowSeconds);
   return blocksTillNextEpoch;
 };
 
