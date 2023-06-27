@@ -6,7 +6,7 @@ import Donate from "./actions/Donate";
 import { GameOver } from "./states/GameOver";
 import { WaitingForPlayers } from "./states/WaitingForPlayers";
 export function TankGame() {
-  let gameState = useTankGameState({});
+  let gameState = useTankGameState();
   let settings = useTankGameSettings();
   return (
     <div className={`w-full`}>
