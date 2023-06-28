@@ -5,8 +5,9 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "../ui/hover-card";
-import { Heart, Target, User, Zap } from "lucide-react";
+import { Droplet, Heart, Target, User, Zap } from "lucide-react";
 import { ITank } from "./ITank";
+import { useTankGameGetEpoch, useTankGameLastDripEpoch } from "@/src/generated";
 
 export const OWNERS: Map<String, String> = new Map<string, string>([
   ["0x5337122c6b5ce24D970Ce771510D22Aeaf038C44", "Ryan"],
@@ -22,6 +23,11 @@ export const OWNERS: Map<String, String> = new Map<string, string>([
 ]);
 export function Tank({ tank, tankId }: typeof ITank) {
   let { address } = useAccount();
+  let lastDripEpoch = useTankGameLastDripEpoch({
+    args: [tankId],
+    enabled: !!tankId,
+  });
+  let currentEpoch = useTankGameGetEpoch();
   return (
     <div>
       <HoverCard>
@@ -63,6 +69,15 @@ export function Tank({ tank, tankId }: typeof ITank) {
               <div className="flex items-center pt-2">
                 <Zap className="mr-2 h-4 w-4 " />{" "}
                 <span className="text-xs">APs: {tank.aps.toString()}</span>
+              </div>
+              <div className="flex items-center pt-2">
+                <Droplet className="mr-2 h-4 w-4 " />{" "}
+                <span className="text-xs">
+                  Claimable APs:{" "}
+                  {!!currentEpoch.data &&
+                    !!lastDripEpoch.data &&
+                    (currentEpoch.data! - lastDripEpoch.data!).toString()}
+                </span>
               </div>
               <div className="flex items-center pt-2">
                 <Target className="mr-2 h-4 w-4 " />{" "}
