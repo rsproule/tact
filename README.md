@@ -1,6 +1,8 @@
 # Tank game
 
-A game of trust in an environment of no trust.
+![demo](assets/game.png)
+
+> A game of trust in an environment of no trust.
 Bring your own trust: BYOT.
 
 ## Rules
@@ -34,3 +36,8 @@ Bring your own trust: BYOT.
 - action points are supposed to be secret
   - on-chain privacy stuff, could do a tornado style pool
 -
+---
+
+## Motivation
+
+The primary game mechanic is trust and deceit. This is an experiment to see how the infrastructure of trustless blockchains can help players coordinate in ways that are not possible in the real world.
