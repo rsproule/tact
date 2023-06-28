@@ -11,18 +11,17 @@ contract TankGameDeployerScript is Script {
     function run() public {
         vm.broadcast();
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
-            playerCount: 1,
+            playerCount: 10,
             boardSize: 40,
-            initAPs: 3,
+            initAPs: 1,
             initHearts: 3,
             initShootRange: 3,
             upgradeCost: 3,
-            epochSeconds: 1 minutes,
-            voteThreshold: 3,
+            epochSeconds: 4 hours,
+            voteThreshold: 3, // not yet used
             actionDelaySeconds: 0
         });
         tankGame = new TankGame(gs);
         console.log("TankGame deployed at address: %s", address(tankGame));
     }
-
 }
