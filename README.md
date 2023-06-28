@@ -14,7 +14,7 @@
 > A game of trust in an environment of no trust.  Bring your own trust: BYOT.
 
 <p align="center">
- <img width="50%" src="assets/tank.jpeg" alt="logo">
+ <img width="80%" src="assets/tank.jpeg" alt="logo">
 </p>
 
 ## Rules
