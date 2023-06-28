@@ -14,10 +14,8 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <link rel="icon" href="/favicon.ico" sizes="any" />
       <body>
-        <Providers>
-          {children}
-          <Analytics />
-        </Providers>
+        <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );
