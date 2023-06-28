@@ -1,7 +1,12 @@
-import { useTankGameGetEpoch, useTankGameSettings } from "@/src/generated";
+import {
+  useTankGameEpochStart,
+  useTankGameGetEpoch,
+  useTankGameSettings,
+} from "@/src/generated";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export default function Timer() {
+  const startEpoch = useTankGameEpochStart();
   const currentEpoch = useTankGameGetEpoch({ watch: true });
   const settings = useTankGameSettings();
   return (
@@ -12,6 +17,11 @@ export default function Timer() {
         </CardHeader>
         <CardContent>
           <>
+            Current Epoch:{" "}
+            {currentEpoch.data &&
+              startEpoch.data &&
+              (currentEpoch.data! - startEpoch.data!).toString()}
+            <br />
             Time till next epoch:{" "}
             {currentEpoch.data &&
               settings.data &&
