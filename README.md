@@ -1,9 +1,21 @@
-# Tank game
+[licence-badge]: https://img.shields.io/github/license/rsproule/tanks?color=blue
+[licence-url]: https://github.com/rsproule/tanks/blob/main/LICENSE
+[actions-badge]: https://github.com/rsproule/tanks/actions/workflows/test.yml/badge.svg
+[actions-url]: https://github.com/rsproule/tanks/actions/workflows/test.yml
+[twitter-badge]: https://img.shields.io/twitter/follow/sproule_
+[twitter-url]: https://twitter.com/sproule_
 
-![demo](assets/game.png)
+# Tank Trust Tactics
 
-> A game of trust in an environment of no trust.
-Bring your own trust: BYOT.
+[![MIT licensed][licence-badge]][licence-url]
+[![Build Status][actions-badge]][actions-url]
+[![Twitter][twitter-badge]][twitter-url]
+
+> A game of trust in an environment of no trust.  Bring your own trust: BYOT.
+
+<p align="center">
+ <img width="50%" src="assets/tank.jpeg" alt="logo">
+</p>
 
 ## Rules
 
@@ -35,7 +47,13 @@ Bring your own trust: BYOT.
   - or put a timer in where there is only one global action allowed per 5 mins or something
 - action points are supposed to be secret
   - on-chain privacy stuff, could do a tornado style pool
--
+
+---
+
+## The frontend (v1)
+
+![demo](assets/game.png)
+
 ---
 
 ## Motivation
