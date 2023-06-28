@@ -1,5 +1,5 @@
 [licence-badge]: https://img.shields.io/github/license/rsproule/tanks?color=blue
-[licence-url]: https://github.com/rsproule/tanks/blob/main/LICENSE
+[licence-url]: https://github.com/rsproule/tanks/blob/master/LICENSE
 [actions-badge]: https://github.com/rsproule/tanks/actions/workflows/test.yml/badge.svg
 [actions-url]: https://github.com/rsproule/tanks/actions/workflows/test.yml
 [twitter-badge]: https://img.shields.io/twitter/follow/sproule_
