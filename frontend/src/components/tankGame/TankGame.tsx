@@ -12,7 +12,7 @@ export function TankGame() {
     <div className={`w-full`}>
       <a
         className="text-blue-600 visited:text-purple-600"
-        href="https://goerli.etherscan.io/address/0x1D738bb3c3D594E248Fdb5234b7Af7a2Ecb7B64D"
+        href="https://goerli.etherscan.io/address/0x0a8628a32f0AC3A208B8CEf032B38fF08bB140D7"
       >
         View Contract on Block Explorer
       </a>
