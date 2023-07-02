@@ -8,7 +8,7 @@ import { getPublicClient } from "wagmi/actions";
 import { useNetwork } from "wagmi";
 import { OWNERS } from "./Tank";
 
-const TANK_MAPPING = [
+export const TANK_MAPPING = [
   "Ryan",
   "Jonah",
   "Sam",
