@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "forge-std/Test.sol";
 import "./ITankGame.sol";
 
 contract TankGame is ITankGame {
@@ -26,6 +25,8 @@ contract TankGame is ITankGame {
     GameState public state;
     uint public epochStart;
     uint[3] public podium;
+
+    bool canInit = true;
 
     struct Tank {
         address owner;
@@ -65,10 +66,35 @@ contract TankGame is ITankGame {
         return _settings;
     }
 
-    function init() external payable {
-        // TODO: Some sort of game initialization if necissary
-        // state = GameState.WaitingForPlayers;
-        // prizePool = msg.value;
+    // utility function for initializing the game state
+    function init(StateCheat calldata cs) external payable {
+        require(canInit, "already init");
+        canInit = false;
+        playersCount = cs.playerCount;
+        numTanksAlive = cs.numTanksAlive;
+        prizePool = cs.prizePool;
+        state = cs.gameState;
+        epochStart = cs.epochStart;
+        for (uint i = 0; i < cs.tankLocations.length; i++) {
+            TankLocation memory tank = cs.tankLocations[i];
+            players[tank.tank.owner] = tank.tankId;
+            tanks[tank.tankId] = tank.tank;
+            tankToPosition[tank.tankId] = tank.position;
+            tanksOnBoard[_pointToIndex(tank.position.x, tank.position.y)] = tank
+                .tankId;
+            lastDripEpoch[tank.tankId] = cs.lastDripEpoch[i];
+        }
+    }
+
+    struct StateCheat {
+        uint playerCount;
+        uint numTanksAlive;
+        uint prizePool;
+        TankGame.GameState gameState;
+        uint epochStart;
+        ITankGame.GameSettings gameSettings;
+        TankGame.TankLocation[] tankLocations;
+        uint[] lastDripEpoch;
     }
 
     function donate() external payable {
@@ -224,6 +250,9 @@ contract TankGame is ITankGame {
 
         tanks[fromId].hearts -= hearts;
         tanks[fromId].aps -= aps;
+        if (tanks[toId].hearts <= 0) {
+            numTanksAlive++;
+        }
         tanks[toId].hearts += hearts;
         tanks[toId].aps += aps;
 
