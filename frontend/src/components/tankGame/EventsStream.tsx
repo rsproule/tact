@@ -127,7 +127,10 @@ export function EventStream() {
     const logs = await publicClient.getFilterLogs({
       filter,
     });
-    setOldLogs(logs.reverse().map((log) => logToText(log)));
+    setOldLogs([
+      ...emergencyInitLogs,
+      ...logs.reverse().map((log) => logToText(log)),
+    ]);
   };
 
   return (
