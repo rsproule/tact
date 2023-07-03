@@ -16,9 +16,8 @@ contract ViewTest is TankTest {
             // there needs to be some way to deterministically
             // initialize the contents of the board, this would
             // be useful for the other tests too
-            uint tid = tankGame.players(address(i+1));
+            uint256 tid = tankGame.players(address(i + 1));
             assertEq(tid, tl.tankId, "unexepected tank id");
-
         }
     }
 }

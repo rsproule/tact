@@ -27,10 +27,7 @@ contract TankTest is Test {
 
     function initGame(uint160 offset) public {
         for (uint160 i = 1; i < 9; i++) {
-            vm.label(
-                address(i + offset),
-                string(abi.encodePacked("tank", Strings.toString(i)))
-            );
+            vm.label(address(i + offset), string(abi.encodePacked("tank", Strings.toString(i))));
             vm.prank(address(i + offset));
             tankGame.join();
         }
@@ -71,42 +68,28 @@ contract TankTest is Test {
 
     function testMove() public {
         initGame();
-        (uint x, uint y) = tankGame.tankToPosition(1);
-        (, , uint apsBefore, ) = tankGame.tanks(1);
-        if (
-            tankGame.tanksOnBoard(
-                tankGame.pointToIndex(ITankGame.Point(x + 1, y))
-            ) != 0
-        ) {
-            console.log(
-                "this position is occupied, this is cuz randomness sucks"
-            );
+        (uint256 x, uint256 y) = tankGame.tankToPosition(1);
+        (,, uint256 apsBefore,) = tankGame.tanks(1);
+        if (tankGame.tanksOnBoard(tankGame.pointToIndex(ITankGame.Point(x + 1, y))) != 0) {
+            console.log("this position is occupied, this is cuz randomness sucks");
         }
         vm.prank(address(1));
         tankGame.move(1, ITankGame.Point(x + 1, y));
-        (, , uint apsAfter, ) = tankGame.tanks(1);
-        (uint xd, uint yd) = tankGame.tankToPosition(1);
+        (,, uint256 apsAfter,) = tankGame.tanks(1);
+        (uint256 xd, uint256 yd) = tankGame.tankToPosition(1);
         assertEq(xd, x + 1);
         assertEq(yd, y);
         // assert the tank is in the new position
-        assertEq(
-            tankGame.tanksOnBoard(
-                tankGame.pointToIndex(ITankGame.Point(x + 1, y))
-            ),
-            1
-        );
+        assertEq(tankGame.tanksOnBoard(tankGame.pointToIndex(ITankGame.Point(x + 1, y))), 1);
         // assert the old position is now empty
-        assertEq(
-            tankGame.tanksOnBoard(tankGame.pointToIndex(ITankGame.Point(x, y))),
-            0
-        );
+        assertEq(tankGame.tanksOnBoard(tankGame.pointToIndex(ITankGame.Point(x, y))), 0);
         // assert that an action point was spent
         assertEq(apsBefore - apsAfter, 1);
     }
 
     function testMoveOutOfBounds() public {
         initGame();
-        uint boardSize = tankGame.settings().boardSize;
+        uint256 boardSize = tankGame.settings().boardSize;
         vm.prank(address(1));
         vm.expectRevert("out of bounds");
         tankGame.move(1, ITankGame.Point(boardSize + 1, boardSize + 1));
@@ -114,8 +97,8 @@ contract TankTest is Test {
 
     function testMoveTooFar() public {
         initGame();
-        (uint x, uint y) = tankGame.tankToPosition(1);
-        (, , uint apsBefore, ) = tankGame.tanks(1);
+        (uint256 x, uint256 y) = tankGame.tankToPosition(1);
+        (,, uint256 apsBefore,) = tankGame.tanks(1);
         vm.prank(address(1));
         vm.expectRevert("not enough action points");
         tankGame.move(1, ITankGame.Point(x + apsBefore + 1, y));
@@ -123,7 +106,7 @@ contract TankTest is Test {
 
     function testMoveNowhere() public {
         initGame();
-        (uint x, uint y) = tankGame.tankToPosition(1);
+        (uint256 x, uint256 y) = tankGame.tankToPosition(1);
         vm.prank(address(1));
         vm.expectRevert("position occupied");
         tankGame.move(1, ITankGame.Point(x, y));
@@ -137,9 +120,9 @@ contract TankTest is Test {
                 if (i == j) {
                     continue;
                 }
-                uint distance = tankGame.getDistance(i, j);
+                uint256 distance = tankGame.getDistance(i, j);
                 if (distance < 3) {
-                    (uint x, uint y) = tankGame.tankToPosition(i);
+                    (uint256 x, uint256 y) = tankGame.tankToPosition(i);
                     vm.prank(address(j));
                     vm.expectRevert("position occupied");
                     tankGame.move(j, ITankGame.Point(x, y));
@@ -153,8 +136,8 @@ contract TankTest is Test {
         initGame();
         vm.prank(address(8));
         tankGame.shoot(8, 6);
-        (, , uint apsAfter, ) = tankGame.tanks(8);
-        (, uint hearts, , ) = tankGame.tanks(6);
+        (,, uint256 apsAfter,) = tankGame.tanks(8);
+        (, uint256 hearts,,) = tankGame.tanks(6);
         assertEq(apsAfter, 2);
         assertEq(hearts, 2);
     }
@@ -205,9 +188,9 @@ contract TankTest is Test {
         initGame();
         vm.prank(address(8));
         tankGame.give(8, 6, 1, 0);
-        (, uint hearts, , ) = tankGame.tanks(8);
+        (, uint256 hearts,,) = tankGame.tanks(8);
         assertEq(hearts, 2);
-        (, uint giverHearts, , ) = tankGame.tanks(6);
+        (, uint256 giverHearts,,) = tankGame.tanks(6);
         assertEq(giverHearts, 4);
     }
 
@@ -215,9 +198,9 @@ contract TankTest is Test {
         initGame();
         vm.prank(address(8));
         tankGame.give(8, 6, 0, 1);
-        (, , uint ap, ) = tankGame.tanks(8);
+        (,, uint256 ap,) = tankGame.tanks(8);
         assertEq(ap, 2);
-        (, , uint aps, ) = tankGame.tanks(6);
+        (,, uint256 aps,) = tankGame.tanks(6);
         assertEq(aps, 4);
     }
 
@@ -247,7 +230,7 @@ contract TankTest is Test {
         initGame();
         vm.prank(address(1));
         tankGame.upgrade(1);
-        (, , uint aps, uint range) = tankGame.tanks(1);
+        (,, uint256 aps, uint256 range) = tankGame.tanks(1);
         assertEq(range, 4);
         assertEq(aps, 0);
     }
@@ -274,7 +257,7 @@ contract TankTest is Test {
         skip(tankGame.settings().epochSeconds);
         vm.prank(address(1));
         tankGame.drip(1);
-        (, , uint aps, ) = tankGame.tanks(1);
+        (,, uint256 aps,) = tankGame.tanks(1);
         assertEq(aps, 4);
     }
 
@@ -301,7 +284,7 @@ contract TankTest is Test {
         initGame(precompileOffset);
         // give everyone infinite range
         skip(tankGame.settings().epochSeconds);
-        for (uint j = 1; j <= 1000; j++) {
+        for (uint256 j = 1; j <= 1000; j++) {
             for (uint160 i = 1; i <= 8; i++) {
                 vm.startPrank(address(i + precompileOffset));
                 tankGame.drip(i);
@@ -336,43 +319,27 @@ contract TankTest is Test {
         vm.prank(address(7 + precompileOffset));
         tankGame.claim(7, address(7 + precompileOffset));
 
-
-        assertEq(
-            address(1 + precompileOffset).balance,
-            6 ether,
-            "first place reward is wrong"
-        );
-        assertEq(
-            address(8 + precompileOffset).balance,
-            3 ether,
-            "second place reward is wrong"
-        );
-        assertEq(
-            address(7 + precompileOffset).balance,
-            1 ether,
-            "third place reward is wrong"
-        );
+        assertEq(address(1 + precompileOffset).balance, 6 ether, "first place reward is wrong");
+        assertEq(address(8 + precompileOffset).balance, 3 ether, "second place reward is wrong");
+        assertEq(address(7 + precompileOffset).balance, 1 ether, "third place reward is wrong");
     }
 
-    function testRecievePrizeDonation() public { 
-        uint prizeAmountBefore = tankGame.prizePool();
+    function testRecievePrizeDonation() public {
+        uint256 prizeAmountBefore = tankGame.prizePool();
         hoax(address(1), 1 ether);
         tankGame.donate{value: 1 ether}();
         assertEq(address(tankGame).balance - prizeAmountBefore, 1 ether);
         assertEq(tankGame.prizePool() - prizeAmountBefore, 1 ether);
-        
     }
     /// helper
 
     function _printBoard() public {
-        uint boardSize = tankGame.settings().boardSize;
+        uint256 boardSize = tankGame.settings().boardSize;
         console.log("_________________________________________");
-        for (uint i = 0; i < boardSize; i++) {
+        for (uint256 i = 0; i < boardSize; i++) {
             string memory line = "| ";
-            for (uint j = 0; j < boardSize; j++) {
-                uint tankId = tankGame.tanksOnBoard(
-                    tankGame.pointToIndex(ITankGame.Point(i, j))
-                );
+            for (uint256 j = 0; j < boardSize; j++) {
+                uint256 tankId = tankGame.tanksOnBoard(tankGame.pointToIndex(ITankGame.Point(i, j)));
                 if (tankId == 0) {
                     line = string.concat(line, "  | ");
                 } else {
@@ -383,13 +350,12 @@ contract TankTest is Test {
             console.log("_________________________________________");
         }
     }
+
     function _printBoardIndex() public {
-        uint boardSize = tankGame.settings().boardSize;
-        for (uint i = 0; i < boardSize; i++) {
-            for (uint j = 0; j < boardSize; j++) {
-                uint tankId = tankGame.tanksOnBoard(
-                    tankGame.pointToIndex(ITankGame.Point(i, j))
-                );
+        uint256 boardSize = tankGame.settings().boardSize;
+        for (uint256 i = 0; i < boardSize; i++) {
+            for (uint256 j = 0; j < boardSize; j++) {
+                uint256 tankId = tankGame.tanksOnBoard(tankGame.pointToIndex(ITankGame.Point(i, j)));
                 console.log(i, j, tankId);
             }
         }
