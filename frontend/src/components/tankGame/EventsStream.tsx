@@ -128,8 +128,8 @@ export function EventStream() {
       filter,
     });
     setOldLogs([
-      ...emergencyInitLogs,
       ...logs.reverse().map((log) => logToText(log)),
+      ...emergencyInitLogs,
     ]);
   };
 
