@@ -7,9 +7,9 @@ import { ITankGame } from "src/interfaces/ITankGame.sol";
 contract TankGameFactory {
     event GameCreated(address game, ITankGame.GameSettings settings);
 
-    function createGame(ITankGame.GameSettings calldata settings) external returns (address) {
-        address gameAddress = address(new TankGame(settings));
+    function createGame(ITankGame.GameSettings calldata settings) external returns (TankGame game) {
+        game = new TankGame(settings);
+        address gameAddress = address(game);
         emit GameCreated(gameAddress, settings);
-        return gameAddress;
     }
 }

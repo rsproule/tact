@@ -19,6 +19,19 @@ interface ITankGame {
         uint256 spawnerCooldown;
     }
 
+    struct Tank {
+        address owner;
+        uint256 hearts;
+        uint256 aps;
+        uint256 range;
+    }
+
+    enum GameState {
+        WaitingForPlayers,
+        Started,
+        Ended
+    }
+
     function join() external payable;
 
     function move(uint256 fromId, Board.Point calldata to) external;

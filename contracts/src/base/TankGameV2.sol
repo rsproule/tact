@@ -27,7 +27,6 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     constructor(ITankGame.GameSettings memory gs) payable {
         settings = gs;
-        // not sure if this will end up being necissary
         state = GameState.WaitingForPlayers;
         prizePool = msg.value;
         board = new HexBoard(gs.boardSize);
@@ -250,7 +249,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Delegate(tankId, delegatee, tanks[tankId].owner);
     }
 
-    function commit() public {
+    function commit() public gameStarted {
         require(block.number <= revealBlock, "already commit");
         require(block.number - settings.spawnerCooldown > lastRevealBlock, "cooling down");
         revealBlock = block.number + settings.revealWaitBlocks;

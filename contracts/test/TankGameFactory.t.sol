@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import { Test } from "forge-std/Test.sol";
 import { TankGameFactory } from "src/base/TankGameFactory.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
+import { TankGame } from "src/base/TankGameV2.sol";
 
 contract TankGameFactoryTest is Test {
     TankGameFactory public factory;
@@ -27,6 +28,9 @@ contract TankGameFactoryTest is Test {
             revealWaitBlocks: 10,
             spawnerCooldown: 10
         });
-        address gameAddress = factory.createGame(gs);
+        TankGame gameAddress = factory.createGame(gs);
+        assertTrue(address(gameAddress) != address(0), "game address not zero");
+        ITankGame.GameState state = gameAddress.state();
+        assertTrue(state == ITankGame.GameState.WaitingForPlayers, "game state is waiting");
     }
 }
