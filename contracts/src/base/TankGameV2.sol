@@ -105,7 +105,9 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
         tanks[tankId].hearts += tile.hearts;
         tanks[tankId].aps -= apsRequired;
+        Board.Point memory from = board.getTankPosition(tankId);
         board.setTile(to, Board.Tile({ tankId: tankId, hearts: 0 }));
+        board.setTile(from, Board.Tile({ tankId: 0, hearts: 0 }));
         emit Move(tankId, to.x, to.y, tile.hearts);
     }
 
@@ -137,7 +139,10 @@ contract TankGame is ITankGame, TankGameV2Storage {
                 podium[2] = deadTanks[deadTanks.length - 2];
                 // since we know that there is only 1 remaining tank
                 // we can set the first podium position to the sum of all alive tanks
+                // can't trust the `from` because you can kill yourself 
                 podium[0] = aliveTanksIdSum;
+                state = GameState.Ended;
+                emit GameOver(podium[0], podium[1], podium[2], prizePool);
             }
         }
         emit Shoot(fromId, toId);
@@ -277,5 +282,9 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function getBoard() external view returns (Board) {
         return board;
+    }
+
+    function getSettings() external view returns (ITankGame.GameSettings memory) {
+        return settings;
     }
 }

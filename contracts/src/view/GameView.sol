@@ -7,6 +7,10 @@ import { ITankGame } from "src/interfaces/ITankGame.sol";
 contract GameView {
     ITankGame public game;
 
+    constructor(ITankGame _game) {
+        game = _game;
+    }
+
     struct TankLocation {
         ITankGame.Tank tank;
         Board.Point position;

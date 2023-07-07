@@ -57,4 +57,6 @@ interface ITankGame {
     function getTank(uint256 tankId) external view returns (Tank memory);
 
     function getBoard() external view returns (Board);
+
+    function getSettings() external view returns (GameSettings memory);
 }

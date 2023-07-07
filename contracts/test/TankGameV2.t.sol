@@ -7,6 +7,7 @@ import { TankGame } from "src/base/TankGameV2.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Board } from "src/interfaces/IBoard.sol";
+import { HexBoard } from "src/base/HexBoard.sol";
 
 contract TankTest is Test {
     TankGame public tankGame;
@@ -35,6 +36,7 @@ contract TankTest is Test {
             vm.prank(address(i + offset));
             tankGame.join();
         }
+        vm.clearMockedCalls();
     }
 
     function initGame() public {
@@ -68,32 +70,6 @@ contract TankTest is Test {
         assertEq(tankGame.playersCount(), 8);
     }
 
-    ///// tests for move() /////
-
-    function testMove() public {
-        initGame();
-        Board.Point memory p0 = tankGame.board().getTankPosition(1);
-        (,, uint256 apsBefore,) = tankGame.tanks(1);
-        vm.prank(address(1));
-        tankGame.move(1, Board.Point(p0.x + 1, p0.y, p0.z));
-        (,, uint256 apsAfter,) = tankGame.tanks(1);
-        Board.Point memory p = tankGame.board().getTankPosition(1);
-        assertEq(p.x, p0.x + 1);
-        assertEq(p.y, p0.y);
-        assertEq(p.z, p0.z);
-        assertEq(tankGame.board().getTile(p0).tankId, 0, "old tile should be empty");
-        // assert that an action point was spent
-        assertEq(apsBefore - apsAfter, 1);
-    }
-
-    function testMoveOutOfBounds() public {
-        initGame();
-        uint256 boardSize = tankGame.board().boardSize();
-        vm.prank(address(1));
-        vm.expectRevert("out of bounds");
-        tankGame.move(1, Board.Point(boardSize + 1, boardSize + 1, boardSize + 1));
-    }
-
     function testGetDistance() public {
         Board.Point memory p0 = Board.Point({ x: 3, y: 3, z: 3 });
         Board.Point memory p1 = Board.Point({ x: 4, y: 2, z: 3 });
@@ -113,56 +89,82 @@ contract TankTest is Test {
         }
     }
 
-    function testMoveTooFar() public {
-        initGame();
-        Board.Point memory p0 = tankGame.getBoard().getTankPosition(1);
-        uint256 apsBefore = tankGame.getTank(1).aps;
-        vm.prank(address(1));
-        vm.mockCall(address(0), abi.encodeWithSelector(Board.getDistance.selector), abi.encode(4));
-        vm.expectRevert("not enough action points");
-        tankGame.move(1, Board.Point(p0.x + apsBefore + 1, p0.y, p0.z));
-    }
+    ///// tests for move() /////
 
-    function testMoveNowhere() public {
+    function testMoveNormal() public {
         initGame();
         Board.Point memory p0 = tankGame.board().getTankPosition(1);
+        vm.mockCall(
+            address(tankGame.getBoard()),
+            abi.encodeWithSelector(HexBoard.getDistanceTankToPoint.selector),
+            abi.encode(1)
+        );
+        uint256 apsBefore = tankGame.getTank(1).aps;
+        vm.prank(address(1));
+        tankGame.move(1, Board.Point(p0.x + 1, p0.y - 1, p0.z));
+        uint256 apsAfter = tankGame.getTank(1).aps;
+        Board.Point memory p = tankGame.board().getTankPosition(1);
+        assertEq(p.x, p0.x + 1, "wrong x coord");
+        assertEq(p.y, p0.y - 1, "wrong y coord");
+        assertEq(p.z, p0.z, "wrong z coord");
+        assertEq(tankGame.board().getTile(p0).tankId, 0, "old tile should be empty");
+        // assert that an action point was spent
+        assertEq(apsBefore - apsAfter, 1);
+    }
+
+    function testMoveOutOfBounds() public {
+        initGame();
+        Board.Point memory invalidPoint = Board.Point({ x: 0, y: 0, z: 0 });
+        vm.prank(address(1));
+        vm.expectRevert("invalid point");
+        tankGame.move(1, invalidPoint);
+    }
+
+    function testMoveTooFar() public {
+        initGame();
+        Board.Point memory to = Board.Point({ x: 0, y: 0, z: tankGame.getBoard().boardSize() });
+        vm.mockCall(
+            address(tankGame.getBoard()),
+            abi.encodeWithSelector(HexBoard.getDistanceTankToPoint.selector),
+            abi.encode(4)
+        );
+        vm.prank(address(1));
+        vm.expectRevert("not enough action points");
+        tankGame.move(1, to);
+    }
+
+    function testMoveToOccupied() public {
+        initGame();
+        Board.Point memory p0 = tankGame.board().getTankPosition(1);
+        vm.mockCall(
+            address(tankGame.getBoard()),
+            abi.encodeWithSelector(HexBoard.getTile.selector),
+            abi.encode(Board.Tile({ tankId: 1, hearts: 0 }))
+        );
         vm.prank(address(1));
         vm.expectRevert("position occupied");
         tankGame.move(1, p0);
     }
 
-    function testMoveToOccupied() public {
-        initGame();
-        // check if any are in range to collide. if not do multiple move to make this happen
-        for (uint160 i = 1; i < 9; i++) {
-            for (uint160 j = 1; j < 9; j++) {
-                if (i == j) {
-                    continue;
-                }
-                uint256 distance = tankGame.board().getDistanceTanks(i, j);
-                if (distance < 3) {
-                    Board.Point memory p0 = tankGame.board().getTankPosition(1);
-                    vm.prank(address(j));
-                    vm.expectRevert("position occupied");
-                    tankGame.move(j, p0);
-                }
-            }
-        }
-    }
-
     ///// TESTs for shoot /////
-    function testShoot() public {
+    function testShootNormal() public {
         initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
         vm.prank(address(8));
         tankGame.shoot(8, 6, 1);
-        (,, uint256 apsAfter,) = tankGame.tanks(8);
-        (, uint256 hearts,,) = tankGame.tanks(6);
+        uint256 apsAfter = tankGame.getTank(8).aps;
+        uint256 hearts = tankGame.getTank(6).hearts;
         assertEq(apsAfter, 2);
         assertEq(hearts, 2);
     }
 
     function testShootOutOfRange() public {
         initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(4)
+        );
         vm.prank(address(1));
         vm.expectRevert("target out of range");
         tankGame.shoot(1, 8, 1);
@@ -170,6 +172,9 @@ contract TankTest is Test {
 
     function testShootNotEnoughAP() public {
         initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
         vm.prank(address(3));
         vm.expectRevert("not enough action points");
         tankGame.shoot(3, 4, 4);
@@ -180,6 +185,7 @@ contract TankTest is Test {
         vm.prank(address(5));
         tankGame.shoot(5, 3, 3);
         vm.expectRevert("tank is dead");
+        vm.prank(address(4));
         tankGame.shoot(4, 3, 1);
     }
 
@@ -194,26 +200,35 @@ contract TankTest is Test {
 
     function testGiveHeart() public {
         initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
         vm.prank(address(8));
         tankGame.give(8, 6, 1, 0);
-        (, uint256 hearts,,) = tankGame.tanks(8);
+        uint256 hearts = tankGame.getTank(8).hearts;
         assertEq(hearts, 2);
-        (, uint256 giverHearts,,) = tankGame.tanks(6);
+        uint256 giverHearts = tankGame.getTank(6).hearts;
         assertEq(giverHearts, 4);
     }
 
     function testGiveAps() public {
         initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
         vm.prank(address(8));
         tankGame.give(8, 6, 0, 1);
-        (,, uint256 ap,) = tankGame.tanks(8);
+        uint256 ap = tankGame.getTank(8).aps;
         assertEq(ap, 2);
-        (,, uint256 aps,) = tankGame.tanks(6);
+        uint256 aps = tankGame.getTank(6).aps;
         assertEq(aps, 4);
     }
 
     function testGiveOutOfRange() public {
         initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(4)
+        );
         vm.prank(address(1));
         vm.expectRevert("target out of range");
         tankGame.give(1, 2, 1, 0);
@@ -221,6 +236,9 @@ contract TankTest is Test {
 
     function testGiveTooMuchAp() public {
         initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
         vm.prank(address(8));
         vm.expectRevert("not enough action points");
         tankGame.give(8, 6, 0, 4);
@@ -228,6 +246,9 @@ contract TankTest is Test {
 
     function testGiveTooMuchHearts() public {
         initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
         vm.prank(address(8));
         vm.expectRevert("not enough hearts");
         tankGame.give(8, 6, 4, 0);
@@ -238,7 +259,8 @@ contract TankTest is Test {
         initGame();
         vm.prank(address(1));
         tankGame.upgrade(1);
-        (,, uint256 aps, uint256 range) = tankGame.tanks(1);
+        uint256 aps = tankGame.getTank(1).aps;
+        uint256 range = tankGame.getTank(1).range;
         assertEq(range, 4);
         assertEq(aps, 0);
     }
@@ -262,11 +284,11 @@ contract TankTest is Test {
     /// drip tests ///
     function testDrip() public {
         initGame();
-        (,,,,,,,, uint256 epochtime,,,) = tankGame.settings();
+        uint256 epochtime = tankGame.getSettings().epochSeconds;
         skip(epochtime);
         vm.prank(address(1));
         tankGame.drip(1);
-        (,, uint256 aps,) = tankGame.tanks(1);
+        uint256 aps = tankGame.getTank(1).aps;
         assertEq(aps, 4);
     }
 
@@ -279,7 +301,7 @@ contract TankTest is Test {
 
     function testDripInSameEpoch() public {
         initGame();
-        (,,,,,,,, uint256 epochtime,,,) = tankGame.settings();
+        uint256 epochtime = tankGame.getSettings().epochSeconds;
         skip(epochtime);
         vm.prank(address(1));
         tankGame.drip(1);
@@ -289,28 +311,31 @@ contract TankTest is Test {
     }
 
     /// end game tests
+    // @notice this offset logic is because there are precompiles at address 1, 2, 3, 4, 5  etc
+    // if we try to transfer to them we get fucked.
+    // importantly this is next n where killer needs to be at the front
+    function killNPlayers(uint256 killerId, uint160 addressOffset, uint256 n) public {
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        uint256 numplayers = tankGame.getSettings().playerCount;
+        uint256 initHearts = tankGame.getSettings().initHearts;
+        skip(epochTime * numplayers * initHearts);
+        vm.prank(address(uint160(killerId + addressOffset)));
+        tankGame.drip(killerId);
+        for (uint160 i = uint160(killerId + 1); i <= killerId + n - 1; i++) {
+            vm.prank(address(uint160(killerId + addressOffset)));
+            tankGame.shoot(killerId, i, 3);
+            console.log("tanks alive", tankGame.numTanksAlive());
+        }
+        assertTrue(tankGame.state() == ITankGame.GameState.Ended, "game should be over");
+    }
+
     function testClaim() public {
         uint160 precompileOffset = 10_000;
         initGame(precompileOffset);
-        // give everyone infinite range
-        (,,,,,,,, uint256 epochtime,,,) = tankGame.settings();
-        skip(epochtime);
-        for (uint256 j = 1; j <= 1000; j++) {
-            for (uint160 i = 1; i <= 8; i++) {
-                vm.startPrank(address(i + precompileOffset));
-                tankGame.drip(i);
-                if (j % 3 == 0) {
-                    tankGame.upgrade(i);
-                }
-                skip(epochtime);
-                vm.stopPrank();
-            }
-        }
-        // kill everyone
-        vm.startPrank(address(1 + precompileOffset));
-        for (uint160 i = 2; i <= 8; i++) {
-            tankGame.shoot(1, i, 3);
-        }
+        killNPlayers(1, precompileOffset, 8);
 
         // number 1 wins, second is 7 and third is 8
         assertTrue(tankGame.state() == ITankGame.GameState.Ended, "game not ended");
