@@ -94,11 +94,31 @@ contract TankTest is Test {
         tankGame.move(1, Board.Point(boardSize + 1, boardSize + 1, boardSize + 1));
     }
 
+    function testGetDistance() public {
+        Board.Point memory p0 = Board.Point({ x: 3, y: 3, z: 3 });
+        Board.Point memory p1 = Board.Point({ x: 4, y: 2, z: 3 });
+        uint256 distance = tankGame.board().getDistance(p0, p1);
+        assertEq(distance, 1, "distance should be 1");
+        Board.Point memory p2 = Board.Point({ x: 5, y: 1, z: 3 });
+        uint256 distance2 = tankGame.board().getDistance(p0, p2);
+        assertEq(distance2, 2, "distance should be 2");
+    }
+
+    function testRandomPoints() public {
+        for (uint256 i = 0; i < 10_000; i++) {
+            uint256 seed = uint256(keccak256(abi.encodePacked(i)));
+            Board.Point memory p0 = tankGame.board().randomPoint(seed);
+            // console.log("random point: (%s, %s, %s)", p0.x, p0.y, p0.z);
+            assertTrue(tankGame.board().isValidPoint(p0), "point should be valid");
+        }
+    }
+
     function testMoveTooFar() public {
         initGame();
-        Board.Point memory p0 = tankGame.board().getTankPosition(1);
-        (,, uint256 apsBefore,) = tankGame.tanks(1);
+        Board.Point memory p0 = tankGame.getBoard().getTankPosition(1);
+        uint256 apsBefore = tankGame.getTank(1).aps;
         vm.prank(address(1));
+        vm.mockCall(address(0), abi.encodeWithSelector(Board.getDistance.selector), abi.encode(4));
         vm.expectRevert("not enough action points");
         tankGame.move(1, Board.Point(p0.x + apsBefore + 1, p0.y, p0.z));
     }

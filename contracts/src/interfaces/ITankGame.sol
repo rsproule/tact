@@ -51,4 +51,10 @@ interface ITankGame {
     function commit() external;
 
     function reveal() external;
+
+    function getPlayerCount() external view returns (uint256);
+
+    function getTank(uint256 tankId) external view returns (Tank memory);
+
+    function getBoard() external view returns (Board);
 }

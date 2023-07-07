@@ -8,7 +8,7 @@ import { HexBoard } from "src/base/HexBoard.sol";
 
 contract TankGame is ITankGame, TankGameV2Storage {
     event GameStarted();
-    event PlayerJoined(address player, uint256 x, uint256 y, uint256 z);
+    event PlayerJoined(address player, uint256 tankId, Board.Point position);
     event Move(uint256 tankId, uint256 x, uint256 y, uint256 z);
     event Shoot(uint256 tankId, uint256 targetId);
     event Give(uint256 fromId, uint256 toId, uint256 hearts, uint256 aps);
@@ -79,13 +79,13 @@ contract TankGame is ITankGame, TankGameV2Storage {
         aliveTanksIdSum += playersCount;
         tanks[playersCount] = tank;
         players[msg.sender] = playersCount;
-        board.setTile(emptyPoint, Board.Tile(playersCount, 0));
+        board.setTile(emptyPoint, Board.Tile({ tankId: playersCount, hearts: 0 }));
         if (playersCount >= settings.playerCount) {
             epochStart = _getEpoch();
             state = GameState.Started;
             emit GameStarted();
         }
-        emit PlayerJoined(msg.sender, emptyPoint.x, emptyPoint.y, emptyPoint.z);
+        emit PlayerJoined(msg.sender, playersCount, emptyPoint);
     }
 
     function move(
@@ -97,22 +97,15 @@ contract TankGame is ITankGame, TankGameV2Storage {
         isTankOwnerOrDelegate(tankId)
         isTankAlive(tankId)
     {
-        if (to.x >= settings.boardSize || to.y >= settings.boardSize) {
-            revert("out of bounds");
-        }
+        require(board.isValidPoint(to), "invalid point");
         Board.Tile memory tile = board.getTile(to);
-        if (tile.tankId != 0) {
-            revert("position occupied");
-        }
-
+        require(tile.tankId == 0, "position occupied");
         uint256 apsRequired = board.getDistanceTankToPoint(tankId, to);
-        if (apsRequired > tanks[tankId].aps) {
-            revert("not enough action points");
-        }
+        require(apsRequired <= tanks[tankId].aps, "not enough action points");
 
         tanks[tankId].hearts += tile.hearts;
         tanks[tankId].aps -= apsRequired;
-        board.setTile(to, Board.Tile(tankId, 0));
+        board.setTile(to, Board.Tile({ tankId: tankId, hearts: 0 }));
         emit Move(tankId, to.x, to.y, tile.hearts);
     }
 
@@ -210,14 +203,10 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function drip(uint256 tankId) external gameStarted isTankOwnerOrDelegate(tankId) isTankAlive(tankId) {
         uint256 epoch = _getEpoch();
-        if (epoch == epochStart) {
-            revert("too early to drip");
-        }
+        require(epoch != epochStart, "too early to drip");
         uint256 lastDrippedEpoch = lastDripEpoch[tankId];
         lastDrippedEpoch = lastDrippedEpoch > 0 ? lastDrippedEpoch : epochStart;
-        if (epoch == lastDrippedEpoch) {
-            revert("already dripped");
-        }
+        require(epoch != lastDrippedEpoch, "already dripped");
         uint256 amount = epoch - lastDrippedEpoch;
         tanks[tankId].aps += amount;
 
@@ -226,9 +215,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     function claim(uint256 tankId, address claimer) external isTankOwner(tankId) {
-        if (state != GameState.Ended) {
-            revert("game not ended");
-        }
+        require(state == GameState.Ended, "game not ended");
         // loop is a bit gross, could do a mapping of tank to position on podium
         for (uint256 i = 0; i < podium.length; i++) {
             if (podium[i] == tankId) {
@@ -268,11 +255,10 @@ contract TankGame is ITankGame, TankGameV2Storage {
     function spawnResource() private {
         uint256 seed = uint256(blockhash(revealBlock));
         Board.Point memory randomTile = board.getEmptyTile(seed);
-        board.setTile(randomTile, Board.Tile(0, 1));
+        board.setTile(randomTile, Board.Tile({ tankId: 0, hearts: 1 }));
         emit SpawnHeart(msg.sender, randomTile.x, randomTile.y, randomTile.z);
     }
 
-    /// helpers ///
     function _getEpoch() internal view returns (uint256) {
         return block.timestamp / settings.epochSeconds;
     }
@@ -281,22 +267,15 @@ contract TankGame is ITankGame, TankGameV2Storage {
         return _getEpoch();
     }
 
-    /// readonly stuff used for frontend, move this to a view contract ///
-    struct TankLocation {
-        Tank tank;
-        Board.Point position;
-        uint256 tankId;
+    function getTank(uint256 tankId) external view returns (Tank memory) {
+        return tanks[tankId];
     }
 
-    function getAllTanks() external view returns (TankLocation[] memory) {
-        TankLocation[] memory tanksWithLocation = new TankLocation[](
-            playersCount
-        );
-        for (uint256 i = 1; i <= playersCount; i++) {
-            Board.Point memory position = board.getTankPosition(i);
-            Tank memory tank = tanks[i];
-            tanksWithLocation[i - 1] = TankLocation(tank, position, i);
-        }
-        return tanksWithLocation;
+    function getPlayerCount() external view returns (uint256) {
+        return playersCount;
+    }
+
+    function getBoard() external view returns (Board) {
+        return board;
     }
 }
