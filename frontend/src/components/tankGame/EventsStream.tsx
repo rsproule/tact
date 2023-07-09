@@ -127,6 +127,11 @@ export function EventStream() {
     const logs = await publicClient.getFilterLogs({
       filter,
     });
+    console.log(
+      JSON.stringify(logs, (key, value) =>
+        typeof value === "bigint" ? value.toString() : value
+      )
+    );
     setOldLogs([
       ...logs.reverse().map((log) => logToText(log)),
       ...emergencyInitLogs,
