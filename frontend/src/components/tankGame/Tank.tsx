@@ -1,20 +1,7 @@
-import { useAccount } from "wagmi";
-import Image from "next/image";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "../ui/hover-card";
-import { Droplet, Heart, Move, Target, User, Zap } from "lucide-react";
+import { Droplet, Heart, Target, User, Zap } from "lucide-react";
 import { ITank } from "./ITank";
 import { useTankGameGetEpoch, useTankGameLastDripEpoch } from "@/src/generated";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from "../ui/dropdown-menu";
-import EmptySquareMenu from "./actions/EmptySquareMenu";
+import { DropdownMenu, DropdownMenuContent } from "../ui/dropdown-menu";
 
 export const OWNERS: Map<String, String> = new Map<string, string>([
   ["0x5337122c6b5ce24D970Ce771510D22Aeaf038C44", "Ryan"],
@@ -39,7 +26,6 @@ interface TankProps {
 }
 export function Tank({ tankObj, open, position, onChange }: TankProps) {
   const { tank, tankId } = tankObj;
-  let { address } = useAccount();
   let lastDripEpoch = useTankGameLastDripEpoch({
     args: [tankId],
     enabled: !!tankId,

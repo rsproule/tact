@@ -1,18 +1,11 @@
 import { useState } from "react";
 import { Tank } from "./Tank";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent } from "../ui/dropdown-menu";
 import { ITank } from "./ITank";
 import EmptySquareMenu from "./actions/EmptySquareMenu";
 import EnemySquareMenu from "./actions/EnemySquareMenu";
 import SelfSquareMenu from "./actions/SelfSquareMenu";
-import { Hexagon, Pattern } from "react-hexgrid";
+import { Hexagon } from "react-hexgrid";
 
 interface TileProps {
   x: number;
@@ -44,7 +37,6 @@ export function Tile(props: TileProps) {
 
   const handleClick = (event: React.MouseEvent<SVGGElement, MouseEvent>) => {
     const rect = event.currentTarget.getBoundingClientRect();
-    console.log("rect", rect);
     setPosition({
       top: rect.top + rect.height / 2,
       left: rect.left + rect.width / 2,
@@ -55,7 +47,6 @@ export function Tile(props: TileProps) {
     event: React.MouseEvent<SVGGElement, MouseEvent>
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
-    // console.log("rect", rect);
     setPosition2({
       top: rect.top + rect.height / 2,
       left: rect.left + rect.width / 2,
@@ -74,19 +65,21 @@ export function Tile(props: TileProps) {
       )}
       <Hexagon
         onClick={(e) => {
-          console.log("e", e);
           props.onClick();
           handleClick(e);
         }}
-        // onMouseEnter={handleMouseEnter}
         onContextMenu={(e) => {
-          // console.log("e", e);
           e.preventDefault();
           handleContextMenu(e);
         }}
         q={props.x}
         r={props.y}
         s={props.z}
+        className={`${getColor(
+          props.selected,
+          props.isShootRange,
+          props.isMoveRange
+        )}`}
         fill={
           props.tank && props.tank?.tankId === props.ownersTankId
             ? "owner"
@@ -110,6 +103,7 @@ export function Tile(props: TileProps) {
               ownersTank={props.ownersTankId!}
               x={props.x}
               y={props.y}
+              z={props.z}
             />
           )}
           {props.tank && props.tank.tankId === props.ownersTankId && (
@@ -128,19 +122,18 @@ export function Tile(props: TileProps) {
   );
 }
 
-function getFill(selected: boolean, shootRange: boolean, moveRange: boolean) {}
 function getColor(selected: boolean, shootRange: boolean, moveRange: boolean) {
   if (selected) {
-    return "bg-green-200";
+    return "fill-green-200";
   }
   if (shootRange && moveRange) {
-    return "bg-orange-200";
+    return "fill-orange-200";
   }
   if (shootRange) {
-    return "bg-red-200";
+    return "fill-red-200";
   }
   if (moveRange) {
-    return "bg-gray-200";
+    return "fill-blue-200";
   }
-  return "bg-gray-500";
+  return "fill-gray-400";
 }

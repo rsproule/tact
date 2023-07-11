@@ -85,10 +85,10 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
-svg g {
+/* svg g {
   fill: #454f89;
   fill-opacity: 0.6;
-}
+} */
 svg g:hover {
   fill-opacity: 1;
 }

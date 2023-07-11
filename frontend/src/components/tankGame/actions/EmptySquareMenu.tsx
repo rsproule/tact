@@ -3,27 +3,25 @@ import { usePrepareTankGameMove, useTankGameMove } from "@/src/generated";
 import { Move } from "lucide-react";
 import { BaseError } from "viem";
 import { useWaitForTransaction } from "wagmi";
-import {
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from "../../ui/dropdown-menu";
+import { DropdownMenuGroup, DropdownMenuItem } from "../../ui/dropdown-menu";
 import { useToast } from "../../ui/use-toast";
 
 export default function EmptySquareMenu({
   ownersTank,
   x,
   y,
+  z,
   open,
 }: {
   ownersTank: bigint;
   x: number;
   y: number;
+  z: number;
   open: boolean;
 }) {
   const { toast } = useToast();
   let { config } = usePrepareTankGameMove({
-    args: [ownersTank, { x: BigInt(x), y: BigInt(y) }],
+    args: [ownersTank, { x: BigInt(x), y: BigInt(y), z: BigInt(z) }],
     enabled: open && !!ownersTank,
   });
   const { write: move, data } = useTankGameMove(config);
@@ -51,7 +49,7 @@ export default function EmptySquareMenu({
       <DropdownMenuItem disabled={!move} onSelect={() => move?.()}>
         <Move className="mr-2 h-4 w-4" />
         <span>
-          Move here ({y}, {x})
+          Move here ({y}, {x}, {z})
         </span>
       </DropdownMenuItem>
     </DropdownMenuGroup>

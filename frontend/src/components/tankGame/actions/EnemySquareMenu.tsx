@@ -26,7 +26,7 @@ export default function EnemySquareMenu({
 }) {
   const { toast } = useToast();
   let { config: shootConfig } = usePrepareTankGameShoot({
-    args: [ownersTank!, enemyTank!],
+    args: [ownersTank!, enemyTank!, BigInt(1)],
     enabled: open && !!ownersTank && !!enemyTank,
   });
   const { write: shoot, data: shootHash } = useTankGameShoot(shootConfig);
