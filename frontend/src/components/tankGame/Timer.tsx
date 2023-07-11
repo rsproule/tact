@@ -1,14 +1,14 @@
 import {
+  useITankGameGetSettings,
   useTankGameEpochStart,
   useTankGameGetEpoch,
-  useTankGameSettings,
 } from "@/src/generated";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export default function Timer() {
   const startEpoch = useTankGameEpochStart();
   const currentEpoch = useTankGameGetEpoch({ watch: true });
-  const settings = useTankGameSettings();
+  const settings = useITankGameGetSettings();
   return (
     <div className="flex justify-center pb-3">
       <Card>

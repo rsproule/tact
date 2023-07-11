@@ -1,5 +1,5 @@
 "use client";
-import { useITankGameGetSettings, useTankGameSettings, useTankGameState } from "../../generated";
+import { useITankGameGetSettings, useTankGameGetSettings, useTankGameSettings, useTankGameState } from "../../generated";
 // import { Board } from "./GameBoard";
 import { HexBoard } from "./HexGameBoard";
 import Timer from "./Timer";
@@ -7,10 +7,10 @@ import Donate from "./actions/Donate";
 import { GameOver } from "./states/GameOver";
 import { WaitingForPlayers } from "./states/WaitingForPlayers";
 export function TankGame() {
-  let gameState = useTankGameState();
+  let gameState = useTankGameState({watch: true});
   console.log("gameState", gameState)
   // let settings = useTankGameSettings();
-  let settings = useITankGameGetSettings()
+  let settings = useTankGameGetSettings()
   return (
     <div className={`w-full`}>
       <a
@@ -31,7 +31,7 @@ export function TankGame() {
           <HexBoard boardSize={settings.data && settings.data!.boardSize} />
         </>
       )}
-      <HexBoard boardSize={settings.data && settings.data!.boardSize} />
+      {/* <HexBoard boardSize={settings.data && settings.data!.boardSize} /> */}
       {/* {gameState.data === 2 && <GameOver />}
       {gameState.data !== 2 && <Donate />} */}
     </div>

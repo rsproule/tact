@@ -953,6 +953,19 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
+"@radix-ui/react-context-menu@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-context-menu/-/react-context-menu-2.1.4.tgz#250420d259d3cebe026b7658414c516a1204de3f"
+  integrity sha512-HVHLUtZOBiR2Fh5l07qQ9y0IgX4dGZF0S9Gwdk4CVA+DL9afSphvFNa4nRiw6RNgb6quwLV4dLPF/gFDvNaOcQ==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-menu" "2.0.5"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-use-callback-ref" "1.0.1"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
+
 "@radix-ui/react-context@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-context/-/react-context-1.0.1.tgz#fe46e67c96b240de59187dcb7a1a50ce3e2ec00c"
@@ -1061,6 +1074,33 @@
     "@radix-ui/react-roving-focus" "1.0.4"
     "@radix-ui/react-slot" "1.0.2"
     "@radix-ui/react-use-callback-ref" "1.0.1"
+    aria-hidden "^1.1.1"
+    react-remove-scroll "2.5.5"
+
+"@radix-ui/react-polymorphic@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-polymorphic/-/react-polymorphic-0.0.14.tgz#fc6cefee6686db8c5a7ff14c8c1b9b5abdee325b"
+  integrity sha512-9nsMZEDU3LeIUeHJrpkkhZVxu/9Fc7P2g2I3WR+uA9mTbNC3hGaabi0dV6wg0CfHb+m4nSs1pejbE/5no3MJTA==
+
+"@radix-ui/react-popover@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-popover/-/react-popover-1.0.6.tgz#19bb81e7450482c625b8cd05bf4dcd1d2cd91a8b"
+  integrity sha512-cZ4defGpkZ0qTRtlIBzJLSzL6ht7ofhhW4i1+pkemjV1IKXm0wgCRnee154qlV6r9Ttunmh2TNZhMfV2bavUyA==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-compose-refs" "1.0.1"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-dismissable-layer" "1.0.4"
+    "@radix-ui/react-focus-guards" "1.0.1"
+    "@radix-ui/react-focus-scope" "1.0.3"
+    "@radix-ui/react-id" "1.0.1"
+    "@radix-ui/react-popper" "1.1.2"
+    "@radix-ui/react-portal" "1.0.3"
+    "@radix-ui/react-presence" "1.0.1"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-slot" "1.0.2"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
     aria-hidden "^1.1.1"
     react-remove-scroll "2.5.5"
 
@@ -2213,6 +2253,18 @@ array.prototype.tosorted@^1.1.1:
     es-abstract "^1.20.4"
     es-shim-unscopables "^1.0.0"
     get-intrinsic "^1.1.3"
+
+assign-deep@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/assign-deep/-/assign-deep-1.0.1.tgz#b6d21d74e2f28bf6592e4c0c541bed6ab59c5f27"
+  integrity sha512-CSXAX79mibneEYfqLT5FEmkqR5WXF+xDRjgQQuVf6wSCXCYU8/vHttPidNar7wJ5BFmKAo8Wei0rCtzb+M/yeA==
+  dependencies:
+    assign-symbols "^2.0.2"
+
+assign-symbols@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-2.0.2.tgz#0fb9191dd9d617042746ecfc354f3a3d768a0c98"
+  integrity sha512-9sBQUQZMKFKcO/C3Bo6Rx4CQany0R0UeVcefNGRRdW2vbmaMOhV1sbmlXcQLcD56juLXbSGTBm0GGuvmrAF8pA==
 
 ast-types-flow@^0.0.7:
   version "0.0.7"
@@ -6440,6 +6492,13 @@ thread-stream@^0.15.1:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==
+
+tiled-hexagons@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/tiled-hexagons/-/tiled-hexagons-1.0.2.tgz#dd85ca9b7236da6fef027276d86ac9cb45f2a23a"
+  integrity sha512-n5cyvPKEO8pIriJsbJ4pFxQSo+1GHAkByqg4xkXreWXAq3r28G+JBrP0VHqOYXup4juJzF1tCRLSiEbwWyBwVw==
+  dependencies:
+    assign-deep "^1.0.0"
 
 titleize@^3.0.0:
   version "3.0.0"

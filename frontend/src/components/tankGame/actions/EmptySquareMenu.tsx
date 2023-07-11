@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { usePrepareTankGameMove, useTankGameMove } from "@/src/generated";
 import { Move } from "lucide-react";
 import { BaseError } from "viem";
@@ -46,13 +46,15 @@ export default function EmptySquareMenu({
     },
   });
   return (
-    <DropdownMenuContent className="w-56">
-      <DropdownMenuGroup>
-        <DropdownMenuItem disabled={!move} onSelect={() => move?.()}>
-          <Move className="mr-2 h-4 w-4" />
-          <span>Move here ({y}, {x})</span>
-        </DropdownMenuItem>
-      </DropdownMenuGroup>
-    </DropdownMenuContent>
+    // <DropdownMenuContent className="w-56">
+    <DropdownMenuGroup>
+      <DropdownMenuItem disabled={!move} onSelect={() => move?.()}>
+        <Move className="mr-2 h-4 w-4" />
+        <span>
+          Move here ({y}, {x})
+        </span>
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+    // </DropdownMenuContent>
   );
 }
