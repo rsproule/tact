@@ -24,8 +24,7 @@ contract TankGameDeployerScript is Script {
             voteThreshold: 3,
             actionDelaySeconds: 0,
             buyInMinimum: 0,
-            revealWaitBlocks: 10,
-            spawnerCooldown: 10
+            revealWaitBlocks: 1000
         });
         tankGame = factory.createGame(gs);
 

@@ -21,7 +21,8 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event Death(uint256 killer, uint256 killed);
     event Revive(uint256 savior, uint256 saved);
     event SpawnHeart(address poker, uint256 x, uint256 y, uint256 z);
-    event RevealSet(address poker, uint256 blocknumber);
+    event Reveal(address poker, uint256 blocknumber);
+    event Commit(address poker, uint256 blocknumber);
     event Delegate(uint256 tank, address delegate, address owner);
     event GameOver(uint256 winner, uint256 second, uint256 third, uint256 prizePool);
 
@@ -30,6 +31,8 @@ contract TankGame is ITankGame, TankGameV2Storage {
         state = GameState.WaitingForPlayers;
         prizePool = msg.value;
         board = new HexBoard(gs.boardSize);
+        revealBlock = block.number + gs.revealWaitBlocks;
+        emit Commit(msg.sender, revealBlock);
     }
 
     function donate() external payable {
@@ -139,7 +142,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
                 podium[2] = deadTanks[deadTanks.length - 2];
                 // since we know that there is only 1 remaining tank
                 // we can set the first podium position to the sum of all alive tanks
-                // can't trust the `from` because you can kill yourself 
+                // can't trust the `from` because you can kill yourself
                 podium[0] = aliveTanksIdSum;
                 state = GameState.Ended;
                 emit GameOver(podium[0], podium[1], podium[2], prizePool);
@@ -241,20 +244,15 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Delegate(tankId, delegatee, tanks[tankId].owner);
     }
 
-    function commit() public gameStarted {
-        require(block.number <= revealBlock, "already commit");
-        require(block.number - settings.spawnerCooldown > lastRevealBlock, "cooling down");
-        revealBlock = block.number + settings.revealWaitBlocks;
-    }
-
     function reveal() public {
         require(block.number >= revealBlock, "not ready to reveal");
+        emit Reveal(msg.sender, revealBlock);
         // as long as we are within 256 blocks, we can reveal
         if (block.number - revealBlock <= 256) {
             spawnResource();
         }
-        revealBlock = block.number + settings.revealWaitBlocks + settings.spawnerCooldown;
-        emit RevealSet(msg.sender, revealBlock);
+        revealBlock = block.number + settings.revealWaitBlocks; 
+        emit Commit(msg.sender, revealBlock);
     }
 
     function spawnResource() private {

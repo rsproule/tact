@@ -16,7 +16,6 @@ interface ITankGame {
         uint256 actionDelaySeconds;
         uint256 buyInMinimum;
         uint256 revealWaitBlocks;
-        uint256 spawnerCooldown;
     }
 
     struct Tank {
@@ -47,8 +46,6 @@ interface ITankGame {
     function claim(uint256 tankId, address claimer) external;
 
     function delegate(uint256 tankId, address delegatee) external;
-
-    function commit() external;
 
     function reveal() external;
 

@@ -24,8 +24,7 @@ contract TankTest is Test {
             voteThreshold: 3,
             actionDelaySeconds: 0,
             buyInMinimum: 0,
-            revealWaitBlocks: 10,
-            spawnerCooldown: 10
+            revealWaitBlocks: 1000
         });
         tankGame = new TankGame{value: 10 ether}(gs);
     }
@@ -269,10 +268,8 @@ contract TankTest is Test {
         skip((26 - apsBefore) * epochTime);
         vm.startPrank(address(1));
         tankGame.drip(1);
-        console.log("apsBefore", apsBefore);
         tankGame.upgrade(1);
         uint256 apsAfter = tankGame.getTank(1).aps;
-        console.log("apsAFter   ", apsAfter);
         uint256 range = tankGame.getTank(1).range;
         assertEq(range, 4);
         assertEq(apsAfter, 0);
@@ -326,6 +323,59 @@ contract TankTest is Test {
         tankGame.drip(1);
     }
 
+    /// commit reveal tests
+
+    function testRevealOnTime() public {
+        initGame();
+        uint256 revealTime = tankGame.revealBlock();
+        vm.roll(revealTime);
+        vm.recordLogs();
+        tankGame.reveal();
+        // we are still in window so should see a spawn
+        Vm.Log[] memory entries = vm.getRecordedLogs();
+        assertEq(entries.length, 3);
+        assertEq(entries[0].topics[0], keccak256("Reveal(address,uint256)"));
+        assertEq(entries[1].topics[0], keccak256("SpawnHeart(address,uint256,uint256,uint256)"));
+        assertEq(entries[2].topics[0], keccak256("Commit(address,uint256)"));
+    }
+
+    function testRevealJIT() public {
+        initGame();
+        uint256 revealTime = tankGame.revealBlock();
+        vm.roll(revealTime + 256); // 256 is how many block headers in past are accessible in evm
+        vm.recordLogs();
+        tankGame.reveal();
+        // we are still in window so should see a spawn
+        Vm.Log[] memory entries = vm.getRecordedLogs();
+        assertEq(entries.length, 3);
+        assertEq(entries[0].topics[0], keccak256("Reveal(address,uint256)"));
+        assertEq(entries[1].topics[0], keccak256("SpawnHeart(address,uint256,uint256,uint256)"));
+        assertEq(entries[2].topics[0], keccak256("Commit(address,uint256)"));
+    }
+
+    function testRevealLate() public {
+        initGame();
+        uint256 revealTime = tankGame.revealBlock();
+        vm.roll(revealTime + 256 + 1); // 256 is how many block headers in past are accessible in evm
+        vm.recordLogs();
+        tankGame.reveal();
+        Vm.Log[] memory entries = vm.getRecordedLogs();
+        assertEq(entries.length, 2);
+        assertEq(entries[0].topics[0], keccak256("Reveal(address,uint256)"));
+        assertEq(entries[1].topics[0], keccak256("Commit(address,uint256)"));
+
+        /// now wait another cooldown
+        revealTime = tankGame.revealBlock();
+        vm.roll(revealTime + 256); // 256 is how many block headers in past are accessible in evm
+        vm.recordLogs();
+        tankGame.reveal();
+        entries = vm.getRecordedLogs();
+        assertEq(entries.length, 3);
+        assertEq(entries[0].topics[0], keccak256("Reveal(address,uint256)"));
+        assertEq(entries[1].topics[0], keccak256("SpawnHeart(address,uint256,uint256,uint256)"));
+        assertEq(entries[2].topics[0], keccak256("Commit(address,uint256)"));
+    }
+
     /// end game tests
     // @notice this offset logic is because there are precompiles at address 1, 2, 3, 4, 5  etc
     // if we try to transfer to them we get fucked.
@@ -343,7 +393,6 @@ contract TankTest is Test {
         for (uint160 i = uint160(killerId + 1); i <= killerId + n - 1; i++) {
             vm.prank(address(uint160(killerId + addressOffset)));
             tankGame.shoot(killerId, i, 3);
-            console.log("tanks alive", tankGame.numTanksAlive());
         }
         assertTrue(tankGame.state() == ITankGame.GameState.Ended, "game should be over");
     }

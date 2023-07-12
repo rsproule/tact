@@ -36,8 +36,7 @@ contract TankGameFactoryTest is Test {
             voteThreshold: 3,
             actionDelaySeconds: 0,
             buyInMinimum: 0,
-            revealWaitBlocks: 10,
-            spawnerCooldown: 10
+            revealWaitBlocks: 1000
         });
     }
 }
