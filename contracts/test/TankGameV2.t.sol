@@ -23,7 +23,7 @@ contract TankTest is Test {
             epochSeconds: 4 hours,
             voteThreshold: 3,
             actionDelaySeconds: 0,
-            buyInMinimum: 0,
+            buyInMinimum: 1,
             revealWaitBlocks: 1000
         });
         tankGame = new TankGame{value: 10 ether}(gs);
@@ -32,8 +32,8 @@ contract TankTest is Test {
     function initGame(uint160 offset) public {
         for (uint160 i = 1; i < 9; i++) {
             vm.label(address(i + offset), string(abi.encodePacked("tank", Strings.toString(i))));
-            vm.prank(address(i + offset));
-            tankGame.join();
+            hoax(address(i + offset), 1);
+            tankGame.join{ value: 1 }();
         }
         vm.clearMockedCalls();
     }
@@ -43,24 +43,32 @@ contract TankTest is Test {
     }
 
     function testJoinGame() public {
-        tankGame.join();
+        hoax(address(1), 1);
+        tankGame.join{ value: 1 }();
         assertEq(tankGame.playersCount(), 1);
     }
 
-    function testJoinGameTwiceFails() public {
+    function testJoinGameInsufficientBuyIn() public {
+        vm.expectRevert("insufficient buy in");
         tankGame.join();
+    }
+
+    function testJoinGameTwiceFails() public {
+        startHoax(address(1), 2);
+        tankGame.join{ value: 1 }();
         assertEq(tankGame.playersCount(), 1);
         vm.expectRevert("already joined");
-        tankGame.join();
+        tankGame.join{ value: 1 }();
     }
 
     function testJoinFullGame() public {
         for (uint160 i = 0; i < 8; i++) {
-            vm.prank(address(i));
-            tankGame.join();
+            hoax(address(i), 1);
+            tankGame.join{ value: 1 }();
         }
         vm.expectRevert("game is full");
-        tankGame.join();
+        hoax(address(9), 1);
+        tankGame.join{ value: 1 }();
     }
 
     function testInitGame() public {
@@ -192,6 +200,46 @@ contract TankTest is Test {
         vm.expectRevert("tank is dead");
         vm.prank(address(4));
         tankGame.shoot(4, 3, 1);
+    }
+
+    function testShootTooMany() public {
+        initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        skip(epochTime);
+        vm.startPrank(address(5));
+        tankGame.drip(5);
+        vm.expectRevert("too many shots");
+        tankGame.shoot(5, 3, 4);
+    }
+
+    function testShootAndRevive() public {
+        initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        vm.startPrank(address(5));
+        skip(epochTime + 1);
+        uint256 sum = tankGame.aliveTanksIdSum();
+        tankGame.shoot(5, 3, 3);
+        assertEq(tankGame.numTanksAlive(), tankGame.getSettings().playerCount - 1, "wrong number of tanks alive");
+        assertEq(tankGame.aliveTanksIdSum(), sum - 3, "wrong sum after kill");
+        tankGame.give(5, 3, 1, 0);
+        assertEq(tankGame.numTanksAlive(), tankGame.getSettings().playerCount, "wrong number of tanks alive");
+        assertEq(tankGame.aliveTanksIdSum(), sum, "wrong sum after revive");
+        uint256 from = tankGame.getTank(5).hearts;
+        uint256 to = tankGame.getTank(3).hearts;
+        tankGame.drip(5);
+        vm.startPrank(address(3));
+        vm.expectRevert("already dripped");
+        tankGame.drip(3);
+        uint256 apsAlive = tankGame.getTank(5).aps;
+        assertEq(apsAlive, 1);
+        assertEq(from, 2);
+        assertEq(to, 1);
     }
 
     function testShootNonexistentTank() public {
@@ -429,5 +477,80 @@ contract TankTest is Test {
         tankGame.donate{ value: 1 ether }();
         assertEq(address(tankGame).balance - prizeAmountBefore, 1 ether);
         assertEq(tankGame.prizePool() - prizeAmountBefore, 1 ether);
+    }
+
+    /// Delegation tests
+    function testDelegate() public {
+        initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+        vm.prank(address(1));
+        tankGame.delegate(1, address(69));
+        vm.startPrank(address(69));
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        skip(100 * epochTime);
+        // can do all the actions
+        tankGame.drip(1);
+        tankGame.move(1, tankGame.getBoard().getEmptyTile(1));
+        tankGame.shoot(1, 2, 1);
+        tankGame.give(1, 2, 1, 1);
+
+        // kms
+        tankGame.shoot(1, 1, 2);
+        tankGame.vote(1, 2);
+        vm.prank(address(3));
+        tankGame.give(3, 1, 1, 1);
+
+        vm.startPrank(address(69));
+        vm.expectRevert("not tank owner");
+        tankGame.delegate(1, address(12));
+    }
+
+    /// Voting tests
+    function testVote() public {
+        initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+        vm.prank(address(1));
+        tankGame.shoot(1, 2, 3);
+
+        vm.prank(address(3));
+        vm.expectRevert("not tank owner or delegate");
+        tankGame.vote(2, 3);
+
+        vm.prank(address(3));
+        vm.expectRevert("tank is alive");
+        tankGame.vote(3, 1);
+
+        uint256 epochBefore = tankGame.getLastDrip(1);
+        vm.startPrank(address(2));
+        vm.recordLogs();
+        tankGame.vote(2, 1);
+        uint256 epochAfter = tankGame.getLastDrip(1);
+        assertEq(epochBefore + 1, epochAfter, "curse should push forward drip epoch");
+        Vm.Log[] memory entries = vm.getRecordedLogs();
+        assertEq(entries.length, 2);
+        assertEq(entries[0].topics[0], keccak256("Curse(uint256,uint256,uint256)"));
+        assertEq(entries[1].topics[0], keccak256("Vote(uint256,uint256,uint256)"));
+
+        vm.expectRevert("already voted");
+        tankGame.vote(2, 3);
+        // vm.prank(address(1));
+
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        skip(epochTime + 1);
+        vm.startPrank(address(4));
+        tankGame.shoot(4, 6, 3);
+        vm.prank(address(2));
+        tankGame.vote(2, 7);
+
+        vm.startPrank(address(6));
+        uint256 apsBefore = tankGame.getTank(7).aps;
+        tankGame.vote(6, 7);
+        uint256 apsAfter = tankGame.getTank(7).aps;
+        assertEq(apsBefore - 1, apsAfter, "vote should remove aps");
+
     }
 }

@@ -15,7 +15,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event Upgrade(uint256 tankId, uint256 range);
     event Vote(uint256 voter, uint256 cursed, uint256 epoch);
     event Curse(uint256 cursedTank, uint256 voter, uint256 epoch);
-    event Drip(uint256 tankId, uint256 amount);
+    event Drip(uint256 tankId, uint256 amount, uint256 epoch);
     event Claim(address reciever, uint256 tankId, uint256 amount);
     event PrizeIncrease(address donator, uint256 amount);
     event Death(uint256 killer, uint256 killed);
@@ -33,11 +33,6 @@ contract TankGame is ITankGame, TankGameV2Storage {
         board = new HexBoard(gs.boardSize);
         revealBlock = block.number + gs.revealWaitBlocks;
         emit Commit(msg.sender, revealBlock);
-    }
-
-    function donate() external payable {
-        prizePool += msg.value;
-        emit PrizeIncrease(msg.sender, msg.value);
     }
 
     modifier gameStarted() {
@@ -63,6 +58,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
     modifier isTankDead(uint256 tankId) {
         require(tanks[tankId].hearts == 0, "tank is alive");
         _;
+    }
+
+    function donate() external payable {
+        prizePool += msg.value;
+        emit PrizeIncrease(msg.sender, msg.value);
     }
 
     // should do some sort of commit reveal thing for the randomness instead of this
@@ -194,14 +194,27 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Upgrade(tankId, tanks[tankId].range);
     }
 
-    function vote(uint256 voter, uint256 cursed) external gameStarted isTankDead(voter) isTankOwnerOrDelegate(voter) {
+    function vote(
+        uint256 voter,
+        uint256 cursed
+    )
+        external
+        gameStarted
+        isTankDead(voter)
+        isTankAlive(cursed)
+        isTankOwnerOrDelegate(voter)
+    {
         uint256 epoch = _getEpoch();
-        require(votesPerEpoch[epoch][voter] == 0, "already voted");
+        require(!votedThisEpoch[epoch][voter], "already voted");
         require(votingClosed[epoch] == false, "voting closed");
 
         votesPerEpoch[epoch][cursed] += 1;
-        if (votesPerEpoch[epoch][cursed] > (deadTanks.length / 2) + 1) {
-            tanks[cursed].aps -= 1;
+        if (votesPerEpoch[epoch][cursed] >= (deadTanks.length / 2) + 1) {
+            if (tanks[cursed].aps > 1) {
+                tanks[cursed].aps -= 1;
+            } else {
+                lastDripEpoch[cursed] = _getLastDrip(cursed) + 1;
+            }
             votingClosed[epoch] = true;
             emit Curse(cursed, voter, epoch);
         }
@@ -212,14 +225,13 @@ contract TankGame is ITankGame, TankGameV2Storage {
     function drip(uint256 tankId) external gameStarted isTankOwnerOrDelegate(tankId) isTankAlive(tankId) {
         uint256 epoch = _getEpoch();
         require(epoch != epochStart, "too early to drip");
-        uint256 lastDrippedEpoch = lastDripEpoch[tankId];
-        lastDrippedEpoch = lastDrippedEpoch > 0 ? lastDrippedEpoch : epochStart;
-        require(epoch != lastDrippedEpoch, "already dripped");
+        uint256 lastDrippedEpoch = _getLastDrip(tankId);
+        require(epoch > lastDrippedEpoch, "already dripped");
         uint256 amount = epoch - lastDrippedEpoch;
         tanks[tankId].aps += amount;
 
         lastDripEpoch[tankId] = epoch;
-        emit Drip(tankId, amount);
+        emit Drip(tankId, amount, epoch);
     }
 
     function claim(uint256 tankId, address claimer) external isTankOwner(tankId) {
@@ -251,7 +263,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         if (block.number - revealBlock <= 256) {
             spawnResource();
         }
-        revealBlock = block.number + settings.revealWaitBlocks; 
+        revealBlock = block.number + settings.revealWaitBlocks;
         emit Commit(msg.sender, revealBlock);
     }
 
@@ -284,5 +296,14 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function getSettings() external view returns (ITankGame.GameSettings memory) {
         return settings;
+    }
+
+    function _getLastDrip(uint256 tankId) internal view returns (uint256) {
+        uint256 lastDrippedEpoch = lastDripEpoch[tankId];
+        return lastDrippedEpoch = lastDrippedEpoch > 0 ? lastDrippedEpoch : epochStart;
+    }
+
+    function getLastDrip(uint256 tankId) external view returns (uint256) {
+        return _getLastDrip(tankId);
     }
 }
