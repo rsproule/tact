@@ -551,6 +551,5 @@ contract TankTest is Test {
         tankGame.vote(6, 7);
         uint256 apsAfter = tankGame.getTank(7).aps;
         assertEq(apsBefore - 1, apsAfter, "vote should remove aps");
-
     }
 }
