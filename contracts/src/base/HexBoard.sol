@@ -3,7 +3,6 @@ pragma solidity ^0.8.19;
 
 import { Board } from "src/interfaces/IBoard.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
-import "forge-std/Console.sol";
 
 contract HexBoard is Board {
     mapping(uint256 tankId => Board.Point point) public tankToPosition;
