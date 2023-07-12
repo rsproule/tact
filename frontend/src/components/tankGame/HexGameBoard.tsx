@@ -5,9 +5,10 @@ import { useGameViewGetAllTanks, useTankGamePlayers } from "@/src/generated";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { ITank } from "./ITank";
 
 export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
-  const [selectedTank, setSelectedTank] = useState<any>();
+  const [selectedTank, setSelectedTank] = useState<typeof ITank | undefined>();
   const [selectedTile, setSelectedTile] = useState<Hex | undefined>();
   let tanks = useGameViewGetAllTanks({ watch: true });
   const { address } = useAccount();
@@ -28,15 +29,8 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
             <Pattern id="owner" link="/logos/tank1.png" size={{ x: 1, y: 1 }} />
             <Pattern id="enemy" link="/logos/tank2.png" size={{ x: 1, y: 1 }} />
             <Pattern id="dead" link="/logos/tank3.png" size={{ x: 1, y: 1 }} />
-            <Pattern id="move" link="/logos/move.png" size={{ x: 1, y: 1 }} />
-            <Pattern id="shoot" link="/logos/shoot.png" size={{ x: 1, y: 1 }} />
 
-            <Layout
-              size={{ x: 1, y: 1 }}
-              flat={false}
-              // spacing={1}
-              origin={{ x: 0, y: 0 }}
-            >
+            <Layout size={{ x: 1, y: 1 }} flat={false} origin={{ x: 0, y: 0 }}>
               {a.map((hex, i) => {
                 const tank = tanks.data?.find((tank) => {
                   return (

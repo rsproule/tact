@@ -5,17 +5,28 @@ import { Test } from "forge-std/Test.sol";
 import { TankGameFactory } from "src/base/TankGameFactory.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { TankGame } from "src/base/TankGameV2.sol";
+import { GameView } from "src/view/GameView.sol";
 
 contract TankGameFactoryTest is Test {
     TankGameFactory public factory;
+    GameView public gameView;
 
     function setUp() public {
         factory = new TankGameFactory();
+        TankGame game = factory.createGame(getSettings());
+        vm.prank(address(1));
+        game.join();
+        gameView = new GameView(game);
     }
 
-    function test_factory_createGame() public {
-        ITankGame.GameSettings memory gs = ITankGame.GameSettings({
-            playerCount: 8,
+    function test_view_getAllTanks() public {
+        GameView.TankLocation[] memory tanks = gameView.getAllTanks();
+        assertTrue(tanks.length == 1, "tanks length is 1");
+    }
+
+    function getSettings() internal pure returns (ITankGame.GameSettings memory) {
+        return ITankGame.GameSettings({
+            playerCount: 1,
             boardSize: 10,
             initAPs: 3,
             initHearts: 3,
@@ -28,9 +39,5 @@ contract TankGameFactoryTest is Test {
             revealWaitBlocks: 10,
             spawnerCooldown: 10
         });
-        TankGame gameAddress = factory.createGame(gs);
-        assertTrue(address(gameAddress) != address(0), "game address not zero");
-        ITankGame.GameState state = gameAddress.state();
-        assertTrue(state == ITankGame.GameState.WaitingForPlayers, "game state is waiting");
     }
 }

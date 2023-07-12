@@ -84,7 +84,6 @@ contract TankTest is Test {
         for (uint256 i = 0; i < 10_000; i++) {
             uint256 seed = uint256(keccak256(abi.encodePacked(i)));
             Board.Point memory p0 = tankGame.board().randomPoint(seed);
-            // console.log("random point: (%s, %s, %s)", p0.x, p0.y, p0.z);
             assertTrue(tankGame.board().isValidPoint(p0), "point should be valid");
         }
     }
@@ -122,7 +121,11 @@ contract TankTest is Test {
 
     function testMoveTooFar() public {
         initGame();
-        Board.Point memory to = Board.Point({ x: 0, y: 0, z: tankGame.getBoard().boardSize() });
+        Board.Point memory to = Board.Point({
+            x: tankGame.getBoard().boardSize(),
+            y: tankGame.getBoard().boardSize(),
+            z: tankGame.getBoard().boardSize()
+        });
         vm.mockCall(
             address(tankGame.getBoard()),
             abi.encodeWithSelector(HexBoard.getDistanceTankToPoint.selector),
@@ -182,6 +185,9 @@ contract TankTest is Test {
 
     function testShootDeadTank() public {
         initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
         vm.prank(address(5));
         tankGame.shoot(5, 3, 3);
         vm.expectRevert("tank is dead");
@@ -257,19 +263,29 @@ contract TankTest is Test {
     /// upgrade tests ///
     function testUpgrade() public {
         initGame();
-        vm.prank(address(1));
+        // upgrade cose is 4 * 6 + 24/10 = 26
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        uint256 apsBefore = tankGame.getTank(1).aps;
+        skip((26 - apsBefore) * epochTime);
+        vm.startPrank(address(1));
+        tankGame.drip(1);
+        console.log("apsBefore", apsBefore);
         tankGame.upgrade(1);
-        uint256 aps = tankGame.getTank(1).aps;
+        uint256 apsAfter = tankGame.getTank(1).aps;
+        console.log("apsAFter   ", apsAfter);
         uint256 range = tankGame.getTank(1).range;
         assertEq(range, 4);
-        assertEq(aps, 0);
+        assertEq(apsAfter, 0);
     }
 
     function testUpgraadeNotEnoughAps() public {
         initGame();
-        vm.prank(address(1));
+        // upgrade cose is 4 * 6 + 24/10 = 26
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        skip(26 * epochTime);
+        vm.startPrank(address(1));
+        tankGame.drip(1);
         tankGame.upgrade(1);
-        vm.prank(address(1));
         vm.expectRevert("not enough action points");
         tankGame.upgrade(1);
     }
@@ -365,33 +381,4 @@ contract TankTest is Test {
         assertEq(address(tankGame).balance - prizeAmountBefore, 1 ether);
         assertEq(tankGame.prizePool() - prizeAmountBefore, 1 ether);
     }
-    /// helper
-
-    // function _printBoard() public {
-    //     uint256 boardSize = tankGame.board().boardSize();
-    //     console.log("_________________________________________");
-    //     for (uint256 i = 0; i < boardSize; i++) {
-    //         string memory line = "| ";
-    //         for (uint256 j = 0; j < boardSize; j++) {
-    //             uint256 tankId = tankGame.tanksOnBoard(tankGame.pointToIndex(Board.Point(i, j)));
-    //             if (tankId == 0) {
-    //                 line = string.concat(line, "  | ");
-    //             } else {
-    //                 line = string.concat(line, Strings.toString(tankId), " | ");
-    //             }
-    //         }
-    //         console.log(line);
-    //         console.log("_________________________________________");
-    //     }
-    // }
-
-    // function _printBoardIndex() public {
-    //     uint256 boardSize = tankGame.settings().boardSize;
-    //     for (uint256 i = 0; i < boardSize; i++) {
-    //         for (uint256 j = 0; j < boardSize; j++) {
-    //             uint256 tankId = tankGame.tanksOnBoard(tankGame.pointToIndex(ITankGame.Point(i, j)));
-    //             console.log(i, j, tankId);
-    //         }
-    //     }
-    // }
 }

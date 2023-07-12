@@ -40,33 +40,33 @@ contract HexBoard is Board {
         return _getDistance(a, b);
     }
 
-    // function getDistanceIndex(uint256 indexA, uint256 indexB) external view override returns (uint256) {
-    //     Point memory a = indexToPoint(indexA);
-    //     Point memory b = indexToPoint(indexB);
-    //     return getDistance(a, b);
-    // }
-
     function pointToIndex(Point memory point) public view override returns (uint256) {
         uint256 boardSize = boardSize;
         return point.x + point.y * boardSize + point.z * (boardSize * boardSize);
     }
 
     function isValidPoint(Point memory point) public view override returns (bool) {
-        // invariant of the hex board is that we are on the plane x + y + z = boardSize
-        return point.x + point.y + point.z == boardSize && _getDistance(point, Point(0, 0, 0)) <= boardSize;
+        // invariant of the hex board is that we are on the plane x + y + z = 3 * boardSize
+        return point.x + point.y + point.z == 3 * boardSize
+            && _getDistance(point, Point(boardSize, boardSize, boardSize)) <= boardSize;
     }
 
-    // function indexToPoint(uint256 index) public view override returns (Point memory) {
-    //     uint256 y = index / boardSize;
-    //     uint256 x = index % boardSize;
-    //     uint256 z = boardSize - x - y;
-    //     return Point(x, y, z);
-    // }
-
+    // TODO: there is a way to do this deterministically, this is wasting gas.
+    // the problem is we are generating points over a rhombus, not a hexagon, so
+    // in case we are on the outside of the hexagon we try again. jank.
     function randomPoint(uint256 seed) public view override returns (Point memory) {
-        uint256 q = seed % (boardSize);
-        uint256 r = uint256(keccak256(abi.encodePacked(seed))) % (boardSize - q);
-        uint256 s = boardSize - q - r;
+        uint256 q;
+        uint256 r;
+        uint256 s;
+        uint256 i = 1;
+        uint256 boardSize = boardSize;
+        do {
+            q = i + seed % (2 * boardSize);
+            r = 2 * boardSize - q > 0 ? uint256(keccak256(abi.encodePacked(seed))) % (2 * boardSize - q) : 0;
+            s = 3 * boardSize - q - r;
+            i++;
+        } while (!isValidPoint(Point(q, r, s)));
+
         return Point(q, r, s);
     }
 

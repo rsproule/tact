@@ -11,16 +11,16 @@ contract TankGameDeployerScript is Script {
     TankGame public tankGame;
 
     function run() public {
-        vm.broadcast();
+        vm.startBroadcast();
         TankGameFactory factory = new TankGameFactory();
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
             playerCount: 1,
-            boardSize: 10,
+            boardSize: 18, // needs to be divisible by 3
             initAPs: 3,
             initHearts: 3,
             initShootRange: 3,
             upgradeCost: 3,
-            epochSeconds: 1 hours,
+            epochSeconds: 30 minutes,
             voteThreshold: 3,
             actionDelaySeconds: 0,
             buyInMinimum: 0,
@@ -33,5 +33,6 @@ contract TankGameDeployerScript is Script {
         console.log("TankGame deployed at address: %s", address(tankGame));
         console.log("TankGameFactory at address: %s", address(factory));
         console.log("TankGameView at address: %s", address(gameView));
+        vm.stopBroadcast();
     }
 }
