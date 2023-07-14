@@ -1,5 +1,5 @@
 
-chain:;  anvil -m 'test test test test test test test test test test test junk' --block-time 12
+chain:;  anvil -m 'test test test test test test test test test test test junk' ##--block-time 12
 
 lint :; solhint src/**/*.sol && solhint src/*.sol
 
