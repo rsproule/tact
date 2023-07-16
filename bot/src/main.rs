@@ -29,6 +29,7 @@ struct Args {
     strategy: String,
 }
 
+#[derive(Clone, Debug, PartialEq, Eq)]
 enum BotStrategy {
     Attack,
     Medic,
@@ -103,8 +104,6 @@ async fn main() -> anyhow::Result<()> {
         game_state = game_contract.state().await?;
         thread::sleep(Duration::from_secs(5));
     }
-
-    Ok(())
 }
 
 async fn handle_game<P, S>(
@@ -127,32 +126,34 @@ where
 
     if bot_tank.hearts > U256::zero() {
         // try to drip
-        match game.drip(bot_id).send().await {
-            Ok(pending_tx) => {
-                println!("sent drip tx");
-                let result = pending_tx.await;
-                println!("drip tx mined: {:?}", result);
-            }
-            Err(e) => {
-                println!("error dripping: {}", e);
-            }
-        }
-        let (nearest_tank_id, nearest_tank, distance) = find_nearest_tank(bot_id, &tanks);
+        // match game.drip(bot_id).send().await {
+        //     Ok(pending_tx) => {
+        //         println!("sent drip tx");
+        //         let result = pending_tx.await;
+        //         println!("drip tx mined: {:?}", result);
+        //     }
+        //     Err(e) => {
+        //         println!("error dripping: {}", e);
+        //     }
+        // }
+        let (nearest_tank_id, nearest_tank, distance) =
+            find_nearest_tank(bot_id, &tanks, matches!(strategy, BotStrategy::Attack));
         // some contrived strategy here to decide between aggro/friendly give/shoot
         // if we have no aps, should just give up
         if bot_tank.aps > U256::zero() {
             match strategy {
                 BotStrategy::Attack => {
                     // find the nearest person, go towards them and try to shoot them
-                    if distance > bot_tank.aps {
+                    if distance > bot_tank.range {
                         // move toward, slightly complex use the hex math here
                         let to = traverse_towards(
                             bot_tank_location.position,
                             nearest_tank.position,
-                            board_size.as_usize(),
-                            1,
+                            board_size.as_usize() as i32,
+                            distance - bot_tank.range,
                         )
                         .expect("unable to get move to coordinates");
+                        println!("tank: {:?}, moving to {:?}", id, to);
                         match game.move_(bot_id, to).send().await {
                             Ok(pending_tx) => {
                                 println!("sent move tx");
@@ -165,8 +166,13 @@ where
                         }
                     } else {
                         // shoot!
+                        println!("tank: {:?}, shooting {:?}", id, nearest_tank_id);
                         match game
-                            .shoot(bot_id, U256::from(nearest_tank_id), bot_tank.aps)
+                            .shoot(
+                                bot_id,
+                                U256::from(nearest_tank_id),
+                                U256::min(nearest_tank.tank.hearts, bot_tank.aps),
+                            )
                             .send()
                             .await
                         {
@@ -187,8 +193,8 @@ where
                         let to = traverse_towards(
                             bot_tank_location.position,
                             nearest_tank.position,
-                            board_size.as_usize(),
-                            1,
+                            board_size.as_usize() as i32,
+                            distance - bot_tank.aps,
                         )
                         .expect("unable to get move to coordinates");
                         match game.move_(bot_id, to).send().await {
@@ -284,64 +290,81 @@ where
     }
 
     // always stuff
-    match game.reveal().send().await {
-        Ok(pending_tx) => {
-            println!("sent reveal tx");
-            let result = pending_tx.await;
-            println!("drip tx mined: {:?}", result);
-        }
-        Err(e) => {
-            println!("error dripping: {}", e);
-        }
-    }
+    // match game.reveal().send().await {
+    //     Ok(pending_tx) => {
+    //         println!("sent reveal tx");
+    //         let result = pending_tx.await;
+    //         println!("drip tx mined: {:?}", result);
+    //     }
+    //     Err(e) => {
+    //         println!("error dripping: {}", e);
+    //     }
+    // }
     Ok(())
 }
 
 fn traverse_towards(
     a: game_view::Point,
     b: game_view::Point,
-    r: usize,
-    distance: usize,
+    r: i32,
+    distance: U256,
 ) -> Option<tank_game::Point> {
     // see if we can find a crate to do this for us
     // draw a line, index into the line via len
-    let ax = (a.x.as_usize() - r) as i32;
-    let ay = (a.y.as_usize() - r) as i32;
-    let az = (a.z.as_usize() - r) as i32;
-    let bx = (b.x.as_usize() - r) as i32;
-    let by = (b.y.as_usize() - r) as i32;
-    let bz = (b.z.as_usize() - r) as i32;
+    let ax = a.x.as_usize() as i32 - r;
+    let ay = a.y.as_usize() as i32 - r;
+    let az = a.z.as_usize() as i32 - r;
+    let bx = b.x.as_usize() as i32 - r;
+    let by = b.y.as_usize() as i32 - r;
+    let bz = b.z.as_usize() as i32 - r;
     let a = Hex::new_cubic(ax, ay, az);
     let b = Hex::new_cubic(bx, by, bz);
     let line = a.line_to(b).collect::<Vec<Hex>>();
 
-    let v = line.get(distance);
+    let v = line.get(distance.as_usize());
     v.map(|v| tank_game::Point {
-        x: U256::from(v.x + r as i32),
-        y: U256::from(v.y + r as i32),
-        z: U256::from(v.z() + r as i32),
+        x: U256::from(v.x + r),
+        y: U256::from(v.y + r),
+        z: U256::from(v.z() + r),
     })
 }
 
-fn find_nearest_tank(tank_id: U256, tanks: &[TankLocation]) -> (usize, TankLocation, U256) {
+fn find_nearest_tank(
+    tank_id: U256,
+    tanks: &[TankLocation],
+    alive: bool,
+) -> (usize, TankLocation, U256) {
     // tank ids index from 0
     let id: usize = tank_id.as_usize();
     let my_tank = tanks[id - 1].clone();
     let mut nearest_tank_id = if id == 1 { 2 } else { 1 };
-    let mut nearest_tank = tanks[nearest_tank_id].clone();
+    let mut nearest_tank = tanks[nearest_tank_id - 1].clone();
     let mut nearest_distance = distance(&my_tank, &nearest_tank);
-
+    let mut first_loop = true;
+    println!("nearest distance: {:?}", nearest_distance);
     for (i, tank) in tanks.iter().enumerate() {
-        if i == id {
+        if i == id - 1 {
             continue;
         }
+        if alive && tank.tank.hearts == U256::zero() {
+            continue;
+        }
+        if !alive && tank.tank.hearts > U256::zero() {
+            continue;
+        }
+
         let distance = distance(&my_tank, tank);
-        if distance < nearest_distance {
+        if distance < nearest_distance || first_loop {
+            first_loop = false;
             nearest_tank = tank.clone();
-            nearest_tank_id = i;
+            nearest_tank_id = i + 1;
             nearest_distance = distance;
         }
     }
+    println!(
+        "for {:?}, nearest tank is {:?} at distance {:?}",
+        tank_id, nearest_tank_id, nearest_distance
+    );
     (nearest_tank_id, nearest_tank, nearest_distance)
 }
 

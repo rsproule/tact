@@ -1,20 +1,14 @@
 run-test-fleet:;
-	# reckabandon 
-	# trap ctrl_c INT
-	# function ctrl_c() {
-	# 	echo "Trapped CTRL_C"
-	# 	kill -KILL $PID1 $PID2
-	# }
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --strategy attack &
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0x05a067874b28c947896394e460d3a0850aa163bec9fe944e67dc865f700a2797 --strategy attack &
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0x65a2ab2acee180e71811e968232e3525d3b3aa4122e178a1b3de89fa4b5718d3 --strategy attack &
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0x65eca363e6996b7752762e8559e16219b25fcd47c88aa86c627beb45789d540a --strategy attack &
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0xc7229c6ef89404bcee4b5c6dd787a0f971f6930cacc2e116ecf9f11a1dc598a7 --strategy attack &
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0x5982f0e862adf4a538e0baa8ca1215e1a50f98dd7c3f11f93814ba390cd13376 --strategy attack &
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0xcd4ff8e210e093ff7b8b036ab8b2a95d18653f16e19ccc74405e8adc2b530688 --strategy attack &
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0xe4ea45a8a9a682d6bd2b5e1bd7a688ef8f0405423028513d6d0ed7e966d973dc --strategy attack &
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0xdbd8db7fd1b6e6668f7dbd30a3fa563779b28cb1788c67fb6d944ebb07ae85f8 --strategy attack &
-	cargo run -- --game-address 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be --game-view-address 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --rpc http://localhost:8545 --private-key 0x242397144bc1085beb81b8ffc87ca76bb74ca2d9d36151ad18cfecee5e2b74c1 --strategy attack &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --strategy attack &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0x05a067874b28c947896394e460d3a0850aa163bec9fe944e67dc865f700a2797 --strategy attack &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0x65a2ab2acee180e71811e968232e3525d3b3aa4122e178a1b3de89fa4b5718d3 --strategy attack &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0x65eca363e6996b7752762e8559e16219b25fcd47c88aa86c627beb45789d540a --strategy medic &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0xc7229c6ef89404bcee4b5c6dd787a0f971f6930cacc2e116ecf9f11a1dc598a7 --strategy medic &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0x5982f0e862adf4a538e0baa8ca1215e1a50f98dd7c3f11f93814ba390cd13376 --strategy medic &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0xcd4ff8e210e093ff7b8b036ab8b2a95d18653f16e19ccc74405e8adc2b530688 --strategy medic &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0xe4ea45a8a9a682d6bd2b5e1bd7a688ef8f0405423028513d6d0ed7e966d973dc --strategy hoard &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0xdbd8db7fd1b6e6668f7dbd30a3fa563779b28cb1788c67fb6d944ebb07ae85f8 --strategy hoard &
+	cargo run -- --game-address 0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b --game-view-address 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 --rpc http://localhost:8545 --private-key 0x242397144bc1085beb81b8ffc87ca76bb74ca2d9d36151ad18cfecee5e2b74c1 --strategy hoard &
 
 fund-test-fleet:; 
 	cast send --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 0xb42B3cb57a1C19094589fd11Fd1C132f4CB642ba --value 1ether
@@ -28,4 +22,4 @@ fund-test-fleet:;
 	cast send --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 0x17a2E875eEe19c6549dba69a35Cf4Ab37B32a03E --value 1ether
 
 kill-fleet:;
-pkill -f "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+	pkill -f "0x1007BDBA1BCc3C94e20d57768EF9fc0b1Cc2844b"
