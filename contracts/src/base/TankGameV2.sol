@@ -133,20 +133,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         tanks[fromId].aps -= shots;
         tanks[toId].hearts -= shots;
         if (tanks[toId].hearts <= 0) {
-            numTanksAlive--;
-            emit Death(fromId, toId);
-            deadTanks.push(toId);
-            aliveTanksIdSum -= toId;
-            if (numTanksAlive == 1) {
-                podium[1] = deadTanks[deadTanks.length - 1];
-                podium[2] = deadTanks[deadTanks.length - 2];
-                // since we know that there is only 1 remaining tank
-                // we can set the first podium position to the sum of all alive tanks
-                // can't trust the `from` because you can kill yourself
-                podium[0] = aliveTanksIdSum;
-                state = GameState.Ended;
-                emit GameOver(podium[0], podium[1], podium[2], prizePool);
-            }
+            handleDeath(fromId, toId);
         }
         emit Shoot(fromId, toId);
     }
@@ -175,6 +162,9 @@ contract TankGame is ITankGame, TankGameV2Storage {
             aliveTanksIdSum += toId;
             // reset the epoch to the current one
             lastDripEpoch[toId] = _getEpoch();
+        }
+        if (tanks[fromId].hearts == 0) {
+            handleDeath(fromId, fromId);
         }
         tanks[toId].hearts += hearts;
         tanks[toId].aps += aps;
@@ -265,6 +255,23 @@ contract TankGame is ITankGame, TankGameV2Storage {
         }
         revealBlock = block.number + settings.revealWaitBlocks;
         emit Commit(msg.sender, revealBlock);
+    }
+
+    function handleDeath(uint256 killer, uint256 tankId) private {
+        numTanksAlive--;
+        aliveTanksIdSum -= tankId;
+        deadTanks.push(tankId);
+        emit Death(killer, tankId);
+        if (numTanksAlive == 1) {
+            podium[1] = deadTanks[deadTanks.length - 1];
+            podium[2] = deadTanks[deadTanks.length - 2];
+            // since we know that there is only 1 remaining tank
+            // we can set the first podium position to the sum of all alive tanks
+            // can't trust the `from` because you can kill yourself
+            podium[0] = aliveTanksIdSum;
+            state = GameState.Ended;
+            emit GameOver(podium[0], podium[1], podium[2], prizePool);
+        }
     }
 
     function spawnResource() private {

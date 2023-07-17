@@ -242,6 +242,23 @@ contract TankTest is Test {
         assertEq(to, 1);
     }
 
+    function testGiveLastHeart() public {
+        initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        skip(epochTime * 20);
+
+        vm.startPrank(address(5));
+        tankGame.shoot(5, 3, 2);
+
+        vm.startPrank(address(3));
+        tankGame.shoot(3, 5, 1);
+        tankGame.give(3, 5, 1, 0);
+        assertEq(tankGame.numTanksAlive(), tankGame.getSettings().playerCount - 1, "wrong number of tanks alive");
+    }
+
     function testShootNonexistentTank() public {
         initGame();
         vm.prank(address(5));
