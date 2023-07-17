@@ -549,8 +549,8 @@ contract TankTest is Test {
         assertEq(epochBefore + 1, epochAfter, "curse should push forward drip epoch");
         Vm.Log[] memory entries = vm.getRecordedLogs();
         assertEq(entries.length, 2);
-        assertEq(entries[0].topics[0], keccak256("Curse(uint256,uint256,uint256)"));
-        assertEq(entries[1].topics[0], keccak256("Vote(uint256,uint256,uint256)"));
+        assertEq(entries[0].topics[0], keccak256("Vote(uint256,uint256,uint256)"));
+        assertEq(entries[1].topics[0], keccak256("Curse(uint256,uint256,uint256)"));
 
         vm.expectRevert("already voted");
         tankGame.vote(2, 3);

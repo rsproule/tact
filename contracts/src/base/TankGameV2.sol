@@ -132,10 +132,10 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
         tanks[fromId].aps -= shots;
         tanks[toId].hearts -= shots;
+        emit Shoot(fromId, toId);
         if (tanks[toId].hearts <= 0) {
             handleDeath(fromId, toId);
         }
-        emit Shoot(fromId, toId);
     }
 
     function give(
@@ -163,12 +163,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
             // reset the epoch to the current one
             lastDripEpoch[toId] = _getEpoch();
         }
-        if (tanks[fromId].hearts == 0) {
-            handleDeath(fromId, fromId);
-        }
         tanks[toId].hearts += hearts;
         tanks[toId].aps += aps;
         emit Give(fromId, toId, hearts, aps);
+        if (tanks[fromId].hearts == 0) {
+            handleDeath(fromId, fromId);
+        }
     }
 
     function upgrade(uint256 tankId) external gameStarted isTankOwnerOrDelegate(tankId) isTankAlive(tankId) {
@@ -199,6 +199,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         require(votingClosed[epoch] == false, "voting closed");
 
         votesPerEpoch[epoch][cursed] += 1;
+        emit Vote(voter, cursed, epoch);
         if (votesPerEpoch[epoch][cursed] >= (deadTanks.length / 2) + 1) {
             if (tanks[cursed].aps > 1) {
                 tanks[cursed].aps -= 1;
@@ -209,7 +210,6 @@ contract TankGame is ITankGame, TankGameV2Storage {
             emit Curse(cursed, voter, epoch);
         }
         votedThisEpoch[epoch][voter] = true;
-        emit Vote(voter, cursed, epoch);
     }
 
     function drip(uint256 tankId) external gameStarted isTankOwnerOrDelegate(tankId) isTankAlive(tankId) {
