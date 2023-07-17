@@ -70,7 +70,6 @@ async fn main() -> anyhow::Result<()> {
     println!("game state: {}", game_state);
     if game_state == 0 {
         // join the game, dw its free
-
         match game_contract.join().send().await {
             Ok(pending_tx) => {
                 println!("sent join tx");
@@ -126,16 +125,16 @@ where
 
     if bot_tank.hearts > U256::zero() {
         // try to drip
-        // match game.drip(bot_id).send().await {
-        //     Ok(pending_tx) => {
-        //         println!("sent drip tx");
-        //         let result = pending_tx.await;
-        //         println!("drip tx mined: {:?}", result);
-        //     }
-        //     Err(e) => {
-        //         println!("error dripping: {}", e);
-        //     }
-        // }
+        match game.drip(bot_id).send().await {
+            Ok(pending_tx) => {
+                println!("sent drip tx");
+                let result = pending_tx.await;
+                println!("drip tx mined: {:?}", result);
+            }
+            Err(e) => {
+                println!("error dripping: {}", e);
+            }
+        }
         let (nearest_tank_id, nearest_tank, distance) =
             find_nearest_tank(bot_id, &tanks, matches!(strategy, BotStrategy::Attack));
         // some contrived strategy here to decide between aggro/friendly give/shoot
@@ -290,16 +289,16 @@ where
     }
 
     // always stuff
-    // match game.reveal().send().await {
-    //     Ok(pending_tx) => {
-    //         println!("sent reveal tx");
-    //         let result = pending_tx.await;
-    //         println!("drip tx mined: {:?}", result);
-    //     }
-    //     Err(e) => {
-    //         println!("error dripping: {}", e);
-    //     }
-    // }
+    match game.reveal().send().await {
+        Ok(pending_tx) => {
+            println!("sent reveal tx");
+            let result = pending_tx.await;
+            println!("drip tx mined: {:?}", result);
+        }
+        Err(e) => {
+            println!("error dripping: {}", e);
+        }
+    }
     Ok(())
 }
 
