@@ -83,12 +83,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
         tanks[playersCount] = tank;
         players[msg.sender] = playersCount;
         board.setTile(emptyPoint, Board.Tile({ tankId: playersCount, hearts: 0 }));
+        emit PlayerJoined(msg.sender, playersCount, emptyPoint);
         if (playersCount >= settings.playerCount) {
             epochStart = _getEpoch();
             state = GameState.Started;
             emit GameStarted();
         }
-        emit PlayerJoined(msg.sender, playersCount, emptyPoint);
     }
 
     function move(
