@@ -63,28 +63,27 @@ async fn main() -> anyhow::Result<()> {
     let game_view_contract = GameView::new(game_view_address, provider.clone());
     // let i_game_contract = ITankGame::new(game_address, provider.clone());
 
-    let bot_tank_id = game_contract.players(wallet.address()).await?;
+    let mut bot_tank_id = game_contract.players(wallet.address()).await?;
 
     // while the game is not over and the bot is still alive
     let mut game_state = game_contract.state().await?;
-    println!("game state: {}", game_state);
-    if game_state == 0 {
-        // join the game, dw its free
-        match game_contract.join().send().await {
-            Ok(pending_tx) => {
-                println!("sent join tx");
-                let result = pending_tx.await;
-                println!("join tx mined: {:?}", result);
-            }
-            Err(e) => {
-                println!("error joining game: {}", e);
-            }
-        }
-    }
     loop {
+        if bot_tank_id == U256::zero() {
+            bot_tank_id = game_contract.players(wallet.address()).await?;
+        }
         match game_state {
             0 => {
                 println!("waiting for game to start: {}", game_state);
+                match game_contract.join().send().await {
+                    Ok(pending_tx) => {
+                        println!("sent join tx");
+                        let result = pending_tx.await;
+                        println!("join tx mined: {:?}", result);
+                    }
+                    Err(e) => {
+                        println!("error joining game: {}", e);
+                    }
+                }
             }
             1 => {
                 println!("game started: {}", game_state);
@@ -93,6 +92,7 @@ async fn main() -> anyhow::Result<()> {
             }
             2 => {
                 println!("game ended: {}", game_state);
+                // TODO: try to claim
                 return Ok(());
             }
             _ => {
@@ -118,6 +118,10 @@ where
     let tanks: Vec<TankLocation> = game_view_contract.get_all_tanks().await?;
     let bot_tank = game.get_tank(bot_id).await?;
     let id: usize = bot_id.as_usize();
+    if id == 0 {
+        println!("bot id is 0, something is wrong. Tanks: {:?}", tanks);
+        return Err(anyhow::anyhow!("bot id is 0, something is wrong"));
+    }
     let bot_tank_location = tanks[id - 1].clone();
     let board_size = game.get_settings().call().await?.board_size;
 
@@ -276,7 +280,7 @@ where
         // try to vote
         let cursed = alive_tanks.first().unwrap();
         let cursed_id = tanks.iter().position(|r| r == *cursed).unwrap();
-        match game.vote(bot_id, U256::from(cursed_id)).send().await {
+        match game.vote(bot_id, U256::from(cursed_id + 1)).send().await {
             Ok(pending_tx) => {
                 println!("sent vote tx");
                 let result = pending_tx.await;
