@@ -1,14 +1,31 @@
 import {
   useITankGameGetSettings,
+  usePrepareTankGameReveal,
   useTankGameEpochStart,
   useTankGameGetEpoch,
+  useTankGameReveal,
+  useTankGameRevealBlock,
 } from "@/src/generated";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Button } from "../ui/button";
+import { Pointer } from "lucide-react";
+import { useToast } from "../ui/use-toast";
 
 export default function Timer() {
+  const { toast } = useToast();
   const startEpoch = useTankGameEpochStart();
   const currentEpoch = useTankGameGetEpoch({ watch: true });
   const settings = useITankGameGetSettings();
+  const { config: revealConfig } = usePrepareTankGameReveal();
+  const { write: reveal, data: revealData } = useTankGameReveal(revealConfig);
+  const revealBlock = useTankGameRevealBlock();
+
   return (
     <div className="flex justify-center pb-3">
       <Card>
@@ -35,6 +52,19 @@ export default function Timer() {
               )}
           </>
         </CardContent>
+        <CardFooter>
+          {!!reveal && (
+            <Button
+              className="w-full"
+              disabled={!reveal}
+              onClick={() => {
+                reveal?.();
+              }}
+            >
+              <Pointer className="mr-2 h-4 w-4" /> Spawn heart
+            </Button>
+          )}
+        </CardFooter>
       </Card>
     </div>
   );

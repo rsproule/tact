@@ -81,10 +81,12 @@ export function Tile(props: TileProps) {
           props.isMoveRange
         )}`}
         fill={
-          props.tank && props.tank?.tankId === props.ownersTankId
-            ? "owner"
-            : props.tank
-            ? "enemy"
+          props.tank
+            ? props.tank.tank.hearts === BigInt(0)
+              ? "dead"
+              : props.tank && props.tank?.tankId === props.ownersTankId
+              ? "owner"
+              : "enemy"
             : ""
         }
       />

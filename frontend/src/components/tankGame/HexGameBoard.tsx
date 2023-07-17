@@ -32,6 +32,8 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
 
             <Layout size={{ x: 1, y: 1 }} flat={false} origin={{ x: 0, y: 0 }}>
               {a.map((hex, i) => {
+                // TODO: performance improvement here by using a diff data structure
+                // instead of a find
                 const tank = tanks.data?.find((tank) => {
                   return (
                     tank.position.x === BigInt(hex.q) &&

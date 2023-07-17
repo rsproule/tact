@@ -1,5 +1,5 @@
 "use client";
-import { tankGameABI, tankGameAddress } from "@/src/generated";
+import { tankGameABI, tankGameAddress, useTankGameClaimEvent, useTankGameDripEvent, useTankGameGiveEvent, useTankGameMoveEvent, useTankGamePlayerJoinedEvent, useTankGamePrizeIncreaseEvent, useTankGameShootEvent, useTankGameUpgradeEvent, useTankGameVoteEvent } from "@/src/generated";
 import { useState } from "react";
 import { formatEther } from "viem";
 import { Card, CardHeader } from "../ui/card";
@@ -31,7 +31,7 @@ const toTankName = (tankId: bigint | undefined) => {
   return TANK_MAPPING[Number(tankId!) - 1];
 };
 export function EventStream() {
-  // const [events, setEvents] = useState<string[]>([]);
+  const [events, setEvents] = useState<string[]>([]);
   // useTankGameMoveEvent({
   //   listener: (e) => {
   //     e.map((event) => {
@@ -121,7 +121,7 @@ export function EventStream() {
     const filter = await publicClient.createContractEventFilter({
       abi: tankGameABI,
       strict: true,
-      fromBlock: BigInt(9229639),
+      fromBlock: BigInt(0),
       address: tankGameAddress[chainId as keyof typeof tankGameAddress],
     });
     const logs = await publicClient.getFilterLogs({
@@ -137,7 +137,7 @@ export function EventStream() {
 
   return (
     <div className="py-4">
-      {/* <Card>
+      <Card>
         <CardHeader>
           <h1 className="text-xl">Action Feed</h1>
         </CardHeader>
@@ -151,7 +151,6 @@ export function EventStream() {
           })}
         </div>
       </Card>
-      <Card> */}
       <Card>
         <CardHeader>
           <h1 className="text-xl">Historical logs</h1>
