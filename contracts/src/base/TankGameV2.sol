@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
+import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { TankGameV2Storage } from "src/base/TankGameV2Storage.sol";
 import { Board } from "src/interfaces/IBoard.sol";
@@ -67,10 +68,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     // should do some sort of commit reveal thing for the randomness instead of this
     // random point thing
-    function join() external payable {
+    function join(bytes32[] memory proof) external payable {
         require(players[msg.sender] == 0, "already joined");
         require(playersCount < settings.playerCount, "game is full");
         require(msg.value >= settings.buyInMinimum, "insufficient buy in");
+        bytes32 leaf = keccak256(abi.encodePacked(msg.sender));
+        require(settings.root == bytes32(0) || MerkleProof.verify(proof, settings.root, leaf), "invalid proof");
 
         // this is manipulatable.
         uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, msg.sender)));

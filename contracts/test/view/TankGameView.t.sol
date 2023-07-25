@@ -14,8 +14,9 @@ contract TankGameFactoryTest is Test {
     function setUp() public {
         factory = new TankGameFactory();
         TankGame game = factory.createGame(getSettings());
+        bytes32[] memory proof = new bytes32[](1);
         vm.prank(address(1));
-        game.join();
+        game.join(proof);
         gameView = new GameView(game);
     }
 
@@ -31,12 +32,10 @@ contract TankGameFactoryTest is Test {
             initAPs: 3,
             initHearts: 3,
             initShootRange: 3,
-            upgradeCost: 3,
             epochSeconds: 4 hours,
-            voteThreshold: 3,
-            actionDelaySeconds: 0,
             buyInMinimum: 0,
-            revealWaitBlocks: 1000
+            revealWaitBlocks: 1000,
+            root: bytes32(0)
         });
     }
 }

@@ -19,12 +19,10 @@ contract TankGameDeployerScript is Script {
             initAPs: 3,
             initHearts: 3,
             initShootRange: 3,
-            upgradeCost: 3, // TODO: this is no longer used
             epochSeconds: 10, // super short for testing
-            voteThreshold: 3, // TODO: this is never actually used
-            actionDelaySeconds: 0,
             buyInMinimum: 0,
-            revealWaitBlocks: 10
+            revealWaitBlocks: 10,
+            root: bytes32(0)
         });
         tankGame = factory.createGame(gs);
 

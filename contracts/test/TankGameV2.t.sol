@@ -11,6 +11,7 @@ import { HexBoard } from "src/base/HexBoard.sol";
 
 contract TankTest is Test {
     TankGame public tankGame;
+    TankGame public tankGamePrivate;
 
     function setUp() public {
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
@@ -19,21 +20,22 @@ contract TankTest is Test {
             initAPs: 3,
             initHearts: 3,
             initShootRange: 3,
-            upgradeCost: 3,
             epochSeconds: 4 hours,
-            voteThreshold: 3,
-            actionDelaySeconds: 0,
             buyInMinimum: 1,
-            revealWaitBlocks: 1000
+            revealWaitBlocks: 1000,
+            root: bytes32(0)
         });
         tankGame = new TankGame{value: 10 ether}(gs);
+        gs.root = "0xdeadbeef";
+        tankGamePrivate = new TankGame{value: 10 ether}(gs);
     }
 
     function initGame(uint160 offset) public {
         for (uint160 i = 1; i < 9; i++) {
             vm.label(address(i + offset), string(abi.encodePacked("tank", Strings.toString(i))));
             hoax(address(i + offset), 1);
-            tankGame.join{ value: 1 }();
+            bytes32[] memory proof = new bytes32[](1);
+            tankGame.join{ value: 1 }(proof);
         }
         vm.clearMockedCalls();
     }
@@ -44,31 +46,35 @@ contract TankTest is Test {
 
     function testJoinGame() public {
         hoax(address(1), 1);
-        tankGame.join{ value: 1 }();
+        bytes32[] memory proof = new bytes32[](1);
+        tankGame.join{ value: 1 }(proof);
         assertEq(tankGame.playersCount(), 1);
     }
 
     function testJoinGameInsufficientBuyIn() public {
         vm.expectRevert("insufficient buy in");
-        tankGame.join();
+        bytes32[] memory proof = new bytes32[](1);
+        tankGame.join(proof);
     }
 
     function testJoinGameTwiceFails() public {
         startHoax(address(1), 2);
-        tankGame.join{ value: 1 }();
+        bytes32[] memory proof = new bytes32[](1);
+        tankGame.join{ value: 1 }(proof);
         assertEq(tankGame.playersCount(), 1);
         vm.expectRevert("already joined");
-        tankGame.join{ value: 1 }();
+        tankGame.join{ value: 1 }(proof);
     }
 
     function testJoinFullGame() public {
+        bytes32[] memory proof = new bytes32[](1);
         for (uint160 i = 0; i < 8; i++) {
             hoax(address(i), 1);
-            tankGame.join{ value: 1 }();
+            tankGame.join{ value: 1 }(proof);
         }
         vm.expectRevert("game is full");
         hoax(address(9), 1);
-        tankGame.join{ value: 1 }();
+        tankGame.join{ value: 1 }(proof);
     }
 
     function testInitGame() public {

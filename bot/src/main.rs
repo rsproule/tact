@@ -74,7 +74,7 @@ async fn main() -> anyhow::Result<()> {
         match game_state {
             0 => {
                 println!("waiting for game to start: {}", game_state);
-                match game_contract.join().send().await {
+                match game_contract.join(vec![U256::zero().into()]).send().await {
                     Ok(pending_tx) => {
                         println!("sent join tx");
                         let result = pending_tx.await;

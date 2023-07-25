@@ -20,12 +20,10 @@ contract TankGameFactoryTest is Test {
             initAPs: 3,
             initHearts: 3,
             initShootRange: 3,
-            upgradeCost: 3,
             epochSeconds: 4 hours,
-            voteThreshold: 3,
-            actionDelaySeconds: 0,
             buyInMinimum: 0,
-            revealWaitBlocks: 1000
+            revealWaitBlocks: 1000,
+            root: bytes32(0)
         });
         TankGame gameAddress = factory.createGame(gs);
         assertTrue(address(gameAddress) != address(0), "game address not zero");

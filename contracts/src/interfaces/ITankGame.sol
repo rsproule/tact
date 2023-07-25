@@ -9,13 +9,11 @@ interface ITankGame {
         uint256 boardSize;
         uint256 initAPs;
         uint256 initHearts;
-        uint256 voteThreshold;
         uint256 initShootRange;
-        uint256 upgradeCost;
         uint256 epochSeconds;
-        uint256 actionDelaySeconds;
         uint256 buyInMinimum;
         uint256 revealWaitBlocks;
+        bytes32 root;
     }
 
     struct Tank {
@@ -31,7 +29,7 @@ interface ITankGame {
         Ended
     }
 
-    function join() external payable;
+    function join(bytes32[] memory proof) external payable;
 
     function move(uint256 fromId, Board.Point calldata to) external;
 
