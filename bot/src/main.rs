@@ -256,14 +256,37 @@ where
                 }
                 BotStrategy::Hoard => {
                     // all this mf does is upgrade range
-                    match game.upgrade(bot_id).send().await {
-                        Ok(pending_tx) => {
-                            println!("upgrade tx");
-                            let result = pending_tx.await;
-                            println!("upgrade tx mined: {:?}", result);
+                    if distance > bot_tank.range {
+                        match game.upgrade(bot_id).send().await {
+                            Ok(pending_tx) => {
+                                println!("upgrade tx");
+                                let result = pending_tx.await;
+                                println!("upgrade tx mined: {:?}", result);
+                            }
+                            Err(e) => {
+                                println!("error upgrade: {}", e);
+                            }
                         }
-                        Err(e) => {
-                            println!("error upgrade: {}", e);
+                    } else {
+                        // shoot!
+                        println!("tank: {:?}, shooting {:?}", id, nearest_tank_id);
+                        match game
+                            .shoot(
+                                bot_id,
+                                U256::from(nearest_tank_id),
+                                U256::min(nearest_tank.tank.hearts, bot_tank.aps),
+                            )
+                            .send()
+                            .await
+                        {
+                            Ok(pending_tx) => {
+                                println!("sent shoot tx");
+                                let result = pending_tx.await;
+                                println!("shoot tx mined: {:?}", result);
+                            }
+                            Err(e) => {
+                                println!("error shoot: {}", e);
+                            }
                         }
                     }
                 }
