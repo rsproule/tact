@@ -25,7 +25,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
     <div className="container border">
       <TransformWrapper>
         <TransformComponent>
-          <HexGrid width={1200} height={800} viewBox="0 0 100 100">
+          <HexGrid width={1200} height={1200} viewBox="0 -10 140 140">
             <Pattern id="owner" link="/logos/tank1.png" size={{ x: 1, y: 1 }} />
             <Pattern id="enemy" link="/logos/tank2.png" size={{ x: 1, y: 1 }} />
             <Pattern id="dead" link="/logos/tank3.png" size={{ x: 1, y: 1 }} />
