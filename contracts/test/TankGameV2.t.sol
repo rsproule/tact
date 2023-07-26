@@ -494,6 +494,24 @@ contract TankTest is Test {
         assertEq(address(7 + precompileOffset).balance, 1 ether, "third place reward is wrong");
     }
 
+    function testNoDoubleClaim() public {
+        uint160 precompileOffset = 10_000;
+        initGame(precompileOffset);
+        killNPlayers(1, precompileOffset, 8);
+
+        // number 1 wins, second is 7 and third is 8
+        assertTrue(tankGame.state() == ITankGame.GameState.Ended, "game not ended");
+        assertEq(tankGame.podium(0), 1, "first place is wrong");
+        assertEq(tankGame.podium(1), 8, "second place is wrong");
+        assertEq(tankGame.podium(2), 7, "third place is wrong");
+
+        // do some claims
+        vm.startPrank(address(1 + precompileOffset));
+        tankGame.claim(1, address(1 + precompileOffset));
+        vm.expectRevert("already claimed");
+        tankGame.claim(1, address(1 + precompileOffset));
+    }
+
     function testRecievePrizeDonation() public {
         uint256 prizeAmountBefore = tankGame.prizePool();
         hoax(address(1), 1 ether);

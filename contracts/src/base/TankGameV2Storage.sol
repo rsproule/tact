@@ -16,6 +16,7 @@ contract TankGameV2Storage {
     mapping(uint256 epoch => mapping(uint256 tankId => uint256 votes)) public votesPerEpoch;
     mapping(uint256 epoch => bool votingClosed) public votingClosed;
     mapping(uint256 epoch => mapping(uint256 tankId => bool voted)) public votedThisEpoch;
+    mapping(uint256 tankId => bool claimed) public claimed;
     uint256 public playersCount;
     uint256 public numTanksAlive;
     uint256 public prizePool;

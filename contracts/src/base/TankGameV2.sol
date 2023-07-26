@@ -229,11 +229,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function claim(uint256 tankId, address claimer) external isTankOwner(tankId) {
         require(state == GameState.Ended, "game not ended");
+        require(!claimed[tankId], "already claimed");
+        claimed[tankId] = true;
         // loop is a bit gross, could do a mapping of tank to position on podium
         for (uint256 i = 0; i < podium.length; i++) {
             if (podium[i] == tankId) {
                 // payout structure is 60% 30% 10%. would be nice if there was a sequence
-                podium[i] = 0; // clear podium for reentrency
                 uint256 p = i == 0 ? 60 : i == 1 ? 30 : 10;
                 uint256 placePrize = (prizePool * p) / 100;
                 payable(claimer).transfer(placePrize);
