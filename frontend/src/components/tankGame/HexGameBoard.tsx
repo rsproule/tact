@@ -22,7 +22,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
   }
   const a = hexagon(Number(boardSize!));
   return (
-    <div className="container border">
+    <div className="border">
       <TransformWrapper>
         <TransformComponent>
           <HexGrid width={1200} height={1200} viewBox="0 -10 140 140">

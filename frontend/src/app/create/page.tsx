@@ -61,10 +61,10 @@ export default function CreateGamePage() {
       boardSize: 40,
       initAPs: 1,
       initHearts: 1,
-      epochSeconds: 1,
+      epochSeconds: 60 * 60,
       buyInMinimum: 1,
-      revealWaitBlocks: 1,
-      root: "",
+      revealWaitBlocks: 1200, // 4 hours ish
+      root: "0x0",
     },
   });
   // 2. Define a submit handler.
@@ -213,7 +213,7 @@ export default function CreateGamePage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Create Game</Button>
             </form>
           </Form>
         </CardContent>
