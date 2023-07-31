@@ -15,3 +15,8 @@ docs/
 
 # ignore zksync compiler 
 lib/zksolc*
+
+
+dist/ 
+node_modules/
+

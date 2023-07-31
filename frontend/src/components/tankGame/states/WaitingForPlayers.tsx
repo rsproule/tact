@@ -8,7 +8,7 @@ import { useWaitForTransaction } from "wagmi";
 import { Button } from "../../ui/button";
 import { Card, CardHeader } from "../../ui/card";
 import { useToast } from "../../ui/use-toast";
-import { Board } from "../GameBoard";
+import { HexBoard } from "../HexGameBoard";
 
 export function WaitingForPlayers({
   boardSize,
@@ -63,7 +63,7 @@ export function WaitingForPlayers({
           </CardHeader>
         </Card>
       </div>
-      <Board boardSize={boardSize} />
+      <HexBoard boardSize={boardSize} />
     </div>
   );
 }
