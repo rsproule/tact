@@ -8,7 +8,15 @@ import { BaseError } from "viem";
 import { useAccount, useWaitForTransaction } from "wagmi";
 import { Button } from "../../ui/button";
 import { useToast } from "../../ui/use-toast";
-import { TANK_MAPPING } from "../EventsStream";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../ui/card";
+import { Trophy } from "lucide-react";
 
 export function GameOver() {
   let { toast } = useToast();
@@ -57,17 +65,26 @@ export function GameOver() {
     },
   });
   return (
-    <div>
-      <h1 className="text-xl">Game Over</h1>
-      <h1 className="text-lg">Podium</h1>
-      <ul>
-        <li>First: {!!first.data && TANK_MAPPING[Number(first.data!)]}</li>
-        <li>Second: {!!second.data && TANK_MAPPING[Number(second.data!)]}</li>
-        <li>Third: {!!third.data && TANK_MAPPING[Number(third.data!)]}</li>
-      </ul>
-      <Button disabled={!claim} onClick={() => claim?.()}>
-        Claim Prize
-      </Button>
+    <div className="flex justify-center pb-3">
+      <Card>
+        <CardHeader>
+          <CardTitle>Game Over!</CardTitle>
+          <CardDescription>Podium</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul>
+            <li>First: {!!first.data && first.data!.toString()}</li>
+            <li>Second: {!!second.data && second.data!.toString()}</li>
+            <li>Third: {!!third.data && third.data!.toString()}</li>
+          </ul>
+        </CardContent>
+        <CardFooter>
+          <Button disabled={!claim} onClick={() => claim?.()}>
+            <Trophy className="mr-2 h-4 w-4" />
+            Claim Prize
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
