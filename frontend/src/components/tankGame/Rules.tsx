@@ -61,6 +61,12 @@ export default function Rules() {
               </li>
             </ul>
           </ul>
+          <a
+            className="text-blue-600 visited:text-purple-600"
+            href="https://goerli.etherscan.io/address/0x0a8628a32f0AC3A208B8CEf032B38fF08bB140D7"
+          >
+            View Contract on Block Explorer
+          </a> 
         </CardContent>
       </Card>
     </div>

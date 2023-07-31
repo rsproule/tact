@@ -26,7 +26,7 @@ export default function EnemySquareMenu({
 }) {
   const { toast } = useToast();
   let { config: shootConfig } = usePrepareTankGameShoot({
-    args: [ownersTank!, enemyTank!],
+    args: [ownersTank!, enemyTank!, BigInt(1)],
     enabled: open && !!ownersTank && !!enemyTank,
   });
   const { write: shoot, data: shootHash } = useTankGameShoot(shootConfig);
@@ -94,22 +94,20 @@ export default function EnemySquareMenu({
     },
   });
   return (
-    <DropdownMenuContent className="w-56">
-      <DropdownMenuGroup>
-        <DropdownMenuItem disabled={!shoot} onSelect={() => shoot?.()}>
-          <Crosshair className="mr-2 h-4 w-4" />
-          <span>Shoot</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem disabled={!giveHeart} onSelect={() => giveHeart?.()}>
-          <HeartHandshake className="mr-2 h-4 w-4" />
-          <span>Give heart</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled={!giveAp} onSelect={() => giveAp?.()}>
-          <GiftIcon className="mr-2 h-4 w-4" />
-          <span>Give AP</span>
-        </DropdownMenuItem>
-      </DropdownMenuGroup>
-    </DropdownMenuContent>
+    <DropdownMenuGroup>
+      <DropdownMenuItem disabled={!shoot} onSelect={() => shoot?.()}>
+        <Crosshair className="mr-2 h-4 w-4" />
+        <span>Shoot</span>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem disabled={!giveHeart} onSelect={() => giveHeart?.()}>
+        <HeartHandshake className="mr-2 h-4 w-4" />
+        <span>Give heart</span>
+      </DropdownMenuItem>
+      <DropdownMenuItem disabled={!giveAp} onSelect={() => giveAp?.()}>
+        <GiftIcon className="mr-2 h-4 w-4" />
+        <span>Give AP</span>
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
   );
 }

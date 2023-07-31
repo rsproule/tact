@@ -69,17 +69,15 @@ export default function SelfSquareMenu({
     },
   });
   return (
-    <DropdownMenuContent className="w-56">
-      <DropdownMenuGroup>
-        <DropdownMenuItem disabled={!upgrade} onSelect={() => upgrade?.()}>
-          <Rocket className="mr-2 h-4 w-4" />
-          <span>Upgrade Range</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled={!drip} onSelect={() => drip?.()}>
-          <Droplet className="mr-2 h-4 w-4" />
-          <span>Claim APs</span>
-        </DropdownMenuItem>
-      </DropdownMenuGroup>
-    </DropdownMenuContent>
+    <DropdownMenuGroup>
+      <DropdownMenuItem disabled={!upgrade} onSelect={() => upgrade?.()}>
+        <Rocket className="mr-2 h-4 w-4" />
+        <span>Upgrade Range</span>
+      </DropdownMenuItem>
+      <DropdownMenuItem disabled={!drip} onSelect={() => drip?.()}>
+        <Droplet className="mr-2 h-4 w-4" />
+        <span>Claim APs</span>
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
   );
 }
