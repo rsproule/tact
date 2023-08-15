@@ -540,7 +540,7 @@ contract TankTest is Test {
         // kms
         tankGame.shoot(1, 1, 2);
         tankGame.vote(1, 2);
-        vm.prank(address(3));
+        vm.startPrank(address(3));
         tankGame.give(3, 1, 1, 1);
 
         vm.startPrank(address(69));
@@ -554,14 +554,14 @@ contract TankTest is Test {
         vm.mockCall(
             address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
         );
-        vm.prank(address(1));
+        vm.startPrank(address(1));
         tankGame.shoot(1, 2, 3);
 
-        vm.prank(address(3));
+        vm.startPrank(address(3));
         vm.expectRevert("not tank owner or delegate");
         tankGame.vote(2, 3);
 
-        vm.prank(address(3));
+        vm.startPrank(address(3));
         vm.expectRevert("tank is alive");
         tankGame.vote(3, 1);
 
@@ -584,7 +584,7 @@ contract TankTest is Test {
         skip(epochTime + 1);
         vm.startPrank(address(4));
         tankGame.shoot(4, 6, 3);
-        vm.prank(address(2));
+        vm.startPrank(address(2));
         tankGame.vote(2, 7);
 
         vm.startPrank(address(6));
