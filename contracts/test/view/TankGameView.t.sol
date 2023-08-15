@@ -28,7 +28,7 @@ contract TankGameFactoryTest is Test {
     function getSettings() internal pure returns (ITankGame.GameSettings memory) {
         return ITankGame.GameSettings({
             playerCount: 1,
-            boardSize: 10,
+            boardSize: 12,
             initAPs: 3,
             initHearts: 3,
             initShootRange: 3,

@@ -60,9 +60,14 @@ contract HexBoard is Board {
         uint256 i = 1;
         uint256 boardSize = boardSize;
         do {
-            q = i + seed % (2 * boardSize);
-            r = 2 * boardSize - q > 0 ? uint256(keccak256(abi.encodePacked(seed))) % (2 * boardSize - q) : 0;
+            q = seed % (2 * boardSize + 1); // 0 to 60
+            // r is in range [boardSize - q, 2*boardSize] [90-q, 60]
+            uint256 minR = q <= boardSize ? boardSize - q : 0;
+            uint256 maxR = 3 * boardSize - q;
+            // q+r must be > 30 and < 90
+            r = uint256(keccak256(abi.encodePacked(seed))) % (maxR - minR) + minR; // 0 to 60
             s = 3 * boardSize - q - r;
+            seed = uint256(keccak256(abi.encodePacked(seed, i)));
             i++;
         } while (!isValidPoint(Point(q, r, s)));
 
