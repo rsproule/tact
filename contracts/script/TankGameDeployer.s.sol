@@ -15,7 +15,7 @@ contract TankGameDeployerScript is Script {
         TankGameFactory factory = new TankGameFactory();
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
             playerCount: 15,
-            boardSize: 51, // needs to be divisible by 3
+            boardSize: 30, // needs to be divisible by 3
             initAPs: 1,
             initHearts: 3,
             initShootRange: 3,
