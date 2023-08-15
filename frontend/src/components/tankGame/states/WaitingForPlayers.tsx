@@ -17,7 +17,11 @@ export function WaitingForPlayers({
   boardSize: bigint | undefined;
   expectedPlayersCount: bigint | undefined;
 }) {
-  let { config, refetch } = usePrepareTankGameJoin();
+  const zero = ["0x0000000000000000000000000000000000000000000000000000000000000000"] as readonly [`0x${string}`];
+  let { config, refetch } = usePrepareTankGameJoin({
+    args: [zero],
+    value: BigInt(0),
+  });
   let { toast } = useToast();
   let numPlayers = useTankGamePlayersCount({
     watch: true,
@@ -42,28 +46,25 @@ export function WaitingForPlayers({
     },
   });
   return (
-    <div>
-      <div className="flex justify-center pb-3">
-        <Card>
-          <CardHeader>
-            <p>
-              Waiting for players:{" "}
-              <span>{!!numPlayers.data && numPlayers.data.toString()} / </span>
-              {!!expectedPlayersCount && expectedPlayersCount.toString()}
-            </p>
-            <Button
-              onClick={() => {
-                write?.();
-                refetch?.();
-              }}
-              disabled={!write}
-            >
-              Join Game
-            </Button>
-          </CardHeader>
-        </Card>
-      </div>
-      <HexBoard boardSize={boardSize} />
+    <div className="flex justify-center pb-3">
+      <Card>
+        <CardHeader>
+          <p>
+            Waiting for players:{" "}
+            <span>{!!numPlayers.data && numPlayers.data.toString()} / </span>
+            {!!expectedPlayersCount && expectedPlayersCount.toString()}
+          </p>
+          <Button
+            onClick={() => {
+              write?.();
+              refetch?.();
+            }}
+            disabled={!write}
+          >
+            Join Game
+          </Button>
+        </CardHeader>
+      </Card>
     </div>
   );
 }

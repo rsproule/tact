@@ -16,7 +16,7 @@ contract TankGameFactoryTest is Test {
     function test_factory_createGame() public {
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
             playerCount: 8,
-            boardSize: 10,
+            boardSize: 12,
             initAPs: 3,
             initHearts: 3,
             initShootRange: 3,
@@ -29,5 +29,21 @@ contract TankGameFactoryTest is Test {
         assertTrue(address(gameAddress) != address(0), "game address not zero");
         ITankGame.GameState state = gameAddress.state();
         assertTrue(state == ITankGame.GameState.WaitingForPlayers, "game state is waiting");
+    }
+
+    function test_invalidBoardSize() public {
+        ITankGame.GameSettings memory gs = ITankGame.GameSettings({
+            playerCount: 8,
+            boardSize: 10,
+            initAPs: 3,
+            initHearts: 3,
+            initShootRange: 3,
+            epochSeconds: 4 hours,
+            buyInMinimum: 0,
+            revealWaitBlocks: 1000,
+            root: bytes32(0)
+        });
+        vm.expectRevert("invalid board size");
+        factory.createGame(gs);
     }
 }

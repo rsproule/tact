@@ -28,6 +28,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event GameOver(uint256 winner, uint256 second, uint256 third, uint256 prizePool);
 
     constructor(ITankGame.GameSettings memory gs) payable {
+        require(gs.boardSize % 3 == 0, "invalid board size");
         settings = gs;
         state = GameState.WaitingForPlayers;
         prizePool = msg.value;

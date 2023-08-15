@@ -1,5 +1,5 @@
 import { Tile } from "./Tile";
-import { HexGrid, Layout, Hex, Pattern } from "react-hexgrid";
+import { HexGrid, Layout, Hex, Pattern, Hexagon } from "react-hexgrid";
 
 import { useGameViewGetAllTanks, useTankGamePlayers } from "@/src/generated";
 import { useState } from "react";
@@ -25,7 +25,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
     <div className="border">
       <TransformWrapper>
         <TransformComponent>
-          <HexGrid width={1200} height={1200} viewBox="0 -10 140 140">
+          <HexGrid width={1200} height={1200} viewBox="-25 -20 240 240">
             <Pattern id="owner" link="/logos/tank1.png" size={{ x: 1, y: 1 }} />
             <Pattern id="enemy" link="/logos/tank2.png" size={{ x: 1, y: 1 }} />
             <Pattern id="dead" link="/logos/tank3.png" size={{ x: 1, y: 1 }} />
@@ -53,7 +53,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                       selectedTile!.r === hex.r &&
                       selectedTile!.s === hex.s
                     }
-                    boardSize={40}
+                    boardSize={a.length}
                     tank={tank}
                     ownersTankId={ownersTankId.data!}
                     isShootRange={
@@ -66,7 +66,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                       selectedTank.tank.hearts > 0 &&
                       getDistance(selectedTile!, hex) <= selectedTank.tank.aps
                     }
-                    onClick={function (): void {
+                    onClick={(): void => {
                       setSelectedTank(tank);
                       setSelectedTile(hex);
                     }}
