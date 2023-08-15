@@ -16,7 +16,7 @@ contract TankTest is Test {
     function setUp() public {
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
             playerCount: 8,
-            boardSize: 10,
+            boardSize: 12,
             initAPs: 3,
             initHearts: 3,
             initShootRange: 3,
