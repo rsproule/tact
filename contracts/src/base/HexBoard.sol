@@ -60,7 +60,7 @@ contract HexBoard is Board {
         uint256 i = 1;
         uint256 boardSize = boardSize;
         do {
-            q = seed % (2 * boardSize + 1); 
+            q = seed % (2 * boardSize + 1);
             uint256 minR = q <= boardSize ? boardSize - q : 0;
             uint256 maxR = 3 * boardSize - q;
             r = uint256(keccak256(abi.encodePacked(seed))) % (maxR - minR) + minR; // 0 to 60
