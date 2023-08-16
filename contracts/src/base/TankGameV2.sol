@@ -8,6 +8,7 @@ import { Board } from "src/interfaces/IBoard.sol";
 import { HexBoard } from "src/base/HexBoard.sol";
 
 contract TankGame is ITankGame, TankGameV2Storage {
+    event GameInit(ITankGame.GameSettings settings);
     event GameStarted();
     event PlayerJoined(address player, uint256 tankId, Board.Point position);
     event Move(uint256 tankId, uint256 x, uint256 y, uint256 z);
@@ -18,7 +19,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event Curse(uint256 cursedTank, uint256 voter, uint256 epoch);
     event Drip(uint256 tankId, uint256 amount, uint256 epoch);
     event Claim(address reciever, uint256 tankId, uint256 amount);
-    event PrizeIncrease(address donator, uint256 amount);
+    event PrizeIncrease(address donator, uint256 amount, uint256 newTotal);
     event Death(uint256 killer, uint256 killed);
     event Revive(uint256 savior, uint256 saved);
     event SpawnHeart(address poker, uint256 x, uint256 y, uint256 z);
@@ -29,11 +30,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     constructor(ITankGame.GameSettings memory gs) payable {
         require(gs.boardSize % 3 == 0, "invalid board size");
+        emit GameInit(gs);
         settings = gs;
         state = GameState.WaitingForPlayers;
-        prizePool = msg.value;
         board = new HexBoard(gs.boardSize);
         revealBlock = block.number + gs.revealWaitBlocks;
+        _handleDonation();
         emit Commit(msg.sender, revealBlock);
     }
 
@@ -63,8 +65,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     function donate() external payable {
+        _handleDonation();
+    }
+
+    function _handleDonation() internal {
         prizePool += msg.value;
-        emit PrizeIncrease(msg.sender, msg.value);
+        emit PrizeIncrease(msg.sender, msg.value, address(this).balance);
     }
 
     // should do some sort of commit reveal thing for the randomness instead of this
