@@ -101,3 +101,6 @@ svg g polygon {
   stroke-width: 0.2;
   transition: fill-opacity .2s;
 }
+.markdown > * {
+  all: revert;
+}
