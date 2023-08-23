@@ -36,6 +36,7 @@
     "react-dom": "^18.2.0",
     "react-hexgrid": "^2.0.1",
     "react-hook-form": "^7.45.2",
+    "react-markdown": "^8.0.7",
     "react-zoom-pan-pinch": "^3.1.0",
     "remark": "^14.0.3",
     "remark-html": "^15.0.2",
