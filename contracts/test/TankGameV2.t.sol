@@ -406,7 +406,7 @@ contract TankTest is Test {
         Vm.Log[] memory entries = vm.getRecordedLogs();
         assertEq(entries.length, 3);
         assertEq(entries[0].topics[0], keccak256("Reveal(address,uint256)"));
-        assertEq(entries[1].topics[0], keccak256("SpawnHeart(address,uint256,uint256,uint256)"));
+        assertEq(entries[1].topics[0], keccak256("SpawnHeart(address,(uint256,uint256,uint256))"));
         assertEq(entries[2].topics[0], keccak256("Commit(address,uint256)"));
     }
 
@@ -420,7 +420,7 @@ contract TankTest is Test {
         Vm.Log[] memory entries = vm.getRecordedLogs();
         assertEq(entries.length, 3);
         assertEq(entries[0].topics[0], keccak256("Reveal(address,uint256)"));
-        assertEq(entries[1].topics[0], keccak256("SpawnHeart(address,uint256,uint256,uint256)"));
+        assertEq(entries[1].topics[0], keccak256("SpawnHeart(address,(uint256,uint256,uint256))"));
         assertEq(entries[2].topics[0], keccak256("Commit(address,uint256)"));
     }
 
@@ -443,7 +443,7 @@ contract TankTest is Test {
         entries = vm.getRecordedLogs();
         assertEq(entries.length, 3);
         assertEq(entries[0].topics[0], keccak256("Reveal(address,uint256)"));
-        assertEq(entries[1].topics[0], keccak256("SpawnHeart(address,uint256,uint256,uint256)"));
+        assertEq(entries[1].topics[0], keccak256("SpawnHeart(address,(uint256,uint256,uint256))"));
         assertEq(entries[2].topics[0], keccak256("Commit(address,uint256)"));
     }
 
