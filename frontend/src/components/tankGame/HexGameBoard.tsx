@@ -1,7 +1,11 @@
 import { Tile } from "./Tile";
 import { HexGrid, Layout, Hex, Pattern, Hexagon } from "react-hexgrid";
 
-import { useGameViewGetAllTanks, useTankGamePlayers } from "@/src/generated";
+import {
+  useGameViewGetAllHearts,
+  useGameViewGetAllTanks,
+  useTankGamePlayers,
+} from "@/src/generated";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -11,6 +15,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
   const [selectedTank, setSelectedTank] = useState<typeof ITank | undefined>();
   const [selectedTile, setSelectedTile] = useState<Hex | undefined>();
   let tanks = useGameViewGetAllTanks({ watch: true });
+  let hearts = useGameViewGetAllHearts({ watch: true });
   const { address } = useAccount();
   let ownersTankId = useTankGamePlayers({
     args: [address!],
@@ -29,6 +34,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
             <Pattern id="owner" link="/logos/tank1.png" size={{ x: 1, y: 1 }} />
             <Pattern id="enemy" link="/logos/tank2.png" size={{ x: 1, y: 1 }} />
             <Pattern id="dead" link="/logos/tank3.png" size={{ x: 1, y: 1 }} />
+            <Pattern id="heart" link="/logos/heart.png" size={{ x: 1, y: 1 }} />
 
             <Layout size={{ x: 1, y: 1 }} flat={false} origin={{ x: 0, y: 0 }}>
               {a.map((hex, i) => {
@@ -39,6 +45,13 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                     tank.position.x === BigInt(hex.q) &&
                     tank.position.y === BigInt(hex.r) &&
                     tank.position.z === BigInt(hex.s)
+                  );
+                });
+                const heartsOnTile = hearts.data?.find((heartLocation) => {
+                  return (
+                    heartLocation.position.x === BigInt(hex.q) &&
+                    heartLocation.position.y === BigInt(hex.r) &&
+                    heartLocation.position.z === BigInt(hex.s)
                   );
                 });
                 return (
@@ -55,6 +68,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                     }
                     boardSize={a.length}
                     tank={tank}
+                    heartsOnTile={heartsOnTile?.numHearts}
                     ownersTankId={ownersTankId.data!}
                     isShootRange={
                       !!selectedTank &&

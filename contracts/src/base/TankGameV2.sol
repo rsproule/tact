@@ -11,7 +11,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event GameInit(ITankGame.GameSettings settings);
     event GameStarted();
     event PlayerJoined(address player, uint256 tankId, Board.Point position);
-    event Move(uint256 tankId, uint256 x, uint256 y, uint256 z);
+    event Move(uint256 tankId, Board.Point position);
     event Shoot(uint256 tankId, uint256 targetId);
     event Give(uint256 fromId, uint256 toId, uint256 hearts, uint256 aps);
     event Upgrade(uint256 tankId, uint256 range);
@@ -22,7 +22,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event PrizeIncrease(address donator, uint256 amount, uint256 newTotal);
     event Death(uint256 killer, uint256 killed);
     event Revive(uint256 savior, uint256 saved);
-    event SpawnHeart(address poker, uint256 x, uint256 y, uint256 z);
+    event SpawnHeart(address poker, Board.Point position);
     event Reveal(address poker, uint256 blocknumber);
     event Commit(address poker, uint256 blocknumber);
     event Delegate(uint256 tank, address delegate, address owner);
@@ -121,7 +121,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         Board.Point memory from = board.getTankPosition(tankId);
         board.setTile(to, Board.Tile({ tankId: tankId, hearts: 0 }));
         board.setTile(from, Board.Tile({ tankId: 0, hearts: 0 }));
-        emit Move(tankId, to.x, to.y, tile.hearts);
+        emit Move(tankId, to);
     }
 
     function shoot(
@@ -289,7 +289,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         uint256 seed = uint256(blockhash(revealBlock));
         Board.Point memory randomTile = board.getEmptyTile(seed);
         board.setTile(randomTile, Board.Tile({ tankId: 0, hearts: 1 }));
-        emit SpawnHeart(msg.sender, randomTile.x, randomTile.y, randomTile.z);
+        emit SpawnHeart(msg.sender, randomTile);
     }
 
     function _getEpoch() internal view returns (uint256) {
