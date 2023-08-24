@@ -17,6 +17,11 @@ contract GameView {
         uint256 tankId;
     }
 
+    struct HeartLocation {
+        Board.Point position;
+        uint256 numHearts;
+    }
+
     function getAllTanks() external view returns (TankLocation[] memory) {
         TankLocation[] memory tanksWithLocation = new TankLocation[](
             game.getPlayerCount()
@@ -27,5 +32,34 @@ contract GameView {
             tanksWithLocation[i - 1] = TankLocation(tank, position, i);
         }
         return tanksWithLocation;
+    }
+
+    // return the list of heart positions.
+    function getAllHearts() external view returns (HeartLocation[] memory) {
+        // iterate the whole board.
+        uint256 tilesWithHearts = 0;
+        uint256 boardSize = game.getSettings().boardSize;
+        HeartLocation[] memory hearts = new HeartLocation[](boardSize * boardSize);
+        for (uint256 q = 0; q <= 2 * boardSize + 1; q++) {
+            uint256 minR = q <= boardSize ? boardSize - q : 0;
+            uint256 maxR = 3 * boardSize - q;
+            for (uint256 r = minR; r < maxR; r++) {
+                uint256 s = 3 * boardSize - q - r;
+                uint256 numHearts = game.getBoard().getHeartAtPosition(Board.Point(q, r, s));
+                if (numHearts > 0) {
+                    HeartLocation memory hl = HeartLocation(Board.Point(q, r, s), numHearts);
+                    hearts[tilesWithHearts] = hl;
+                    tilesWithHearts += 1;
+                }
+            }
+        }
+        // convert the storage array into memory array, cuz fuck solidity
+        HeartLocation[] memory hls = new HeartLocation[](tilesWithHearts);
+        for (uint256 i = 0; i < tilesWithHearts; i++) {
+            // HeartLocation memory hl = hearts[i];
+            hls[i] = hearts[i];
+        }
+
+        return hls;
     }
 }
