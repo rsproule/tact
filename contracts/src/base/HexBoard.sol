@@ -39,9 +39,8 @@ contract HexBoard is Board {
         return _getDistance(a, b);
     }
 
-    function pointToIndex(Point memory point) public view override returns (uint256) {
-        uint256 boardSize = boardSize;
-        return point.x + point.y * boardSize + point.z * (boardSize * boardSize);
+    function pointToIndex(Point memory point) public pure override returns (uint256) {
+        return uint256(keccak256(abi.encode(point)));
     }
 
     function isValidPoint(Point memory point) public view override returns (bool) {
@@ -60,7 +59,7 @@ contract HexBoard is Board {
         uint256 i = 1;
         uint256 boardSize = boardSize;
         do {
-            q = seed % (2 * boardSize + 1); 
+            q = seed % (2 * boardSize + 1);
             uint256 minR = q <= boardSize ? boardSize - q : 0;
             uint256 maxR = 3 * boardSize - q;
             r = uint256(keccak256(abi.encodePacked(seed))) % (maxR - minR) + minR; // 0 to 60
@@ -98,6 +97,10 @@ contract HexBoard is Board {
 
     function getTankPosition(uint256 tankId) public view override returns (Point memory) {
         return tankToPosition[tankId];
+    }
+
+    function getHeartAtPosition(Point memory point) public view override returns (uint256) {
+        return heartsOnBoard[pointToIndex(point)];
     }
 
     function getPerimeterForRadius(uint256 radius) public pure override returns (uint256) {

@@ -10,10 +10,11 @@ import { GameView } from "src/view/GameView.sol";
 contract TankGameFactoryTest is Test {
     TankGameFactory public factory;
     GameView public gameView;
+    TankGame public game;
 
     function setUp() public {
         factory = new TankGameFactory();
-        TankGame game = factory.createGame(getSettings());
+        game = factory.createGame(getSettings());
         bytes32[] memory proof = new bytes32[](1);
         vm.prank(address(1));
         game.join(proof);
@@ -25,6 +26,15 @@ contract TankGameFactoryTest is Test {
         assertTrue(tanks.length == 1, "tanks length is 1");
     }
 
+    function test_view_getAllHearts() public {
+        GameView.HeartLocation[] memory hearts = gameView.getAllHearts();
+        assertTrue(hearts.length == 0, "tanks length is 0");
+        vm.roll(2);
+        game.reveal();
+        hearts = gameView.getAllHearts();
+        assertTrue(hearts.length == 1, "tanks length is 1");
+    }
+
     function getSettings() internal pure returns (ITankGame.GameSettings memory) {
         return ITankGame.GameSettings({
             playerCount: 1,
@@ -34,7 +44,7 @@ contract TankGameFactoryTest is Test {
             initShootRange: 3,
             epochSeconds: 4 hours,
             buyInMinimum: 0,
-            revealWaitBlocks: 1000,
+            revealWaitBlocks: 1,
             root: bytes32(0)
         });
     }
