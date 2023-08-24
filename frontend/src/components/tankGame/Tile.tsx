@@ -14,6 +14,7 @@ interface TileProps {
   selected: boolean;
   boardSize: number;
   tank: typeof ITank | undefined;
+  heartsOnTile: bigint | undefined;
   ownersTankId: bigint | undefined;
   isShootRange: boolean;
   isMoveRange: boolean;
@@ -87,6 +88,8 @@ export function Tile(props: TileProps) {
               : props.tank && props.tank?.tankId === props.ownersTankId
               ? "owner"
               : "enemy"
+            : props.heartsOnTile && props.heartsOnTile > 0
+            ? "heart"
             : ""
         }
       />
