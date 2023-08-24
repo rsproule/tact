@@ -77,3 +77,14 @@ The primary game mechanic is trust and deceit. This is an experiment to see how 
 - Dead players can be revived by someone who sends them a heart (they do not accumulate APs during the time they are dead)
 - once a day a heart spawns randomly on the field, whoever goes to that square earns a heart
 - Dead players form a "cursing jury" who can vote on who to curse (take ap) once per epoch
+
+## V2 launch checklist
+
+- [ ] Where do we launch?
+- [ ] Run this on testne?
+- [ ] Clean up the botkit
+- [ ] build the merkle root
+- [ ] decide board size
+- [ ] frontend for the factory?
+- [ ] centering the images in the tiles
+- [ ] write some rules, put them somewhere on the frontend
