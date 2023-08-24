@@ -36,11 +36,13 @@ contract GameView {
 
     // return the list of heart positions.
     function getAllHearts() external view returns (HeartLocation[] memory) {
-        // iterate the whole board.
+        // iterate the whole board, better to do this here instead of in the frontend
+        // 1 call instead of N calls
         uint256 tilesWithHearts = 0;
         uint256 boardSize = game.getSettings().boardSize;
         HeartLocation[] memory hearts = new HeartLocation[](boardSize * boardSize);
         for (uint256 q = 0; q <= 2 * boardSize + 1; q++) {
+            // TODO: a bit gnarlly that we are duplicating this code here. 
             uint256 minR = q <= boardSize ? boardSize - q : 0;
             uint256 maxR = 3 * boardSize - q;
             for (uint256 r = minR; r < maxR; r++) {
@@ -53,10 +55,10 @@ contract GameView {
                 }
             }
         }
+
         // convert the storage array into memory array, cuz fuck solidity
         HeartLocation[] memory hls = new HeartLocation[](tilesWithHearts);
         for (uint256 i = 0; i < tilesWithHearts; i++) {
-            // HeartLocation memory hl = hearts[i];
             hls[i] = hearts[i];
         }
 
