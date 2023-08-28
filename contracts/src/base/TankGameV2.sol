@@ -87,13 +87,14 @@ contract TankGame is ITankGame, TankGameV2Storage {
         Board.Point memory emptyPoint = board.getEmptyTile(seed);
         Tank memory tank = Tank(msg.sender, settings.initHearts, settings.initAPs, settings.initShootRange);
 
-        playersCount++;
         numTanksAlive++;
         aliveTanksIdSum += playersCount;
         tanks[playersCount] = tank;
         players[msg.sender] = playersCount;
         board.setTile(emptyPoint, Board.Tile({ tankId: playersCount, hearts: 0 }));
         emit PlayerJoined(msg.sender, playersCount, emptyPoint);
+
+        playersCount++;
         if (playersCount >= settings.playerCount) {
             epochStart = _getEpoch();
             state = GameState.Started;
