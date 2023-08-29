@@ -10,7 +10,7 @@ import {
 export default function Manifesto() {
   const markdown = `In today's world, we're grappling with the limitations of overstretched social bonds and faltering institutions that constrain our ability to coordinate on a large scale. The advent of programmable, credible commitments that bypass these frail social layers has the potential to usher in a new era of human progress.
 
-Throughout history, the scope of our achievements has been dictated by the strength of trust we share with each other. Coordination is what sets us apart from other species; it has been the driving force behind our evolutionary journey.
+Throughout history, the scope of our achievements has been dictated by the strength of trust we share with each other. Coordination is what sets us apart from the beasts of the field; it has been the driving force behind our evolutionary journey.
 
 In the early days of human existence, the nuclear family served as the cornerstone of trust. This foundational social unit allowed us to leave the confines of caves and invent basic tools and technologies. Over time, the family structure evolved into tribes, comprised of extended families. These tribes enhanced our capacity for technological innovation, and laid the foundations for more complex hunting, gathering, and agricultural systems.
 
