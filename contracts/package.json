@@ -11,6 +11,7 @@
         "prettier-plugin-solidity": "^1.0.0-beta.19"
     },
     "scripts": {
-        "ts-node": "ts-node"
+        "ts-node": "ts-node",
+        "merkle": "ts-node script/merkle.ts"
     }
 }
