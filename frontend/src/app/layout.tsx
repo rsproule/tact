@@ -18,7 +18,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <div className="container mt-2">
-            <ConnectKitButton showBalance />
+            {/* <ConnectKitButton showBalance /> */}
           </div>
           <Title/>
           {children}
