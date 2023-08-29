@@ -17,7 +17,7 @@ contract TankGameFactoryTest is Test {
         game = factory.createGame(getSettings());
         bytes32[] memory proof = new bytes32[](1);
         vm.prank(address(1));
-        game.join(proof);
+        game.join(proof, "player1");
         gameView = new GameView(game);
     }
 
