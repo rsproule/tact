@@ -10,7 +10,7 @@ import { HexBoard } from "src/base/HexBoard.sol";
 contract TankGame is ITankGame, TankGameV2Storage {
     event GameInit(ITankGame.GameSettings settings);
     event GameStarted();
-    event PlayerJoined(address player, uint256 tankId, Board.Point position);
+    event PlayerJoined(address player, uint256 tankId, Board.Point position, string name);
     event Move(uint256 tankId, Board.Point position);
     event Shoot(uint256 tankId, uint256 targetId);
     event Give(uint256 fromId, uint256 toId, uint256 hearts, uint256 aps);
@@ -75,11 +75,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     // should do some sort of commit reveal thing for the randomness instead of this
     // random point thing
-    function join(bytes32[] memory proof) external payable {
+    function join(bytes32[] memory proof, string calldata playerName) external payable {
         require(players[msg.sender] == 0, "already joined");
         require(playersCount < settings.playerCount, "game is full");
         require(msg.value >= settings.buyInMinimum, "insufficient buy in");
-        bytes32 leaf = keccak256(abi.encodePacked(msg.sender));
+        bytes32 leaf = keccak256(abi.encodePacked(msg.sender, playerName));
         require(settings.root == bytes32(0) || MerkleProof.verify(proof, settings.root, leaf), "invalid proof");
 
         // this is manipulatable.
@@ -93,7 +93,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         tanks[playersCount] = tank;
         players[msg.sender] = playersCount;
         board.setTile(emptyPoint, Board.Tile({ tankId: playersCount, hearts: 0 }));
-        emit PlayerJoined(msg.sender, playersCount, emptyPoint);
+        emit PlayerJoined(msg.sender, playersCount, emptyPoint, playerName);
         if (playersCount >= settings.playerCount) {
             epochStart = _getEpoch();
             state = GameState.Started;

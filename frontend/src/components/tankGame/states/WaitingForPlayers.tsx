@@ -17,9 +17,11 @@ export function WaitingForPlayers({
   boardSize: bigint | undefined;
   expectedPlayersCount: bigint | undefined;
 }) {
-  const zero = ["0x0000000000000000000000000000000000000000000000000000000000000000"] as readonly [`0x${string}`];
+  const zero = [
+    "0x0000000000000000000000000000000000000000000000000000000000000000",
+  ] as readonly [`0x${string}`];
   let { config, refetch } = usePrepareTankGameJoin({
-    args: [zero],
+    args: [zero, "name"],
     value: BigInt(0),
   });
   let { toast } = useToast();
