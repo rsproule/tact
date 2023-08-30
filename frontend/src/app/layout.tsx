@@ -46,7 +46,7 @@ export default function RootLayout({
             <a href="/rules" className="text-white hover:text-gray-400 text-sm">
               Read the rules
             </a>
-            <a href="/rules" className="text-white hover:text-gray-400 text-sm">
+            <a href="/manifesto" className="text-white hover:text-gray-400 text-sm">
               Why Tact?
             </a>
             <a
