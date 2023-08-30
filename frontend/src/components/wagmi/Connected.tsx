@@ -7,5 +7,7 @@ export function Connected({ children }: { children: React.ReactNode }) {
   const { isConnected } = useAccount();
 
   if (!isConnected) return <ManifestoPage />;
+  // before deployment
+  return <ManifestoPage />;
   return <>{children}</>;
 }
