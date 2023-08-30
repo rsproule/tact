@@ -7,7 +7,6 @@ export default function TestJoinPage() {
   const merkleTree = StandardMerkleTree.load(tree as any);
   const { address } = useAccount();
   const value = tree.values.find((x) => x.value[0] === address);
-  console.log(value);
   return (
     <div className="container mt-10">
       {value ? (
