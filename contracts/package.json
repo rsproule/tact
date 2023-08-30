@@ -12,6 +12,6 @@
     },
     "scripts": {
         "ts-node": "ts-node",
-        "merkle": "ts-node script/merkle.ts"
+        "merkle": "ts-node script/merkle.ts && cp tree.json ../frontend/public/tree.json"
     }
 }

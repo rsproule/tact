@@ -79,7 +79,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         require(players[msg.sender] == 0, "already joined");
         require(playersCount < settings.playerCount, "game is full");
         require(msg.value >= settings.buyInMinimum, "insufficient buy in");
-        bytes32 leaf = keccak256(abi.encodePacked(msg.sender, playerName));
+        bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(msg.sender, playerName))));
         require(settings.root == bytes32(0) || MerkleProof.verify(proof, settings.root, leaf), "invalid proof");
 
         // this is manipulatable.
