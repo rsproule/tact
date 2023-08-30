@@ -10,6 +10,6 @@ export const config = createConfig(
     appName: "Tank Trust Tactics",
     walletConnectProjectId,
     alchemyId: alchemyId,
-    chains: [foundry],
+    chains: [goerli],
   })
 );
