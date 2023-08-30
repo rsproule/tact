@@ -137,7 +137,7 @@ export function EventStream() {
 
   return (
     <div className="py-4">
-      <Card>
+      {/* <Card>
         <CardHeader>
           <h1 className="text-xl">Action Feed</h1>
         </CardHeader>
@@ -150,7 +150,7 @@ export function EventStream() {
             );
           })}
         </div>
-      </Card>
+      </Card> */}
       <Card>
         <CardHeader>
           <h1 className="text-xl">Historical logs</h1>
