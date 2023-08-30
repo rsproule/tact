@@ -35,6 +35,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         state = GameState.WaitingForPlayers;
         board = new HexBoard(gs.boardSize);
         revealBlock = block.number + gs.revealWaitBlocks;
+        owner = msg.sender;
         _handleDonation();
         emit Commit(msg.sender, revealBlock);
     }
@@ -99,6 +100,16 @@ contract TankGame is ITankGame, TankGameV2Storage {
             state = GameState.Started;
             emit GameStarted();
         }
+    }
+
+    // this is just for the scenario where one of the people we are expecting to join, doesnt actually join
+    // for when we are using the merkle whitelisted entry, its also possible people lose keys.
+    function emergencyForceGameStart() external {
+        require(msg.sender == owner, "not owner");
+        require(playersCount < settings.playerCount, "game is full");
+        epochStart = _getEpoch();
+        state = GameState.Started;
+        emit GameStarted();
     }
 
     function move(
