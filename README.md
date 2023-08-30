@@ -57,11 +57,13 @@ The advent of blockchain technology, equipped with smart contracts, offers a sol
 
 ## V2 launch checklist
 
-- [ ] Where do we launch?
-- [ ] Run this on testne?
+- [x] Where do we launch? Goerli
+- [x] Run this on testnet? yes
 - [ ] Clean up the botkit
-- [ ] build the merkle root
+- [x] build the merkle root
+  - [ ] make the frontend use this
 - [ ] decide board size
 - [ ] frontend for the factory?
-- [ ] centering the images in the tiles
-- [ ] write some rules, put them somewhere on the frontend
+  - not going to do this in the beta
+- [ ] centering the images in the tiles (low prio)
+- [x] write some rules, put them somewhere on the frontend
