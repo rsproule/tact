@@ -12,8 +12,8 @@ export default function TestJoinPage() {
     <div className="container mt-10">
       {value ? (
         <div className="bg-lime-900 p-10 text-center">
-          Found, you are ready to go. Good luck, soldier.{" "}
-          <b>{value.value[1]}</b>
+          Found <b>{value.value[1]}</b>, you are ready to go. Good luck,
+          soldier.
         </div>
       ) : (
         <div className="bg-red-900 p-10 text-center">
