@@ -42,7 +42,7 @@ contract GameView {
         uint256 boardSize = game.getSettings().boardSize;
         HeartLocation[] memory hearts = new HeartLocation[](boardSize * boardSize);
         for (uint256 q = 0; q <= 2 * boardSize + 1; q++) {
-            // TODO: a bit gnarlly that we are duplicating this code here. 
+            // TODO: a bit gnarlly that we are duplicating this code here.
             uint256 minR = q <= boardSize ? boardSize - q : 0;
             uint256 maxR = 3 * boardSize - q;
             for (uint256 r = minR; r < maxR; r++) {
