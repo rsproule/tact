@@ -12,12 +12,22 @@ export default function TestJoinPage() {
     <div className="container mt-10">
       {value ? (
         <div className="bg-lime-900 p-10 text-center">
-          Found, you are ready to go <b>{value.value[1]}</b>
+          Found, you are ready to go. Good luck, soldier.{" "}
+          <b>{value.value[1]}</b>
         </div>
       ) : (
         <div className="bg-red-900 p-10 text-center">
           Not Found. check you are connecting the correct wallet, or contact
           ryan
+          <div className="mt-2">Expected addresses:</div>
+          <div>
+            {tree.values.map((x) => (
+              <>
+                {x.value[1] + " = " + x.value[0] + "\n"}
+                <br />
+              </>
+            ))}
+          </div>
         </div>
       )}
     </div>
