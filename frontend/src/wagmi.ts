@@ -7,7 +7,7 @@ const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID!;
 export const config = createConfig(
   getDefaultConfig({
     autoConnect: true,
-    appName: "Tact",
+    appName: "TactV2",
     walletConnectProjectId,
     alchemyId: alchemyId,
     chains: [goerli],
