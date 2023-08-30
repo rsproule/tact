@@ -4,11 +4,16 @@ import {
   useTankGameJoin,
 } from "@/src/generated";
 import { BaseError } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useAccount, useWaitForTransaction } from "wagmi";
 import { Button } from "../../ui/button";
 import { Card, CardHeader } from "../../ui/card";
 import { useToast } from "../../ui/use-toast";
-import { HexBoard } from "../HexGameBoard";
+import * as tree from "public/tree.json";
+import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
+
+const zero = [
+  "0x0000000000000000000000000000000000000000000000000000000000000000",
+] as readonly [`0x${string}`];
 
 export function WaitingForPlayers({
   boardSize,
@@ -17,11 +22,16 @@ export function WaitingForPlayers({
   boardSize: bigint | undefined;
   expectedPlayersCount: bigint | undefined;
 }) {
-  const zero = [
-    "0x0000000000000000000000000000000000000000000000000000000000000000",
-  ] as readonly [`0x${string}`];
+  const merkleTree = StandardMerkleTree.load(tree as any);
+  const { address } = useAccount();
+  const value = tree.values.find((x) => x.value[0] === address);
+  const proof = value
+    ? merkleTree
+        .getProof(value.value)
+        .map((x) => Object.freeze(x) as `0x${string}`)
+    : zero;
   let { config, refetch } = usePrepareTankGameJoin({
-    args: [zero, "name"],
+    args: [proof, value?.value[1] ?? ""],
     value: BigInt(0),
   });
   let { toast } = useToast();
