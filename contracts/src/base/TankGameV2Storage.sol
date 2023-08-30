@@ -29,4 +29,5 @@ contract TankGameV2Storage {
     ITankGame.GameState public state; // can calculate this
     ITankGame.GameSettings public settings;
     Board public board;
+    address public owner;
 }
