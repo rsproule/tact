@@ -8,6 +8,6 @@ export function Connected({ children }: { children: React.ReactNode }) {
 
   if (!isConnected) return <ManifestoPage />;
   // before deployment
-  return <ManifestoPage />;
-  // return <>{children}</>;
+  // return <ManifestoPage />;
+  return <>{children}</>;
 }

@@ -9,7 +9,7 @@ export function TankGame() {
   let gameState = useTankGameState({ watch: true });
   let settings = useTankGameGetSettings();
   return (
-    <div className={`w-full`}>
+    <div className="container">
 
       {gameState.data === 0 && (
         <WaitingForPlayers
@@ -23,7 +23,7 @@ export function TankGame() {
         </>
       )}
       {gameState.data === 2 && <GameOver />}
-      {gameState.data !== 2 && <Donate />}
+      {/* {gameState.data !== 2 && <Donate />} */}
       <HexBoard boardSize={settings.data && settings.data!.boardSize} />
     </div>
   );
