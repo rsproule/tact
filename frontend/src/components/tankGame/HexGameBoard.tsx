@@ -6,7 +6,7 @@ import {
   useGameViewGetAllTanks,
   useTankGamePlayers,
 } from "@/src/generated";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { ITank } from "./ITank";
@@ -22,21 +22,39 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
     enabled: !!address,
   });
 
+  const ref = useRef();
+  const { width } = useContainerDimensions(ref);
   if (!boardSize) {
     return <div></div>;
   }
+  // const {innerWidth: width, innerHeight: height} = window;
+  console.log(width)
   const a = hexagon(Number(boardSize!));
   return (
-    <div className="border">
+    <div className="border" ref={ref}>
       <TransformWrapper>
         <TransformComponent>
-          <HexGrid width={1200} height={1200} viewBox="-25 -20 240 240">
+          <HexGrid
+            width={width}
+            height={width < 500 ? "50%" : undefined}
+            viewBox="10 -20 150 150"
+          >
             <Pattern id="owner" link="/logos/tank1.png" size={{ x: 1, y: 1 }} />
             <Pattern id="enemy" link="/logos/tank2.png" size={{ x: 1, y: 1 }} />
             <Pattern id="dead" link="/logos/tank3.png" size={{ x: 1, y: 1 }} />
             <Pattern id="heart" link="/logos/heart.png" size={{ x: 1, y: 1 }} />
 
-            <Layout size={{ x: 1, y: 1 }} flat={false} origin={{ x: 0, y: 0 }}>
+            <Layout
+              size={{
+                x: 1,
+                y: 1,
+              }}
+              flat={false}
+              origin={{
+                x: 0,
+                y: 0,
+              }}
+            >
               {a.map((hex, i) => {
                 // TODO: performance improvement here by using a diff data structure
                 // instead of a find
@@ -117,3 +135,31 @@ function getDistance(a: Hex, b: Hex): number {
   let dz = a.s > b.s ? a.s - b.s : b.s - a.s;
   return (dx + dy + dz) / 2;
 }
+const useContainerDimensions = (myRef) => {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0, innerWidth: 0, innerHeight: 0});
+
+  useEffect(() => {
+    const getDimensions = () => ({
+      width: myRef.current.offsetWidth,
+      height: myRef.current.offsetHeight,
+      innerWidth: window.innerWidth,
+      innerHeight: window.innerHeight,
+    });
+
+    const handleResize = () => {
+      setDimensions(getDimensions());
+    };
+
+    if (myRef.current) {
+      setDimensions(getDimensions());
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [myRef]);
+
+  return dimensions;
+};
