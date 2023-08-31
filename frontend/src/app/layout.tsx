@@ -17,10 +17,10 @@ export default function RootLayout({
       <link rel="icon" href="/favicon.ico" sizes="any" />
       <body className="relative min-h-screen mb-10">
         <Providers>
-          <div className="container mt-2">
+          <div className="container md:flex justify-between mt-2">
+            <Title />
             <ConnectKitButton showBalance />
           </div>
-          <Title />
           {children}
         </Providers>
         <Analytics />{" "}
