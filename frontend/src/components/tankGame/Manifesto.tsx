@@ -20,85 +20,73 @@ export default function Manifesto() {
         </CardHeader>
         <CardContent>
           <p className="text-base mb-4">
-            {`In today's world, we're grappling with the limitations of
-              overstretched social bonds and faltering institutions that
-              constrain our ability to coordinate on a large scale. The advent
-              of programmable, credible commitments that bypass these frail
-              social layers has the potential to usher in a new era of human
-              progress.`}
+            {`Today's world runs on aggressively over-leveraged social bonds and failing 
+            institutions that are limiting the scalability of human coordination efforts.
+            The ability to make programmable, credible commitments without this fragile social
+            layer can unlock the next level of human coordination.`}
           </p>
 
           <p className="text-base mb-4">
-            Throughout history, the scope of our achievements has been dictated
-            by the strength of trust we share with each other. Coordination is
-            what sets us apart from the beasts of the field; it has been the
-            driving force behind our evolutionary journey.
+            Human progress has always been limited by the strength of the trust
+            we share with each other. The ability to coordinate is what
+            separates us from the common beasts of the field.
           </p>
 
           <h2 className="text-xl font-semibold mb-2">Early Humanity</h2>
           <p className="text-base mb-4">
-            In the early days of human existence, the nuclear family served as
-            the cornerstone of trust. This foundational social unit allowed us
-            to leave the confines of caves and invent basic tools and
-            technologies. Over time, the family structure evolved into tribes,
-            comprised of extended families. These tribes enhanced our capacity
-            for technological innovation, and laid the foundations for more
-            complex hunting, gathering, and agricultural systems.
-          </p>
-
-          <h2 className="text-xl font-semibold mb-2">Civilization</h2>
-          <p className="text-base mb-4">
-            {`Civilization marked another significant milestone. Societal groups
-              formed around shared values and beliefs, creating social contracts
-              of trust similar to how Ethereum's Virtual Machine (EVM) paved the
-              way for programmable, on-chain agreements.`}
-          </p>
-
-          <h2 className="text-xl font-semibold mb-2">Current Challenges</h2>
-          <p className="text-base mb-4">
-            Yet, we now find ourselves at a crossroads. Traditional institutions
-            that once fortified our trust—like banks, governments, and religious
-            organizations—are showing cracks in their foundations. The erosion
-            of faith in these institutions, along with the globalization of
-            society and the rise of secularism, necessitate a new paradigm. The
-            way forward lies in robust, decentralized economic systems that
-            technologies like blockchain can facilitate.
+            In the beginning of humanity, the nuclear family structure unlocked
+            the first social structures of trust. This allowed humans to exit
+            the caves and develop rudimentary technology. Over time, the family
+            structure evolved into tribes, comprised of extended families that
+            organized around the combination of blood bonds and a common set of
+            beliefs and values. This set the stage for the agricultural
+            revolution and the boom of early human civilization.
           </p>
 
           <p className="text-base mb-4">
-            From families to tribes, from religious organizations to banks and
-            governments, our progression has been marked by evolving forms of
-            trust and coordination. Today, we see an opportunity to advance to a
-            new stage powered by blockchains and demonstrated by Tact.
+            Structures built on social bonds of common beliefs brought us to the
+            modern day. Yet, we now find ourselves at a crossroads. Traditional
+            institutions that once fortified our trust—like banks, governments,
+            and religious organizations—are showing cracks in their foundations.
+            Banks are failing, leading to economic collapse; national borders
+            are melting away with the new global online society; religious
+            organizations are being left behind for modern secular thinking.
+            This is the key problem with social bond-driven trust systems: they
+            do not scale.
+          </p>
+
+          <h2 className="text-xl font-semibold mb-2">A Path Forward</h2>
+          <p className="text-base mb-4">
+            The only path forward is to replace these failing, unscalable
+            sources of trust with truly robust decentralized economic systems
+            that infrastructure like blockchains can provide.
+          </p>
+
+          <p className="text-base mb-4">
+            From families to tribes, from tribes to civilizations, from
+            religious organizations to banks and governments, our progression
+            has been marked by evolving forms of trust and coordination. Today,
+            we see an opportunity to advance to a new stage powered by
+            blockchains and demonstrated by Tact.
           </p>
 
           <h2 className="text-xl font-semibold mb-2">
             Limitations of Online Gaming Today
           </h2>
-          <p className="text-base mb-4">
-            Consider online gaming as an analogy. Historically, the scope of
-            game mechanics has been limited due to the inherently untrustworthy
-            nature of anonymous online opponents. Games that thrive on social
-            interaction and trust, like Risk, Mafia, Diplomacy, and Catan, fail
-            to translate well into online environments where there are no
-            real-world consequences for deception or betrayal.
-          </p>
-
-          <h2 className="text-xl font-semibold mb-2">Blockchain Technology</h2>
-          <p className="text-base mb-4">
-            The advent of blockchain technology, equipped with smart contracts,
-            offers a solution. It provides a programmable layer of trust,
-            enabling us to form reliable bonds without the need for complex
-            social intermediaries.
+          <p className="text-base mb-9">
+            For generations, online games have been limited in the game
+            mechanics that they can explore by the fundamental untrustworthy
+            nature of the anonymous opponent on the other side of the network
+            link. Some of the most interesting and most popular IRL games like
+            Risk, Diplomacy, Mafia, and Catan do not translate to the online,
+            anonymous worlds because there is no social cost to betrayal or
+            lying.
           </p>
 
           <p className="text-base mb-4">
-            {`Tact is more than just a game; it's a case study for a world
-              built on the foundation that blockchain offers—a world driven by
-              credible economic commitments. It shows us what is possible when
-              we employ the coordination tools that a decentralized
-              infrastructure can provide, potentially revolutionizing how we
-              organize and trust one another.`}
+            Tact is more than just a game; it is a demonstration of what a world
+            can look like utilizing the tools for coordination that a blockchain
+            provides. A world that runs on credible economic commitments.
           </p>
         </CardContent>
 
