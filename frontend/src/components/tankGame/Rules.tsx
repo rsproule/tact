@@ -9,7 +9,7 @@ import {
 
 export default function Rules() {
   return (
-    <div className="container py-3">
+    <div className="py-3 pb-20">
       <Card>
         <CardHeader>
           <CardTitle>Tact Rules</CardTitle>

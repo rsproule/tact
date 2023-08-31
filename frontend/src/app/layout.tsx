@@ -41,10 +41,10 @@ export default function RootLayout({
               Home
             </a>
             <a href="/test" className="text-white hover:text-gray-400 text-sm">
-              Test connection
+              Test
             </a>
             <a href="/rules" className="text-white hover:text-gray-400 text-sm">
-              Read the rules
+              Rules
             </a>
             <a href="/manifesto" className="text-white hover:text-gray-400 text-sm">
               Why Tact?
