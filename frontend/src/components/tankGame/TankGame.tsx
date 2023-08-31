@@ -9,7 +9,7 @@ export function TankGame() {
   let gameState = useTankGameState({ watch: true });
   let settings = useTankGameGetSettings();
   return (
-    <div className="container">
+    <div>
       {gameState.data === 0 && (
         <WaitingForPlayers
           expectedPlayersCount={settings.data && settings.data!.playerCount}
