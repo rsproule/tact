@@ -6,7 +6,7 @@ import {
   useGameViewGetAllTanks,
   useTankGamePlayers,
 } from "@/src/generated";
-import { useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { ITank } from "./ITank";
@@ -22,16 +22,16 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
     enabled: !!address,
   });
 
-  const ref = useRef();
+  const ref = useRef(null);
   const { width } = useContainerDimensions(ref);
   if (!boardSize) {
     return <div></div>;
   }
   // const {innerWidth: width, innerHeight: height} = window;
-  console.log(width)
+  console.log(width);
   const a = hexagon(Number(boardSize!));
   return (
-    <div className="border" ref={ref}>
+    <div className="border flex justify-center" ref={ref}>
       <TransformWrapper>
         <TransformComponent>
           <HexGrid
@@ -135,12 +135,19 @@ function getDistance(a: Hex, b: Hex): number {
   let dz = a.s > b.s ? a.s - b.s : b.s - a.s;
   return (dx + dy + dz) / 2;
 }
-const useContainerDimensions = (myRef) => {
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0, innerWidth: 0, innerHeight: 0});
+const useContainerDimensions = (myRef: MutableRefObject<null>) => {
+  const [dimensions, setDimensions] = useState({
+    width: 0,
+    height: 0,
+    innerWidth: 0,
+    innerHeight: 0,
+  });
 
   useEffect(() => {
     const getDimensions = () => ({
+      // @ts-ignore
       width: myRef.current.offsetWidth,
+      // @ts-ignore
       height: myRef.current.offsetHeight,
       innerWidth: window.innerWidth,
       innerHeight: window.innerHeight,
