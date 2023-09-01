@@ -26,12 +26,14 @@ export default function TestJoinPage() {
           ryan
           <div className="mt-2">Expected addresses:</div>
           <div>
-            {tree.values.map((x) => (
-              <>
-                {x.value[1] + " = " + x.value[0] + "\n"}
-                <br />
-              </>
-            ))}
+            {tree.values
+              .filter((x) => !x.value[1].includes("bot"))
+              .map((x) => (
+                <>
+                  {x.value[1] + " = " + x.value[0] + "\n"}
+                  <br />
+                </>
+              ))}
           </div>
         </div>
       )}
