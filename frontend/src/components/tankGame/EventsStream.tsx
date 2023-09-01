@@ -256,12 +256,12 @@ const shootString = (event: any) => {
 
 const delegateString = (event: any) => {
   return `👨‍⚖️ ${event.args.owner} delegated control of ${toTankName(
-    event.args.tankId
+    event.args.tank
   )} to ${event.args.delegate}`;
 };
 
 const commitString = (event: any) => {
-  return `📥 Next heart will be available to spawn at block ${event.args.blockNumber}`;
+  return `📥 Next heart will be available to spawn at block ${event.args.blocknumber}`;
 };
 const gameInitString = (event: any) => {
   return `Game started with ${event.args.settings.playerCount} players. Buy in is ${event.args.settings.buyInMinimum} ether.`;
