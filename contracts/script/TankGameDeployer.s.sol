@@ -22,7 +22,7 @@ contract TankGameDeployerScript is Script {
             epochSeconds: 30 minutes,
             buyInMinimum: 0,
             revealWaitBlocks: 300 minutes / 12,
-            root: bytes32(0x12a256e478de89eaa392995ee0771b20dba7f602434ed6e936fe2187cd825070)
+            root: bytes32(0x67b97316e56a4dfcf0fe628d8b3abeaf5b1a6b5582c0cce54a05b1f974dc813d)
         });
         tankGame = factory.createGame(gs);
 
