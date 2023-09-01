@@ -7,7 +7,7 @@ import { GameOver } from "./states/GameOver";
 import { WaitingForPlayers } from "./states/WaitingForPlayers";
 export function TankGame() {
   let gameState = useTankGameState({ watch: true });
-  let settings = useTankGameGetSettings();
+  let settings = useTankGameGetSettings({ watch: true });
   return (
     <div>
       {gameState.data === 0 && (
