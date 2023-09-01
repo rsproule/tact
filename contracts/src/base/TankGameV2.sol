@@ -103,7 +103,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     // this is just for the scenario where one of the people we are expecting to join, doesnt actually join
-    // for when we are using the merkle tree whitelisted entry, its also possible people lose keys (moron proof).
+    // for when we are using the merkle tree whitelisted, its also possible people lose keys (moron proof).
     function emergencyForceGameStart() external {
         require(msg.sender == owner, "not owner");
         require(playersCount < settings.playerCount, "game is full");
