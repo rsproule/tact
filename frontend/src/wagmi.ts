@@ -1,5 +1,5 @@
 import { getDefaultConfig } from "connectkit";
-import { goerli } from "viem/chains";
+import { goerli, foundry } from "viem/chains";
 import { createConfig } from "wagmi";
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_APP!;
 const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID!;
@@ -11,5 +11,6 @@ export const config = createConfig(
     walletConnectProjectId,
     alchemyId: alchemyId,
     chains: [goerli],
+    // chains: [foundry],
   })
 );
