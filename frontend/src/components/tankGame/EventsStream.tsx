@@ -22,6 +22,7 @@ import { OWNERS } from "./Tank";
 
 export const TANK_MAPPING = [
   "Ryan",
+  "Yuan",
   // "Jonah",
   // "Sam",
   // "Mason",
