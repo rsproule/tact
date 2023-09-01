@@ -20,7 +20,7 @@ const values = [
   [getAddress("0xac56Bf73E73e252e962958B856d88F8264A2F2Ab"), "daniel"],
   [getAddress("0xbf0E0d8797d31fdDb2073B51eC5F78B56382643f"), "brad"],
   [getAddress("0x1f08eB0a5F08117D3302212139d3804Cf4810de8"), "pat"],
-  [getAddress("0x72Edd28063647BE9E87F6Df3f4de7138A1a5ceBA"), "will"],
+  [getAddress("0x6c915B7d41566fA58b15962D829591edE914Fc34"), "will"],
   [getAddress("0xB3c296170c57A7510Bb95EF2E9C47977bC2FF1c8"), "caleb"],
   [getAddress("0xDA744DaCea631029430FD63D83B26F757E054Cb7"), "brian"],
   [getAddress("0x25C9745e0BA56fa7E40F9F8f61b7Fb49016cf342"), "phil"],

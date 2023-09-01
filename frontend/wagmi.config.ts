@@ -10,22 +10,20 @@ export default defineConfig({
         ITankGame: {
           [chains.mainnet.id]: "0x021dbff4a864aa25c51f0ad2cd73266fde66199d",
           [chains.foundry.id]: "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
-          [chains.goerli.id]: "0xEa87EC217842145e888644C7B3D08055bd403E1a",
-          // [chains.goerli.id]: "0x0a8628a32f0AC3A208B8CEf032B38fF08bB140D7",
+          [chains.goerli.id]: "0xa28b12ff977cA9969F1f4e3973499fFBe3115835",
         },
         TankGame: {
           [chains.mainnet.id]: "0x021dbff4a864aa25c51f0ad2cd73266fde66199d",
           [chains.foundry.id]: "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
-          [chains.goerli.id]: "0xEa87EC217842145e888644C7B3D08055bd403E1a",
-          // [chains.goerli.id]: "0x0a8628a32f0AC3A208B8CEf032B38fF08bB140D7",
+          [chains.goerli.id]: "0xa28b12ff977cA9969F1f4e3973499fFBe3115835",
         },
         GameView: {
           [chains.foundry.id]: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
-          [chains.goerli.id]: "0xD30E09577F821921791B6F1a00B398620C1CE9De",
+          [chains.goerli.id]: "0x2D4F0046b57DCaB450a081c74075d3e99CA9DF9E",
         },
         TankGameFactory: {
           [chains.foundry.id]: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-          [chains.goerli.id]: "0x19B1A37E63E8fe46c52d4ac94A8f09D15Df43635",
+          [chains.goerli.id]: "0xDB9a8A333f9c56c935d0a6328935bA5CB46D438F",
         },
       },
       project: "../contracts",
