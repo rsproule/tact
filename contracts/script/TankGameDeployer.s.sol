@@ -14,15 +14,15 @@ contract TankGameDeployerScript is Script {
         vm.startBroadcast();
         TankGameFactory factory = new TankGameFactory();
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
-            playerCount: 19,
-            boardSize: 30, // needs to be divisible by 3
+            playerCount: 21,
+            boardSize: 33, // needs to be divisible by 3
             initAPs: 1,
             initHearts: 3,
             initShootRange: 3,
             epochSeconds: 30 minutes,
             buyInMinimum: 0,
-            revealWaitBlocks: 6 hours / 12,
-            root: bytes32(0xd279952f2e4ec5aae8ec894ad9ce151507a5f5e64251b2f103828b9547ec440b)
+            revealWaitBlocks: 300 minutes / 12,
+            root: bytes32(0x12a256e478de89eaa392995ee0771b20dba7f602434ed6e936fe2187cd825070)
         });
         tankGame = factory.createGame(gs);
 

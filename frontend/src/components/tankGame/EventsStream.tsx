@@ -1,5 +1,17 @@
 "use client";
-import { tankGameABI, tankGameAddress, useTankGameClaimEvent, useTankGameDripEvent, useTankGameGiveEvent, useTankGameMoveEvent, useTankGamePlayerJoinedEvent, useTankGamePrizeIncreaseEvent, useTankGameShootEvent, useTankGameUpgradeEvent, useTankGameVoteEvent } from "@/src/generated";
+import {
+  tankGameABI,
+  tankGameAddress,
+  useTankGameClaimEvent,
+  useTankGameDripEvent,
+  useTankGameGiveEvent,
+  useTankGameMoveEvent,
+  useTankGamePlayerJoinedEvent,
+  useTankGamePrizeIncreaseEvent,
+  useTankGameShootEvent,
+  useTankGameUpgradeEvent,
+  useTankGameVoteEvent,
+} from "@/src/generated";
 import { useState } from "react";
 import { formatEther } from "viem";
 import { Card, CardHeader } from "../ui/card";
@@ -10,22 +22,22 @@ import { OWNERS } from "./Tank";
 
 export const TANK_MAPPING = [
   "Ryan",
-  "Jonah",
-  "Sam",
-  "Mason",
-  "Spencer",
-  "Yigit",
-  "Caleb",
-  "Joe",
-  "Sterling",
-  "Shishi",
+  // "Jonah",
+  // "Sam",
+  // "Mason",
+  // "Spencer",
+  // "Yigit",
+  // "Caleb",
+  // "Joe",
+  // "Sterling",
+  // "Shishi",
 ];
 
 const toTankName = (tankId: bigint | undefined) => {
   if (!tankId) {
     return "Unknown Tank";
   }
-  if (tankId && tankId! > TANK_MAPPING.length + 1) {
+  if (tankId && tankId! > TANK_MAPPING.length ) {
     return "Tank " + tankId!.toString();
   }
   return TANK_MAPPING[Number(tankId!) - 1];
@@ -201,16 +213,27 @@ const logToText = (event) => {
   if (event.eventName == "GameStarted") {
     return startString(event);
   }
+  if (event.eventName == "SpawnHeart") {
+    return spawnHeartString(event);
+  }
+  if (event.eventName == "Revive") {
+    return reviveString(event);
+  }
+  if (event.eventName == "Death") {
+    return deathString(event);
+  }
   if (event.eventName == "PrizeIncrease") {
     return donateString(event);
-  } else {
-    return event.eventName + "";
   }
+  return event.eventName + "";
 };
 const moveString = (event: any) => {
-  return `🏃 ${toTankName(event.args.tankId)} moved to (${event.args.y}, ${
-    event.args.x
-  })`;
+  return `🏃 ${toTankName(event.args.tankId)} moved to (${
+    event.args.position.x
+  }, 
+    ${event.args.position.y}, 
+    ${event.args.position.z}
+  )`;
 };
 
 const shootString = (event: any) => {
@@ -218,7 +241,22 @@ const shootString = (event: any) => {
     event.args.targetId
   )}`;
 };
+const reviveString = (event: any) => {
+  return `🩸 ${toTankName(event.args.saved)} was revived by ${toTankName(
+    event.args.savior
+  )}`;
+};
+const deathString = (event: any) => {
+  return `💀 ${toTankName(event.args.killed)} killed by ${toTankName(
+    event.args.killer
+  )}`;
+};
 
+const spawnHeartString = (event: any) => {
+  return `❤️ A heart spawned at ${event.args.position.x}, 
+    ${event.args.position.y}, 
+    ${event.args.position.z}`;
+};
 const giveString = (event: any) => {
   return `🤝 ${toTankName(event.args.fromId)} gave ${
     event.args.hearts || event.args.aps

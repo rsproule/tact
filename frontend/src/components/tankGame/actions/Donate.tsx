@@ -37,25 +37,27 @@ export default function Donate() {
     },
   });
   return (
-    <div className="float-right">
-      <>
-        {prizePool.isSuccess ? formatEther(prizePool.data!) : "0"} ETH in the
-        prize pool
-      </>
-      <div className="flex w-full max-w-sm items-center space-x-2">
-        <Input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value as `${number}`)}
-        />
-        <Button
-          disabled={!donate}
-          onClick={() => {
-            donate?.();
-          }}
-        >
-          Donate ETH
-        </Button>
+    <div className="flex justify-center pb-3">
+      <div className="block justify-center pb-3">
+        <>
+          {prizePool.isSuccess ? formatEther(prizePool.data!) : "0"} ETH in the
+          prize pool
+        </>
+        <div className="flex w-full max-w-sm items-center space-x-2">
+          <Input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value as `${number}`)}
+          />
+          <Button
+            disabled={!donate}
+            onClick={() => {
+              donate?.();
+            }}
+          >
+            Donate ETH
+          </Button>
+        </div>
       </div>
     </div>
   );
