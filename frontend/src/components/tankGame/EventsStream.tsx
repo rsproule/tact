@@ -37,7 +37,7 @@ const toTankName = (tankId: bigint | undefined) => {
   if (!tankId) {
     return "Unknown Tank";
   }
-  if (tankId && tankId! > TANK_MAPPING.length ) {
+  if (tankId && tankId! > TANK_MAPPING.length) {
     return "Tank " + tankId!.toString();
   }
   return TANK_MAPPING[Number(tankId!) - 1];
@@ -222,6 +222,18 @@ const logToText = (event) => {
   if (event.eventName == "Death") {
     return deathString(event);
   }
+  if (event.eventName == "Delegate") {
+    return delegateString(event);
+  }
+  if (event.eventName == "Commit") {
+    return commitString(event);
+  }
+  if (event.eventName == "GameInit") {
+    return gameInitString(event);
+  }
+  if (event.eventName == "Reveal") {
+    return revealString(event);
+  }
   if (event.eventName == "PrizeIncrease") {
     return donateString(event);
   }
@@ -241,11 +253,29 @@ const shootString = (event: any) => {
     event.args.targetId
   )}`;
 };
+
+const delegateString = (event: any) => {
+  return `👨‍⚖️ ${event.args.owner} delegated control of ${toTankName(
+    event.args.tankId
+  )} to ${event.args.delegate}`;
+};
+
+const commitString = (event: any) => {
+  return `📥 Next heart will be available to spawn at block ${event.args.blockNumber}`;
+};
+const gameInitString = (event: any) => {
+  return `Game started with ${event.args.settings.playerCount} players. Buy in is ${event.args.settings.buyInMinimum} ether.`;
+};
+const revealString = (event: any) => {
+  return `Thanks ${event.args.poker} for the reveal!`;
+};
+
 const reviveString = (event: any) => {
   return `🩸 ${toTankName(event.args.saved)} was revived by ${toTankName(
     event.args.savior
   )}`;
 };
+
 const deathString = (event: any) => {
   return `💀 ${toTankName(event.args.killed)} killed by ${toTankName(
     event.args.killer
