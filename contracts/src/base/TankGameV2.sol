@@ -103,7 +103,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     // this is just for the scenario where one of the people we are expecting to join, doesnt actually join
-    // for when we are using the merkle whitelisted entry, its also possible people lose keys.
+    // for when we are using the merkle tree whitelisted entry, its also possible people lose keys (moron proof).
     function emergencyForceGameStart() external {
         require(msg.sender == owner, "not owner");
         require(playersCount < settings.playerCount, "game is full");
@@ -155,7 +155,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         tanks[toId].hearts -= shots;
         emit Shoot(fromId, toId);
         if (tanks[toId].hearts <= 0) {
-            handleDeath(fromId, toId);
+            _handleDeath(fromId, toId);
         }
     }
 
@@ -188,7 +188,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         tanks[toId].aps += aps;
         emit Give(fromId, toId, hearts, aps);
         if (tanks[fromId].hearts == 0) {
-            handleDeath(fromId, fromId);
+            _handleDeath(fromId, fromId);
         }
     }
 
@@ -273,13 +273,13 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Reveal(msg.sender, revealBlock);
         // as long as we are within 256 blocks, we can reveal
         if (block.number - revealBlock <= 256) {
-            spawnResource();
+            _spawnResource();
         }
         revealBlock = block.number + settings.revealWaitBlocks;
         emit Commit(msg.sender, revealBlock);
     }
 
-    function handleDeath(uint256 killer, uint256 tankId) private {
+    function _handleDeath(uint256 killer, uint256 tankId) private {
         numTanksAlive--;
         aliveTanksIdSum -= tankId;
         deadTanks.push(tankId);
@@ -296,7 +296,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         }
     }
 
-    function spawnResource() private {
+    function _spawnResource() private {
         uint256 seed = uint256(blockhash(revealBlock));
         Board.Point memory randomTile = board.getEmptyTile(seed);
         board.setTile(randomTile, Board.Tile({ tankId: 0, hearts: 1 }));

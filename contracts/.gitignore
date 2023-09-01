@@ -20,3 +20,5 @@ lib/zksolc*
 dist/ 
 node_modules/
 
+
+.botkeys.env
