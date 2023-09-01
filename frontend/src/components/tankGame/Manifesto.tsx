@@ -99,7 +99,10 @@ export default function Manifesto() {
           <a className="text-white hover:text-gray-400" href="/rules">
             Read the Rules
           </a>
-          <a className="text-white hover:text-gray-400" href="todo">
+          <a
+            className="text-white hover:text-gray-400"
+            href="https://goerli.etherscan.io/address/0xEa87EC217842145e888644C7B3D08055bd403E1a"
+          >
             View Contract on Block Explorer
           </a>
         </div>
