@@ -23,6 +23,11 @@ import { OWNERS } from "./Tank";
 export const TANK_MAPPING = [
   "Ryan",
   "Yuan",
+  "Shishi",
+  "iwillgiveyouapsforeth",
+  "Sterling",
+  "Will",
+  "Spencer",
   // "Jonah",
   // "Sam",
   // "Mason",
@@ -31,7 +36,6 @@ export const TANK_MAPPING = [
   // "Caleb",
   // "Joe",
   // "Sterling",
-  // "Shishi",
 ];
 
 const toTankName = (tankId: bigint | undefined) => {
