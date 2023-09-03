@@ -28,6 +28,7 @@ export const TANK_MAPPING = [
   "Sterling",
   "Will",
   "Spencer",
+  "Yigit",
   // "Jonah",
   // "Sam",
   // "Mason",
