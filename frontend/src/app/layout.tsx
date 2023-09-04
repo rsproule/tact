@@ -32,7 +32,7 @@ export default function RootLayout({
                 className="text-white hover:text-gray-400"
                 href="https://twitter.com/sproule_"
               >
-                Ryan Sproule
+               rfs 
               </a>
             </p>
             <div className="flex space-x-4">
