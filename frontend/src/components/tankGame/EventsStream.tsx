@@ -41,7 +41,7 @@ export const TANK_MAPPING = [
   "Daniel",
   "Anay",
   "Joshua",
-  "Brian"
+  "Brian",
   // "Jonah",
   // "Sam",
   // "Mason",
@@ -286,7 +286,7 @@ const gameInitString = (event: any) => {
   return `Game started with ${event.args.settings.playerCount} players. Buy in is ${event.args.settings.buyInMinimum} ether.`;
 };
 const revealString = (event: any) => {
-  return `Thanks ${event.args.poker} for the reveal!`;
+  return `Thanks ${toTankName(event.args.poker)} for the reveal!`;
 };
 
 const reviveString = (event: any) => {
