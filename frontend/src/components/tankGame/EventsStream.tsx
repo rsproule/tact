@@ -163,7 +163,13 @@ export function EventStream() {
         typeof value === "bigint" ? value.toString() : value
       )
     );
-    setOldLogs([...logs.reverse().map((log) => logToText(log))]);
+    setOldLogs([
+      ...logs
+        .reverse()
+        .map(
+          (log) => "Block number: " + log.blockNumber + " " + logToText(log)
+        ),
+    ]);
   };
 
   return (
