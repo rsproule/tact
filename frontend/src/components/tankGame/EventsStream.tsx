@@ -24,7 +24,7 @@ export const TANK_MAPPING = [
   "Ryan",
   "Yuan",
   "Shishi",
-  "iwillgiveyouapsforeth",
+  "THE KRAKEN",
   "Sterling",
   "Will",
   "Spencer",
