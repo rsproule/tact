@@ -324,9 +324,9 @@ const upgradeString = (event: any) => {
 };
 
 const voteString = (event: any) => {
-  return `🗳️ ${toTankName(event.args.voter)} voted to curse ${
+  return `🗳️ ${toTankName(event.args.voter)} voted to curse ${toTankName(
     event.args.cursed
-  } during epoch ${event.args.epoch}`;
+  )} during epoch ${event.args.epoch}`;
 };
 
 const dripString = (event: any) => {
