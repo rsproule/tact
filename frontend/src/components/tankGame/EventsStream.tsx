@@ -274,7 +274,7 @@ const shootString = (event: any) => {
 };
 
 const delegateString = (event: any) => {
-  return `👨‍⚖️ ${event.args.owner} delegated control of ${toTankName(
+  return `👨‍⚖️ ${OWNERS.get(event.args.owner)} delegated control of ${toTankName(
     event.args.tank
   )} to ${event.args.delegate}`;
 };
@@ -286,7 +286,7 @@ const gameInitString = (event: any) => {
   return `Game started with ${event.args.settings.playerCount} players. Buy in is ${event.args.settings.buyInMinimum} ether.`;
 };
 const revealString = (event: any) => {
-  return `Thanks ${toTankName(event.args.poker)} for the reveal!`;
+  return `Thanks ${OWNERS.get(event.args.poker)} for the reveal!`;
 };
 
 const reviveString = (event: any) => {
