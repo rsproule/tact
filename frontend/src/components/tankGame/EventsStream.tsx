@@ -263,8 +263,7 @@ const moveString = (event: any) => {
     event.args.position.x
   }, 
     ${event.args.position.y}, 
-    ${event.args.position.z}
-  )`;
+    ${event.args.position.z})`;
 };
 
 const shootString = (event: any) => {
@@ -286,7 +285,7 @@ const gameInitString = (event: any) => {
   return `Game started with ${event.args.settings.playerCount} players. Buy in is ${event.args.settings.buyInMinimum} ether.`;
 };
 const revealString = (event: any) => {
-  return `Thanks ${OWNERS.get(event.args.poker)} for the reveal!`;
+  return `👇${OWNERS.get(event.args.poker)} poked the reveal!`;
 };
 
 const reviveString = (event: any) => {
