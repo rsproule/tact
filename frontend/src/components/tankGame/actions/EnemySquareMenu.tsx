@@ -8,12 +8,13 @@ import { Crosshair, GiftIcon, HeartHandshake } from "lucide-react";
 import { BaseError } from "viem";
 import { useWaitForTransaction } from "wagmi";
 import {
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "../../ui/dropdown-menu";
 import { useToast } from "../../ui/use-toast";
+import { Input } from "../../ui/input";
+import { useState } from "react";
 
 export default function EnemySquareMenu({
   ownersTank,
@@ -24,9 +25,14 @@ export default function EnemySquareMenu({
   enemyTank: bigint | undefined;
   open: boolean;
 }) {
+  const [multiplier, setMultiplier] = useState("1");
   const { toast } = useToast();
   let { config: shootConfig } = usePrepareTankGameShoot({
-    args: [ownersTank!, enemyTank!, BigInt(1)],
+    args: [
+      ownersTank!,
+      enemyTank!,
+      BigInt(multiplier ? parseInt(multiplier) : 1),
+    ],
     enabled: open && !!ownersTank && !!enemyTank,
   });
   const { write: shoot, data: shootHash } = useTankGameShoot(shootConfig);
@@ -49,7 +55,12 @@ export default function EnemySquareMenu({
   });
 
   let { config: giftHeartConfig } = usePrepareTankGameGive({
-    args: [ownersTank!, enemyTank!, BigInt(1), BigInt(0)],
+    args: [
+      ownersTank!,
+      enemyTank!,
+      BigInt(multiplier ? parseInt(multiplier) : 1),
+      BigInt(0),
+    ],
     enabled: open && !!ownersTank && !!enemyTank,
   });
   const { write: giveHeart, data: giveHeartHash } =
@@ -72,7 +83,12 @@ export default function EnemySquareMenu({
     },
   });
   let { config: giveAPConfig } = usePrepareTankGameGive({
-    args: [ownersTank!, enemyTank!, BigInt(0), BigInt(1)],
+    args: [
+      ownersTank!,
+      enemyTank!,
+      BigInt(0),
+      BigInt(multiplier ? parseInt(multiplier) : 1),
+    ],
     enabled: open && !!ownersTank && !!enemyTank,
   });
   const { write: giveAp, data: giveHash } = useTankGameGive(giveAPConfig);
@@ -95,6 +111,12 @@ export default function EnemySquareMenu({
   });
   return (
     <DropdownMenuGroup>
+      <span>Multi</span>
+      <Input
+        value={multiplier}
+        onChange={(e) => setMultiplier(e.target.value)}
+      />
+      <DropdownMenuSeparator />
       <DropdownMenuItem disabled={!shoot} onSelect={() => shoot?.()}>
         <Crosshair className="mr-2 h-4 w-4" />
         <span>Shoot</span>
