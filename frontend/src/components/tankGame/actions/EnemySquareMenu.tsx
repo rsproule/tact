@@ -1,10 +1,12 @@
 import {
   usePrepareTankGameGive,
   usePrepareTankGameShoot,
+  usePrepareTankGameVote,
   useTankGameGive,
   useTankGameShoot,
+  useTankGameVote,
 } from "@/src/generated";
-import { Crosshair, GiftIcon, HeartHandshake } from "lucide-react";
+import { Crosshair, GiftIcon, HeartHandshake, SkullIcon } from "lucide-react";
 import { BaseError } from "viem";
 import { useWaitForTransaction } from "wagmi";
 import {
@@ -109,9 +111,31 @@ export default function EnemySquareMenu({
       });
     },
   });
+  let { config: curseConfig } = usePrepareTankGameVote({
+    args: [ownersTank!, enemyTank!],
+    enabled: open && !!ownersTank && !!enemyTank,
+  });
+  const { write: curse, data: curseHash } = useTankGameVote(curseConfig);
+  useWaitForTransaction({
+    hash: curseHash?.hash,
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: (error as BaseError)?.shortMessage,
+      });
+    },
+    onSuccess: (s) => {
+      toast({
+        variant: "success",
+        title: "Transaction Confirmed.",
+        description: s.transactionHash,
+      });
+    },
+  });
   return (
     <DropdownMenuGroup>
-      <span>Multi</span>
+      <span>Multiplier</span>
       <Input
         value={multiplier}
         onChange={(e) => setMultiplier(e.target.value)}
@@ -129,6 +153,10 @@ export default function EnemySquareMenu({
       <DropdownMenuItem disabled={!giveAp} onSelect={() => giveAp?.()}>
         <GiftIcon className="mr-2 h-4 w-4" />
         <span>Give AP</span>
+      </DropdownMenuItem>
+      <DropdownMenuItem disabled={!curse} onSelect={() => curse?.()}>
+        <SkullIcon className="mr-2 h-4 w-4" />
+        <span>Curse</span>
       </DropdownMenuItem>
     </DropdownMenuGroup>
   );
