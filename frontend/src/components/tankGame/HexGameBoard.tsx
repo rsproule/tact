@@ -21,7 +21,14 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
     args: [address!],
     enabled: !!address,
   });
-
+  let ownerTank = tanks.data?.find((tank) => tank.tank.owner === address);
+  let ownerTankTile = ownerTank
+    ? new Hex(
+        Number(ownerTank?.position.x!),
+        Number(ownerTank?.position.y!),
+        Number(ownerTank?.position.z!)
+      )
+    : undefined;
   const ref = useRef(null);
   const { width } = useContainerDimensions(ref);
   if (!boardSize) {
@@ -76,6 +83,11 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                     x={Number(hex.q)}
                     y={Number(hex.r)}
                     z={Number(hex.s)}
+                    distance={
+                      ownerTankTile
+                        ? getDistance(hex, ownerTankTile!)
+                        : undefined
+                    }
                     selected={
                       !!selectedTile &&
                       selectedTile!.q === hex.q &&
