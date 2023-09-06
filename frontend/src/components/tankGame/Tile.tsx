@@ -11,6 +11,7 @@ interface TileProps {
   x: number;
   y: number;
   z: number;
+  distance: number | undefined;
   selected: boolean;
   boardSize: number;
   tank: typeof ITank | undefined;
@@ -104,6 +105,7 @@ export function Tile(props: TileProps) {
         >
           {!props.tank && (
             <EmptySquareMenu
+              distance={props.distance}
               open={open}
               ownersTank={props.ownersTankId!}
               x={props.x}
