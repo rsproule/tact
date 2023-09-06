@@ -11,12 +11,14 @@ export default function EmptySquareMenu({
   x,
   y,
   z,
+  distance,
   open,
 }: {
   ownersTank: bigint;
   x: number;
   y: number;
   z: number;
+  distance: number | undefined;
   open: boolean;
 }) {
   const { toast } = useToast();
@@ -49,7 +51,7 @@ export default function EmptySquareMenu({
       <DropdownMenuItem disabled={!move} onSelect={() => move?.()}>
         <Move className="mr-2 h-4 w-4" />
         <span>
-          Move here ({y}, {x}, {z})
+          Move here ({y}, {x}, {z}) {distance ? `(costs ${distance} aps)` : ""}
         </span>
       </DropdownMenuItem>
     </DropdownMenuGroup>
