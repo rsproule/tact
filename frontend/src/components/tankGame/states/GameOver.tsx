@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "../../ui/card";
 import { Trophy } from "lucide-react";
+import { toTankName } from "../EventsStream";
 
 export function GameOver() {
   let { toast } = useToast();
@@ -73,9 +74,9 @@ export function GameOver() {
         </CardHeader>
         <CardContent>
           <ul>
-            <li>First: {!!first.data && first.data!.toString()}</li>
-            <li>Second: {!!second.data && second.data!.toString()}</li>
-            <li>Third: {!!third.data && third.data!.toString()}</li>
+            <li>First: {!!first.data && toTankName(first.data!)}</li>
+            <li>Second: {!!second.data && toTankName(second.data!)}</li>
+            <li>Third: {!!third.data && toTankName(third.data!)}</li>
           </ul>
         </CardContent>
         <CardFooter>
