@@ -52,7 +52,7 @@ export const TANK_MAPPING = [
   // "Sterling",
 ];
 
-const toTankName = (tankId: bigint | undefined) => {
+export const toTankName = (tankId: bigint | undefined) => {
   if (!tankId) {
     return "Unknown Tank";
   }
