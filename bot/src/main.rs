@@ -176,17 +176,6 @@ where
         if bot_tank.aps > U256::zero() {
             match strategy {
                 BotStrategy::Sentinel => {
-                    if nearest_tank.tank.hearts > U256::zero() && distance == U256::from(4) {
-                        let to = traverse_towards(
-                            bot_tank_location.clone().position,
-                            nearest_tank.position,
-                            board_size.as_usize() as i32,
-                            distance - bot_tank.range + 1,
-                        )
-                        .expect("unable to get move to coordinates");
-                        println!("tank: {:?}, moving to {:?}", id, to);
-                        execute_tx(game.move_(bot_id, to)).await;
-                    }
                     // if there is a tank within range
                     for tank in tanks.clone() {
                         if tank.tank_id == bot_id {
@@ -198,8 +187,8 @@ where
                             println!("SENTINEL: tank: {:?}, shooting {:?}", id, tank.tank_id);
                             let _ = execute_tx(game.shoot(
                                 bot_id,
-                                U256::from(nearest_tank_id),
-                                U256::min(nearest_tank.tank.hearts, bot_tank.aps),
+                                tank.tank_id,
+                                U256::min(tank.tank.hearts, bot_tank.aps),
                             ))
                             .await;
                         }
