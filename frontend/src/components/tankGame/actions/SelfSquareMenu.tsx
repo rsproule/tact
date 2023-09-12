@@ -9,7 +9,6 @@ import { Droplet, Rocket } from "lucide-react";
 import { BaseError } from "viem";
 import { useWaitForTransaction } from "wagmi";
 import {
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "../../ui/dropdown-menu";
