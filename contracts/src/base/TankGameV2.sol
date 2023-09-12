@@ -27,6 +27,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event Commit(address poker, uint256 blocknumber);
     event Delegate(uint256 tank, address delegate, address owner);
     event GameOver(uint256 winner, uint256 second, uint256 third, uint256 prizePool);
+    event BountyCompleted(uint256 hunter, uint256 victim, uint256 reward);
 
     constructor(ITankGame.GameSettings memory gs) payable {
         require(gs.boardSize % 3 == 0, "invalid board size");
@@ -145,6 +146,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
         tanks[toId].hearts -= shots;
         emit Shoot(fromId, toId);
         if (tanks[toId].hearts <= 0) {
+            // reward the killer with 20% of the victims aps
+            uint256 apReward = tanks[toId].aps / 5;
+            tanks[fromId].aps += apReward;
+            tanks[toId].aps -= apReward;
+            emit BountyCompleted(fromId, toId, apReward);
+
             _handleDeath(fromId, toId);
         }
     }
