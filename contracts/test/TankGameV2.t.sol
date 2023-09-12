@@ -35,7 +35,7 @@ contract TankTest is Test {
             vm.label(address(i + offset), string(abi.encodePacked("tank", Strings.toString(i))));
             hoax(address(i + offset), 1);
             bytes32[] memory proof = new bytes32[](1);
-            tankGame.join{ value: 1 }(proof, "");
+            tankGame.join{ value: 1 }(address(i + offset), proof, "");
         }
         vm.clearMockedCalls();
     }
@@ -47,34 +47,34 @@ contract TankTest is Test {
     function testJoinGame() public {
         hoax(address(1), 1);
         bytes32[] memory proof = new bytes32[](1);
-        tankGame.join{ value: 1 }(proof, "klebus");
+        tankGame.join{ value: 1 }(msg.sender, proof, "klebus");
         assertEq(tankGame.playersCount(), 1);
     }
 
     function testJoinGameInsufficientBuyIn() public {
         vm.expectRevert("insufficient buy in");
         bytes32[] memory proof = new bytes32[](1);
-        tankGame.join(proof, "klebus");
+        tankGame.join(msg.sender, proof, "klebus");
     }
 
     function testJoinGameTwiceFails() public {
         startHoax(address(1), 2);
         bytes32[] memory proof = new bytes32[](1);
-        tankGame.join{ value: 1 }(proof, "klebus");
+        tankGame.join{ value: 1 }(msg.sender, proof, "klebus");
         assertEq(tankGame.playersCount(), 1);
         vm.expectRevert("already joined");
-        tankGame.join{ value: 1 }(proof, "klebus");
+        tankGame.join{ value: 1 }(msg.sender, proof, "klebus");
     }
 
     function testJoinFullGame() public {
         bytes32[] memory proof = new bytes32[](1);
         for (uint160 i = 0; i < 8; i++) {
             hoax(address(i), 1);
-            tankGame.join{ value: 1 }(proof, "klebus");
+            tankGame.join{ value: 1 }(address(i), proof, "klebus");
         }
         vm.expectRevert("game is full");
         hoax(address(9), 1);
-        tankGame.join{ value: 1 }(proof, "klebus");
+        tankGame.join{ value: 1 }(address(9), proof, "klebus");
     }
 
     function testInitGame() public {
@@ -333,10 +333,9 @@ contract TankTest is Test {
     /// upgrade tests ///
     function testUpgrade() public {
         initGame();
-        // upgrade cose is 4 * 6 + 24/10 = 26
         uint256 epochTime = tankGame.getSettings().epochSeconds;
         uint256 apsBefore = tankGame.getTank(1).aps;
-        skip((26 - apsBefore) * epochTime);
+        skip((12 - apsBefore) * epochTime);
         vm.startPrank(address(1));
         tankGame.drip(1);
         tankGame.upgrade(1);
@@ -348,9 +347,9 @@ contract TankTest is Test {
 
     function testUpgraadeNotEnoughAps() public {
         initGame();
-        // upgrade cose is 4 * 6 + 24/10 = 26
+        // upgrade cose is 12
         uint256 epochTime = tankGame.getSettings().epochSeconds;
-        skip(26 * epochTime);
+        skip(12 * epochTime);
         vm.startPrank(address(1));
         tankGame.drip(1);
         tankGame.upgrade(1);
