@@ -2,6 +2,7 @@ import {
   usePrepareTankGameDrip,
   usePrepareTankGameUpgrade,
   useTankGameDrip,
+  useTankGameGetUpgradeCost,
   useTankGameUpgrade,
 } from "@/src/generated";
 import { Droplet, Rocket } from "lucide-react";
@@ -22,6 +23,9 @@ export default function SelfSquareMenu({
   open: boolean;
 }) {
   let { toast } = useToast();
+  let { data: upgradeCost } = useTankGameGetUpgradeCost({
+    args: [ownersTank],
+  });
   let { config: upgradeConfig } = usePrepareTankGameUpgrade({
     args: [ownersTank],
     enabled: open && !!ownersTank,
@@ -72,7 +76,10 @@ export default function SelfSquareMenu({
     <DropdownMenuGroup>
       <DropdownMenuItem disabled={!upgrade} onSelect={() => upgrade?.()}>
         <Rocket className="mr-2 h-4 w-4" />
-        <span>Upgrade Range</span>
+        <span>
+          Upgrade Range ({upgradeCost ? upgradeCost.toString() : "..."}{" "}
+          APs)
+        </span>
       </DropdownMenuItem>
       <DropdownMenuItem disabled={!drip} onSelect={() => drip?.()}>
         <Droplet className="mr-2 h-4 w-4" />

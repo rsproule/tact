@@ -11,6 +11,7 @@ export function LeaderBoard() {
   const [reviveCount, setReviveCount] = useState(undefined);
   const [deathCount, setDeathCount] = useState(undefined);
   const [dripCount, setDripCount] = useState(undefined);
+  const [distances, setDistances] = useState(undefined);
   const { chain } = useNetwork();
   const getLogs = async () => {
     const publicClient = getPublicClient();
@@ -84,8 +85,6 @@ export function LeaderBoard() {
       (a, b) => b[1] - a[1]
     );
 
-    // @ts-ignore
-    setDeathCount(sortedTanksByDeaths);
     const tanksByDrips = logs
       .filter((log) => log.eventName === "Drip")
       .reduce((acc, log) => {
@@ -191,6 +190,25 @@ export function LeaderBoard() {
 
               <div className="border-t border-gray-300 my-4"></div>
             </div>
+            {/* <div>
+              <div>
+                <CardTitle className="text-xl mt-4">
+                  Distance Travelled
+                </CardTitle>
+                <div className="border-t border-gray-300 my-4"></div>
+              </div>
+              {distances &&
+                // @ts-ignore
+                distances.map(([num, distance]) => {
+                  return (
+                    <div key={num}>
+                      {toTankName(BigInt(num))}: {distance}
+                    </div>
+                  );
+                })}
+
+              <div className="border-t border-gray-300 my-4"></div>
+            </div> */}
           </div>
         )}
       </CardContent>
