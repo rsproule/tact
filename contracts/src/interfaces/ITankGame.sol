@@ -29,7 +29,7 @@ interface ITankGame {
         Ended
     }
 
-    function join(bytes32[] memory proof, string calldata playerName) external payable;
+    function join(address joiner, bytes32[] memory proof, string calldata playerName) external payable;
 
     function move(uint256 fromId, Board.Point calldata to) external;
 
