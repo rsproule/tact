@@ -1,5 +1,6 @@
 "use client";
 import { useTankGameGetSettings, useTankGameState } from "../../generated";
+import { LeaderBoard } from "../LeaderBoard";
 import { HexBoard } from "./HexGameBoard";
 import Timer from "./Timer";
 import Donate from "./actions/Donate";
@@ -22,6 +23,7 @@ export function TankGame() {
         {gameState.data === 2 && <GameOver />}
         {gameState.data !== 2 && <Donate />}
       </div>
+      <LeaderBoard />
     </div>
   );
 }

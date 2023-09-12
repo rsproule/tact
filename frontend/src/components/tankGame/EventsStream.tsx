@@ -146,7 +146,7 @@ export function EventStream() {
   // });
   const [oldLogs, setOldLogs] = useState<string[]>([]);
   const { chain } = useNetwork();
-  const getOldLogs = async () => {
+  const getLogs = async () => {
     const publicClient = getPublicClient();
     const chainId = chain?.id;
     const filter = await publicClient.createContractEventFilter({
@@ -155,9 +155,13 @@ export function EventStream() {
       fromBlock: BigInt(0),
       address: tankGameAddress[chainId as keyof typeof tankGameAddress],
     });
-    const logs = await publicClient.getFilterLogs({
+    return await publicClient.getFilterLogs({
       filter,
     });
+  };
+
+  const getOldLogs = async () => {
+    const logs = await getLogs();
     console.log(
       JSON.stringify(logs, (key, value) =>
         typeof value === "bigint" ? value.toString() : value
