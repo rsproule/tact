@@ -221,6 +221,27 @@ contract TankTest is Test {
         tankGame.shoot(5, 3, 4);
     }
 
+    function testShootAndKill() public {
+        initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        skip(epochTime + 100 * epochTime);
+        vm.startPrank(address(3));
+        tankGame.drip(3);
+        vm.startPrank(address(5));
+        tankGame.drip(5);
+        uint256 sum = tankGame.aliveTanksIdSum();
+        uint256 apsBefore5 = tankGame.getTank(5).aps;
+        uint256 apsBefore3 = tankGame.getTank(3).aps;
+        tankGame.shoot(5, 3, 3);
+        assertEq(tankGame.numTanksAlive(), tankGame.getSettings().playerCount - 1, "wrong number of tanks alive");
+        assertEq(tankGame.aliveTanksIdSum(), sum - 3, "wrong sum after kill");
+        assertEq(tankGame.getTank(5).aps - apsBefore5, 17); // gained 20% - 3
+        assertEq(apsBefore3 - tankGame.getTank(3).aps, 20); // lost 20%
+    }
+
     function testShootAndRevive() public {
         initGame();
         vm.mockCall(
