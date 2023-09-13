@@ -57,7 +57,6 @@ contract TankGameDeployerScript is Script {
             console.log("Joining %s at address %s", np.name, np.player);
             tankGame.join(np.player, new bytes32[](0), np.name);
         }
-        // join everyone.
         vm.stopBroadcast();
     }
 
