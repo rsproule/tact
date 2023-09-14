@@ -298,8 +298,8 @@ const reviveString = (event: any) => {
 };
 
 const deathString = (event: any) => {
-  return `💀 ${toTankName(event.args.killed)} killed by ${toTankName(
-    event.args.killer
+  return `💀 ${toTankName(event.args.killer)} killed ${toTankName(
+    event.args.killed
   )}`;
 };
 
