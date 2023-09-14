@@ -349,7 +349,7 @@ const joinString = (event: any) => {
 const donateString = (event: any) => {
   return `🎁 ${
     OWNERS.get(event.args.donator) || event.args.donator
-  } has added ${formatEther(event.args.amount!)} to the prize pool.`;
+  } has added ${formatEther(event.args.amount!)} ether to the prize pool.`;
 };
 
 const startString = (event: any) => {
