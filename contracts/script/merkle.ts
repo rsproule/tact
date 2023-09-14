@@ -22,6 +22,7 @@ const values = [
   [getAddress("0xb3c296170c57a7510bb95ef2e9c47977bc2ff1c8"), "caleb"],
   [getAddress("0xda744dacea631029430fd63d83b26f757e054cb7"), "brian"],
   [getAddress("0x14174a3f8868b4b6ab023853e2ff5903ea0fd015"), "carra"],
+  [getAddress("0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9"), "hopper"],
   //   (getAddress("0x5337122c6b5ce24D970Ce771510D22Aeaf038C44"), "ryan")
   // ],
   // [getAddress("0xC15ebb4f1aC7F1C5D94dB64a472e1718fa6b6dEc"), "kinjal"],

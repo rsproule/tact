@@ -37,6 +37,7 @@ contract TankTest is Test {
             bytes32[] memory proof = new bytes32[](1);
             tankGame.join{ value: 1 }(address(i + offset), proof, "");
         }
+        tankGame.start();
         vm.clearMockedCalls();
     }
 
@@ -366,7 +367,7 @@ contract TankTest is Test {
         assertEq(apsAfter, 0);
     }
 
-    function testUpgraadeNotEnoughAps() public {
+    function testUpgradeNotEnoughAps() public {
         initGame();
         // upgrade cose is 12
         uint256 epochTime = tankGame.getSettings().epochSeconds;

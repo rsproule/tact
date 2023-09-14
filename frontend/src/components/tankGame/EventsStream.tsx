@@ -39,6 +39,7 @@ export const TANK_MAPPING = [
   "caleb",
   "brian",
   "carra",
+  "hopper"
 ];
 
 export const toTankName = (tankId: bigint | undefined) => {
@@ -255,6 +256,9 @@ const logToText = (event) => {
   if (event.eventName == "PrizeIncrease") {
     return donateString(event);
   }
+  if (event.eventName == "BountyCompleted") {
+    return bountyString(event);
+  }
   return event.eventName + "";
 };
 const moveString = (event: any) => {
@@ -350,4 +354,10 @@ const donateString = (event: any) => {
 
 const startString = (event: any) => {
   return `🎮 The game has started! 🎊`;
+};
+
+const bountyString = (event: any) => {
+  return `🎯 ${toTankName(event.args.hunter)} completed bounty on ${toTankName(
+    event.args.victim
+  )} for ${event.args.reward} APs.`;
 };

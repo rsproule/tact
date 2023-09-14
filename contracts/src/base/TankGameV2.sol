@@ -96,11 +96,13 @@ contract TankGame is ITankGame, TankGameV2Storage {
         players[joiner] = playersCount;
         board.setTile(emptyPoint, Board.Tile({ tankId: playersCount, hearts: 0 }));
         emit PlayerJoined(joiner, playersCount, emptyPoint, playerName);
-        if (playersCount >= settings.playerCount) {
-            epochStart = _getEpoch();
-            state = GameState.Started;
-            emit GameStarted();
-        }
+    }
+
+    function start() external {
+        require(playersCount >= settings.playerCount, "not enough players");
+        epochStart = _getEpoch();
+        state = GameState.Started;
+        emit GameStarted();
     }
 
     function move(
@@ -225,7 +227,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         votedThisEpoch[epoch][voter] = true;
     }
 
-    function drip(uint256 tankId) external gameStarted isTankOwnerOrDelegate(tankId) isTankAlive(tankId) {
+    function drip(uint256 tankId) external gameStarted isTankAlive(tankId) {
         uint256 epoch = _getEpoch();
         require(epoch != epochStart, "too early to drip");
         uint256 lastDrippedEpoch = _getLastDrip(tankId);
@@ -329,6 +331,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     function getUpgradeCost(uint256 tankId) public view returns (uint256) {
-        return board.getPerimeterForRadius(tanks[tankId].range + 1) / 2;
+        // 12, 18, 24, 30, 36, 42, 48, 54, 60
+        return board.getPerimeterForRadius(tanks[tankId].range) - 6;
     }
 }
