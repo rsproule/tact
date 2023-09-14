@@ -135,6 +135,31 @@ export const hexBoardABI = [
     type: 'constructor',
     inputs: [{ name: '_boardSize', internalType: 'uint256', type: 'uint256' }],
   },
+] as const
+
+/**
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2D4F0046b57DCaB450a081c74075d3e99CA9DF9E)
+ * -
+ */
+export const gameViewAddress = {
+  5: '0x2D4F0046b57DCaB450a081c74075d3e99CA9DF9E',
+  31337: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
+} as const
+
+/**
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2D4F0046b57DCaB450a081c74075d3e99CA9DF9E)
+ * -
+ */
+export const gameViewConfig = {
+  address: gameViewAddress,
+  abi: gameViewABI,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Board
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const boardABI = [
   {
     stateMutability: 'view',
     type: 'function',
@@ -824,6 +849,165 @@ export const iTankGameABI = [
       { name: 'cursed', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'vote',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      {
+        name: 'point',
+        internalType: 'struct Board.Point',
+        type: 'tuple',
+        components: [
+          { name: 'x', internalType: 'uint256', type: 'uint256' },
+          { name: 'y', internalType: 'uint256', type: 'uint256' },
+          { name: 'z', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'getHeartAtPosition',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'radius', internalType: 'uint256', type: 'uint256' }],
+    name: 'getPerimeterForRadius',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getTankPosition',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct Board.Point',
+        type: 'tuple',
+        components: [
+          { name: 'x', internalType: 'uint256', type: 'uint256' },
+          { name: 'y', internalType: 'uint256', type: 'uint256' },
+          { name: 'z', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      {
+        name: 'point',
+        internalType: 'struct Board.Point',
+        type: 'tuple',
+        components: [
+          { name: 'x', internalType: 'uint256', type: 'uint256' },
+          { name: 'y', internalType: 'uint256', type: 'uint256' },
+          { name: 'z', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'getTile',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct Board.Tile',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getTotalTiles',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      {
+        name: 'point',
+        internalType: 'struct Board.Point',
+        type: 'tuple',
+        components: [
+          { name: 'x', internalType: 'uint256', type: 'uint256' },
+          { name: 'y', internalType: 'uint256', type: 'uint256' },
+          { name: 'z', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'isValidPoint',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      {
+        name: 'point',
+        internalType: 'struct Board.Point',
+        type: 'tuple',
+        components: [
+          { name: 'x', internalType: 'uint256', type: 'uint256' },
+          { name: 'y', internalType: 'uint256', type: 'uint256' },
+          { name: 'z', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'pointToIndex',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'seed', internalType: 'uint256', type: 'uint256' }],
+    name: 'randomPoint',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct Board.Point',
+        type: 'tuple',
+        components: [
+          { name: 'x', internalType: 'uint256', type: 'uint256' },
+          { name: 'y', internalType: 'uint256', type: 'uint256' },
+          { name: 'z', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'point',
+        internalType: 'struct Board.Point',
+        type: 'tuple',
+        components: [
+          { name: 'x', internalType: 'uint256', type: 'uint256' },
+          { name: 'y', internalType: 'uint256', type: 'uint256' },
+          { name: 'z', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+      {
+        name: 'tile',
+        internalType: 'struct Board.Tile',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'setTile',
     outputs: [],
   },
 ] as const
@@ -1864,6 +2048,13 @@ export const tankGameABI = [
     type: 'function',
     inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
     name: 'drip',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [],
+    name: 'emergencyForceGameStart',
     outputs: [],
   },
   {
@@ -5937,6 +6128,53 @@ export function useTankGameDrip<
 }
 
 /**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"emergencyForceGameStart"`.
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x021dbff4a864aa25c51f0ad2cd73266fde66199d)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xa28b12ff977cA9969F1f4e3973499fFBe3115835)
+ * -
+ */
+export function useTankGameEmergencyForceGameStart<
+  TMode extends WriteContractMode = undefined,
+  TChainId extends number = keyof typeof tankGameAddress,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof tankGameABI,
+          'emergencyForceGameStart'
+        >['request']['abi'],
+        'emergencyForceGameStart',
+        TMode
+      > & {
+        address?: Address
+        chainId?: TChainId
+        functionName?: 'emergencyForceGameStart'
+      }
+    : UseContractWriteConfig<
+        typeof tankGameABI,
+        'emergencyForceGameStart',
+        TMode
+      > & {
+        abi?: never
+        address?: never
+        chainId?: TChainId
+        functionName?: 'emergencyForceGameStart'
+      } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const chainId = config.chainId ?? chain?.id
+  return useContractWrite<typeof tankGameABI, 'emergencyForceGameStart', TMode>(
+    {
+      abi: tankGameABI,
+      address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+      functionName: 'emergencyForceGameStart',
+      ...config,
+    } as any,
+  )
+}
+
+/**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"give"`.
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x021dbff4a864aa25c51f0ad2cd73266fde66199d)
@@ -6307,6 +6545,35 @@ export function usePrepareTankGameDrip(
     functionName: 'drip',
     ...config,
   } as UsePrepareContractWriteConfig<typeof tankGameABI, 'drip'>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"emergencyForceGameStart"`.
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x021dbff4a864aa25c51f0ad2cd73266fde66199d)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xa28b12ff977cA9969F1f4e3973499fFBe3115835)
+ * -
+ */
+export function usePrepareTankGameEmergencyForceGameStart(
+  config: Omit<
+    UsePrepareContractWriteConfig<
+      typeof tankGameABI,
+      'emergencyForceGameStart'
+    >,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const chainId = config.chainId ?? chain?.id
+  return usePrepareContractWrite({
+    abi: tankGameABI,
+    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+    functionName: 'emergencyForceGameStart',
+    ...config,
+  } as UsePrepareContractWriteConfig<
+    typeof tankGameABI,
+    'emergencyForceGameStart'
+  >)
 }
 
 /**
