@@ -85,6 +85,9 @@ export function LeaderBoard() {
       (a, b) => b[1] - a[1]
     );
 
+    // @ts-ignore
+    setDeathCount(sortedTanksByDeaths);
+
     const tanksByDrips = logs
       .filter((log) => log.eventName === "Drip")
       .reduce((acc, log) => {
@@ -103,7 +106,7 @@ export function LeaderBoard() {
     const sortedTanksByDrips = Object.entries(tanksByDrips).sort(
       (a, b) => b[1] - a[1]
     );
-    const missingTankIds = Array.from({ length: 21 }, (_, i) => i + 1)
+    const missingTankIds = Array.from({ length: 19 }, (_, i) => i + 1)
       .map(String)
       .filter((id) => !sortedTanksByDrips.some(([num]) => num === id));
 
