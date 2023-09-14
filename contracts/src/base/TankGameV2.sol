@@ -27,6 +27,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event Commit(address poker, uint256 blocknumber);
     event Delegate(uint256 tank, address delegate, address owner);
     event GameOver(uint256 winner, uint256 second, uint256 third, uint256 prizePool);
+    event BountyCompleted(uint256 hunter, uint256 victim, uint256 reward);
 
     constructor(ITankGame.GameSettings memory gs) payable {
         require(gs.boardSize % 3 == 0, "invalid board size");
@@ -75,38 +76,30 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     // should do some sort of commit reveal thing for the randomness instead of this
-    // random point thing
-    function join(bytes32[] memory proof, string calldata playerName) external payable {
-        require(players[msg.sender] == 0, "already joined");
+    // random point thing.
+    function join(address joiner, bytes32[] memory proof, string calldata playerName) external payable {
+        require(players[joiner] == 0, "already joined");
         require(playersCount < settings.playerCount, "game is full");
         require(msg.value >= settings.buyInMinimum, "insufficient buy in");
-        bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(msg.sender, playerName))));
+        bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(joiner, playerName))));
         require(settings.root == bytes32(0) || MerkleProof.verify(proof, settings.root, leaf), "invalid proof");
 
         // this is manipulatable.
-        uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, msg.sender)));
+        uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, joiner)));
         Board.Point memory emptyPoint = board.getEmptyTile(seed);
-        Tank memory tank = Tank(msg.sender, settings.initHearts, settings.initAPs, settings.initShootRange);
+        Tank memory tank = Tank(joiner, settings.initHearts, settings.initAPs, settings.initShootRange);
 
         playersCount++;
         numTanksAlive++;
         aliveTanksIdSum += playersCount;
         tanks[playersCount] = tank;
-        players[msg.sender] = playersCount;
+        players[joiner] = playersCount;
         board.setTile(emptyPoint, Board.Tile({ tankId: playersCount, hearts: 0 }));
-        emit PlayerJoined(msg.sender, playersCount, emptyPoint, playerName);
-        if (playersCount >= settings.playerCount) {
-            epochStart = _getEpoch();
-            state = GameState.Started;
-            emit GameStarted();
-        }
+        emit PlayerJoined(joiner, playersCount, emptyPoint, playerName);
     }
 
-    // this is just for the scenario where one of the people we are expecting to join, doesnt actually join
-    // for when we are using the merkle tree whitelisted, its also possible people lose keys (moron proof).
-    function emergencyForceGameStart() external {
-        require(msg.sender == owner, "not owner");
-        require(playersCount < settings.playerCount, "game is full");
+    function start() external {
+        require(playersCount >= settings.playerCount, "not enough players");
         epochStart = _getEpoch();
         state = GameState.Started;
         emit GameStarted();
@@ -155,6 +148,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
         tanks[toId].hearts -= shots;
         emit Shoot(fromId, toId);
         if (tanks[toId].hearts <= 0) {
+            // reward the killer with 20% of the victims aps
+            uint256 apReward = tanks[toId].aps / 5;
+            tanks[fromId].aps += apReward;
+            tanks[toId].aps -= apReward;
+            emit BountyCompleted(fromId, toId, apReward);
+
             _handleDeath(fromId, toId);
         }
     }
@@ -193,12 +192,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     function upgrade(uint256 tankId) external gameStarted isTankOwnerOrDelegate(tankId) isTankAlive(tankId) {
-        uint256 range = tanks[tankId].range;
-        // upgrading is equivalent to moving in all direction by 1, permanently.
-        // this means each upgrade gives access to the new perimeter of the range.
-        // since its permanent, we should charge extra for it.
-        // extra 10% of the perimeter seems reasonable?
-        uint256 upgradeCost = board.getPerimeterForRadius(range + 1) + (board.getPerimeterForRadius(range + 1) / 10);
+        uint256 upgradeCost = getUpgradeCost(tankId);
         require(upgradeCost <= tanks[tankId].aps, "not enough action points");
         tanks[tankId].aps -= upgradeCost;
         tanks[tankId].range += 1;
@@ -233,7 +227,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         votedThisEpoch[epoch][voter] = true;
     }
 
-    function drip(uint256 tankId) external gameStarted isTankOwnerOrDelegate(tankId) isTankAlive(tankId) {
+    function drip(uint256 tankId) external gameStarted isTankAlive(tankId) {
         uint256 epoch = _getEpoch();
         require(epoch != epochStart, "too early to drip");
         uint256 lastDrippedEpoch = _getLastDrip(tankId);
@@ -334,5 +328,10 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function getLastDrip(uint256 tankId) external view returns (uint256) {
         return _getLastDrip(tankId);
+    }
+
+    function getUpgradeCost(uint256 tankId) public view returns (uint256) {
+        // 12, 18, 24, 30, 36, 42, 48, 54, 60
+        return board.getPerimeterForRadius(tanks[tankId].range) - 6;
     }
 }

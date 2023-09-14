@@ -35,8 +35,9 @@ contract TankTest is Test {
             vm.label(address(i + offset), string(abi.encodePacked("tank", Strings.toString(i))));
             hoax(address(i + offset), 1);
             bytes32[] memory proof = new bytes32[](1);
-            tankGame.join{ value: 1 }(proof, "");
+            tankGame.join{ value: 1 }(address(i + offset), proof, "");
         }
+        tankGame.start();
         vm.clearMockedCalls();
     }
 
@@ -47,34 +48,34 @@ contract TankTest is Test {
     function testJoinGame() public {
         hoax(address(1), 1);
         bytes32[] memory proof = new bytes32[](1);
-        tankGame.join{ value: 1 }(proof, "klebus");
+        tankGame.join{ value: 1 }(msg.sender, proof, "klebus");
         assertEq(tankGame.playersCount(), 1);
     }
 
     function testJoinGameInsufficientBuyIn() public {
         vm.expectRevert("insufficient buy in");
         bytes32[] memory proof = new bytes32[](1);
-        tankGame.join(proof, "klebus");
+        tankGame.join(msg.sender, proof, "klebus");
     }
 
     function testJoinGameTwiceFails() public {
         startHoax(address(1), 2);
         bytes32[] memory proof = new bytes32[](1);
-        tankGame.join{ value: 1 }(proof, "klebus");
+        tankGame.join{ value: 1 }(msg.sender, proof, "klebus");
         assertEq(tankGame.playersCount(), 1);
         vm.expectRevert("already joined");
-        tankGame.join{ value: 1 }(proof, "klebus");
+        tankGame.join{ value: 1 }(msg.sender, proof, "klebus");
     }
 
     function testJoinFullGame() public {
         bytes32[] memory proof = new bytes32[](1);
         for (uint160 i = 0; i < 8; i++) {
             hoax(address(i), 1);
-            tankGame.join{ value: 1 }(proof, "klebus");
+            tankGame.join{ value: 1 }(address(i), proof, "klebus");
         }
         vm.expectRevert("game is full");
         hoax(address(9), 1);
-        tankGame.join{ value: 1 }(proof, "klebus");
+        tankGame.join{ value: 1 }(address(9), proof, "klebus");
     }
 
     function testInitGame() public {
@@ -221,6 +222,27 @@ contract TankTest is Test {
         tankGame.shoot(5, 3, 4);
     }
 
+    function testShootAndKill() public {
+        initGame();
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        skip(epochTime + 100 * epochTime);
+        vm.startPrank(address(3));
+        tankGame.drip(3);
+        vm.startPrank(address(5));
+        tankGame.drip(5);
+        uint256 sum = tankGame.aliveTanksIdSum();
+        uint256 apsBefore5 = tankGame.getTank(5).aps;
+        uint256 apsBefore3 = tankGame.getTank(3).aps;
+        tankGame.shoot(5, 3, 3);
+        assertEq(tankGame.numTanksAlive(), tankGame.getSettings().playerCount - 1, "wrong number of tanks alive");
+        assertEq(tankGame.aliveTanksIdSum(), sum - 3, "wrong sum after kill");
+        assertEq(tankGame.getTank(5).aps - apsBefore5, 17); // gained 20% - 3
+        assertEq(apsBefore3 - tankGame.getTank(3).aps, 20); // lost 20%
+    }
+
     function testShootAndRevive() public {
         initGame();
         vm.mockCall(
@@ -333,10 +355,9 @@ contract TankTest is Test {
     /// upgrade tests ///
     function testUpgrade() public {
         initGame();
-        // upgrade cose is 4 * 6 + 24/10 = 26
         uint256 epochTime = tankGame.getSettings().epochSeconds;
         uint256 apsBefore = tankGame.getTank(1).aps;
-        skip((26 - apsBefore) * epochTime);
+        skip((12 - apsBefore) * epochTime);
         vm.startPrank(address(1));
         tankGame.drip(1);
         tankGame.upgrade(1);
@@ -346,11 +367,11 @@ contract TankTest is Test {
         assertEq(apsAfter, 0);
     }
 
-    function testUpgraadeNotEnoughAps() public {
+    function testUpgradeNotEnoughAps() public {
         initGame();
-        // upgrade cose is 4 * 6 + 24/10 = 26
+        // upgrade cose is 12
         uint256 epochTime = tankGame.getSettings().epochSeconds;
-        skip(26 * epochTime);
+        skip(12 * epochTime);
         vm.startPrank(address(1));
         tankGame.drip(1);
         tankGame.upgrade(1);

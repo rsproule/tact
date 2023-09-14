@@ -1,12 +1,20 @@
 import {
+  usePrepareTankGameDrip,
   usePrepareTankGameGive,
   usePrepareTankGameShoot,
   usePrepareTankGameVote,
+  useTankGameDrip,
   useTankGameGive,
   useTankGameShoot,
   useTankGameVote,
 } from "@/src/generated";
-import { Crosshair, GiftIcon, HeartHandshake, SkullIcon } from "lucide-react";
+import {
+  Droplet,
+  Crosshair,
+  GiftIcon,
+  HeartHandshake,
+  SkullIcon,
+} from "lucide-react";
 import { BaseError } from "viem";
 import { useWaitForTransaction } from "wagmi";
 import {
@@ -133,6 +141,29 @@ export default function EnemySquareMenu({
       });
     },
   });
+
+  let { config: dripConfig } = usePrepareTankGameDrip({
+    args: [enemyTank!],
+    enabled: open && !!ownersTank,
+  });
+  const { write: drip, data: dripHash } = useTankGameDrip(dripConfig);
+  useWaitForTransaction({
+    hash: dripHash?.hash,
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: (error as BaseError)?.shortMessage,
+      });
+    },
+    onSuccess: (s) => {
+      toast({
+        variant: "success",
+        title: "Transaction Confirmed.",
+        description: s.transactionHash,
+      });
+    },
+  });
   return (
     <DropdownMenuGroup>
       <span>Multiplier</span>
@@ -157,6 +188,10 @@ export default function EnemySquareMenu({
       <DropdownMenuItem disabled={!curse} onSelect={() => curse?.()}>
         <SkullIcon className="mr-2 h-4 w-4" />
         <span>Curse</span>
+      </DropdownMenuItem>
+      <DropdownMenuItem disabled={!drip} onSelect={() => drip?.()}>
+        <Droplet className="mr-2 h-4 w-4" />
+        <span>Force Claim APs</span>
       </DropdownMenuItem>
     </DropdownMenuGroup>
   );

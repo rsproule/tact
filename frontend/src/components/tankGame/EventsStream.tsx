@@ -21,35 +21,25 @@ import { useNetwork } from "wagmi";
 import { OWNERS } from "./Tank";
 
 export const TANK_MAPPING = [
-  "Ryan",
-  "Yuan",
-  "Shishi",
-  "THE KRAKEN",
-  "Sterling",
-  "Will",
-  "Spencer",
-  "Yigit",
-  "Phil",
-  "Mason",
-  "Jay",
-  "Samuel",
-  "Pat",
-  "Joe//Osprey",
-  "Kinjal",
-  "Caleb",
-  "Brad",
-  "Daniel",
-  "Anay",
-  "Joshua",
-  "Brian",
-  // "Jonah",
-  // "Sam",
-  // "Mason",
-  // "Spencer",
-  // "Yigit",
-  // "Caleb",
-  // "Joe",
-  // "Sterling",
+  "ryan",
+  "kinjal",
+  "yuan",
+  "anay",
+  "spencer",
+  "jay",
+  "joshua",
+  "shishi",
+  "sterling",
+  "joe",
+  "sam",
+  "mason",
+  "daniel",
+  "pat",
+  "will",
+  "caleb",
+  "brian",
+  "carra",
+  "hopper"
 ];
 
 export const toTankName = (tankId: bigint | undefined) => {
@@ -266,6 +256,9 @@ const logToText = (event) => {
   if (event.eventName == "PrizeIncrease") {
     return donateString(event);
   }
+  if (event.eventName == "BountyCompleted") {
+    return bountyString(event);
+  }
   return event.eventName + "";
 };
 const moveString = (event: any) => {
@@ -361,4 +354,10 @@ const donateString = (event: any) => {
 
 const startString = (event: any) => {
   return `🎮 The game has started! 🎊`;
+};
+
+const bountyString = (event: any) => {
+  return `🎯 ${toTankName(event.args.hunter)} completed bounty on ${toTankName(
+    event.args.victim
+  )} for ${event.args.reward} APs.`;
 };
