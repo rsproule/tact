@@ -6,6 +6,7 @@ import {
   useTankGameReveal,
   useTankGameRevealBlock,
 } from "@/src/generated";
+import { BaseError } from "viem";
 import {
   Card,
   CardContent,
@@ -16,16 +17,35 @@ import {
 import { Button } from "../ui/button";
 import { Pointer } from "lucide-react";
 import { useToast } from "../ui/use-toast";
+import { useBlockNumber, useWaitForTransaction } from "wagmi";
 
 export default function Timer() {
   const { toast } = useToast();
+  const { data: blockNumber } = useBlockNumber({ watch: true });
   const startEpoch = useTankGameEpochStart();
   const currentEpoch = useTankGameGetEpoch({ watch: true });
   const settings = useITankGameGetSettings();
   const { config: revealConfig } = usePrepareTankGameReveal();
   const { write: reveal, data: revealData } = useTankGameReveal(revealConfig);
-  const revealBlock = useTankGameRevealBlock();
-
+  const { data: revealBlock } = useTankGameRevealBlock({ watch: true });
+  useWaitForTransaction({
+    hash: revealData?.hash,
+    enabled: !!revealData,
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: (error as BaseError)?.shortMessage,
+      });
+    },
+    onSuccess: (s) => {
+      toast({
+        variant: "success",
+        title: "Transaction Confirmed.",
+        description: s.transactionHash,
+      });
+    },
+  });
   return (
     <div className="flex justify-center pb-3">
       <Card>
@@ -53,16 +73,25 @@ export default function Timer() {
           </>
         </CardContent>
         <CardFooter>
-          {!!reveal && (
-            <Button
-              className="w-full"
-              disabled={!reveal}
-              onClick={() => {
-                reveal?.();
-              }}
-            >
-              <Pointer className="mr-2 h-4 w-4" /> Spawn heart
-            </Button>
+          {blockNumber && revealBlock ? (
+            blockNumber > revealBlock ? (
+              <Button
+                className="w-full"
+                disabled={!reveal}
+                onClick={() => {
+                  reveal?.();
+                }}
+              >
+                <Pointer className="mr-2 h-4 w-4" /> Spawn heart
+              </Button>
+            ) : (
+              "Heart reveal in " +
+              (revealBlock - blockNumber).toString() +
+              " blocks... approx: " +
+              secondsToHMS(Number((revealBlock - blockNumber) * BigInt(12)))
+            )
+          ) : (
+            ""
           )}
         </CardFooter>
       </Card>
