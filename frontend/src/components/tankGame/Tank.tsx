@@ -39,8 +39,9 @@ export function Tank({ tankObj, open, position, onChange }: TankProps) {
   let lastDripEpoch = useTankGameLastDripEpoch({
     args: [tankId],
     enabled: !!tankId,
+    watch: true,
   });
-  let currentEpoch = useTankGameGetEpoch();
+  let currentEpoch = useTankGameGetEpoch({ watch: true });
   return (
     <div>
       <DropdownMenu open={open} onOpenChange={onChange}>

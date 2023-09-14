@@ -14,6 +14,7 @@ import { ITank } from "./ITank";
 export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
   const [selectedTank, setSelectedTank] = useState<typeof ITank | undefined>();
   const [selectedTile, setSelectedTile] = useState<Hex | undefined>();
+  const [highlightedTiles, setHighlightedTiles] = useState<Hex[] | undefined>();
   let tanks = useGameViewGetAllTanks({ watch: true });
   let hearts = useGameViewGetAllHearts({ watch: true });
   const { address } = useAccount();
@@ -98,6 +99,11 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                     tank={tank}
                     heartsOnTile={heartsOnTile?.numHearts}
                     ownersTankId={ownersTankId.data!}
+                    highlighted={highlightedTiles?.some((tile) => {
+                      return (
+                        tile.q === hex.q && tile.r === hex.r && tile.s === hex.s
+                      );
+                    })!}
                     isShootRange={
                       !!selectedTank &&
                       selectedTank.tank.hearts > 0 &&
@@ -111,6 +117,31 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                     onClick={(): void => {
                       setSelectedTank(tank);
                       setSelectedTile(hex);
+                    }}
+                    onContextClick={(): void => {
+                      // if this tile is
+                      setHighlightedTiles((prevTiles) => {
+                        const tileExists = prevTiles?.some((tile) => {
+                          return (
+                            tile.q === hex.q &&
+                            tile.r === hex.r &&
+                            tile.s === hex.s
+                          );
+                        });
+                        if (tileExists) {
+                          return prevTiles?.filter((tile) => {
+                            return (
+                              tile.q !== hex.q ||
+                              tile.r !== hex.r ||
+                              tile.s !== hex.s
+                            );
+                          });
+                        } else {
+                          return [...(prevTiles || []), hex];
+                        }
+                      });
+
+                      // setHighlightedTiles(
                     }}
                   />
                 );

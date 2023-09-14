@@ -13,6 +13,7 @@ interface TileProps {
   z: number;
   distance: number | undefined;
   selected: boolean;
+  highlighted: boolean;
   boardSize: number;
   tank: typeof ITank | undefined;
   heartsOnTile: bigint | undefined;
@@ -20,6 +21,7 @@ interface TileProps {
   isShootRange: boolean;
   isMoveRange: boolean;
   onClick: () => void;
+  onContextClick: () => void;
 }
 export function Tile(props: TileProps) {
   const [open, setOpen] = useState(false);
@@ -54,6 +56,7 @@ export function Tile(props: TileProps) {
       left: rect.left + rect.width / 2,
     });
     setHover(true);
+    props.onContextClick();
   };
   return (
     <DropdownMenu open={open} onOpenChange={handleChange}>
@@ -79,6 +82,7 @@ export function Tile(props: TileProps) {
         s={props.z}
         className={`${getColor(
           props.selected,
+          props.highlighted,
           props.isShootRange,
           props.isMoveRange
         )}`}
@@ -129,9 +133,17 @@ export function Tile(props: TileProps) {
   );
 }
 
-function getColor(selected: boolean, shootRange: boolean, moveRange: boolean) {
+function getColor(
+  selected: boolean,
+  highlighted: boolean,
+  shootRange: boolean,
+  moveRange: boolean
+) {
   if (selected) {
     return "fill-green-200";
+  }
+  if (highlighted) {
+    return "fill-orange-200";
   }
   if (shootRange && moveRange) {
     return "fill-orange-200";
