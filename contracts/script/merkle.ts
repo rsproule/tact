@@ -55,7 +55,6 @@ const values = [
   // [getAddress("0x60848AFA93C83cA3eA7734E47c3dA155eB78B59B"), "bot8"],
   // [getAddress("0xe54B2534F74b857246Bd5854551F1178aa0BeA71"), "bot9"],
   // [getAddress("0x0541a3Aa3FA999EFE2596324bfeE79ACf11269Df"), "bot10"],
-  // ["", "jonah"],
 ];
 
 // (2)
