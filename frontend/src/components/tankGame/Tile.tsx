@@ -77,6 +77,10 @@ export function Tile(props: TileProps) {
           e.preventDefault();
           handleContextMenu(e);
         }}
+        onDoubleClick={(e) => {
+          e.preventDefault();
+          handleContextMenu(e);
+        }}
         q={props.x}
         r={props.y}
         s={props.z}
