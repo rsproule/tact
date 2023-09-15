@@ -67,11 +67,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     function donate() external payable {
+        require(msg.value > 0, "no value sent");
         _handleDonation();
     }
 
     function _handleDonation() internal {
-        require(msg.value > 0, "no value sent");
         prizePool += msg.value;
         emit PrizeIncrease(msg.sender, msg.value, address(this).balance);
     }
