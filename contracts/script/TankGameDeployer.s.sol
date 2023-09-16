@@ -41,9 +41,9 @@ contract TankGameDeployerScript is Script {
             initAPs: 1,
             initHearts: 3,
             initShootRange: 3,
-            epochSeconds: 10 minutes,
+            epochSeconds: 1 minutes,
             buyInMinimum: 0,
-            revealWaitBlocks: (50 minutes) / 12,
+            revealWaitBlocks: (5 minutes) / 12,
             root: bytes32(0x0)
         });
         tankGame = factory.createGame(gs);
