@@ -56,7 +56,7 @@ contract TankGameDeployerScript is Script {
         for (uint256 i = 0; i < _staticAddresses.length; i++) {
             NamedPlayer memory np = _staticAddresses[i];
             console.log("Joining %s at address %s", np.name, np.player);
-            tankGame.join(np.player, new bytes32[](0), np.name);
+            tankGame.join(ITankGame.JoinParams(np.player, new bytes32[](0), np.name));
             // finance this player
             payable(np.player).transfer(0.1 ether);
         }

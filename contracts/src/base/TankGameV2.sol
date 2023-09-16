@@ -78,25 +78,25 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     // should do some sort of commit reveal thing for the randomness instead of this
     // random point thing.
-    function join(address joiner, bytes32[] memory proof, string calldata playerName) external payable {
-        require(players[joiner] == 0, "already joined");
+    function join(ITankGame.JoinParams calldata params) external override payable {
+        require(players[params.joiner] == 0, "already joined");
         require(playersCount < settings.playerCount, "game is full");
         require(msg.value >= settings.buyInMinimum, "insufficient buy in");
-        bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(joiner, playerName))));
-        require(settings.root == bytes32(0) || MerkleProof.verify(proof, settings.root, leaf), "invalid proof");
+        bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(params.joiner, params.playerName))));
+        require(settings.root == bytes32(0) || MerkleProof.verify(params.proof, settings.root, leaf), "invalid proof");
 
         // this is manipulatable.
-        uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, joiner)));
+        uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, params.joiner)));
         Board.Point memory emptyPoint = board.getEmptyTile(seed);
-        Tank memory tank = Tank(joiner, settings.initHearts, settings.initAPs, settings.initShootRange);
+        Tank memory tank = Tank(params.joiner, settings.initHearts, settings.initAPs, settings.initShootRange);
 
         playersCount++;
         numTanksAlive++;
         aliveTanksIdSum += playersCount;
         tanks[playersCount] = tank;
-        players[joiner] = playersCount;
+        players[params.joiner] = playersCount;
         board.setTile(emptyPoint, Board.Tile({ tankId: playersCount, hearts: 0 }));
-        emit PlayerJoined(joiner, playersCount, emptyPoint, playerName);
+        emit PlayerJoined(params.joiner, playersCount, emptyPoint, params.playerName);
     }
 
     function start() external {
@@ -106,15 +106,15 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit GameStarted();
     }
 
-    function move(
-        uint256 tankId,
-        Board.Point calldata to
-    )
+    function move(ITankGame.MoveParams calldata params)
         external
+        override 
         gameStarted
-        isTankOwnerOrDelegate(tankId)
-        isTankAlive(tankId)
+        isTankOwnerOrDelegate(params.tankId)
+        isTankAlive(params.tankId)
     {
+        uint256 tankId = params.tankId;
+        Board.Point memory to = params.to;
         require(board.isValidPoint(to), "invalid point");
         Board.Tile memory tile = board.getTile(to);
         require(tile.tankId == 0, "position occupied");
@@ -129,17 +129,17 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Move(tankId, to);
     }
 
-    function shoot(
-        uint256 fromId,
-        uint256 toId,
-        uint256 shots
-    )
+    function shoot(ITankGame.ShootParams calldata params)
         external
+        override
         gameStarted
-        isTankOwnerOrDelegate(fromId)
-        isTankAlive(fromId)
-        isTankAlive(toId)
+        isTankOwnerOrDelegate(params.fromId)
+        isTankAlive(params.fromId)
+        isTankAlive(params.toId)
     {
+        uint256 fromId = params.fromId;
+        uint256 toId = params.toId;
+        uint256 shots = params.shots;
         uint256 distance = board.getDistanceTanks(fromId, toId);
         require(distance <= tanks[fromId].range, "target out of range");
         require(tanks[fromId].aps >= shots, "not enough action points");
@@ -159,17 +159,16 @@ contract TankGame is ITankGame, TankGameV2Storage {
         }
     }
 
-    function give(
-        uint256 fromId,
-        uint256 toId,
-        uint256 hearts,
-        uint256 aps
-    )
+    function give(ITankGame.GiveParams calldata params)
         external
         gameStarted
-        isTankOwnerOrDelegate(fromId)
-        isTankAlive(fromId)
+        isTankOwnerOrDelegate(params.fromId)
+        isTankAlive(params.fromId)
     {
+        uint256 hearts = params.hearts;
+        uint256 aps = params.aps;
+        uint256 fromId = params.fromId;
+        uint256 toId = params.toId;
         require(hearts <= tanks[fromId].hearts, "not enough hearts");
         require(aps <= tanks[fromId].aps, "not enough action points");
         uint256 distance = board.getDistanceTanks(fromId, toId);
@@ -192,7 +191,14 @@ contract TankGame is ITankGame, TankGameV2Storage {
         }
     }
 
-    function upgrade(uint256 tankId) external gameStarted isTankOwnerOrDelegate(tankId) isTankAlive(tankId) {
+    function upgrade(ITankGame.UpgradeParams calldata params)
+        external
+        override 
+        gameStarted
+        isTankOwnerOrDelegate(params.tankId)
+        isTankAlive(params.tankId)
+    {
+        uint256 tankId = params.tankId;
         uint256 upgradeCost = getUpgradeCost(tankId);
         require(upgradeCost <= tanks[tankId].aps, "not enough action points");
         tanks[tankId].aps -= upgradeCost;
@@ -200,16 +206,16 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Upgrade(tankId, tanks[tankId].range);
     }
 
-    function vote(
-        uint256 voter,
-        uint256 cursed
-    )
+    function vote(ITankGame.VoteParams calldata params)
         external
+        override
         gameStarted
-        isTankDead(voter)
-        isTankAlive(cursed)
-        isTankOwnerOrDelegate(voter)
+        isTankDead(params.voter)
+        isTankAlive(params.cursed)
+        isTankOwnerOrDelegate(params.voter)
     {
+        uint256 voter = params.voter;
+        uint256 cursed = params.cursed;
         uint256 epoch = _getEpoch();
         require(!votedThisEpoch[epoch][voter], "already voted");
         require(votingClosed[epoch] == false, "voting closed");
@@ -228,8 +234,10 @@ contract TankGame is ITankGame, TankGameV2Storage {
         votedThisEpoch[epoch][voter] = true;
     }
 
-    function drip(uint256 tankId) external gameStarted isTankAlive(tankId) {
+    function drip(ITankGame.DripParams calldata params) external override gameStarted isTankAlive(params.tankId) {
+        uint256 tankId = params.tankId;
         uint256 epoch = _getEpoch();
+
         require(epoch != epochStart, "too early to drip");
         uint256 lastDrippedEpoch = _getLastDrip(tankId);
         require(epoch > lastDrippedEpoch, "already dripped");
@@ -240,7 +248,9 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Drip(tankId, amount, epoch);
     }
 
-    function claim(uint256 tankId, address claimer) external isTankOwner(tankId) {
+    function claim(ITankGame.ClaimParams calldata params) external override isTankOwner(params.tankId) {
+        uint256 tankId = params.tankId;
+        address claimer = params.claimer;
         require(state == GameState.Ended, "game not ended");
         require(!claimed[tankId], "already claimed");
         claimed[tankId] = true;
@@ -258,12 +268,14 @@ contract TankGame is ITankGame, TankGameV2Storage {
         revert("tank not on podium");
     }
 
-    function delegate(uint256 tankId, address delegatee) public isTankOwner(tankId) {
+    function delegate(DelegateParams calldata params) public override isTankOwner(params.tankId) {
+        uint256 tankId = params.tankId;
+        address delegatee = params.delegatee;
         delegates[tankId][delegatee] = true;
         emit Delegate(tankId, delegatee, tanks[tankId].owner);
     }
 
-    function reveal() public {
+    function reveal() public override  {
         require(block.number >= revealBlock, "not ready to reveal");
         emit Reveal(msg.sender, revealBlock);
         // as long as we are within 256 blocks, we can reveal

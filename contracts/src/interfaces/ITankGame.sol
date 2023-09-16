@@ -29,23 +29,76 @@ interface ITankGame {
         Ended
     }
 
-    function join(address joiner, bytes32[] memory proof, string calldata playerName) external payable;
+    struct JoinParams {
+        address joiner;
+        bytes32[] proof;
+        string playerName;
+    }
 
-    function move(uint256 fromId, Board.Point calldata to) external;
+    function join(JoinParams calldata joinParams) external payable;
 
-    function shoot(uint256 fromId, uint256 toId, uint256 shots) external;
+    // TODO: want to migrate to this eventually becuause we reuse the params in the hooks.
+    // Problem is lots of refactoring required (both here and on frontend/bot)
+    struct MoveParams {
+        uint256 tankId;
+        Board.Point to;
+    }
 
-    function give(uint256 fromId, uint256 toId, uint256 hearts, uint256 aps) external;
+    function move(MoveParams calldata moveParams) external;
 
-    function upgrade(uint256 tankId) external;
+    struct ShootParams {
+        uint256 fromId;
+        uint256 toId;
+        uint256 shots;
+    }
 
-    function vote(uint256 voter, uint256 cursed) external;
+    function shoot(ShootParams calldata shootParams) external;
 
-    function claim(uint256 tankId, address claimer) external;
+    struct GiveParams {
+        uint256 fromId;
+        uint256 toId;
+        uint256 hearts;
+        uint256 aps;
+    }
 
-    function delegate(uint256 tankId, address delegatee) external;
+    function give(GiveParams calldata giveParams) external;
+
+    struct UpgradeParams {
+        uint256 tankId;
+    }
+
+    function upgrade(UpgradeParams calldata upgradeParams) external;
+
+    struct VoteParams {
+        uint256 voter;
+        uint256 cursed;
+    }
+
+    function vote(VoteParams calldata voteParams) external;
+
+    struct ClaimParams {
+        uint256 tankId;
+        address claimer;
+    }
+
+    function claim(ClaimParams calldata claimParams) external;
+
+    struct DelegateParams {
+        uint256 tankId;
+        address delegatee;
+    }
+
+    function delegate(DelegateParams calldata delegateParams) external;
+
+    struct DripParams {
+        uint256 tankId;
+    }
+
+    function drip(DripParams calldata dripParams) external;
 
     function reveal() external;
+
+    // view functions
 
     function getPlayerCount() external view returns (uint256);
 
