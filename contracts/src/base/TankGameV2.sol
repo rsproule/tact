@@ -78,7 +78,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     // should do some sort of commit reveal thing for the randomness instead of this
     // random point thing.
-    function join(ITankGame.JoinParams calldata params) external override payable {
+    function join(ITankGame.JoinParams calldata params) external payable override {
         require(players[params.joiner] == 0, "already joined");
         require(playersCount < settings.playerCount, "game is full");
         require(msg.value >= settings.buyInMinimum, "insufficient buy in");
@@ -108,7 +108,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function move(ITankGame.MoveParams calldata params)
         external
-        override 
+        override
         gameStarted
         isTankOwnerOrDelegate(params.tankId)
         isTankAlive(params.tankId)
@@ -193,7 +193,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function upgrade(ITankGame.UpgradeParams calldata params)
         external
-        override 
+        override
         gameStarted
         isTankOwnerOrDelegate(params.tankId)
         isTankAlive(params.tankId)
@@ -275,7 +275,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Delegate(tankId, delegatee, tanks[tankId].owner);
     }
 
-    function reveal() public override  {
+    function reveal() public override {
         require(block.number >= revealBlock, "not ready to reveal");
         emit Reveal(msg.sender, revealBlock);
         // as long as we are within 256 blocks, we can reveal
