@@ -6,6 +6,9 @@ import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { TankGameV2Storage } from "src/base/TankGameV2Storage.sol";
 import { Board } from "src/interfaces/IBoard.sol";
 import { HexBoard } from "src/base/HexBoard.sol";
+import { IHooks } from "src/interfaces/IHooks.sol";
+
+import "forge-std/console.sol";
 
 contract TankGame is ITankGame, TankGameV2Storage {
     event GameInit(ITankGame.GameSettings settings);
@@ -28,6 +31,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event Delegate(uint256 tank, address delegate, address owner);
     event GameOver(uint256 winner, uint256 second, uint256 third, uint256 prizePool);
     event BountyCompleted(uint256 hunter, uint256 victim, uint256 reward);
+    event HooksAdded(uint256 tankId, address hook);
 
     constructor(ITankGame.GameSettings memory gs) payable {
         require(gs.boardSize % 3 == 0, "invalid board size");
@@ -52,7 +56,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     modifier isTankOwnerOrDelegate(uint256 tankId) {
-        require(tanks[tankId].owner == msg.sender || delegates[tankId][msg.sender], "not tank owner or delegate");
+        require(isAuth(tankId, msg.sender), "not tank owner or delegate");
         _;
     }
 
@@ -74,6 +78,10 @@ contract TankGame is ITankGame, TankGameV2Storage {
     function _handleDonation() internal {
         prizePool += msg.value;
         emit PrizeIncrease(msg.sender, msg.value, address(this).balance);
+    }
+
+    function isAuth(uint256 tankId, address owner) public view override returns (bool) {
+        return tanks[tankId].owner == owner || delegates[tankId][owner];
     }
 
     // should do some sort of commit reveal thing for the randomness instead of this
@@ -145,6 +153,13 @@ contract TankGame is ITankGame, TankGameV2Storage {
         require(tanks[fromId].aps >= shots, "not enough action points");
         require(shots <= tanks[toId].hearts, "too many shots");
 
+        // before shoot hooks run here
+        for (uint256 i = 0; i < tankHooks[fromId].length; i++) {
+            IHooks hook = tankHooks[fromId][i];
+            bytes4 selector = IHooks(hook).beforeShoot(address(this), params, "");
+            require(selector == IHooks.beforeShoot.selector, "invalid hook");
+        }
+
         tanks[fromId].aps -= shots;
         tanks[toId].hearts -= shots;
         emit Shoot(fromId, toId);
@@ -156,6 +171,13 @@ contract TankGame is ITankGame, TankGameV2Storage {
             emit BountyCompleted(fromId, toId, apReward);
 
             _handleDeath(fromId, toId);
+        }
+
+        // after shoot hooks run here
+        for (uint256 i = 0; i < tankHooks[fromId].length; i++) {
+            IHooks hook = tankHooks[fromId][i];
+            bytes4 selector = hook.afterShoot(address(this), params, "");
+            require(selector == IHooks.afterShoot.selector, "invalid hook");
         }
     }
 
@@ -286,6 +308,15 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Commit(msg.sender, revealBlock);
     }
 
+    function addHooks(uint256 tankId, IHooks hooks) external override isTankOwnerOrDelegate(tankId) {
+        require(address(hooks) != address(0), "invalid address");
+        tankHooks[tankId].push(hooks);
+        emit HooksAdded(tankId, address(hooks));
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                                 Internal
+    //////////////////////////////////////////////////////////////*/
     function _handleDeath(uint256 killer, uint256 tankId) private {
         numTanksAlive--;
         aliveTanksIdSum -= tankId;
@@ -314,6 +345,9 @@ contract TankGame is ITankGame, TankGameV2Storage {
         return block.timestamp / settings.epochSeconds;
     }
 
+    /*//////////////////////////////////////////////////////////////
+                                 READ ONLY
+    //////////////////////////////////////////////////////////////*/
     function getEpoch() external view returns (uint256) {
         return _getEpoch();
     }

@@ -2,6 +2,7 @@
 pragma solidity ^0.8.19;
 
 import { Board } from "src/interfaces/IBoard.sol";
+import { IHooks } from "src/interfaces/IHooks.sol";
 
 interface ITankGame {
     struct GameSettings {
@@ -98,6 +99,8 @@ interface ITankGame {
 
     function reveal() external;
 
+    function addHooks(uint256 tankId, IHooks hooks) external;
+
     // view functions
 
     function getPlayerCount() external view returns (uint256);
@@ -109,4 +112,6 @@ interface ITankGame {
     function getSettings() external view returns (GameSettings memory);
 
     function getLastDrip(uint256 tankId) external view returns (uint256);
+
+    function isAuth(uint256 tankId, address owner) external view returns (bool);
 }

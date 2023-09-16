@@ -2,12 +2,14 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
+import "forge-std/console.sol";
 import { Vm } from "forge-std/Vm.sol";
 import { TankGame } from "src/base/TankGameV2.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Board } from "src/interfaces/IBoard.sol";
 import { HexBoard } from "src/base/HexBoard.sol";
+import { NonAggression } from "src/hooks/NonAggression.sol";
 
 contract TankTest is Test {
     TankGame public tankGame;
@@ -613,5 +615,62 @@ contract TankTest is Test {
         tankGame.vote(ITankGame.VoteParams(6, 7));
         uint256 apsAfter = tankGame.getTank(7).aps;
         assertEq(apsBefore - 1, apsAfter, "vote should remove aps");
+    }
+
+    /// test for Hooks
+    function testAddHook() public {
+        initGame();
+
+        vm.prank(address(2));
+        vm.expectRevert("NonAggression: not owner");
+        new NonAggression(ITankGame(tankGame), 1);
+
+        vm.startPrank(address(1));
+        NonAggression nonAggro = new NonAggression(ITankGame(tankGame), 1);
+        // TODO: check this auth is enforced
+        tankGame.addHooks(1, nonAggro);
+
+        vm.startPrank(address(2));
+        vm.expectRevert("not tank owner or delegate");
+        tankGame.addHooks(1, nonAggro);
+
+        vm.startPrank(address(2));
+        NonAggression nonAggro2 = new NonAggression(ITankGame(tankGame), 2);
+        tankGame.addHooks(2, nonAggro);
+
+        vm.startPrank(address(2));
+        vm.expectRevert("NonAggression: proposal expired");
+        nonAggro2.accept(1, address(nonAggro));
+
+        // player 1 can propose a treaty
+        vm.startPrank(address(1));
+        nonAggro.propose(2, block.number + 10);
+
+        vm.startPrank(address(1));
+        vm.expectRevert("NonAggression: not owner");
+        nonAggro2.accept(1, address(nonAggro));
+
+        vm.startPrank(address(nonAggro));
+        vm.expectRevert("NonAggression: not owner");
+        nonAggro2.accept(1, address(nonAggro));
+
+        // try to accept
+        vm.recordLogs();
+        vm.startPrank(address(2));
+        nonAggro2.accept(1, address(nonAggro));
+        Vm.Log[] memory entries = vm.getRecordedLogs();
+        console.log("entries length: %d", entries.length);
+
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+        vm.startPrank(address(1));
+        vm.expectRevert("NonAggression: cannot shoot ally");
+        tankGame.shoot(ITankGame.ShootParams(1, 2, 3));
+
+        vm.roll(block.number + 100);
+
+        vm.startPrank(address(1));
+        tankGame.shoot(ITankGame.ShootParams(1, 2, 3));
     }
 }

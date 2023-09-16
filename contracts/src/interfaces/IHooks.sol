@@ -111,6 +111,22 @@ interface IHooks {
         external
         returns (bytes4);
 
+    function beforeDrip(
+        address gameId,
+        ITankGame.DripParams memory dripParams,
+        bytes memory hookData
+    )
+        external
+        returns (bytes4);
+
+    function afterDrip(
+        address gameId,
+        ITankGame.DripParams memory dripParams,
+        bytes memory hookData
+    )
+        external
+        returns (bytes4);
+
     function beforeDelegate(
         address gameId,
         ITankGame.DelegateParams calldata delegateParams,
