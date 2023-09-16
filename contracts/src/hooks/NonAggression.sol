@@ -6,15 +6,13 @@ import { IHooks } from "src/interfaces/IHooks.sol";
 import { ITreaty } from "src/interfaces/ITreaty.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 
-contract NonAggression is DefaultEmptyHooks {
-    address public otherHook;
+contract NonAggression is DefaultEmptyHooks, ITreaty {
     uint256 public ownerTank;
-    uint256 public expiryBlock; // this should be _per_ alliance, not global
     ITankGame public tankGame;
-
     mapping(uint256 tankId => uint256 expiry) public proposals;
-
     mapping(uint256 tankId => uint256 expiry) public allies;
+
+    event NonAggressionCreated(uint256 ownerTank, ITankGame tankGame);
 
     modifier hasTankAuth(uint256 tankId) {
         require(tankGame.isAuth(tankId, msg.sender), "NonAggression: not owner");
@@ -26,6 +24,7 @@ contract NonAggression is DefaultEmptyHooks {
         require(_tankGame.isAuth(_ownerTank, msg.sender), "NonAggression: not owner");
         tankGame = _tankGame;
         ownerTank = _ownerTank;
+        emit NonAggressionCreated(_ownerTank, tankGame);
     }
 
     function beforeShoot(

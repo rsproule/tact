@@ -309,6 +309,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     function addHooks(uint256 tankId, IHooks hooks) external override isTankOwnerOrDelegate(tankId) {
+        // require(tankId == hooks.getOwner(), "not hook owner"); // TODO: not sure if this is required
         require(address(hooks) != address(0), "invalid address");
         tankHooks[tankId].push(hooks);
         emit HooksAdded(tankId, address(hooks));

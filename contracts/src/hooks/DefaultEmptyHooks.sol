@@ -5,10 +5,7 @@ import { IHooks } from "src/interfaces/IHooks.sol";
 import { ITreaty } from "src/interfaces/ITreaty.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 
-contract DefaultEmptyHooks is IHooks, ITreaty {
-    function accept(uint256, address) external virtual override { }
-    function propose(uint256, uint256) external virtual override { }
-
+contract DefaultEmptyHooks is IHooks {
     function afterJoin(
         address,
         ITankGame.JoinParams memory,

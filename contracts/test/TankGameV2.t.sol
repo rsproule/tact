@@ -10,6 +10,7 @@ import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Board } from "src/interfaces/IBoard.sol";
 import { HexBoard } from "src/base/HexBoard.sol";
 import { NonAggression } from "src/hooks/NonAggression.sol";
+import { Bounty } from "src/hooks/Bounty.sol";
 
 contract TankTest is Test {
     TankGame public tankGame;
@@ -618,7 +619,7 @@ contract TankTest is Test {
     }
 
     /// test for Hooks
-    function testAddHook() public {
+    function testHookNonAggression() public {
         initGame();
 
         vm.prank(address(2));
@@ -636,7 +637,7 @@ contract TankTest is Test {
 
         vm.startPrank(address(2));
         NonAggression nonAggro2 = new NonAggression(ITankGame(tankGame), 2);
-        tankGame.addHooks(2, nonAggro);
+        tankGame.addHooks(2, nonAggro2);
 
         vm.startPrank(address(2));
         vm.expectRevert("NonAggression: proposal expired");
@@ -660,6 +661,8 @@ contract TankTest is Test {
         nonAggro2.accept(1, address(nonAggro));
         Vm.Log[] memory entries = vm.getRecordedLogs();
         console.log("entries length: %d", entries.length);
+        // assertEq(entries[0].topics[0], keccak256("AcceptedTreaty(uint256,uint256,address,address,uint256)"));
+        // assertEq(entries[0].topics[0], keccak256("AcceptedTreaty(uint256,uint256,address,address,uint256)"));
 
         vm.mockCall(
             address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
@@ -667,10 +670,50 @@ contract TankTest is Test {
         vm.startPrank(address(1));
         vm.expectRevert("NonAggression: cannot shoot ally");
         tankGame.shoot(ITankGame.ShootParams(1, 2, 3));
+        vm.startPrank(address(2));
+        vm.expectRevert("NonAggression: cannot shoot ally");
+        tankGame.shoot(ITankGame.ShootParams(2, 1, 3));
 
         vm.roll(block.number + 100);
 
         vm.startPrank(address(1));
         tankGame.shoot(ITankGame.ShootParams(1, 2, 3));
+    }
+
+    function testBountyHook() public {
+        initGame();
+
+        vm.prank(address(2));
+        vm.expectRevert("Bounty: not owner");
+        new Bounty(ITankGame(tankGame), 1);
+
+        vm.startPrank(address(1));
+        Bounty bounty = new Bounty(ITankGame(tankGame), 1);
+        // you can add your own bounty, idgaf
+        tankGame.addHooks(1, bounty);
+
+        // others can add your bounty
+        vm.startPrank(address(2));
+        tankGame.addHooks(2, bounty);
+        vm.startPrank(address(3));
+        tankGame.addHooks(3, bounty);
+
+        // player 1 can propose a treaty
+        startHoax(address(1), 1 ether);
+        bounty.createBounty{ value: 100 }(2);
+
+        startHoax(address(2), 1 ether);
+        vm.expectRevert("Bounty: not owner");
+        bounty.createBounty{ value: 100 }(1);
+
+        vm.mockCall(
+            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+        );
+
+        vm.startPrank(address(3));
+        tankGame.shoot(ITankGame.ShootParams(3, 2, 3));
+
+        bounty.withdrawBounty(3, address(3));
+        assertEq(address(3).balance, 100);
     }
 }
