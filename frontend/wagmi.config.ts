@@ -25,6 +25,10 @@ export default defineConfig({
           [chains.foundry.id]: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
           [chains.goerli.id]: "0x26d0DadeAfeF0AefF3f2CcE09840830146E86A67",
         },
+        HookFactory: {
+          [chains.foundry.id]: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+          [chains.goerli.id]: "0x0000000000000000000000000000000000000000",
+        },
       },
       project: "../contracts",
     }),
