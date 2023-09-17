@@ -14,7 +14,7 @@ contract TankGameFactoryTest is Test {
 
     function setUp() public {
         factory = new TankGameFactory();
-        game = factory.createGame(getSettings());
+        game = factory.createGame(getSettings(), msg.sender);
         bytes32[] memory proof = new bytes32[](1);
         vm.prank(address(1));
         game.join(ITankGame.JoinParams(address(1), proof, "player1"));

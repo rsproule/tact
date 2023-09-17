@@ -23,9 +23,9 @@ contract Bounty is DefaultEmptyHooks {
     }
 
     constructor(ITankGame _tankGame, uint256 _ownerTank) {
-        // this should only be deployable by the guy that actually has auth on the tank
-        require(_tankGame.isAuth(_ownerTank, msg.sender), "Bounty: not owner");
         tankGame = _tankGame;
+        // this should only be deployable by the guy that actually has auth on the tank
+        // require(_tankGame.isAuth(_ownerTank, msg.sender), "Bounty: not owner");
         ownerTank = _ownerTank;
         emit BountyHookCreated(_ownerTank, tankGame);
     }

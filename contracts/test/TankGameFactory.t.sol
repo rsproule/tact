@@ -25,7 +25,7 @@ contract TankGameFactoryTest is Test {
             revealWaitBlocks: 1000,
             root: bytes32(0)
         });
-        TankGame gameAddress = factory.createGame(gs);
+        TankGame gameAddress = factory.createGame(gs, msg.sender);
         assertTrue(address(gameAddress) != address(0), "game address not zero");
         ITankGame.GameState state = gameAddress.state();
         assertTrue(state == ITankGame.GameState.WaitingForPlayers, "game state is waiting");
@@ -44,6 +44,6 @@ contract TankGameFactoryTest is Test {
             root: bytes32(0)
         });
         vm.expectRevert("invalid board size");
-        factory.createGame(gs);
+        factory.createGame(gs, msg.sender);
     }
 }

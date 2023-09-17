@@ -8,8 +8,6 @@ import { Board } from "src/interfaces/IBoard.sol";
 import { HexBoard } from "src/base/HexBoard.sol";
 import { IHooks } from "src/interfaces/IHooks.sol";
 
-import "forge-std/console.sol";
-
 contract TankGame is ITankGame, TankGameV2Storage {
     event GameInit(ITankGame.GameSettings settings);
     event GameStarted();
@@ -33,16 +31,21 @@ contract TankGame is ITankGame, TankGameV2Storage {
     event BountyCompleted(uint256 hunter, uint256 victim, uint256 reward);
     event HooksAdded(uint256 tankId, address hook);
 
-    constructor(ITankGame.GameSettings memory gs) payable {
+    constructor(ITankGame.GameSettings memory gs, address _owner) payable {
         require(gs.boardSize % 3 == 0, "invalid board size");
         emit GameInit(gs);
         settings = gs;
         state = GameState.WaitingForPlayers;
         board = new HexBoard(gs.boardSize);
         revealBlock = block.number + gs.revealWaitBlocks;
-        owner = msg.sender;
+        owner = _owner;
         _handleDonation();
         emit Commit(msg.sender, revealBlock);
+    }
+
+    function setOwner(address _owner) external {
+        require(msg.sender == owner, "not owner");
+        owner = _owner;
     }
 
     modifier gameStarted() {
@@ -80,8 +83,8 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit PrizeIncrease(msg.sender, msg.value, address(this).balance);
     }
 
-    function isAuth(uint256 tankId, address owner) public view override returns (bool) {
-        return tanks[tankId].owner == owner || delegates[tankId][owner];
+    function isAuth(uint256 tankId, address _owner) public view override returns (bool) {
+        return tanks[tankId].owner == _owner || delegates[tankId][_owner];
     }
 
     // should do some sort of commit reveal thing for the randomness instead of this
@@ -270,7 +273,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Drip(tankId, amount, epoch);
     }
 
-    function claim(ITankGame.ClaimParams calldata params) external override isTankOwner(params.tankId) {
+    function claim(ITankGame.ClaimParams calldata params) external override isTankOwnerOrDelegate(params.tankId) {
         uint256 tankId = params.tankId;
         address claimer = params.claimer;
         require(state == GameState.Ended, "game not ended");
@@ -309,8 +312,13 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     function addHooks(uint256 tankId, IHooks hooks) external override isTankOwnerOrDelegate(tankId) {
-        // require(tankId == hooks.getOwner(), "not hook owner"); // TODO: not sure if this is required
         require(address(hooks) != address(0), "invalid address");
+        tankHooks[tankId].push(hooks);
+        emit HooksAdded(tankId, address(hooks));
+    }
+
+    function forceAddDefaultHook(uint256 tankId, IHooks hooks) external {
+        require(msg.sender == owner, "not owner");
         tankHooks[tankId].push(hooks);
         emit HooksAdded(tankId, address(hooks));
     }

@@ -21,7 +21,7 @@ contract NonAggression is DefaultEmptyHooks, ITreaty {
 
     constructor(ITankGame _tankGame, uint256 _ownerTank) {
         // this should only be deployable by the guy that actually has auth on the tank
-        require(_tankGame.isAuth(_ownerTank, msg.sender), "NonAggression: not owner");
+        // require(_tankGame.isAuth(_ownerTank, msg.sender), "NonAggression: not owner");
         tankGame = _tankGame;
         ownerTank = _ownerTank;
         emit NonAggressionCreated(_ownerTank, tankGame);

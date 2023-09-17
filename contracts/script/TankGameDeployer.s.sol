@@ -6,6 +6,10 @@ import { TankGameFactory } from "src/base/TankGameFactory.sol";
 import { TankGame } from "src/base/TankGameV2.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { GameView } from "src/view/GameView.sol";
+import { NonAggression } from "src/hooks/NonAggression.sol";
+import { Bounty } from "src/hooks/Bounty.sol";
+import { HookFactory } from "src/base/HookFactory.sol";
+import { IHooks } from "src/interfaces/IHooks.sol";
 
 contract TankGameDeployerScript is Script {
     TankGame public tankGame;
@@ -46,20 +50,36 @@ contract TankGameDeployerScript is Script {
             revealWaitBlocks: (5 minutes) / 12,
             root: bytes32(0x0)
         });
-        tankGame = factory.createGame(gs);
+        tankGame = factory.createGame(gs, msg.sender);
 
         GameView gameView = new GameView(tankGame);
+        HookFactory hookFactory = new HookFactory();
         console.log("TankGame deployed at address: %s", address(tankGame));
         console.log("TankGameFactory at address: %s", address(factory));
         console.log("TankGameView at address: %s", address(gameView));
+        console.log("HookFactory at address: %s", address(hookFactory));
         // join everyone.
         for (uint256 i = 0; i < _staticAddresses.length; i++) {
             NamedPlayer memory np = _staticAddresses[i];
             console.log("Joining %s at address %s", np.name, np.player);
             tankGame.join(ITankGame.JoinParams(np.player, new bytes32[](0), np.name));
+            // for every player give them a default hook for NonAggression and Bounties
+            // this wont be allowed because hooks only added by owner
+            // can get around this by allownig the admin to at the beginning
+            IHooks nonAggro = hookFactory.createHook(tankGame, i + 1, HookFactory.HookRegistry.NonAggression);
+            IHooks bounty = hookFactory.createHook(tankGame, i + 1, HookFactory.HookRegistry.Bounty);
+
+            tankGame.forceAddDefaultHook(i + 1, nonAggro);
+            tankGame.forceAddDefaultHook(i + 1, bounty);
+
+            // done with default hooks. this is temporary solution
+
             // finance this player
             payable(np.player).transfer(0.1 ether);
         }
+
+        tankGame.setOwner(address(0));
+        tankGame.start();
         vm.stopBroadcast();
     }
 
