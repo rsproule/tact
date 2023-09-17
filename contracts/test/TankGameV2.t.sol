@@ -622,10 +622,6 @@ contract TankTest is Test {
     function testHookNonAggression() public {
         initGame();
 
-        // vm.prank(address(2));
-        // vm.expectRevert("NonAggression: not owner");
-        // new NonAggression(ITankGame(tankGame), 1);
-
         vm.startPrank(address(1));
         NonAggression nonAggro = new NonAggression(ITankGame(tankGame), 1);
         tankGame.addHooks(1, nonAggro);

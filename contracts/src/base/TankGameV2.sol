@@ -297,6 +297,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         uint256 tankId = params.tankId;
         address delegatee = params.delegatee;
         delegates[tankId][delegatee] = true;
+        players[delegatee] = tankId;
         emit Delegate(tankId, delegatee, tanks[tankId].owner);
     }
 

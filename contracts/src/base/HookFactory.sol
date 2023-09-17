@@ -13,13 +13,19 @@ contract HookFactory {
         Bounty
     }
 
-    event HookCreated(ITankGame indexed tankGame, HookRegistry _type, uint256 tankId, address owner);
+    event HookCreated(
+        ITankGame indexed tankGame, HookRegistry _type, address hookAddress, uint256 tankId, address creator
+    );
 
     function createHook(ITankGame tankGame, uint256 tankId, HookRegistry hookType) external returns (IHooks) {
         if (hookType == HookRegistry.NonAggression) {
-            return new NonAggression(tankGame, tankId);
+            NonAggression na = new NonAggression(tankGame, tankId);
+            emit HookCreated(tankGame, hookType, address(na), tankId, msg.sender);
+            return na;
         } else if (hookType == HookRegistry.Bounty) {
-            return new Bounty(tankGame, tankId);
+            Bounty b = new Bounty(tankGame, tankId);
+            emit HookCreated(tankGame, hookType, address(b), tankId, msg.sender);
+            return b;
         } else {
             revert("HookFactory: invalid hook type");
         }

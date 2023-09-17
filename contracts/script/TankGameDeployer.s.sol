@@ -42,7 +42,7 @@ contract TankGameDeployerScript is Script {
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
             playerCount: _staticAddresses.length,
             boardSize: 30,
-            initAPs: 1,
+            initAPs: 100,
             initHearts: 3,
             initShootRange: 3,
             epochSeconds: 1 minutes,
@@ -69,6 +69,8 @@ contract TankGameDeployerScript is Script {
             IHooks nonAggro = hookFactory.createHook(tankGame, i + 1, HookFactory.HookRegistry.NonAggression);
             IHooks bounty = hookFactory.createHook(tankGame, i + 1, HookFactory.HookRegistry.Bounty);
 
+            console.log("Adding bounty hook for %s at address %s", np.name, address(bounty));
+            console.log("Adding nonaggression hook for %s at address %s", np.name, address(nonAggro));
             tankGame.forceAddDefaultHook(i + 1, nonAggro);
             tankGame.forceAddDefaultHook(i + 1, bounty);
 
