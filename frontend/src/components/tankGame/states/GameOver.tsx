@@ -37,7 +37,7 @@ export function GameOver() {
     enabled: !!address,
   });
   let { config } = usePrepareTankGameClaim({
-    args: [ownersTankId.data!, address!],
+    args: [{ tankId: ownersTankId.data!, claimer: address! }],
     enabled:
       !!ownersTankId.data &&
       !!address &&

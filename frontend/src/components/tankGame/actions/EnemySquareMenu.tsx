@@ -39,9 +39,11 @@ export default function EnemySquareMenu({
   const { toast } = useToast();
   let { config: shootConfig } = usePrepareTankGameShoot({
     args: [
-      ownersTank!,
-      enemyTank!,
-      BigInt(multiplier ? parseInt(multiplier) : 1),
+      {
+        fromId: ownersTank!,
+        toId: enemyTank!,
+        shots: BigInt(multiplier ? parseInt(multiplier) : 1),
+      },
     ],
     enabled: open && !!ownersTank && !!enemyTank,
   });
@@ -66,10 +68,12 @@ export default function EnemySquareMenu({
 
   let { config: giftHeartConfig } = usePrepareTankGameGive({
     args: [
-      ownersTank!,
-      enemyTank!,
-      BigInt(multiplier ? parseInt(multiplier) : 1),
-      BigInt(0),
+      {
+        fromId: ownersTank!,
+        toId: enemyTank!,
+        hearts: BigInt(multiplier ? parseInt(multiplier) : 1),
+        aps: BigInt(0),
+      },
     ],
     enabled: open && !!ownersTank && !!enemyTank,
   });
@@ -94,10 +98,12 @@ export default function EnemySquareMenu({
   });
   let { config: giveAPConfig } = usePrepareTankGameGive({
     args: [
-      ownersTank!,
-      enemyTank!,
-      BigInt(0),
-      BigInt(multiplier ? parseInt(multiplier) : 1),
+      {
+        fromId: ownersTank!,
+        toId: enemyTank!,
+        hearts: BigInt(0),
+        aps: BigInt(multiplier ? parseInt(multiplier) : 1),
+      },
     ],
     enabled: open && !!ownersTank && !!enemyTank,
   });
@@ -120,7 +126,7 @@ export default function EnemySquareMenu({
     },
   });
   let { config: curseConfig } = usePrepareTankGameVote({
-    args: [ownersTank!, enemyTank!],
+    args: [{ voter: ownersTank!, cursed: enemyTank! }],
     enabled: open && !!ownersTank && !!enemyTank,
   });
   const { write: curse, data: curseHash } = useTankGameVote(curseConfig);
@@ -143,7 +149,7 @@ export default function EnemySquareMenu({
   });
 
   let { config: dripConfig } = usePrepareTankGameDrip({
-    args: [enemyTank!],
+    args: [{ tankId: enemyTank! }],
     enabled: open && !!ownersTank,
   });
   const { write: drip, data: dripHash } = useTankGameDrip(dripConfig);

@@ -8,10 +8,7 @@ import {
 import { Droplet, Rocket } from "lucide-react";
 import { BaseError } from "viem";
 import { useWaitForTransaction } from "wagmi";
-import {
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from "../../ui/dropdown-menu";
+import { DropdownMenuGroup, DropdownMenuItem } from "../../ui/dropdown-menu";
 import { useToast } from "../../ui/use-toast";
 
 export default function SelfSquareMenu({
@@ -26,7 +23,7 @@ export default function SelfSquareMenu({
     args: [ownersTank],
   });
   let { config: upgradeConfig } = usePrepareTankGameUpgrade({
-    args: [ownersTank],
+    args: [{ tankId: ownersTank }],
     enabled: open && !!ownersTank,
   });
   const { write: upgrade, data: upgradeHash } =
@@ -50,7 +47,7 @@ export default function SelfSquareMenu({
   });
 
   let { config: dripConfig } = usePrepareTankGameDrip({
-    args: [ownersTank],
+    args: [{ tankId: ownersTank }],
     enabled: open && !!ownersTank,
   });
   const { write: drip, data: dripHash } = useTankGameDrip(dripConfig);
@@ -76,8 +73,7 @@ export default function SelfSquareMenu({
       <DropdownMenuItem disabled={!upgrade} onSelect={() => upgrade?.()}>
         <Rocket className="mr-2 h-4 w-4" />
         <span>
-          Upgrade Range ({upgradeCost ? upgradeCost.toString() : "..."}{" "}
-          APs)
+          Upgrade Range ({upgradeCost ? upgradeCost.toString() : "..."} APs)
         </span>
       </DropdownMenuItem>
       <DropdownMenuItem disabled={!drip} onSelect={() => drip?.()}>

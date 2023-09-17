@@ -31,7 +31,9 @@ export function WaitingForPlayers({
         .map((x) => Object.freeze(x) as `0x${string}`)
     : zero;
   let { config, refetch } = usePrepareTankGameJoin({
-    args: [address!, proof, value?.value[1] ?? ""],
+    args: [
+      { joiner: address!, proof: proof, playerName: value?.value[1] ?? "" },
+    ],
     value: BigInt(0),
   });
   let { toast } = useToast();
