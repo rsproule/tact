@@ -93,7 +93,7 @@ export function Treaties() {
                     />
                   );
                 } else if (hook.args._type === 0) {
-                  return <></>;
+                  return;
                   // return <div>non aggro</div>;
                 }
               })}
