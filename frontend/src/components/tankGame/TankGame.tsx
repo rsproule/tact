@@ -1,9 +1,9 @@
 "use client";
 import { useTankGameGetSettings, useTankGameState } from "../../generated";
 import { LeaderBoard } from "../LeaderBoard";
+import { Treaties } from "../treaties/Treaties";
 import { HexBoard } from "./HexGameBoard";
 import Timer from "./Timer";
-import { Treaties } from "./Treaties";
 import Donate from "./actions/Donate";
 import { GameOver } from "./states/GameOver";
 import { WaitingForPlayers } from "./states/WaitingForPlayers";
