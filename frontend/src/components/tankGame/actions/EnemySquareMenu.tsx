@@ -42,7 +42,7 @@ export default function EnemySquareMenu({
       {
         fromId: ownersTank!,
         toId: enemyTank!,
-        shots: BigInt(multiplier ? parseInt(multiplier) : 1),
+        shots: BigInt(multiplier ? multiplier : 1),
       },
     ],
     enabled: open && !!ownersTank && !!enemyTank,

@@ -3,14 +3,11 @@ import {
   bountyABI,
   hookFactoryABI,
   hookFactoryAddress,
-  tankGameABI,
-  tankGameAddress,
-  useBountyCreateBounty,
-  useBountyWithdrawBounty,
-  useGameViewGetAllTanks,
+  useBountyCreate,
+  useBountyWithdraw,
   useNonAggressionPropose,
-  usePrepareBountyCreateBounty,
-  usePrepareBountyWithdrawBounty,
+  usePrepareBountyCreate,
+  usePrepareBountyWithdraw,
   usePrepareNonAggressionPropose,
   usePrepareTankGameAddHooks,
   useTankGameAddHooks,
@@ -97,7 +94,7 @@ export function Treaties() {
                   );
                 } else if (hook.args._type === 0) {
                   return <></>;
-                  return <div>non aggro</div>;
+                  // return <div>non aggro</div>;
                 }
               })}
           </div>
@@ -173,13 +170,13 @@ function Bounty({
       });
     },
   });
-  const { config: withdrawConfig } = usePrepareBountyWithdrawBounty({
+  const { config: withdrawConfig } = usePrepareBountyWithdraw({
     args: [ownerTank.data!, address!],
     enabled: !!ownerTank,
     address: hookAddress,
   });
   const { write: withdraw, data: withdrawData } =
-    useBountyWithdrawBounty(withdrawConfig);
+    useBountyWithdraw(withdrawConfig);
   useWaitForTransaction({
     hash: withdrawData?.hash,
     enabled: !!withdrawData,
@@ -241,7 +238,7 @@ function Bounty({
 function CreateBounty({ hookAddress }: { hookAddress: `0x${string}` }) {
   const [targetTank, setTargetTank] = useState<bigint>(BigInt(0));
   const [bounty, setBounty] = useState<string>("");
-  const { config: createBountyConfig } = usePrepareBountyCreateBounty({
+  const { config: createBountyConfig } = usePrepareBountyCreate({
     address: hookAddress,
     args: [targetTank],
     value: parseEther(bounty),
@@ -249,7 +246,7 @@ function CreateBounty({ hookAddress }: { hookAddress: `0x${string}` }) {
   });
 
   const { write: create, data: createData } =
-    useBountyCreateBounty(createBountyConfig);
+    useBountyCreate(createBountyConfig);
   useWaitForTransaction({
     hash: createData?.hash,
     enabled: !!createData,
