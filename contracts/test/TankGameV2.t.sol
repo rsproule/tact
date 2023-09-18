@@ -695,11 +695,11 @@ contract TankTest is Test {
 
         // player 1 can propose a treaty
         startHoax(address(1), 1 ether);
-        bounty.createBounty{ value: 100 }(2);
+        bounty.create{ value: 100 }(2);
 
         startHoax(address(2), 1 ether);
         vm.expectRevert("Bounty: not owner");
-        bounty.createBounty{ value: 100 }(1);
+        bounty.create{ value: 100 }(1);
 
         vm.mockCall(
             address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
@@ -708,7 +708,7 @@ contract TankTest is Test {
         vm.startPrank(address(3));
         tankGame.shoot(ITankGame.ShootParams(3, 2, 3));
 
-        bounty.withdrawBounty(3, address(3));
+        bounty.withdraw(3, address(3));
         assertEq(address(3).balance, 100);
     }
 }

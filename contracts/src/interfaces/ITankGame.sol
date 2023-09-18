@@ -38,8 +38,6 @@ interface ITankGame {
 
     function join(JoinParams calldata joinParams) external payable;
 
-    // TODO: want to migrate to this eventually becuause we reuse the params in the hooks.
-    // Problem is lots of refactoring required (both here and on frontend/bot)
     struct MoveParams {
         uint256 tankId;
         Board.Point to;
@@ -114,4 +112,6 @@ interface ITankGame {
     function getLastDrip(uint256 tankId) external view returns (uint256);
 
     function isAuth(uint256 tankId, address owner) external view returns (bool);
+
+    function getState() external view returns (ITankGame.GameState);
 }

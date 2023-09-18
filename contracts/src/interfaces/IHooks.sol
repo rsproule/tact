@@ -43,6 +43,7 @@ interface IHooks {
     )
         external
         returns (bytes4);
+
     function afterShoot(
         address gameId,
         ITankGame.ShootParams calldata shootParams,
@@ -58,6 +59,7 @@ interface IHooks {
     )
         external
         returns (bytes4);
+
     function afterGive(
         address gameId,
         ITankGame.GiveParams calldata giveParams,
@@ -73,6 +75,7 @@ interface IHooks {
     )
         external
         returns (bytes4);
+
     function afterUpgrade(
         address gameId,
         ITankGame.UpgradeParams calldata upgradeParams,

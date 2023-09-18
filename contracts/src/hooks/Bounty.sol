@@ -9,13 +9,21 @@ import { ITankGame } from "src/interfaces/ITankGame.sol";
 contract Bounty is DefaultEmptyHooks {
     uint256 public ownerTank;
     ITankGame public tankGame;
-    mapping(uint256 tankId => uint256 amount) public bounties;
+    mapping(uint256 tankId => uint256 bountyId) public bounties;
+    mapping(uint256 bountyId => BountyData bountyData) public bountiesData;
     mapping(uint256 tankId => uint256 amount) public withdrawals;
+    uint256 public bountyCount;
+
+    struct BountyData {
+        uint256 targetTankId;
+        uint256 amount;
+        bool closed;
+    }
 
     event BountyHookCreated(uint256 ownerTank, ITankGame tankGame);
-    event BountyPosted(uint256 tankId, uint256 target, uint256 amount);
-    event BountyWon(uint256 winner, uint256 victim, uint256 amount);
-    event BountyWithdrawn(uint256 tankId, uint256 amount, address reciever);
+    event BountyPosted(uint256 bountyId, uint256 tankId, uint256 target, uint256 amount);
+    event BountyWon(uint256 bountyId, uint256 winner, uint256 victim, uint256 amount);
+    event Withdraw(uint256 tankId, uint256 amount, address reciever);
 
     modifier hasTankAuth(uint256 tankId) {
         require(tankGame.isAuth(tankId, msg.sender), "Bounty: not owner");
@@ -41,26 +49,44 @@ contract Bounty is DefaultEmptyHooks {
     {
         uint256 targetTank = shootParams.toId;
         if (tankGame.getTank(targetTank).hearts <= 0) {
-            uint256 bounty = bounties[targetTank];
-            if (bounty > 0) {
-                bounties[targetTank] = 0;
-                withdrawals[shootParams.fromId] += bounty;
-                emit BountyWon(shootParams.fromId, targetTank, bounty);
+            uint256 bountyId = bounties[targetTank];
+            BountyData storage bounty = bountiesData[bountyId];
+            if (bounty.amount > 0 && !bounty.closed) {
+                bounty.closed = true;
+                bountiesData[bountyId] = bounty;
+                withdrawals[shootParams.fromId] += bounty.amount;
+                emit BountyWon(bountyId, shootParams.fromId, targetTank, bounty.amount);
             }
         }
         return IHooks.afterShoot.selector;
     }
 
-    function createBounty(uint256 targetTankId) external payable hasTankAuth(ownerTank) {
-        bounties[targetTankId] += msg.value;
-        emit BountyPosted(ownerTank, targetTankId, msg.value);
+    function create(uint256 targetTankId) external payable hasTankAuth(ownerTank) {
+        // if there is already a bounty on this tank, then we need to close it out
+        bountyCount++;
+        uint256 bountyId = bounties[targetTankId];
+        BountyData storage existent = bountiesData[bountyId];
+        existent.closed = true;
+        uint256 newAmount = existent.amount + msg.value;
+
+        bounties[targetTankId] = bountyCount;
+        bountiesData[bountyCount] = BountyData(targetTankId, newAmount, false);
+        emit BountyPosted(bountyCount, ownerTank, targetTankId, newAmount);
     }
 
-    function withdrawBounty(uint256 tankId, address reciever) external {
+    function withdraw(uint256 tankId, address reciever) external {
         uint256 amount = withdrawals[tankId];
         require(amount > 0, "Bounty: no bounty to withdraw");
         withdrawals[tankId] = 0;
         payable(reciever).transfer(amount);
-        emit BountyWithdrawn(tankId, amount, reciever);
+        emit Withdraw(tankId, amount, reciever);
+    }
+
+    function cancel(uint256 bountyId) external hasTankAuth(ownerTank) {
+        require(tankGame.getState() == ITankGame.GameState.Ended, "Bounty: game not over");
+        BountyData memory bounty = bountiesData[bountyId];
+
+        bounty.closed = true;
+        withdrawals[ownerTank] += bounty.amount;
     }
 }
