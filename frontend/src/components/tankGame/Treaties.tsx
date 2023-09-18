@@ -205,6 +205,7 @@ function Bounty({
     <div className="border">
       <div className="text-xl">Bounties posted by {tankId.toString()}</div>
       {bounties?.map((bounty: any, i: number) => {
+        console.log(bounties);
         return (
           <div key={i} className="flex justify-between border">
             <div>Target: {toTankName(bounty.args.target)}</div>
@@ -277,8 +278,14 @@ function CreateBounty({ hookAddress }: { hookAddress: `0x${string}` }) {
           placeholder="target"
         />
         <Input
-          // type="number"
-          onChange={(e) => setBounty(e.target.value)}
+          type="number"
+          value={bounty}
+          onChange={(e) => {
+            try {
+              parseEther(e.target.value);
+              setBounty(e.target.value);
+            } catch (e) {}
+          }}
           placeholder="bounty"
         />
       </div>

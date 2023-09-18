@@ -15,7 +15,7 @@ import {
   HeartHandshake,
   SkullIcon,
 } from "lucide-react";
-import { BaseError } from "viem";
+import { BaseError, parseEther } from "viem";
 import { useWaitForTransaction } from "wagmi";
 import {
   DropdownMenuGroup,
@@ -35,7 +35,7 @@ export default function EnemySquareMenu({
   enemyTank: bigint | undefined;
   open: boolean;
 }) {
-  const [multiplier, setMultiplier] = useState("1");
+  const [multiplier, setMultiplier] = useState(1);
   const { toast } = useToast();
   let { config: shootConfig } = usePrepareTankGameShoot({
     args: [
@@ -71,7 +71,7 @@ export default function EnemySquareMenu({
       {
         fromId: ownersTank!,
         toId: enemyTank!,
-        hearts: BigInt(multiplier ? parseInt(multiplier) : 1),
+        hearts: BigInt(multiplier ? multiplier : 1),
         aps: BigInt(0),
       },
     ],
@@ -102,7 +102,7 @@ export default function EnemySquareMenu({
         fromId: ownersTank!,
         toId: enemyTank!,
         hearts: BigInt(0),
-        aps: BigInt(multiplier ? parseInt(multiplier) : 1),
+        aps: BigInt(multiplier ? multiplier : 1),
       },
     ],
     enabled: open && !!ownersTank && !!enemyTank,
@@ -174,8 +174,14 @@ export default function EnemySquareMenu({
     <DropdownMenuGroup>
       <span>Multiplier</span>
       <Input
-        value={multiplier}
-        onChange={(e) => setMultiplier(e.target.value)}
+        // value={multiplier}
+        defaultValue={1}
+        onChange={(e) => {
+          try {
+            let parsedValue = parseInt(e.target.value);
+            setMultiplier(isNaN(parsedValue) ? 1 : parsedValue);
+          } catch (e) {}
+        }}
       />
       <DropdownMenuSeparator />
       <DropdownMenuItem disabled={!shoot} onSelect={() => shoot?.()}>
