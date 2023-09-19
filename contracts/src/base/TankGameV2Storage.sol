@@ -28,8 +28,9 @@ contract TankGameV2Storage {
     uint256 public aliveTanksIdSum;
     uint256 public revealBlock;
     uint256 public lastRevealBlock;
+    address public owner;
     ITankGame.GameState public state; // can calculate this
     ITankGame.GameSettings public settings;
+    ITankGame.StateData public stateData;
     Board public board;
-    address public owner;
 }

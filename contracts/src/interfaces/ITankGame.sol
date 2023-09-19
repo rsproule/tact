@@ -5,6 +5,28 @@ import { Board } from "src/interfaces/IBoard.sol";
 import { IHooks } from "src/interfaces/IHooks.sol";
 
 interface ITankGame {
+    event GameInit(ITankGame.GameSettings settings);
+    event GameStarted();
+    event PlayerJoined(address player, uint256 tankId, Board.Point position, string name);
+    event Move(uint256 tankId, Board.Point position);
+    event Shoot(uint256 tankId, uint256 targetId);
+    event Give(uint256 fromId, uint256 toId, uint256 hearts, uint256 aps);
+    event Upgrade(uint256 tankId, uint256 range);
+    event Vote(uint256 voter, uint256 cursed, uint256 epoch);
+    event Curse(uint256 cursedTank, uint256 voter, uint256 epoch);
+    event Drip(uint256 tankId, uint256 amount, uint256 epoch);
+    event Claim(address reciever, uint256 tankId, uint256 amount);
+    event PrizeIncrease(address donator, uint256 amount, uint256 newTotal);
+    event Death(uint256 killer, uint256 killed);
+    event Revive(uint256 savior, uint256 saved);
+    event SpawnHeart(address poker, Board.Point position);
+    event Reveal(address poker, uint256 blocknumber);
+    event Commit(address poker, uint256 blocknumber);
+    event Delegate(uint256 tank, address delegate, address owner);
+    event GameOver(uint256 winner, uint256 second, uint256 third, uint256 prizePool);
+    event BountyCompleted(uint256 hunter, uint256 victim, uint256 reward);
+    event HooksAdded(uint256 tankId, address hook);
+
     struct GameSettings {
         uint256 playerCount;
         uint256 boardSize;
@@ -15,6 +37,17 @@ interface ITankGame {
         uint256 buyInMinimum;
         uint256 revealWaitBlocks;
         bytes32 root;
+    }
+
+    struct StateData {
+        uint256 playersCount;
+        uint256 numTanksAlive;
+        uint256 prizePool;
+        uint256 epochStart;
+        uint256 aliveTanksIdSum;
+        uint256 revealBlock;
+        uint256 lastRevealBlock;
+        address owner;
     }
 
     struct Tank {

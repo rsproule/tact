@@ -1,35 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { TankGameV2Storage } from "src/base/TankGameV2Storage.sol";
 import { Board } from "src/interfaces/IBoard.sol";
 import { HexBoard } from "src/base/HexBoard.sol";
 import { IHooks } from "src/interfaces/IHooks.sol";
+import { MoveLib } from "src/libraries/Move.sol";
+import { JoinLib } from "src/libraries/Join.sol";
+import { ShootLib } from "src/libraries/Shoot.sol";
+import { GiveLib } from "src/libraries/Give.sol";
 
 contract TankGame is ITankGame, TankGameV2Storage {
-    event GameInit(ITankGame.GameSettings settings);
-    event GameStarted();
-    event PlayerJoined(address player, uint256 tankId, Board.Point position, string name);
-    event Move(uint256 tankId, Board.Point position);
-    event Shoot(uint256 tankId, uint256 targetId);
-    event Give(uint256 fromId, uint256 toId, uint256 hearts, uint256 aps);
-    event Upgrade(uint256 tankId, uint256 range);
-    event Vote(uint256 voter, uint256 cursed, uint256 epoch);
-    event Curse(uint256 cursedTank, uint256 voter, uint256 epoch);
-    event Drip(uint256 tankId, uint256 amount, uint256 epoch);
-    event Claim(address reciever, uint256 tankId, uint256 amount);
-    event PrizeIncrease(address donator, uint256 amount, uint256 newTotal);
-    event Death(uint256 killer, uint256 killed);
-    event Revive(uint256 savior, uint256 saved);
-    event SpawnHeart(address poker, Board.Point position);
-    event Reveal(address poker, uint256 blocknumber);
-    event Commit(address poker, uint256 blocknumber);
-    event Delegate(uint256 tank, address delegate, address owner);
-    event GameOver(uint256 winner, uint256 second, uint256 third, uint256 prizePool);
-    event BountyCompleted(uint256 hunter, uint256 victim, uint256 reward);
-    event HooksAdded(uint256 tankId, address hook);
+    using MoveLib for ITankGame.MoveParams;
+    using JoinLib for ITankGame.JoinParams;
+    using ShootLib for ITankGame.ShootParams;
+    using GiveLib for ITankGame.GiveParams;
 
     constructor(ITankGame.GameSettings memory gs, address _owner) payable {
         require(gs.boardSize % 3 == 0, "invalid board size");
@@ -43,84 +29,19 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Commit(msg.sender, revealBlock);
     }
 
-    function setOwner(address _owner) external {
-        require(msg.sender == owner, "not owner");
-        owner = _owner;
-    }
-
-    modifier gameStarted() {
-        require(state == GameState.Started, "game not started");
-        _;
-    }
-
-    modifier isTankOwner(uint256 tankId) {
-        require(tanks[tankId].owner == msg.sender, "not tank owner");
-        _;
-    }
-
-    modifier isTankOwnerOrDelegate(uint256 tankId) {
-        require(isAuth(tankId, msg.sender), "not tank owner or delegate");
-        _;
-    }
-
-    modifier isTankAlive(uint256 tankId) {
-        require(tanks[tankId].hearts > 0, "tank is dead");
-        _;
-    }
-
-    modifier isTankDead(uint256 tankId) {
-        require(tanks[tankId].hearts == 0, "tank is alive");
-        _;
-    }
-
-    function donate() external payable {
-        require(msg.value > 0, "no value sent");
-        _handleDonation();
-    }
-
-    function _handleDonation() internal {
-        prizePool += msg.value;
-        emit PrizeIncrease(msg.sender, msg.value, address(this).balance);
-    }
-
-    function isAuth(uint256 tankId, address _owner) public view override returns (bool) {
-        return tanks[tankId].owner == _owner || delegates[tankId][_owner];
-    }
-
-    function getState() external view override returns (ITankGame.GameState) {
-        return state;
-    }
-
     // should do some sort of commit reveal thing for the randomness instead of this
     // random point thing.
     function join(ITankGame.JoinParams calldata params) external payable override {
         // verify join
-        require(players[params.joiner] == 0, "already joined");
-        require(playersCount < settings.playerCount, "game is full");
-        require(msg.value >= settings.buyInMinimum, "insufficient buy in");
-        bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(params.joiner, params.playerName))));
-        require(settings.root == bytes32(0) || MerkleProof.verify(params.proof, settings.root, leaf), "invalid proof");
+        params.verifyJoin(players, settings, playersCount);
 
-        // pre join
-        // before join hooks run here, these dont make sense because there is no tank yet
-        // for (uint256 i = 0; i < tankHooks[playersCount-1].length; i++) {
-        //     IHooks hook = tankHooks[playersCount][i];
-        //     bytes4 selector = IHooks(hook).beforeJoin(address(this), params, "");
-        //     require(selector == IHooks.beforeJoin.selector, "invalid hook");
-        // }
-
-        // do the join
-        // this is manipulatable.
-        uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, params.joiner)));
-        Board.Point memory emptyPoint = board.getEmptyTile(seed);
-        Tank memory tank = Tank(params.joiner, settings.initHearts, settings.initAPs, settings.initShootRange);
-
-        playersCount++;
-        numTanksAlive++;
-        aliveTanksIdSum += playersCount;
-        tanks[playersCount] = tank;
-        players[params.joiner] = playersCount;
-        board.setTile(emptyPoint, Board.Tile({ tankId: playersCount, hearts: 0 }));
+        Board.Point memory emptyPoint = params.doJoin(board, tanks, players, settings, stateData);
+        ///// REMOVE THIS
+        playersCount = stateData.playersCount;
+        aliveTanksIdSum = stateData.aliveTanksIdSum;
+        numTanksAlive = stateData.numTanksAlive;
+        ///// REMOVE THIS
+        playersCount = stateData.playersCount;
         emit PlayerJoined(params.joiner, playersCount, emptyPoint, params.playerName);
 
         // after join
@@ -147,14 +68,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
         isTankAlive(params.tankId)
     {
         uint256 tankId = params.tankId;
+        Board.Point memory to = params.to;
+        Board.Tile memory tile = board.getTile(to);
+        uint256 apsRequired = board.getDistanceTankToPoint(tankId, to);
 
         // verify move
-        Board.Point memory to = params.to;
-        require(board.isValidPoint(to), "invalid point");
-        Board.Tile memory tile = board.getTile(to);
-        require(tile.tankId == 0, "position occupied");
-        uint256 apsRequired = board.getDistanceTankToPoint(tankId, to);
-        require(apsRequired <= tanks[tankId].aps, "not enough action points");
+        params.verifyMove(board, tanks, tile, apsRequired);
 
         // before move hooks run here
         for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
@@ -164,11 +83,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         }
 
         // core logic
-        tanks[tankId].hearts += tile.hearts;
-        tanks[tankId].aps -= apsRequired;
-        Board.Point memory from = board.getTankPosition(tankId);
-        board.setTile(to, Board.Tile({ tankId: tankId, hearts: 0 }));
-        board.setTile(from, Board.Tile({ tankId: 0, hearts: 0 }));
+        params.doMove(board, tanks, tile, apsRequired);
         emit Move(tankId, to);
 
         // after ove hooks run here
@@ -189,11 +104,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
     {
         uint256 fromId = params.fromId;
         uint256 toId = params.toId;
-        uint256 shots = params.shots;
-        uint256 distance = board.getDistanceTanks(fromId, toId);
-        require(distance <= tanks[fromId].range, "target out of range");
-        require(tanks[fromId].aps >= shots, "not enough action points");
-        require(shots <= tanks[toId].hearts, "too many shots");
+        params.verifyShoot(tanks, board);
 
         // before shoot hooks run here
         for (uint256 i = 0; i < tankHooks[fromId].length; i++) {
@@ -202,16 +113,14 @@ contract TankGame is ITankGame, TankGameV2Storage {
             require(selector == IHooks.beforeShoot.selector, "invalid hook");
         }
 
-        tanks[fromId].aps -= shots;
-        tanks[toId].hearts -= shots;
         emit Shoot(fromId, toId);
-        if (tanks[toId].hearts <= 0) {
+        if (params.doShoot(tanks)) {
+            // this should really not be in core logic IMO
             // reward the killer with 20% of the victims aps
             uint256 apReward = tanks[toId].aps / 5;
             tanks[fromId].aps += apReward;
             tanks[toId].aps -= apReward;
             emit BountyCompleted(fromId, toId, apReward);
-
             _handleDeath(fromId, toId);
         }
 
@@ -230,15 +139,9 @@ contract TankGame is ITankGame, TankGameV2Storage {
         isTankOwnerOrDelegate(params.fromId)
         isTankAlive(params.fromId)
     {
-        uint256 hearts = params.hearts;
-        uint256 aps = params.aps;
         uint256 fromId = params.fromId;
         uint256 toId = params.toId;
-        require(hearts <= tanks[fromId].hearts, "not enough hearts");
-        require(aps <= tanks[fromId].aps, "not enough action points");
-        uint256 distance = board.getDistanceTanks(fromId, toId);
-        require(distance <= tanks[fromId].range, "target out of range");
-
+        params.verifyGive(tanks, board);
         // before give hooks run here
         for (uint256 i = 0; i < tankHooks[fromId].length; i++) {
             IHooks hook = tankHooks[fromId][i];
@@ -246,21 +149,19 @@ contract TankGame is ITankGame, TankGameV2Storage {
             require(selector == IHooks.beforeGive.selector, "invalid hook");
         }
 
-        tanks[fromId].hearts -= hearts;
-        tanks[fromId].aps -= aps;
-        if (tanks[toId].hearts <= 0) {
-            emit Revive(fromId, toId);
-            numTanksAlive++;
-            aliveTanksIdSum += toId;
-            // reset the epoch to the current one
-            lastDripEpoch[toId] = _getEpoch();
-        }
-        tanks[toId].hearts += hearts;
-        tanks[toId].aps += aps;
-        emit Give(fromId, toId, hearts, aps);
-        if (tanks[fromId].hearts == 0) {
+        (bool fromDead, bool toRevive) = params.doGive(tanks, stateData, lastDripEpoch, _getEpoch());
+        // DELETE THIS LATER
+        numTanksAlive = stateData.numTanksAlive;
+        aliveTanksIdSum = stateData.aliveTanksIdSum;
+        //////
+        emit Give(fromId, toId, params.hearts, params.aps);
+        if (fromDead) {
             _handleDeath(fromId, fromId);
         }
+        if (toRevive) {
+            emit Revive(fromId, toId);
+        }
+
         // after give hooks run here
         for (uint256 i = 0; i < tankHooks[fromId].length; i++) {
             IHooks hook = tankHooks[fromId][i];
@@ -430,12 +331,17 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function addHooks(uint256 tankId, IHooks hooks) external override isTankOwnerOrDelegate(tankId) {
         require(address(hooks) != address(0), "invalid address");
-        // only accept a hook once
+        // only accept a hook once, max length here at default is numPlayers * numDefaultHooks
         for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
             require(address(tankHooks[tankId][i]) != address(hooks), "hook already added");
         }
         tankHooks[tankId].push(hooks);
         emit HooksAdded(tankId, address(hooks));
+    }
+
+    function donate() external payable {
+        require(msg.value > 0, "no value sent");
+        _handleDonation();
     }
 
     function forceAddDefaultHook(uint256 tankId, IHooks hooks) external {
@@ -449,6 +355,8 @@ contract TankGame is ITankGame, TankGameV2Storage {
     //////////////////////////////////////////////////////////////*/
     function _handleDeath(uint256 killer, uint256 tankId) private {
         numTanksAlive--;
+        stateData.numTanksAlive--;
+        stateData.aliveTanksIdSum -= tankId;
         aliveTanksIdSum -= tankId;
         deadTanks.push(tankId);
         emit Death(killer, tankId);
@@ -475,9 +383,52 @@ contract TankGame is ITankGame, TankGameV2Storage {
         return block.timestamp / settings.epochSeconds;
     }
 
+    function _handleDonation() internal {
+        prizePool += msg.value;
+        emit PrizeIncrease(msg.sender, msg.value, address(this).balance);
+    }
+
     /*//////////////////////////////////////////////////////////////
                                  READ ONLY
     //////////////////////////////////////////////////////////////*/
+    function setOwner(address _owner) external {
+        require(msg.sender == owner, "not owner");
+        owner = _owner;
+    }
+
+    modifier gameStarted() {
+        require(state == GameState.Started, "game not started");
+        _;
+    }
+
+    modifier isTankOwner(uint256 tankId) {
+        require(tanks[tankId].owner == msg.sender, "not tank owner");
+        _;
+    }
+
+    modifier isTankOwnerOrDelegate(uint256 tankId) {
+        require(isAuth(tankId, msg.sender), "not tank owner or delegate");
+        _;
+    }
+
+    modifier isTankAlive(uint256 tankId) {
+        require(tanks[tankId].hearts > 0, "tank is dead");
+        _;
+    }
+
+    modifier isTankDead(uint256 tankId) {
+        require(tanks[tankId].hearts == 0, "tank is alive");
+        _;
+    }
+
+    function isAuth(uint256 tankId, address _owner) public view override returns (bool) {
+        return tanks[tankId].owner == _owner || delegates[tankId][_owner];
+    }
+
+    function getState() external view override returns (ITankGame.GameState) {
+        return state;
+    }
+
     function getEpoch() external view returns (uint256) {
         return _getEpoch();
     }

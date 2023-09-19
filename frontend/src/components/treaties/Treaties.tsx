@@ -114,35 +114,36 @@ export function Treaties() {
             <AccordionContent>
               <CardContent>
                 <div className="grid-flow-row auto-rows-max">
-                  {hooks &&
-                    hooks
-                      .sort((a: any, b: any) => a.args._type - b.args._type)
-                      .map((hook: any, i: number) => {
-                        if (hook.args._type === 1) {
-                          return (
-                            <Bounty
-                              key={i}
-                              hookAddress={hook.args.hookAddress}
-                              tankId={hook.args.tankId}
-                            />
-                          );
-                        } else if (hook.args._type === 0) {
-                          return (
-                            <NonAggression
-                              key={i}
-                              hookAddress={hook.args.hookAddress}
-                              tankId={hook.args.tankId}
-                              ownerHookAddress={
-                                hooks.find(
-                                  (h: any) =>
-                                    h.args._type === 0 &&
-                                    h.args.tankId === ownerTank.data
-                                )?.args.hookAddress
-                              }
-                            />
-                          );
-                        }
-                      })}
+                  {hooks
+                    ? hooks
+                        .sort((a: any, b: any) => a.args._type - b.args._type)
+                        .map((hook: any, i: number) => {
+                          if (hook.args._type === 1) {
+                            return (
+                              <Bounty
+                                key={i}
+                                hookAddress={hook.args.hookAddress}
+                                tankId={hook.args.tankId}
+                              />
+                            );
+                          } else if (hook.args._type === 0) {
+                            return (
+                              <NonAggression
+                                key={i}
+                                hookAddress={hook.args.hookAddress}
+                                tankId={hook.args.tankId}
+                                ownerHookAddress={
+                                  hooks.find(
+                                    (h: any) =>
+                                      h.args._type === 0 &&
+                                      h.args.tankId === ownerTank.data
+                                  )?.args.hookAddress
+                                }
+                              />
+                            );
+                          }
+                        })
+                    : "Loading..."}
                 </div>
               </CardContent>
             </AccordionContent>

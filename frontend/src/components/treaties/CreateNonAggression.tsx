@@ -4,19 +4,21 @@ import {
 } from "@/src/generated";
 import { useState } from "react";
 import { BaseError } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useBlockNumber, useWaitForTransaction } from "wagmi";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
 import { Card, CardHeader, CardContent } from "../ui/card";
+import PlayerDropdown from "../tankGame/PlayerDropdown";
 
 export default function CreateNonAggression({
   hookAddress,
 }: {
   hookAddress: `0x${string}`;
 }) {
+  const { data: blockNumber } = useBlockNumber();
   const [targetTank, setTargetTank] = useState<bigint>(BigInt(0));
-  const [expiry, setExpiry] = useState<bigint>(BigInt(0));
+  const [expiry, setExpiry] = useState<bigint>(blockNumber!);
   const { config: createConfig } = usePrepareNonAggressionPropose({
     address: hookAddress,
     args: [targetTank, expiry],
@@ -50,17 +52,11 @@ export default function CreateNonAggression({
       <CardHeader>Create Non-aggression pact</CardHeader>
       <CardContent>
         <div className="flex">
+          <PlayerDropdown setTargetTank={setTargetTank} />
           <Input
             type="number"
-            // value={targetTank}
-            onChange={(e) => setTargetTank(BigInt(e.target.value))}
-            placeholder="ally"
-          />
-          <Input
-            type="number"
-            // value={expiry}
             onChange={(e) => setExpiry(BigInt(e.target.value))}
-            placeholder="expiry"
+            placeholder="Expiration blocknumber"
           />
           <Button disabled={!create} onClick={() => create?.()}>
             Create

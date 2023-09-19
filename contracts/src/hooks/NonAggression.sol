@@ -50,16 +50,21 @@ contract NonAggression is DefaultEmptyHooks, ITreaty {
         proposals[tankId] = expiry; // propose to other guy
 
         // if the other guy has already accepted us. we are allies, done.
-        if (block.number > NonAggression(treaty).allies(ownerTank)) {
+        bool isAlly = block.number > NonAggression(treaty).allies(ownerTank);
+        if (isAlly) {
             propose(tankId, expiry);
-            ITreaty(treaty).accept(ownerTank, address(this));
         }
 
         emit AcceptedTreaty(ownerTank, tankId, address(this), treaty, expiry);
+
+        if (isAlly) {
+            ITreaty(treaty).accept(ownerTank, address(this));
+        }
     }
 
     function propose(uint256 tankId, uint256 expiry) public override hasTankAuth(ownerTank) {
+        require(block.number < expiry, "NonAggression: past expiry");
         proposals[tankId] = expiry;
-        emit ProposedTreaty(ownerTank, tankId, expiry);
+        emit ProposedTreaty(ownerTank, tankId, address(this), expiry);
     }
 }

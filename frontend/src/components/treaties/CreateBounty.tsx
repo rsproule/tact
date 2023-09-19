@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
 import { Card, CardContent, CardHeader } from "../ui/card";
+import PlayerDropdown from "../tankGame/PlayerDropdown";
 
 export default function CreateBounty({
   hookAddress,
@@ -46,11 +47,7 @@ export default function CreateBounty({
       <CardHeader>Create Bounty:</CardHeader>
       <CardContent>
         <div className="flex">
-          <Input
-            type="number"
-            onChange={(e) => setTargetTank(BigInt(e.target.value))}
-            placeholder="target"
-          />
+          <PlayerDropdown setTargetTank={setTargetTank} />
           <Input
             type="number"
             value={bounty}
@@ -60,7 +57,7 @@ export default function CreateBounty({
                 setBounty(e.target.value);
               } catch (e) {}
             }}
-            placeholder="bounty"
+            placeholder="Bounty in ETH"
           />
           <Button disabled={!create} onClick={() => create?.()}>
             Create

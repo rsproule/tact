@@ -62,12 +62,6 @@ export default function NonAggression({
         (bounty: any) => bounty.eventName === "AcceptedTreaty"
       );
 
-      if (proposedTreaties.length !== 0) {
-        console.log({ proposedTreaties });
-      }
-      if (acceptedTreaties.length !== 0) {
-        console.log({ acceptedTreaties });
-      }
       const filteredProposedTreaties = proposedTreaties
         .filter(
           (proposedTreaty: any) =>
@@ -81,9 +75,6 @@ export default function NonAggression({
             )
         )
         .filter((treaty: any) => treaty.args.expiry > blockNumber!);
-      if (filteredProposedTreaties.length !== 0) {
-        console.log({ filteredProposedTreaties });
-      }
       const filteredAcceptedTreaties = acceptedTreaties.filter(
         (treaty: any) => treaty.args.expiry > blockNumber!
       );

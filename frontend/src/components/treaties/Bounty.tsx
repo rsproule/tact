@@ -35,6 +35,7 @@ export default function Bounty({
   const { data: blockNumber } = useBlockNumber({ watch: true });
   const [bounties, setBounties] = useState<any>();
   const [bountiesWon, setBountiesWon] = useState<any>();
+  const [withdraws, setWithdraws] = useState<any>();
   useEffect(() => {
     const getLogs = async () => {
       const publicClient = getPublicClient();
@@ -76,6 +77,10 @@ export default function Bounty({
         (bounty: any) => bounty.eventName === "BountyWon"
       );
       setBountiesWon(wonBounties);
+      const withdrawLogs = bounties.filter(
+        (bounty: any) => bounty.eventName === "Withdraw"
+      );
+      setWithdraws(withdrawLogs);
     };
     getLogs();
   }, [hookAddress, blockNumber]);
@@ -154,9 +159,25 @@ export default function Bounty({
                       (wonBounty: any) =>
                         wonBounty.args.winner === ownerTank.data
                     ) ? (
-                      <Button disabled={!withdraw} onClick={() => withdraw?.()}>
-                        Claim
-                      </Button>
+                      !withdraws?.find(
+                        (withdraw: any) =>
+                          withdraw.args.bountyId === bounty.args.bountyId
+                      ) ? (
+                        "Claimed by " +
+                        toTankName(
+                          bountiesWon?.filter(
+                            (withdraw: any) =>
+                              withdraw.args.bountyId === bounty.args.bountyId
+                          )[0].args.winner
+                        )
+                      ) : (
+                        <Button
+                          disabled={!withdraw}
+                          onClick={() => withdraw?.()}
+                        >
+                          Claim
+                        </Button>
+                      )
                     ) : (
                       "Has been won"
                     )}
