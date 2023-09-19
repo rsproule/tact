@@ -9,11 +9,13 @@ import {
 import { TANK_MAPPING } from "./EventsStream";
 export default function PlayerDropdown({
   setTargetTank,
+  targetTank,
 }: {
   setTargetTank: any;
+  targetTank: string | undefined;
 }) {
   return (
-    <Select onValueChange={setTargetTank}>
+    <Select value={targetTank} onValueChange={setTargetTank}>
       <SelectTrigger>
         <SelectValue placeholder="Select Tank" />
       </SelectTrigger>
@@ -21,7 +23,7 @@ export default function PlayerDropdown({
         {TANK_MAPPING.map((tank, i) => {
           return (
             // @ts-ignore
-            <SelectItem key={i} value={i}>
+            <SelectItem key={i} value={i + 1}>
               {tank}
             </SelectItem>
           );

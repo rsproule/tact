@@ -23,9 +23,11 @@ import { Card, CardHeader, CardContent } from "../ui/card";
 export default function Bounty({
   hookAddress,
   tankId,
+  hideNotMine,
 }: {
   tankId: bigint;
   hookAddress: `0x${string}`;
+  hideNotMine: boolean;
 }) {
   const { address } = useAccount();
   const ownerTank = useTankGamePlayers({
@@ -136,60 +138,82 @@ export default function Bounty({
 
   return (
     bounties &&
-    bounties.length !== 0 && (
+    bounties.filter((t: any) => {
+      if (hideNotMine) {
+        return (
+          t.args.tankId === ownerTank.data! ||
+          t.args.victim === ownerTank.data! ||
+          t.args.winner === ownerTank.data! ||
+          t.args.target === ownerTank.data!
+        );
+      }
+      return true;
+    }).length !== 0 && (
       <Card>
         <CardHeader>
           <div className="text-xl">Bounties posted by {toTankName(tankId)}</div>
         </CardHeader>
         <CardContent>
-          {bounties?.map((bounty: any, i: number) => {
-            return (
-              <div key={i} className="flex justify-between border">
-                <div>Target: {toTankName(bounty.args.target)}</div>
-                <div>Proposer: {toTankName(bounty.args.tankId)}</div>
-                <div>
-                  Bounty amount: {formatEther(bounty.args.amount)} Ether
-                </div>
-                {bountiesWon?.find(
-                  (wonBounty: any) =>
-                    wonBounty.args.bountyId === bounty.args.bountyId
-                ) ? (
+          {bounties
+            ?.filter((t: any) => {
+              if (hideNotMine) {
+                return (
+                  t.args.tankId === ownerTank.data! ||
+                  t.args.victim === ownerTank.data! ||
+                  t.args.winner === ownerTank.data! ||
+                  t.args.target === ownerTank.data!
+                );
+              }
+              return true;
+            })
+            .map((bounty: any, i: number) => {
+              return (
+                <div key={i} className="flex justify-between border">
+                  <div>Target: {toTankName(bounty.args.target)}</div>
+                  <div>Proposer: {toTankName(bounty.args.tankId)}</div>
                   <div>
-                    {bountiesWon?.find(
-                      (wonBounty: any) =>
-                        wonBounty.args.winner === ownerTank.data
-                    ) ? (
-                      !withdraws?.find(
-                        (withdraw: any) =>
-                          withdraw.args.bountyId === bounty.args.bountyId
+                    Bounty amount: {formatEther(bounty.args.amount)} Ether
+                  </div>
+                  {bountiesWon?.find(
+                    (wonBounty: any) =>
+                      wonBounty.args.bountyId === bounty.args.bountyId
+                  ) ? (
+                    <div>
+                      {bountiesWon?.find(
+                        (wonBounty: any) =>
+                          wonBounty.args.winner === ownerTank.data
                       ) ? (
-                        "Claimed by " +
-                        toTankName(
-                          bountiesWon?.filter(
-                            (withdraw: any) =>
-                              withdraw.args.bountyId === bounty.args.bountyId
-                          )[0].args.winner
+                        !withdraws?.find(
+                          (withdraw: any) =>
+                            withdraw.args.bountyId === bounty.args.bountyId
+                        ) ? (
+                          "Claimed by " +
+                          toTankName(
+                            bountiesWon?.filter(
+                              (withdraw: any) =>
+                                withdraw.args.bountyId === bounty.args.bountyId
+                            )[0].args.winner
+                          )
+                        ) : (
+                          <Button
+                            disabled={!withdraw}
+                            onClick={() => withdraw?.()}
+                          >
+                            Claim
+                          </Button>
                         )
                       ) : (
-                        <Button
-                          disabled={!withdraw}
-                          onClick={() => withdraw?.()}
-                        >
-                          Claim
-                        </Button>
-                      )
-                    ) : (
-                      "Has been won"
-                    )}
-                  </div>
-                ) : (
-                  <Button disabled={!addHook} onClick={() => addHook?.()}>
-                    Accept
-                  </Button>
-                )}
-              </div>
-            );
-          })}
+                        "Has been won"
+                      )}
+                    </div>
+                  ) : (
+                    <Button disabled={!addHook} onClick={() => addHook?.()}>
+                      Accept
+                    </Button>
+                  )}
+                </div>
+              );
+            })}
         </CardContent>
       </Card>
     )

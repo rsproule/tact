@@ -48,6 +48,7 @@ export function Treaties() {
   });
 
   const [hooks, setHooks] = useState<any>();
+  const [hideNotMine, setHideNotMine] = useState<boolean>(false);
   useEffect(() => {
     const getLogs = async () => {
       const publicClient = getPublicClient();
@@ -113,6 +114,16 @@ export function Treaties() {
             </AccordionTrigger>
             <AccordionContent>
               <CardContent>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="hideNotMine"
+                    name="hideNotMine"
+                    className="mr-2"
+                    onChange={(e) => setHideNotMine(e.target.checked)}
+                  />
+                  <label htmlFor="hideNotMine">Hide Not Mine</label>
+                </div>
                 <div className="grid-flow-row auto-rows-max">
                   {hooks
                     ? hooks
@@ -124,11 +135,13 @@ export function Treaties() {
                                 key={i}
                                 hookAddress={hook.args.hookAddress}
                                 tankId={hook.args.tankId}
+                                hideNotMine={hideNotMine}
                               />
                             );
                           } else if (hook.args._type === 0) {
                             return (
                               <NonAggression
+                                hideNotMine={hideNotMine}
                                 key={i}
                                 hookAddress={hook.args.hookAddress}
                                 tankId={hook.args.tankId}

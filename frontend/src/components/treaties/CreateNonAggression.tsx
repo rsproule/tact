@@ -17,12 +17,15 @@ export default function CreateNonAggression({
   hookAddress: `0x${string}`;
 }) {
   const { data: blockNumber } = useBlockNumber();
-  const [targetTank, setTargetTank] = useState<bigint>(BigInt(0));
-  const [expiry, setExpiry] = useState<bigint>(blockNumber!);
+  const [targetTank, setTargetTank] = useState<string | undefined>();
+  const [expiry, setExpiry] = useState<string | undefined>();
   const { config: createConfig } = usePrepareNonAggressionPropose({
     address: hookAddress,
-    args: [targetTank, expiry],
-    enabled: targetTank !== BigInt(0) && expiry !== BigInt(0),
+    args: [
+      targetTank ? BigInt(targetTank) : BigInt(0),
+      expiry ? BigInt(expiry) : BigInt(0),
+    ],
+    enabled: !!targetTank && !!expiry,
   });
 
   const { write: create, data: createData } =
@@ -38,8 +41,8 @@ export default function CreateNonAggression({
       });
     },
     onSuccess: (s) => {
-      setTargetTank(BigInt(0));
-      setExpiry(BigInt(0));
+      setTargetTank(undefined);
+      setExpiry(undefined);
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
@@ -52,13 +55,27 @@ export default function CreateNonAggression({
       <CardHeader>Create Non-aggression pact</CardHeader>
       <CardContent>
         <div className="flex">
-          <PlayerDropdown setTargetTank={setTargetTank} />
+          <PlayerDropdown
+            setTargetTank={setTargetTank}
+            targetTank={targetTank}
+          />
           <Input
             type="number"
-            onChange={(e) => setExpiry(BigInt(e.target.value))}
+            value={expiry}
+            onChange={(e) => {
+              try {
+                BigInt(e.target.value);
+                setExpiry(e.target.value);
+              } catch (e) {}
+            }}
             placeholder="Expiration blocknumber"
           />
-          <Button disabled={!create} onClick={() => create?.()}>
+          <Button
+            disabled={!create}
+            onClick={() => {
+              create?.();
+            }}
+          >
             Create
           </Button>
         </div>

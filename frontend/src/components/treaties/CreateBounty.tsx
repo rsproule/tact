@@ -13,13 +13,13 @@ export default function CreateBounty({
 }: {
   hookAddress: `0x${string}`;
 }) {
-  const [targetTank, setTargetTank] = useState<bigint>(BigInt(0));
-  const [bounty, setBounty] = useState<string>("");
+  const [targetTank, setTargetTank] = useState<string | undefined>();
+  const [bounty, setBounty] = useState<string | undefined>();
   const { config: createBountyConfig } = usePrepareBountyCreate({
     address: hookAddress,
-    args: [targetTank],
-    value: parseEther(bounty),
-    enabled: targetTank !== BigInt(0),
+    args: [targetTank ? BigInt(targetTank) : BigInt(0)],
+    value: bounty ? parseEther(bounty) : BigInt(0),
+    enabled: !!targetTank && !!bounty,
   });
 
   const { write: create, data: createData } =
@@ -35,6 +35,8 @@ export default function CreateBounty({
       });
     },
     onSuccess: (s) => {
+      setTargetTank(undefined);
+      setBounty(undefined);
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
@@ -47,7 +49,10 @@ export default function CreateBounty({
       <CardHeader>Create Bounty:</CardHeader>
       <CardContent>
         <div className="flex">
-          <PlayerDropdown setTargetTank={setTargetTank} />
+          <PlayerDropdown
+            setTargetTank={setTargetTank}
+            targetTank={targetTank}
+          />
           <Input
             type="number"
             value={bounty}

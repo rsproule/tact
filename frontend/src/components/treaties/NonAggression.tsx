@@ -28,10 +28,12 @@ export default function NonAggression({
   hookAddress,
   ownerHookAddress,
   tankId,
+  hideNotMine,
 }: {
   tankId: bigint;
   hookAddress: `0x${string}`;
   ownerHookAddress: `0x${string}`;
+  hideNotMine: boolean;
 }) {
   const { address } = useAccount();
   const ownerTank = useTankGamePlayers({
@@ -40,8 +42,6 @@ export default function NonAggression({
   });
   const { data: blockNumber } = useBlockNumber({ watch: true });
   const [treaties, setTreaties] = useState<any>();
-  const [proposedTreaties, setProposedTreaties] = useState<any>();
-  const [acceptedTreaties, setAcceptedTreaties] = useState<any>();
   // const [bountiesWon, setBountiesWon] = useState<any>();
   useEffect(() => {
     const getLogs = async () => {
@@ -68,7 +68,7 @@ export default function NonAggression({
             !acceptedTreaties.some(
               (acceptedTreaty: any) =>
                 acceptedTreaty.args.proposer === proposedTreaty.args.proposer &&
-                acceptedTreaty.args.accepter === proposedTreaty.args.proposee &&
+                acceptedTreaty.args.proposee === proposedTreaty.args.proposee &&
                 acceptedTreaty.args.expiry === proposedTreaty.args.expiry &&
                 acceptedTreaty.args.proposalHook ===
                   proposedTreaty.args.hookProposer
@@ -78,8 +78,14 @@ export default function NonAggression({
       const filteredAcceptedTreaties = acceptedTreaties.filter(
         (treaty: any) => treaty.args.expiry > blockNumber!
       );
-      setProposedTreaties(filteredProposedTreaties);
-      setAcceptedTreaties(filteredAcceptedTreaties);
+      const mergedTreaties = [
+        ...filteredProposedTreaties,
+        ...filteredAcceptedTreaties,
+      ].map((treaty) => ({
+        ...treaty,
+        isAccepted: filteredAcceptedTreaties.includes(treaty),
+      }));
+      setTreaties(mergedTreaties);
     };
     getLogs();
   }, [hookAddress, blockNumber]);
@@ -109,40 +115,60 @@ export default function NonAggression({
   });
   return (
     <div className="">
-      {proposedTreaties && proposedTreaties.length !== 0 && (
-        <Card>
-          <CardHeader>
-            <div className="text-xl">
-              Proposed alliances posted by {toTankName(tankId)}
-            </div>
-          </CardHeader>
-          <CardContent>
-            {proposedTreaties.map((bounty: any, i: number) => {
-              return (
-                <div key={i} className="flex justify-between border">
-                  <div>Proposer: {toTankName(bounty.args.proposer)}</div>
-                  <div>Potential Ally: {toTankName(bounty.args.proposee)}</div>
-                  <div>
-                    Non-aggression until block: {bounty.args.expiry.toString()}
-                  </div>
-                  {bounty.args.proposee === ownerTank.data! && (
-                    <Button
-                      disabled={!accept}
-                      onClick={() => {
-                        console.log({ accept });
-                        accept?.();
-                      }}
-                    >
-                      Accept
-                    </Button>
-                  )}
-                </div>
-              );
-            })}
-          </CardContent>
-        </Card>
-      )}
-      {acceptedTreaties && acceptedTreaties.length !== 0 && (
+      {treaties &&
+        treaties.filter((t: any) => {
+          if (hideNotMine) {
+            return (
+              t.args.proposer === ownerTank.data! ||
+              t.args.proposee === ownerTank.data!
+            );
+          }
+          return true;
+        }).length !== 0 && (
+          <Card>
+            <CardHeader>
+              <div className="text-xl">{toTankName(tankId)} Alliances</div>
+            </CardHeader>
+            <CardContent>
+              {treaties
+                .filter((t: any) => {
+                  if (hideNotMine) {
+                    return (
+                      t.args.proposer === ownerTank.data! ||
+                      t.args.proposee === ownerTank.data!
+                    );
+                  }
+                  return true;
+                })
+                .map((bounty: any, i: number) => {
+                  return (
+                    <div key={i} className="flex justify-between border">
+                      <div>{bounty.isAccepted ? "🤝" : "⏳"}</div>
+                      <div>Proposer: {toTankName(bounty.args.proposer)}</div>
+                      <div>Ally: {toTankName(bounty.args.proposee)}</div>
+                      <div>
+                        Non-aggression until block:{" "}
+                        {bounty.args.expiry.toString()}
+                      </div>
+                      <div>
+                        Approx time:
+                        {secondsToHMS(
+                          Number(bounty.args.expiry - blockNumber!) * 12
+                        )}
+                      </div>
+                      {bounty.args.proposee === ownerTank.data! &&
+                        !bounty.isAccepted && (
+                          <Button disabled={!accept} onClick={() => accept?.()}>
+                            Accept
+                          </Button>
+                        )}
+                    </div>
+                  );
+                })}
+            </CardContent>
+          </Card>
+        )}
+      {/* {acceptedTreaties && acceptedTreaties.length !== 0 && (
         <Card>
           <CardHeader>
             <div className="text-xl">
@@ -169,7 +195,7 @@ export default function NonAggression({
             })}
           </CardContent>
         </Card>
-      )}
+      )} */}
     </div>
   );
 }
