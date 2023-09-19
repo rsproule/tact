@@ -45,6 +45,7 @@ contract NonAggression is DefaultEmptyHooks, ITreaty {
         require(tankGame.isAuth(ownerTank, msg.sender) || msg.sender == treaty, "NonAggression: not owner");
         uint256 expiry = NonAggression(treaty).proposals(ownerTank);
         require(block.number < expiry, "NonAggression: proposal expired");
+        require(allies[tankId] < expiry, "NonAggression: already allies");
 
         allies[tankId] = expiry; // accept the proposal
         proposals[tankId] = expiry; // propose to other guy

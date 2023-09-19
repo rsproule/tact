@@ -64,6 +64,7 @@ contract Bounty is DefaultEmptyHooks {
     function create(uint256 targetTankId) external payable hasTankAuth(ownerTank) {
         // if there is already a bounty on this tank, then we need to close it out
         require(msg.value > 0, "Bounty: no bounty to post");
+        require(tankGame.getTank(targetTankId).owner != address(0), "Bounty: tank must exist");
         bountyCount++;
         uint256 bountyId = bounties[targetTankId];
         BountyData storage existent = bountiesData[bountyId];

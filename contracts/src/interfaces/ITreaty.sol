@@ -7,6 +7,6 @@ interface ITreaty {
 
     event ProposedTreaty(uint256 proposer, uint256 proposee, address proposalHook, uint256 expiry);
     event AcceptedTreaty(
-        uint256 proposer, uint256 accepter, address hookProposer, address hookAccepter, uint256 expiry
+        uint256 proposer, uint256 proposee, address hookProposer, address hookAccepter, uint256 expiry
     );
 }
