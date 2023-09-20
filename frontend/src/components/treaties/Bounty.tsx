@@ -24,10 +24,12 @@ export default function Bounty({
   hookAddress,
   tankId,
   hideNotMine,
+  addedHooks,
 }: {
   tankId: bigint;
   hookAddress: `0x${string}`;
   hideNotMine: boolean;
+  addedHooks: any;
 }) {
   const { address } = useAccount();
   const ownerTank = useTankGamePlayers({
@@ -206,11 +208,27 @@ export default function Bounty({
                         "Has been won"
                       )}
                     </div>
-                  ) : (
+                  ) : addedHooks &&
+                    !addedHooks
+                      .filter((ha: any) => ha.args.hook === hookAddress)
+                      .map((ha: any) => ha.args.tankId)
+                      .includes(bounty.args.target) ? (
                     <Button disabled={!addHook} onClick={() => addHook?.()}>
                       Accept
                     </Button>
+                  ) : (
+                    "🤝"
                   )}
+                  <div>
+                    Valid for:{" "}
+                    {addedHooks &&
+                      addedHooks
+                        ?.filter((ha: any) => ha.args.hook === hookAddress)
+                        .map((ha: any) => {
+                          return toTankName(ha.args.tankId);
+                        })
+                        .toString()}
+                  </div>
                 </div>
               );
             })}
@@ -219,3 +237,4 @@ export default function Bounty({
     )
   );
 }
+

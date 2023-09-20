@@ -1,32 +1,16 @@
 "use client";
 import {
-  bountyABI,
+  gameViewABI,
   hookFactoryABI,
   hookFactoryAddress,
-  useBountyCreate,
-  useBountyWithdraw,
-  useNonAggressionPropose,
-  usePrepareBountyCreate,
-  usePrepareBountyWithdraw,
-  usePrepareNonAggressionPropose,
-  usePrepareTankGameAddHooks,
-  useTankGameAddHooks,
+  tankGameABI,
+  tankGameAddress,
   useTankGamePlayers,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
-import { BaseError, formatEther, parseEther } from "viem";
-import {
-  useAccount,
-  useBlockNumber,
-  useNetwork,
-  useWaitForTransaction,
-} from "wagmi";
+import { useAccount, useBlockNumber, useNetwork } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
-import { toTankName } from "../tankGame/EventsStream";
-import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "../ui/card";
-import { Input } from "../ui/input";
-import { toast } from "../ui/use-toast";
 import CreateBounty from "./CreateBounty";
 import Bounty from "./Bounty";
 import CreateNonAggression from "./CreateNonAggression";
@@ -48,6 +32,7 @@ export function Treaties() {
   });
 
   const [hooks, setHooks] = useState<any>();
+  const [hooksAdded, setHooksAdded] = useState<any>();
   const [hideNotMine, setHideNotMine] = useState<boolean>(false);
   useEffect(() => {
     const getLogs = async () => {
@@ -64,6 +49,20 @@ export function Treaties() {
         filter,
       });
       setHooks(hooks);
+
+      const addedFilter = await publicClient.createContractEventFilter({
+        abi: tankGameABI,
+        strict: true,
+        eventName: "HooksAdded",
+        fromBlock: BigInt(0),
+        address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+      });
+
+      const hookAddedEvents = await publicClient.getFilterLogs({
+        filter: addedFilter,
+      });
+      console.log({ hookAddedEvents });
+      setHooksAdded(hookAddedEvents);
     };
     getLogs();
   }, [chain, blockNumber]);
@@ -136,6 +135,7 @@ export function Treaties() {
                                 hookAddress={hook.args.hookAddress}
                                 tankId={hook.args.tankId}
                                 hideNotMine={hideNotMine}
+                                addedHooks={hooksAdded}
                               />
                             );
                           } else if (hook.args._type === 0) {
