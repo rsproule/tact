@@ -624,6 +624,7 @@ contract TankTest is Test {
 
         vm.startPrank(address(1));
         NonAggression nonAggro = new NonAggression(ITankGame(tankGame), 1);
+        vm.label(address(nonAggro), "nonAggro");
         tankGame.addHooks(1, nonAggro);
 
         vm.startPrank(address(2));
@@ -632,6 +633,7 @@ contract TankTest is Test {
 
         vm.startPrank(address(2));
         NonAggression nonAggro2 = new NonAggression(ITankGame(tankGame), 2);
+        vm.label(address(nonAggro2), "nonAggro2");
         tankGame.addHooks(2, nonAggro2);
 
         vm.startPrank(address(2));
@@ -640,7 +642,7 @@ contract TankTest is Test {
 
         // player 1 can propose a treaty
         vm.startPrank(address(1));
-        nonAggro.propose(2, tankGame.getEpoch() + 10);
+        nonAggro.propose(2, tankGame.getGameEpoch() + 10);
 
         vm.startPrank(address(1));
         vm.expectRevert("NonAggression: not owner");
