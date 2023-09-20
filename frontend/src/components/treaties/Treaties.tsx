@@ -61,7 +61,6 @@ export function Treaties() {
       const hookAddedEvents = await publicClient.getFilterLogs({
         filter: addedFilter,
       });
-      console.log({ hookAddedEvents });
       setHooksAdded(hookAddedEvents);
     };
     getLogs();

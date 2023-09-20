@@ -37,21 +37,23 @@ contract NonAggression is DefaultEmptyHooks, ITreaty {
         override
         returns (bytes4)
     {
-        require(block.number > allies[shootParams.toId], "NonAggression: cannot shoot ally");
+        uint256 epoch = ITankGame(tankGame).getEpoch();
+        require(epoch > allies[shootParams.toId], "NonAggression: cannot shoot ally");
         return IHooks.beforeShoot.selector;
     }
 
     function accept(uint256 tankId, address treaty) external override {
         require(tankGame.isAuth(ownerTank, msg.sender) || msg.sender == treaty, "NonAggression: not owner");
         uint256 expiry = NonAggression(treaty).proposals(ownerTank);
-        require(block.number < expiry, "NonAggression: proposal expired");
+        uint256 epoch = ITankGame(tankGame).getEpoch();
+        require(epoch < expiry, "NonAggression: proposal expired");
         require(allies[tankId] < expiry, "NonAggression: already allies");
 
         allies[tankId] = expiry; // accept the proposal
         proposals[tankId] = expiry; // propose to other guy
 
         // if the other guy has already accepted us. we are allies, done.
-        bool isAlly = block.number > NonAggression(treaty).allies(ownerTank);
+        bool isAlly = epoch > NonAggression(treaty).allies(ownerTank);
         if (isAlly) {
             propose(tankId, expiry);
         }
@@ -64,7 +66,8 @@ contract NonAggression is DefaultEmptyHooks, ITreaty {
     }
 
     function propose(uint256 tankId, uint256 expiry) public override hasTankAuth(ownerTank) {
-        require(block.number < expiry, "NonAggression: past expiry");
+        uint256 epoch = ITankGame(tankGame).getGameEpoch();
+        require(epoch < expiry, "NonAggression: past expiry");
         proposals[tankId] = expiry;
         emit ProposedTreaty(ownerTank, tankId, address(this), expiry);
     }

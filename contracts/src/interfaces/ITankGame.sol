@@ -147,4 +147,8 @@ interface ITankGame {
     function isAuth(uint256 tankId, address owner) external view returns (bool);
 
     function getState() external view returns (ITankGame.GameState);
+
+    function getEpoch() external view returns (uint256);
+
+    function getGameEpoch() external view returns (uint256);
 }

@@ -640,7 +640,7 @@ contract TankTest is Test {
 
         // player 1 can propose a treaty
         vm.startPrank(address(1));
-        nonAggro.propose(2, block.number + 10);
+        nonAggro.propose(2, tankGame.getEpoch() + 10);
 
         vm.startPrank(address(1));
         vm.expectRevert("NonAggression: not owner");
@@ -669,7 +669,7 @@ contract TankTest is Test {
         vm.expectRevert("NonAggression: cannot shoot ally");
         tankGame.shoot(ITankGame.ShootParams(2, 1, 3));
 
-        vm.roll(block.number + 100);
+        vm.warp(block.timestamp + 11 * tankGame.getSettings().epochSeconds);
 
         vm.startPrank(address(1));
         tankGame.shoot(ITankGame.ShootParams(1, 2, 3));

@@ -429,8 +429,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
         return state;
     }
 
-    function getEpoch() external view returns (uint256) {
+    function getEpoch() external view override returns (uint256) {
         return _getEpoch();
+    }
+
+    function getGameEpoch() external view override returns (uint256) {
+        return _getEpoch() - epochStart;
     }
 
     function getTank(uint256 tankId) external view returns (Tank memory) {

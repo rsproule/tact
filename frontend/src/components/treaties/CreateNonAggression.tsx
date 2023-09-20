@@ -1,6 +1,7 @@
 import {
   usePrepareNonAggressionPropose,
   useNonAggressionPropose,
+  useTankGameGetSettings,
 } from "@/src/generated";
 import { useState } from "react";
 import { BaseError } from "viem";
@@ -16,7 +17,6 @@ export default function CreateNonAggression({
 }: {
   hookAddress: `0x${string}`;
 }) {
-  const { data: blockNumber } = useBlockNumber();
   const [targetTank, setTargetTank] = useState<string | undefined>();
   const [expiry, setExpiry] = useState<string | undefined>();
   const { config: createConfig } = usePrepareNonAggressionPropose({
@@ -68,7 +68,7 @@ export default function CreateNonAggression({
                 setExpiry(e.target.value);
               } catch (e) {}
             }}
-            placeholder="Expiration blocknumber"
+            placeholder="Expiration epoch"
           />
           <Button
             disabled={!create}

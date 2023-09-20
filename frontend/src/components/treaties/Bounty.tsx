@@ -153,7 +153,7 @@ export default function Bounty({
     }).length !== 0 && (
       <Card>
         <CardHeader>
-          <div className="text-xl">Bounties posted by {toTankName(tankId)}</div>
+          <div className="text-xl">💰 {toTankName(tankId)} Bounties</div>
         </CardHeader>
         <CardContent>
           {bounties
@@ -212,7 +212,7 @@ export default function Bounty({
                     !addedHooks
                       .filter((ha: any) => ha.args.hook === hookAddress)
                       .map((ha: any) => ha.args.tankId)
-                      .includes(bounty.args.target) ? (
+                      .includes(ownerTank.data!) ? (
                     <Button disabled={!addHook} onClick={() => addHook?.()}>
                       Accept
                     </Button>
@@ -237,4 +237,3 @@ export default function Bounty({
     )
   );
 }
-

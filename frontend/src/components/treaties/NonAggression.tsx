@@ -1,13 +1,10 @@
 import {
   useTankGamePlayers,
-  bountyABI,
-  usePrepareTankGameAddHooks,
-  useTankGameAddHooks,
-  usePrepareBountyWithdraw,
-  useBountyWithdraw,
+  useTankGameGetSettings,
   nonAggressionABI,
   usePrepareNonAggressionAccept,
   useNonAggressionAccept,
+  useTankGameGetGameEpoch,
 } from "@/src/generated";
 import { useState, useEffect } from "react";
 import { BaseError, formatEther } from "viem";
@@ -40,6 +37,7 @@ export default function NonAggression({
     args: [address!],
     enabled: !!address,
   });
+  const { data: epoch } = useTankGameGetGameEpoch({ watch: true });
   const { data: blockNumber } = useBlockNumber({ watch: true });
   const [treaties, setTreaties] = useState<any>();
   // const [bountiesWon, setBountiesWon] = useState<any>();
@@ -74,9 +72,9 @@ export default function NonAggression({
                   proposedTreaty.args.hookProposer
             )
         )
-        .filter((treaty: any) => treaty.args.expiry > blockNumber!);
+        .filter((treaty: any) => treaty.args.expiry > epoch!);
       const filteredAcceptedTreaties = acceptedTreaties.filter(
-        (treaty: any) => treaty.args.expiry > blockNumber!
+        (treaty: any) => treaty.args.expiry > epoch!
       );
       const mergedTreaties = [
         ...filteredProposedTreaties,
@@ -88,7 +86,7 @@ export default function NonAggression({
       setTreaties(mergedTreaties);
     };
     getLogs();
-  }, [hookAddress, blockNumber]);
+  }, [hookAddress, blockNumber, epoch]);
   const { config: acceptConfig } = usePrepareNonAggressionAccept({
     args: [tankId, hookAddress],
     address: ownerHookAddress, // should be MY hook address
@@ -127,7 +125,7 @@ export default function NonAggression({
         }).length !== 0 && (
           <Card>
             <CardHeader>
-              <div className="text-xl">{toTankName(tankId)} Alliances</div>
+              <div className="text-xl">🛡️ {toTankName(tankId)} Alliances</div>
             </CardHeader>
             <CardContent>
               {treaties
@@ -143,19 +141,19 @@ export default function NonAggression({
                 .map((bounty: any, i: number) => {
                   return (
                     <div key={i} className="flex justify-between border">
-                      <div>{bounty.isAccepted ? "🤝" : "⏳"}</div>
                       <div>Proposer: {toTankName(bounty.args.proposer)}</div>
+                      <div>{bounty.isAccepted ? "🤝" : "⏳"}</div>
                       <div>Ally: {toTankName(bounty.args.proposee)}</div>
                       <div>
-                        Non-aggression until block:{" "}
+                        Non-aggression until epoch:{" "}
                         {bounty.args.expiry.toString()}
                       </div>
-                      <div>
-                        Approx time:
-                        {secondsToHMS(
-                          Number(bounty.args.expiry - blockNumber!) * 12
-                        )}
-                      </div>
+                      {/* <div>
+                          Approx time:
+                          {secondsToHMS(
+                            Number(bounty.args.expiry - blockNumber!) * 12
+                          )}
+                        </div> */}
                       {bounty.args.proposee === ownerTank.data! &&
                         !bounty.isAccepted && (
                           <Button disabled={!accept} onClick={() => accept?.()}>
