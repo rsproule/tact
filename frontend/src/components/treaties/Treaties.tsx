@@ -103,7 +103,7 @@ export function Treaties() {
         </Accordion>
       </Card>
       <Card className="mt-2">
-        <Accordion type="single" collapsible>
+        <Accordion type="single" collapsible defaultValue="view">
           <AccordionItem value="view">
             <AccordionTrigger>
               <CardHeader>

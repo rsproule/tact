@@ -32,9 +32,6 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
     : undefined;
   const ref = useRef(null);
   const { width } = useContainerDimensions(ref);
-  if (!boardSize) {
-    return <div>loading...</div>;
-  }
   const a = hexagon(Number(boardSize!));
   return (
     <div className="border flex justify-center" ref={ref}>
