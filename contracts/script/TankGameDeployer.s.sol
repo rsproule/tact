@@ -2,10 +2,14 @@
 pragma solidity ^0.8.19;
 
 import { Script, console } from "forge-std/Script.sol";
-import { TankGameFactory } from "src/base/TankGameFactory.sol";
+// import { TankGameFactory } from "src/base/TankGameFactory.sol";
 import { TankGame } from "src/base/TankGameV2.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { GameView } from "src/view/GameView.sol";
+import { NonAggression } from "src/hooks/NonAggression.sol";
+import { Bounty } from "src/hooks/Bounty.sol";
+import { HookFactory } from "src/base/HookFactory.sol";
+import { IHooks } from "src/interfaces/IHooks.sol";
 
 contract TankGameDeployerScript is Script {
     TankGame public tankGame;
@@ -34,32 +38,49 @@ contract TankGameDeployerScript is Script {
             NamedPlayer(0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9, "hopper")
         ];
 
-        TankGameFactory factory = new TankGameFactory();
+        // TankGameFactory factory = new TankGameFactory();
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
             playerCount: _staticAddresses.length,
             boardSize: 30,
             initAPs: 1,
             initHearts: 3,
             initShootRange: 3,
-            epochSeconds: 1 minutes,
+            epochSeconds: 15 minutes,
             buyInMinimum: 0,
-            revealWaitBlocks: (5 minutes) / 12,
+            revealWaitBlocks: (45 minutes) / 12,
             root: bytes32(0x0)
         });
-        tankGame = factory.createGame(gs);
+        tankGame = new TankGame(gs, msg.sender);
 
         GameView gameView = new GameView(tankGame);
+        HookFactory hookFactory = new HookFactory();
         console.log("TankGame deployed at address: %s", address(tankGame));
-        console.log("TankGameFactory at address: %s", address(factory));
         console.log("TankGameView at address: %s", address(gameView));
+        console.log("HookFactory at address: %s", address(hookFactory));
         // join everyone.
         for (uint256 i = 0; i < _staticAddresses.length; i++) {
             NamedPlayer memory np = _staticAddresses[i];
             console.log("Joining %s at address %s", np.name, np.player);
-            tankGame.join(np.player, new bytes32[](0), np.name);
+            tankGame.join(ITankGame.JoinParams(np.player, new bytes32[](0), np.name));
+            // for every player give them a default hook for NonAggression and Bounties
+            // this wont be allowed because hooks only added by owner
+            // can get around this by allownig the admin to at the beginning
+            IHooks nonAggro = hookFactory.createHook(tankGame, i + 1, HookFactory.HookRegistry.NonAggression);
+            IHooks bounty = hookFactory.createHook(tankGame, i + 1, HookFactory.HookRegistry.Bounty);
+
+            console.log("Adding bounty hook for %s at address %s", np.name, address(bounty));
+            console.log("Adding nonaggression hook for %s at address %s", np.name, address(nonAggro));
+            tankGame.forceAddDefaultHook(i + 1, nonAggro);
+            tankGame.forceAddDefaultHook(i + 1, bounty);
+
+            // done with default hooks. this is temporary solution
+
             // finance this player
-            payable(np.player).transfer(0.1 ether);
+            // payable(np.player).transfer(0.1 ether); // the piggies are full
         }
+
+        tankGame.setOwner(address(0));
+        // tankGame.start();
         vm.stopBroadcast();
     }
 

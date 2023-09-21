@@ -2,8 +2,31 @@
 pragma solidity ^0.8.19;
 
 import { Board } from "src/interfaces/IBoard.sol";
+import { IHooks } from "src/interfaces/IHooks.sol";
 
 interface ITankGame {
+    event GameInit(ITankGame.GameSettings settings);
+    event GameStarted();
+    event PlayerJoined(address player, uint256 tankId, Board.Point position, string name);
+    event Move(uint256 tankId, Board.Point position);
+    event Shoot(uint256 tankId, uint256 targetId);
+    event Give(uint256 fromId, uint256 toId, uint256 hearts, uint256 aps);
+    event Upgrade(uint256 tankId, uint256 range);
+    event Vote(uint256 voter, uint256 cursed, uint256 epoch);
+    event Curse(uint256 cursedTank, uint256 voter, uint256 epoch);
+    event Drip(uint256 tankId, uint256 amount, uint256 epoch);
+    event Claim(address reciever, uint256 tankId, uint256 amount);
+    event PrizeIncrease(address donator, uint256 amount, uint256 newTotal);
+    event Death(uint256 killer, uint256 killed);
+    event Revive(uint256 savior, uint256 saved);
+    event SpawnHeart(address poker, Board.Point position);
+    event Reveal(address poker, uint256 blocknumber);
+    event Commit(address poker, uint256 blocknumber);
+    event Delegate(uint256 tank, address delegate, address owner);
+    event GameOver(uint256 winner, uint256 second, uint256 third, uint256 prizePool);
+    event BountyCompleted(uint256 hunter, uint256 victim, uint256 reward);
+    event HooksAdded(uint256 tankId, address hook);
+
     struct GameSettings {
         uint256 playerCount;
         uint256 boardSize;
@@ -14,6 +37,17 @@ interface ITankGame {
         uint256 buyInMinimum;
         uint256 revealWaitBlocks;
         bytes32 root;
+    }
+
+    struct StateData {
+        uint256 playersCount;
+        uint256 numTanksAlive;
+        uint256 prizePool;
+        uint256 epochStart;
+        uint256 aliveTanksIdSum;
+        uint256 revealBlock;
+        uint256 lastRevealBlock;
+        address owner;
     }
 
     struct Tank {
@@ -29,23 +63,76 @@ interface ITankGame {
         Ended
     }
 
-    function join(address joiner, bytes32[] memory proof, string calldata playerName) external payable;
+    struct JoinParams {
+        address joiner;
+        bytes32[] proof;
+        string playerName;
+    }
 
-    function move(uint256 fromId, Board.Point calldata to) external;
+    function join(JoinParams calldata joinParams) external payable;
 
-    function shoot(uint256 fromId, uint256 toId, uint256 shots) external;
+    struct MoveParams {
+        uint256 tankId;
+        Board.Point to;
+    }
 
-    function give(uint256 fromId, uint256 toId, uint256 hearts, uint256 aps) external;
+    function move(MoveParams calldata moveParams) external;
 
-    function upgrade(uint256 tankId) external;
+    struct ShootParams {
+        uint256 fromId;
+        uint256 toId;
+        uint256 shots;
+    }
 
-    function vote(uint256 voter, uint256 cursed) external;
+    function shoot(ShootParams calldata shootParams) external;
 
-    function claim(uint256 tankId, address claimer) external;
+    struct GiveParams {
+        uint256 fromId;
+        uint256 toId;
+        uint256 hearts;
+        uint256 aps;
+    }
 
-    function delegate(uint256 tankId, address delegatee) external;
+    function give(GiveParams calldata giveParams) external;
+
+    struct UpgradeParams {
+        uint256 tankId;
+    }
+
+    function upgrade(UpgradeParams calldata upgradeParams) external;
+
+    struct VoteParams {
+        uint256 voter;
+        uint256 cursed;
+    }
+
+    function vote(VoteParams calldata voteParams) external;
+
+    struct ClaimParams {
+        uint256 tankId;
+        address claimer;
+    }
+
+    function claim(ClaimParams calldata claimParams) external;
+
+    struct DelegateParams {
+        uint256 tankId;
+        address delegatee;
+    }
+
+    function delegate(DelegateParams calldata delegateParams) external;
+
+    struct DripParams {
+        uint256 tankId;
+    }
+
+    function drip(DripParams calldata dripParams) external;
 
     function reveal() external;
+
+    function addHooks(uint256 tankId, IHooks hooks) external;
+
+    // view functions
 
     function getPlayerCount() external view returns (uint256);
 
@@ -56,4 +143,12 @@ interface ITankGame {
     function getSettings() external view returns (GameSettings memory);
 
     function getLastDrip(uint256 tankId) external view returns (uint256);
+
+    function isAuth(uint256 tankId, address owner) external view returns (bool);
+
+    function getState() external view returns (ITankGame.GameState);
+
+    function getEpoch() external view returns (uint256);
+
+    function getGameEpoch() external view returns (uint256);
 }

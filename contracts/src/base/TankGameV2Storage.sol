@@ -3,6 +3,7 @@ pragma solidity ^0.8.19;
 
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { Board } from "src/interfaces/IBoard.sol";
+import { IHooks } from "src/interfaces/IHooks.sol";
 
 contract TankGameV2Storage {
     mapping(address player => uint256 tank) public players;
@@ -17,6 +18,7 @@ contract TankGameV2Storage {
     mapping(uint256 epoch => bool votingClosed) public votingClosed;
     mapping(uint256 epoch => mapping(uint256 tankId => bool voted)) public votedThisEpoch;
     mapping(uint256 tankId => bool claimed) public claimed;
+    mapping(uint256 tankId => IHooks[] hooks) public tankHooks;
     uint256 public playersCount;
     uint256 public numTanksAlive;
     uint256 public prizePool;
@@ -26,8 +28,9 @@ contract TankGameV2Storage {
     uint256 public aliveTanksIdSum;
     uint256 public revealBlock;
     uint256 public lastRevealBlock;
+    address public owner;
     ITankGame.GameState public state; // can calculate this
     ITankGame.GameSettings public settings;
+    ITankGame.StateData public stateData;
     Board public board;
-    address public owner;
 }

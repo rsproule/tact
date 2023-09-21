@@ -1,6 +1,7 @@
 "use client";
 import { useTankGameGetSettings, useTankGameState } from "../../generated";
 import { LeaderBoard } from "../LeaderBoard";
+import { Treaties } from "../treaties/Treaties";
 import { HexBoard } from "./HexGameBoard";
 import Timer from "./Timer";
 import Donate from "./actions/Donate";
@@ -18,6 +19,7 @@ export function TankGame() {
         />
       )}
       <HexBoard boardSize={settings.data && settings.data!.boardSize} />
+      <Treaties />
       <div className="block justify-evenly py-5 md:flex">
         {gameState.data === 1 && <Timer />}
         {gameState.data === 2 && <GameOver />}

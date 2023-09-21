@@ -23,7 +23,9 @@ export default function EmptySquareMenu({
 }) {
   const { toast } = useToast();
   let { config } = usePrepareTankGameMove({
-    args: [ownersTank, { x: BigInt(x), y: BigInt(y), z: BigInt(z) }],
+    args: [
+      { tankId: ownersTank, to: { x: BigInt(x), y: BigInt(y), z: BigInt(z) } },
+    ],
     enabled: open && !!ownersTank,
   });
   const { write: move, data } = useTankGameMove(config);

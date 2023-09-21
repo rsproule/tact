@@ -107,7 +107,7 @@ const getTimeTillNextEpoch = (currentEpoch: bigint, epochDuration: bigint) => {
   return blocksTillNextEpoch;
 };
 
-function secondsToHMS(secs: number) {
+export function secondsToHMS(secs: number) {
   let hours = Math.floor(secs / 3600);
   let minutes = Math.floor((secs % 3600) / 60);
   let seconds = secs % 60;

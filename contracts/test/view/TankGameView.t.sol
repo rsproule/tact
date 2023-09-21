@@ -2,22 +2,20 @@
 pragma solidity ^0.8.19;
 
 import { Test } from "forge-std/Test.sol";
-import { TankGameFactory } from "src/base/TankGameFactory.sol";
+// import { TankGameFactory } from "src/base/TankGameFactory.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { TankGame } from "src/base/TankGameV2.sol";
 import { GameView } from "src/view/GameView.sol";
 
 contract TankGameFactoryTest is Test {
-    TankGameFactory public factory;
     GameView public gameView;
     TankGame public game;
 
     function setUp() public {
-        factory = new TankGameFactory();
-        game = factory.createGame(getSettings());
+        game = new TankGame(getSettings(), msg.sender);
         bytes32[] memory proof = new bytes32[](1);
         vm.prank(address(1));
-        game.join(address(1), proof, "player1");
+        game.join(ITankGame.JoinParams(address(1), proof, "player1"));
         gameView = new GameView(game);
     }
 

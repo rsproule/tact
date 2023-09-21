@@ -1,5 +1,5 @@
 import { Tile } from "./Tile";
-import { HexGrid, Layout, Hex, Pattern, Hexagon } from "react-hexgrid";
+import { HexGrid, Layout, Hex, Pattern } from "react-hexgrid";
 
 import {
   useGameViewGetAllHearts,
@@ -18,11 +18,11 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
   let tanks = useGameViewGetAllTanks({ watch: true });
   let hearts = useGameViewGetAllHearts({ watch: true });
   const { address } = useAccount();
-  let ownersTankId = useTankGamePlayers({
+  let ownerTankId = useTankGamePlayers({
     args: [address!],
     enabled: !!address,
   });
-  let ownerTank = tanks.data?.find((tank) => tank.tank.owner === address);
+  let ownerTank = tanks.data?.find((tank) => tank.tankId === ownerTankId.data);
   let ownerTankTile = ownerTank
     ? new Hex(
         Number(ownerTank?.position.x!),
@@ -32,9 +32,6 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
     : undefined;
   const ref = useRef(null);
   const { width } = useContainerDimensions(ref);
-  if (!boardSize) {
-    return <div></div>;
-  }
   const a = hexagon(Number(boardSize!));
   return (
     <div className="border flex justify-center" ref={ref}>
@@ -43,13 +40,12 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
           <HexGrid
             width={width}
             height={width < 500 ? "50%" : undefined}
-            viewBox="10 -20 150 150"
+            viewBox="3 -25 150 150"
           >
             <Pattern id="owner" link="/logos/tank1.png" size={{ x: 1, y: 1 }} />
             <Pattern id="enemy" link="/logos/tank2.png" size={{ x: 1, y: 1 }} />
             <Pattern id="dead" link="/logos/tank3.png" size={{ x: 1, y: 1 }} />
             <Pattern id="heart" link="/logos/heart.png" size={{ x: 1, y: 1 }} />
-
             <Layout
               size={{
                 x: 1,
@@ -98,12 +94,16 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                     boardSize={a.length}
                     tank={tank}
                     heartsOnTile={heartsOnTile?.numHearts}
-                    ownersTankId={ownersTankId.data!}
-                    highlighted={highlightedTiles?.some((tile) => {
-                      return (
-                        tile.q === hex.q && tile.r === hex.r && tile.s === hex.s
-                      );
-                    })!}
+                    ownersTankId={ownerTankId.data!}
+                    highlighted={
+                      highlightedTiles?.some((tile) => {
+                        return (
+                          tile.q === hex.q &&
+                          tile.r === hex.r &&
+                          tile.s === hex.s
+                        );
+                      })!
+                    }
                     isShootRange={
                       !!selectedTank &&
                       selectedTank.tank.hearts > 0 &&
@@ -140,8 +140,6 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                           return [...(prevTiles || []), hex];
                         }
                       });
-
-                      // setHighlightedTiles(
                     }}
                   />
                 );
