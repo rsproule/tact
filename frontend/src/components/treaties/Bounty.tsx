@@ -197,12 +197,13 @@ export default function Bounty({
                             )[0].args.winner
                           )
                         ) : (
-                          <Button
+                          <button
+                            className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
                             disabled={!withdraw}
                             onClick={() => withdraw?.()}
                           >
                             Claim
-                          </Button>
+                          </button>
                         )
                       ) : (
                         "Has been won"
@@ -213,9 +214,13 @@ export default function Bounty({
                       .filter((ha: any) => ha.args.hook === hookAddress)
                       .map((ha: any) => ha.args.tankId)
                       .includes(ownerTank.data!) ? (
-                    <Button disabled={!addHook} onClick={() => addHook?.()}>
+                    <button
+                      className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
+                      disabled={!addHook}
+                      onClick={() => addHook?.()}
+                    >
                       Accept
-                    </Button>
+                    </button>
                   ) : (
                     "🤝"
                   )}

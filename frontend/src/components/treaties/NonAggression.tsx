@@ -156,9 +156,13 @@ export default function NonAggression({
                         </div> */}
                       {bounty.args.proposee === ownerTank.data! &&
                         !bounty.isAccepted && (
-                          <Button disabled={!accept} onClick={() => accept?.()}>
+                          <button
+                            className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
+                            disabled={!accept}
+                            onClick={() => accept?.()}
+                          >
                             Accept
-                          </Button>
+                          </button>
                         )}
                     </div>
                   );
