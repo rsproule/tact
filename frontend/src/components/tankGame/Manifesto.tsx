@@ -1,3 +1,4 @@
+import { tankGameAddress } from "@/src/generated";
 import {
   Card,
   CardContent,
@@ -101,7 +102,7 @@ export default function Manifesto() {
           </a>
           <a
             className="text-white hover:text-gray-400"
-            href="https://goerli.etherscan.io/address/0xa28b12ff977cA9969F1f4e3973499fFBe3115835"
+            href={"https://goerli.etherscan.io/address/" + tankGameAddress}
           >
             View Contract on Block Explorer
           </a>
