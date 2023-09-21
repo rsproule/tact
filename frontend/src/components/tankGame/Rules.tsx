@@ -103,7 +103,7 @@ export default function Rules() {
             </a>
             <a
               className="text-white hover:text-gray-400"
-              href={"https://goerli.etherscan.io/address/" + tankGameAddress}
+              href={"https://goerli.etherscan.io/address/" + tankGameAddress[5]}
             >
               View Contract on Block Explorer
             </a>
