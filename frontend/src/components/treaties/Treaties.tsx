@@ -72,7 +72,7 @@ export function Treaties() {
           <AccordionItem value="manage">
             <AccordionTrigger>
               <CardHeader>
-                <div className="text-xl ">Manage Treaties</div>
+                <div className="text-xl ">Manage Tact Pacts</div>
               </CardHeader>
             </AccordionTrigger>
             <AccordionContent>
@@ -107,7 +107,7 @@ export function Treaties() {
           <AccordionItem value="view">
             <AccordionTrigger>
               <CardHeader>
-                <h1 className="text-xl">View Treaties</h1>
+                <h1 className="text-xl">View Tact Pacts</h1>
               </CardHeader>
             </AccordionTrigger>
             <AccordionContent>

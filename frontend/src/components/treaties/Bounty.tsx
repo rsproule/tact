@@ -171,8 +171,8 @@ export default function Bounty({
             .map((bounty: any, i: number) => {
               return (
                 <div key={i} className="flex justify-between border">
-                  <div>Target: {toTankName(bounty.args.target)}</div>
                   <div>Proposer: {toTankName(bounty.args.tankId)}</div>
+                  <div>Target: {toTankName(bounty.args.target)}</div>
                   <div>
                     Bounty amount: {formatEther(bounty.args.amount)} Ether
                   </div>
@@ -197,12 +197,13 @@ export default function Bounty({
                             )[0].args.winner
                           )
                         ) : (
-                          <Button
+                          <button
+                            className="bg-white text-black px-2"
                             disabled={!withdraw}
                             onClick={() => withdraw?.()}
                           >
                             Claim
-                          </Button>
+                          </button>
                         )
                       ) : (
                         "Has been won"
@@ -213,9 +214,13 @@ export default function Bounty({
                       .filter((ha: any) => ha.args.hook === hookAddress)
                       .map((ha: any) => ha.args.tankId)
                       .includes(ownerTank.data!) ? (
-                    <Button disabled={!addHook} onClick={() => addHook?.()}>
+                    <button
+                      className="bg-white text-black px-2"
+                      disabled={!addHook}
+                      onClick={() => addHook?.()}
+                    >
                       Accept
-                    </Button>
+                    </button>
                   ) : (
                     "🤝"
                   )}
