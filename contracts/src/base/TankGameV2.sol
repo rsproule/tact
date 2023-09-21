@@ -143,11 +143,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
         uint256 toId = params.toId;
         params.verifyGive(tanks, board);
         // before give hooks run here
-        for (uint256 i = 0; i < tankHooks[fromId].length; i++) {
-            IHooks hook = tankHooks[fromId][i];
-            bytes4 selector = IHooks(hook).beforeGive(address(this), params, "");
-            require(selector == IHooks.beforeGive.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[fromId].length; i++) {
+        //     IHooks hook = tankHooks[fromId][i];
+        //     bytes4 selector = IHooks(hook).beforeGive(address(this), params, "");
+        //     require(selector == IHooks.beforeGive.selector, "invalid hook");
+        // }
 
         (bool fromDead, bool toRevive) = params.doGive(tanks, stateData, lastDripEpoch, _getEpoch());
         // DELETE THIS LATER
@@ -163,11 +163,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
         }
 
         // after give hooks run here
-        for (uint256 i = 0; i < tankHooks[fromId].length; i++) {
-            IHooks hook = tankHooks[fromId][i];
-            bytes4 selector = IHooks(hook).afterGive(address(this), params, "");
-            require(selector == IHooks.afterGive.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[fromId].length; i++) {
+        //     IHooks hook = tankHooks[fromId][i];
+        //     bytes4 selector = IHooks(hook).afterGive(address(this), params, "");
+        //     require(selector == IHooks.afterGive.selector, "invalid hook");
+        // }
     }
 
     function upgrade(ITankGame.UpgradeParams calldata params)
@@ -181,21 +181,21 @@ contract TankGame is ITankGame, TankGameV2Storage {
         uint256 upgradeCost = getUpgradeCost(tankId);
         require(upgradeCost <= tanks[tankId].aps, "not enough action points");
 
-        for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
-            IHooks hook = tankHooks[tankId][i];
-            bytes4 selector = IHooks(hook).beforeUpgrade(address(this), params, "");
-            require(selector == IHooks.beforeUpgrade.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
+        //     IHooks hook = tankHooks[tankId][i];
+        //     bytes4 selector = IHooks(hook).beforeUpgrade(address(this), params, "");
+        //     require(selector == IHooks.beforeUpgrade.selector, "invalid hook");
+        // }
 
         tanks[tankId].aps -= upgradeCost;
         tanks[tankId].range += 1;
         emit Upgrade(tankId, tanks[tankId].range);
 
-        for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
-            IHooks hook = tankHooks[tankId][i];
-            bytes4 selector = IHooks(hook).afterUpgrade(address(this), params, "");
-            require(selector == IHooks.afterUpgrade.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
+        //     IHooks hook = tankHooks[tankId][i];
+        //     bytes4 selector = IHooks(hook).afterUpgrade(address(this), params, "");
+        //     require(selector == IHooks.afterUpgrade.selector, "invalid hook");
+        // }
     }
 
     function vote(ITankGame.VoteParams calldata params)
@@ -212,11 +212,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
         require(!votedThisEpoch[epoch][voter], "already voted");
         require(votingClosed[epoch] == false, "voting closed");
 
-        for (uint256 i = 0; i < tankHooks[voter].length; i++) {
-            IHooks hook = tankHooks[voter][i];
-            bytes4 selector = IHooks(hook).beforeVote(address(this), params, "");
-            require(selector == IHooks.beforeVote.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[voter].length; i++) {
+        //     IHooks hook = tankHooks[voter][i];
+        //     bytes4 selector = IHooks(hook).beforeVote(address(this), params, "");
+        //     require(selector == IHooks.beforeVote.selector, "invalid hook");
+        // }
 
         votesPerEpoch[epoch][cursed] += 1;
         emit Vote(voter, cursed, epoch);
@@ -231,11 +231,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
         }
         votedThisEpoch[epoch][voter] = true;
 
-        for (uint256 i = 0; i < tankHooks[voter].length; i++) {
-            IHooks hook = tankHooks[voter][i];
-            bytes4 selector = IHooks(hook).afterVote(address(this), params, "");
-            require(selector == IHooks.afterVote.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[voter].length; i++) {
+        //     IHooks hook = tankHooks[voter][i];
+        //     bytes4 selector = IHooks(hook).afterVote(address(this), params, "");
+        //     require(selector == IHooks.afterVote.selector, "invalid hook");
+        // }
     }
 
     function drip(ITankGame.DripParams calldata params) external override gameStarted isTankAlive(params.tankId) {
@@ -245,22 +245,22 @@ contract TankGame is ITankGame, TankGameV2Storage {
         uint256 lastDrippedEpoch = _getLastDrip(tankId);
         require(epoch > lastDrippedEpoch, "already dripped");
 
-        for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
-            IHooks hook = tankHooks[tankId][i];
-            bytes4 selector = IHooks(hook).beforeDrip(address(this), params, "");
-            require(selector == IHooks.beforeDrip.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
+        //     IHooks hook = tankHooks[tankId][i];
+        //     bytes4 selector = IHooks(hook).beforeDrip(address(this), params, "");
+        //     require(selector == IHooks.beforeDrip.selector, "invalid hook");
+        // }
 
         uint256 amount = epoch - lastDrippedEpoch;
         tanks[tankId].aps += amount;
         lastDripEpoch[tankId] = epoch;
         emit Drip(tankId, amount, epoch);
 
-        for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
-            IHooks hook = tankHooks[tankId][i];
-            bytes4 selector = IHooks(hook).afterDrip(address(this), params, "");
-            require(selector == IHooks.afterDrip.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
+        //     IHooks hook = tankHooks[tankId][i];
+        //     bytes4 selector = IHooks(hook).afterDrip(address(this), params, "");
+        //     require(selector == IHooks.afterDrip.selector, "invalid hook");
+        // }
     }
 
     function claim(ITankGame.ClaimParams calldata params) external override isTankOwnerOrDelegate(params.tankId) {
@@ -269,11 +269,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
         require(state == GameState.Ended, "game not ended");
         require(!claimed[tankId], "already claimed");
 
-        for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
-            IHooks hook = tankHooks[tankId][i];
-            bytes4 selector = IHooks(hook).beforeClaim(address(this), params, "");
-            require(selector == IHooks.beforeClaim.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
+        //     IHooks hook = tankHooks[tankId][i];
+        //     bytes4 selector = IHooks(hook).beforeClaim(address(this), params, "");
+        //     require(selector == IHooks.beforeClaim.selector, "invalid hook");
+        // }
 
         claimed[tankId] = true;
         // loop is a bit gross, could do a mapping of tank to position on podium
@@ -293,11 +293,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
             revert("not on podium");
         }
 
-        for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
-            IHooks hook = tankHooks[tankId][i];
-            bytes4 selector = IHooks(hook).afterClaim(address(this), params, "");
-            require(selector == IHooks.afterClaim.selector, "invalid hook");
-        }
+        // for (uint256 i = 0; i < tankHooks[tankId].length; i++) {
+        //     IHooks hook = tankHooks[tankId][i];
+        //     bytes4 selector = IHooks(hook).afterClaim(address(this), params, "");
+        //     require(selector == IHooks.afterClaim.selector, "invalid hook");
+        // }
     }
 
     function delegate(DelegateParams calldata params) public override isTankOwner(params.tankId) {
@@ -434,6 +434,9 @@ contract TankGame is ITankGame, TankGameV2Storage {
     }
 
     function getGameEpoch() external view override returns (uint256) {
+        if (state == GameState.WaitingForPlayers) {
+            return 0; // this is cuz epoch start would be 0
+        }
         return _getEpoch() - epochStart;
     }
 

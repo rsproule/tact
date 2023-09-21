@@ -220,7 +220,7 @@ export default function Bounty({
                     "🤝"
                   )}
                   <div>
-                    Valid for:{" "}
+                    Accepted by:{" "}
                     {addedHooks &&
                       addedHooks
                         ?.filter((ha: any) => ha.args.hook === hookAddress)

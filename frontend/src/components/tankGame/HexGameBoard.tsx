@@ -33,7 +33,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
   const ref = useRef(null);
   const { width } = useContainerDimensions(ref);
   if (!boardSize) {
-    return <div></div>;
+    return <div>loading...</div>;
   }
   const a = hexagon(Number(boardSize!));
   return (

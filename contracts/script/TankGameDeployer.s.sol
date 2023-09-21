@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import { Script, console } from "forge-std/Script.sol";
-import { TankGameFactory } from "src/base/TankGameFactory.sol";
+// import { TankGameFactory } from "src/base/TankGameFactory.sol";
 import { TankGame } from "src/base/TankGameV2.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
 import { GameView } from "src/view/GameView.sol";
@@ -38,24 +38,23 @@ contract TankGameDeployerScript is Script {
             NamedPlayer(0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9, "hopper")
         ];
 
-        TankGameFactory factory = new TankGameFactory();
+        // TankGameFactory factory = new TankGameFactory();
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
             playerCount: _staticAddresses.length,
             boardSize: 30,
-            initAPs: 100,
+            initAPs: 1,
             initHearts: 3,
             initShootRange: 3,
-            epochSeconds: 1 minutes,
+            epochSeconds: 15 minutes,
             buyInMinimum: 0,
-            revealWaitBlocks: (5 minutes) / 12,
+            revealWaitBlocks: (45 minutes) / 12,
             root: bytes32(0x0)
         });
-        tankGame = factory.createGame(gs, msg.sender);
+        tankGame = new TankGame(gs, msg.sender);
 
         GameView gameView = new GameView(tankGame);
         HookFactory hookFactory = new HookFactory();
         console.log("TankGame deployed at address: %s", address(tankGame));
-        console.log("TankGameFactory at address: %s", address(factory));
         console.log("TankGameView at address: %s", address(gameView));
         console.log("HookFactory at address: %s", address(hookFactory));
         // join everyone.
@@ -77,11 +76,11 @@ contract TankGameDeployerScript is Script {
             // done with default hooks. this is temporary solution
 
             // finance this player
-            payable(np.player).transfer(0.1 ether);
+            // payable(np.player).transfer(0.1 ether); // the piggies are full
         }
 
         tankGame.setOwner(address(0));
-        tankGame.start();
+        // tankGame.start();
         vm.stopBroadcast();
     }
 
