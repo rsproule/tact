@@ -40,7 +40,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
           <HexGrid
             width={width}
             height={width < 500 ? "50%" : undefined}
-            viewBox="10 -20 150 150"
+            viewBox="3 -25 150 150"
           >
             <Pattern id="owner" link="/logos/tank1.png" size={{ x: 1, y: 1 }} />
             <Pattern id="enemy" link="/logos/tank2.png" size={{ x: 1, y: 1 }} />
