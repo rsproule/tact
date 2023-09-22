@@ -142,7 +142,7 @@ export default function NonAggression({
                   return (
                     <div key={i} className="flex justify-between border">
                       <div>Proposer: {toTankName(bounty.args.proposer)}</div>
-                      <div>{bounty.isAccepted ? "🤝" : "⏳"}</div>
+                      <div>{bounty.isAccepted ? "🤝 accepted" : "⏳ pending..."}</div>
                       <div>Ally: {toTankName(bounty.args.proposee)}</div>
                       <div>
                         Non-aggression until epoch:{" "}
