@@ -8,6 +8,7 @@ logsRouter.post("/", logHandler);
 function logHandler(req: Request, res: Response, next: NextFunction) {
   getLogs(req.body.fromBlock).then((logs) => {
     res.send(
+      // kinda hacky to handle the fact that BigInts are not JSON serializable
       JSON.parse(
         JSON.stringify(logs, (key, value) =>
           typeof value === "bigint" ? value.toString() : value
@@ -29,4 +30,5 @@ async function getLogs(fromBlock: number) {
     filter,
   });
 }
+
 export default logsRouter;
