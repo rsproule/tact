@@ -1,13 +1,29 @@
 import { Request, Response, NextFunction, Router } from "express";
+import { tankGameABI, tankGameAddress } from "../../frontend/src/generated";
 var logsRouter = Router();
-var publicClient = require("../api/viem");
+import publicClient from "../api/viem";
 
 logsRouter.get("/", function (req: Request, res: Response, next: NextFunction) {
-  res.send(getLogs());
+  getLogs().then((logs) => {
+    console.log(`Found: ${logs.length} logs`);
+    res.send(
+      JSON.stringify(logs, (key, value) =>
+        typeof value === "bigint" ? value.toString() : value
+      )
+    );
+  });
 });
 
-function getLogs() {
-  return "logs go here";
-}
-
+const getLogs = async () => {
+  const chainId = publicClient.chain?.id;
+  const filter = await publicClient.createContractEventFilter({
+    abi: tankGameABI,
+    strict: true,
+    fromBlock: BigInt(0),
+    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+  });
+  return await publicClient.getFilterLogs({
+    filter,
+  });
+};
 export default logsRouter;
