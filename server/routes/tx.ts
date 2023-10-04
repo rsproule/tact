@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { tankGameABI, tankGameAddress } from "../../frontend/src/generated";
-import publicClient from "../api/viem";
+import publicClient from "../api/client";
 var txRouter = Router();
 
 txRouter.post("/sim", simHandler);

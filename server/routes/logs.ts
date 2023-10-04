@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { tankGameABI, tankGameAddress } from "../../frontend/src/generated";
+import publicClient from "../api/client";
 var logsRouter = Router();
-import publicClient from "../api/viem";
 
 logsRouter.post("/", logHandler);
 
