@@ -5,7 +5,6 @@ import publicClient from "../api/viem";
 
 logsRouter.get("/", function (req: Request, res: Response, next: NextFunction) {
   getLogs().then((logs) => {
-    console.log(`Found: ${logs.length} logs`);
     res.send(
       JSON.stringify(logs, (key, value) =>
         typeof value === "bigint" ? value.toString() : value
