@@ -18,14 +18,24 @@ function simHandler(req: Request, res: Response, next: NextFunction) {
       args: [params],
     })
     .then((result) => {
-      console.log(result);
-      res.send("sim");
+      return res.send(result.request);
     })
     .catch((err) => {
-      res.send(err.shortMessage);
+      return res.send(err.shortMessage);
     });
 }
+
+// the only purpose of passing this through the server is to parse the response
+// nicely for the c++ client
 function sendHandler(req: Request, res: Response, next: NextFunction) {
-  res.send("");
+  publicClient
+    .sendRawTransaction(req.body)
+    .then((result) => {
+      return res.send(result);
+    })
+    .catch((err) => {
+      return res.send(err.shortMessage);
+    });
 }
+
 export default txRouter;
