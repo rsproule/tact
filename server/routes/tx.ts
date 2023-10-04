@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction, Router } from "express";
 var txRouter = Router();
 
-txRouter.get("/sim", simHandler);
-txRouter.get("/send", sendHandler);
+txRouter.post("/sim", simHandler);
+txRouter.post("/send", sendHandler);
 
-function sendHandler(req: Request, res: Response, next: NextFunction) {
+function simHandler(req: Request, res: Response, next: NextFunction) {
   res.send("");
 }
-function simHandler(req: Request, res: Response, next: NextFunction) {
+function sendHandler(req: Request, res: Response, next: NextFunction) {
   res.send("");
 }
 export default txRouter;
