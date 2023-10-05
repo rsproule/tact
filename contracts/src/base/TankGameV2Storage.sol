@@ -8,12 +8,8 @@ import { IHooks } from "src/interfaces/IHooks.sol";
 contract TankGameV2Storage {
     mapping(address player => uint256 tank) public players;
     mapping(uint256 tankId => ITankGame.Tank tank) public tanks;
-    mapping(uint256 tankId => Board.Point point) public tankToPosition;
-    mapping(uint256 position => uint256 heartCount) public heartsOnBoard;
-    mapping(uint256 position => uint256 tankId) public tanksOnBoard;
     mapping(uint256 tankId => uint256 epoch) public lastDripEpoch;
     mapping(uint256 tankId => mapping(address delegate => bool isDelegate)) public delegates;
-
     mapping(uint256 epoch => mapping(uint256 tankId => uint256 votes)) public votesPerEpoch;
     mapping(uint256 epoch => bool votingClosed) public votingClosed;
     mapping(uint256 epoch => mapping(uint256 tankId => bool voted)) public votedThisEpoch;

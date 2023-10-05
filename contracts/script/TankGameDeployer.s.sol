@@ -16,7 +16,7 @@ contract TankGameDeployerScript is Script {
 
     function run() public {
         vm.startBroadcast();
-        NamedPlayer[19] memory _staticAddresses = [
+        NamedPlayer[23] memory _staticAddresses = [
             NamedPlayer(0x5337122c6b5ce24D970Ce771510D22Aeaf038C44, "ryan"),
             NamedPlayer(0xC15ebb4f1aC7F1C5D94dB64a472e1718fa6b6dEc, "kinjal"),
             NamedPlayer(0x3Aab3396Fede536ACCB3a578CD96617092270536, "yuan"),
@@ -35,7 +35,11 @@ contract TankGameDeployerScript is Script {
             NamedPlayer(0xB3c296170c57A7510Bb95EF2E9C47977bC2FF1c8, "caleb"),
             NamedPlayer(0xDA744DaCea631029430FD63D83B26F757E054Cb7, "brian"),
             NamedPlayer(0x14174A3f8868b4b6Ab023853e2Ff5903Ea0fd015, "carra"),
-            NamedPlayer(0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9, "hopper")
+            NamedPlayer(0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9, "hopper"),
+            NamedPlayer(0x1f77d34deFF2B72B0A0258603eFFE72704742EBB, "peter"),
+            NamedPlayer(0xb1B541A6460EF4b7b165aC50752451DCB7C01357, "wnuelle"),
+            NamedPlayer(0x696969d25333e7E0a282b240aDE6b21b3E41719f, "kristof"),
+            NamedPlayer(0x5CE306109b8de8d001d52F2140383A54AB55CdB2, "jonah")
         ];
 
         // TankGameFactory factory = new TankGameFactory();

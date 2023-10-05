@@ -39,7 +39,11 @@ export const TANK_MAPPING = [
   "caleb",
   "brian",
   "carra",
-  "hopper"
+  "hopper",
+  "peter",
+  "wnuelle",
+  "kristof",
+  "jonah",
 ];
 
 export const toTankName = (tankId: bigint | undefined) => {
