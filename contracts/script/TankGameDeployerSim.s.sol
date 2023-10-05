@@ -65,7 +65,7 @@ contract TankGameDeployerScript is Script {
         }
 
         tankGame.setOwner(address(0));
-        // tankGame.start();
+        tankGame.start();
         vm.stopBroadcast();
     }
 
