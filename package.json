@@ -1,0 +1,13 @@
+{
+  "name": "",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "^1.0.4-canary.20231003T140149"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "server": "bun run index.ts"
+  }
+}
