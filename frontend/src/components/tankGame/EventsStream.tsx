@@ -1,17 +1,5 @@
 "use client";
-import {
-  tankGameABI,
-  tankGameAddress,
-  useTankGameClaimEvent,
-  useTankGameDripEvent,
-  useTankGameGiveEvent,
-  useTankGameMoveEvent,
-  useTankGamePlayerJoinedEvent,
-  useTankGamePrizeIncreaseEvent,
-  useTankGameShootEvent,
-  useTankGameUpgradeEvent,
-  useTankGameVoteEvent,
-} from "@/src/generated";
+import { tankGameABI } from "@/src/generated";
 import { useState } from "react";
 import { formatEther } from "viem";
 import { Card, CardHeader } from "../ui/card";
@@ -56,99 +44,16 @@ export const toTankName = (tankId: bigint | undefined) => {
   }
   return TANK_MAPPING[Number(tankId!) - 1];
 };
-export function EventStream() {
+export function EventStream({ address }: { address: `0x${string}` }) {
   const [events, setEvents] = useState<string[]>([]);
-  // useTankGameMoveEvent({
-  //   listener: (e) => {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, moveString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameShootEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, shootString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameGiveEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, giveString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameUpgradeEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, upgradeString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameVoteEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, voteString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameDripEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, dripString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameClaimEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, claimString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGamePlayerJoinedEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, joinString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGamePrizeIncreaseEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, donateString(event)];
-  //       });
-  //     });
-  //   },
-  // });
   const [oldLogs, setOldLogs] = useState<string[]>([]);
-  const { chain } = useNetwork();
   const getLogs = async () => {
     const publicClient = getPublicClient();
-    const chainId = chain?.id;
     const filter = await publicClient.createContractEventFilter({
       abi: tankGameABI,
       strict: true,
       fromBlock: BigInt(0),
-      address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+      address: address,
     });
     return await publicClient.getFilterLogs({
       filter,
@@ -173,20 +78,6 @@ export function EventStream() {
 
   return (
     <div className="py-4">
-      {/* <Card>
-        <CardHeader>
-          <h1 className="text-xl">Action Feed</h1>
-        </CardHeader>
-        <div className="grid-flow-row auto-rows-max">
-          {events.reverse().map((event, i) => {
-            return (
-              <div key={i} className="border">
-                {event}
-              </div>
-            );
-          })}
-        </div>
-      </Card> */}
       <Card>
         <CardHeader>
           <h1 className="text-xl">Historical logs</h1>

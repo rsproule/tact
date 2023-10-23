@@ -1,15 +1,10 @@
-import { EventStream } from "@/src/components/tankGame/EventsStream";
-import { TankGame } from "@/src/components/tankGame/TankGame";
-import { Toaster } from "@/src/components/ui/toaster";
 import { Connected } from "@/src/components/wagmi/Connected";
+import { GamePage } from "./GamePage";
 
 export default function Page({ params }: { params: { gameId: string } }) {
   return (
     <Connected>
-      <div>Game contract: {params.gameId}</div>
-      <TankGame />
-      <EventStream />
-      <Toaster />
+      <GamePage gameAddress={params.gameId! as `0x${string}`} />
     </Connected>
   );
 }

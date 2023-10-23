@@ -1,5 +1,11 @@
 "use client";
-import { useTankGameGetSettings, useTankGameState } from "../../generated";
+import { useContractRead } from "wagmi";
+import {
+  tankGameABI,
+  useTankGameGetSettings,
+  useTankGameState,
+  useITankGameGetSettings,
+} from "../../generated";
 import { LeaderBoard } from "../LeaderBoard";
 import { Treaties } from "../treaties/Treaties";
 import { HexBoard } from "./HexGameBoard";
@@ -7,9 +13,11 @@ import Timer from "./Timer";
 import Donate from "./actions/Donate";
 import { GameOver } from "./states/GameOver";
 import { WaitingForPlayers } from "./states/WaitingForPlayers";
-export function TankGame() {
-  let gameState = useTankGameState({ watch: true });
-  let settings = useTankGameGetSettings({ watch: true });
+export function TankGame({ address }: { address: `0x${string}` }) {
+  // @ts-ignore
+  let gameState = useTankGameState({ watch: true, address: address });
+  //@ts-ignore
+  let settings = useTankGameGetSettings({ watch: true, address: address });
   return (
     <div>
       {gameState.data === 0 && (
