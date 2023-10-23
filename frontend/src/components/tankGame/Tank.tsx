@@ -24,6 +24,8 @@ export const OWNERS: Map<String, String> = new Map<string, string>([
   [getAddress("0xda744dacea631029430fd63d83b26f757e054cb7"), "brian"],
   [getAddress("0x14174a3f8868b4b6ab023853e2ff5903ea0fd015"), "carra"],
   [getAddress("0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9"), "hopper"],
+  [getAddress("0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9"), "emily"],
+  [getAddress("0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9"), "aidan"],
 ]);
 interface TankProps {
   tankObj: typeof ITank;
