@@ -15,7 +15,7 @@ export const OWNERS: Map<String, String> = new Map<string, string>([
   [getAddress("0xe0e9a1807802a32544570832fe5a21ea09500872"), "shishi"],
   [getAddress("0x9f90a3c2c1938f248241414754d977b897fb3fc5"), "sterling"],
   [getAddress("0x2cb8636240693b445ac98f2091b58a898e35e60b"), "joe"],
-  [getAddress("0xb7430de9b4d8e5cdb951019d7651cd5fda630498"), "sam"],
+  [getAddress("0x9Ada897d963028923B645d72D01c3beB1343e072"), "sam"],
   [getAddress("0xb100d1e55c42a72a28fba012bb77ad9a497358b8"), "mason"],
   [getAddress("0xac56bf73e73e252e962958b856d88f8264a2f2ab"), "daniel"],
   [getAddress("0x1f08eb0a5f08117d3302212139d3804cf4810de8"), "pat"],
@@ -24,8 +24,8 @@ export const OWNERS: Map<String, String> = new Map<string, string>([
   [getAddress("0xda744dacea631029430fd63d83b26f757e054cb7"), "brian"],
   [getAddress("0x14174a3f8868b4b6ab023853e2ff5903ea0fd015"), "carra"],
   [getAddress("0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9"), "hopper"],
-  [getAddress("0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9"), "emily"],
-  [getAddress("0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9"), "aidan"],
+  [getAddress("0xA288d0BF9fe24773350394b011f6315Ff04a1025"), "emily"],
+  [getAddress("0xA288d0BF9fe24773350394b011f6315Ff04a1025"), "aidan"],
 ]);
 interface TankProps {
   tankObj: typeof ITank;
