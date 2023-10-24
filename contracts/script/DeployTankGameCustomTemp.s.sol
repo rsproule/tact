@@ -15,12 +15,12 @@ contract TankGameDeployerScript is Script {
 
     function run() public {
         vm.startBroadcast();
-        NamedPlayer[6] memory _staticAddresses = [
+        NamedPlayer[5] memory _staticAddresses = [
             NamedPlayer(0x5337122c6b5ce24D970Ce771510D22Aeaf038C44, "ryan"),
-            NamedPlayer(0xb7430de9B4D8e5cDB951019d7651cD5fda630498, "sam"),
+            NamedPlayer(0x9Ada897d963028923B645d72D01c3beB1343e072, "sam"),
             NamedPlayer(0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9, "hopper"),
-            NamedPlayer(0x0, "emily"),
-            NamedPlayer(0x0, "aidan")
+            NamedPlayer(0xA288d0BF9fe24773350394b011f6315Ff04a1025, "emily"),
+            NamedPlayer(0xD9Fd9E6C91e984F8461e4d15468b77fdff1B1bcd, "aidan")
         ];
 
         ITankGame.GameSettings memory gs = ITankGame.GameSettings({
@@ -31,7 +31,7 @@ contract TankGameDeployerScript is Script {
             initShootRange: 3,
             epochSeconds: 30 seconds,
             buyInMinimum: 0,
-            revealWaitBlocks: (90 seconds) / 12,
+            revealWaitBlocks: (1 minutes) / 12,
             root: bytes32(0x0)
         });
         tankGame = new TankGame(gs, msg.sender);

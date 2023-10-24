@@ -16,6 +16,7 @@ contract TankGameFactoryTest is Test {
         bytes32[] memory proof = new bytes32[](1);
         vm.prank(address(1));
         game.join(ITankGame.JoinParams(address(1), proof, "player1"));
+        game.start();
         gameView = new GameView(game);
     }
 
