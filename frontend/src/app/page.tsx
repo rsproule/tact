@@ -6,8 +6,8 @@ export default function HomePage() {
   return (
     <div className="grid container mx-auto p-4">
       <Connected>
-        <TankGame />
-        <EventStream />
+        <TankGame address="0x5947e5654E63aBB5Be710b9D7e7eB87AE884Fa42" />
+        <EventStream address="0x5947e5654E63aBB5Be710b9D7e7eB87AE884Fa42" />
         <Toaster />
       </Connected>
     </div>
