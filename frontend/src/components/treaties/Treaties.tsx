@@ -22,13 +22,14 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 
-export function Treaties() {
-  const { chain } = useNetwork();
+export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
   const { address } = useAccount();
   const { data: blockNumber } = useBlockNumber({ watch: true });
   let ownerTank = useTankGamePlayers({
     args: [address!],
     enabled: !!address,
+    // @ts-ignore
+    address: gameAddress,
   });
 
   const [hooks, setHooks] = useState<any>();
@@ -37,13 +38,12 @@ export function Treaties() {
   useEffect(() => {
     const getLogs = async () => {
       const publicClient = getPublicClient();
-      const chainId = chain?.id;
       const filter = await publicClient.createContractEventFilter({
         abi: hookFactoryABI,
         strict: true,
         eventName: "HookCreated",
         fromBlock: BigInt(0),
-        address: hookFactoryAddress[chainId as keyof typeof hookFactoryAddress],
+        address: gameAddress,
       });
       const hooks = await publicClient.getFilterLogs({
         filter,
@@ -55,7 +55,7 @@ export function Treaties() {
         strict: true,
         eventName: "HooksAdded",
         fromBlock: BigInt(0),
-        address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+        address: gameAddress,
       });
 
       const hookAddedEvents = await publicClient.getFilterLogs({
@@ -64,7 +64,7 @@ export function Treaties() {
       setHooksAdded(hookAddedEvents);
     };
     getLogs();
-  }, [chain, blockNumber]);
+  }, [blockNumber, gameAddress]);
   return (
     <div className="py-4">
       <Card>

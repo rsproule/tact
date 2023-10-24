@@ -24,16 +24,20 @@ export function TankGame({ address }: { address: `0x${string}` }) {
         <WaitingForPlayers
           expectedPlayersCount={settings.data && settings.data!.playerCount}
           boardSize={settings.data && settings.data!.boardSize}
+          gameAddress={address}
         />
       )}
-      <HexBoard boardSize={settings.data && settings.data!.boardSize} />
-      <Treaties />
+      <HexBoard
+        boardSize={settings.data && settings.data!.boardSize}
+        gameAddress={address}
+      />
+      <Treaties gameAddress={address} />
       <div className="block justify-evenly py-5 md:flex">
         {gameState.data === 1 && <Timer />}
         {gameState.data === 2 && <GameOver />}
         {gameState.data !== 2 && <Donate />}
       </div>
-      <LeaderBoard />
+      <LeaderBoard gameAddress={ address} />
     </div>
   );
 }

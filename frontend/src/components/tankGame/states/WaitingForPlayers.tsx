@@ -18,9 +18,11 @@ const zero = [
 export function WaitingForPlayers({
   boardSize,
   expectedPlayersCount,
+  gameAddress,
 }: {
   boardSize: bigint | undefined;
   expectedPlayersCount: bigint | undefined;
+  gameAddress: `0x${string}`;
 }) {
   const merkleTree = StandardMerkleTree.load(tree as any);
   const { address } = useAccount();
@@ -31,6 +33,8 @@ export function WaitingForPlayers({
         .map((x) => Object.freeze(x) as `0x${string}`)
     : zero;
   let { config, refetch } = usePrepareTankGameJoin({
+    // @ts-ignore
+    address: gameAddress,
     args: [
       { joiner: address!, proof: proof, playerName: value?.value[1] ?? "" },
     ],
@@ -39,6 +43,8 @@ export function WaitingForPlayers({
   let { toast } = useToast();
   let numPlayers = useTankGamePlayersCount({
     watch: true,
+    // @ts-ignore
+    address: gameAddress,
   });
   const { write, data } = useTankGameJoin(config);
   useWaitForTransaction({

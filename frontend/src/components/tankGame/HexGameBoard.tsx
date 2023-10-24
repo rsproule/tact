@@ -11,15 +11,31 @@ import { useAccount } from "wagmi";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { ITank } from "./ITank";
 
-export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
+export function HexBoard({
+  boardSize,
+  gameAddress,
+}: {
+  boardSize: bigint | undefined;
+  gameAddress: `0x${string}`;
+}) {
   const [selectedTank, setSelectedTank] = useState<typeof ITank | undefined>();
   const [selectedTile, setSelectedTile] = useState<Hex | undefined>();
   const [highlightedTiles, setHighlightedTiles] = useState<Hex[] | undefined>();
-  let tanks = useGameViewGetAllTanks({ watch: true });
-  let hearts = useGameViewGetAllHearts({ watch: true });
+  let tanks = useGameViewGetAllTanks({
+    watch: true,
+    // @ts-ignore
+    address: gameAddress,
+  });
+  let hearts = useGameViewGetAllHearts({
+    watch: true,
+    // @ts-ignore
+    address: gameAddress,
+  });
   const { address } = useAccount();
   let ownerTankId = useTankGamePlayers({
     args: [address!],
+    // @ts-ignore
+    address: gameAddress,
     enabled: !!address,
   });
   let ownerTank = tanks.data?.find((tank) => tank.tankId === ownerTankId.data);

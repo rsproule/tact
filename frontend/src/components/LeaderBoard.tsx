@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { toTankName } from "./tankGame/EventsStream";
 import { useState } from "react";
 
-export function LeaderBoard() {
+export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
   const [murderCount, setMurderCount] = useState(undefined);
   const [reviveCount, setReviveCount] = useState(undefined);
   const [deathCount, setDeathCount] = useState(undefined);
@@ -15,12 +15,11 @@ export function LeaderBoard() {
   const { chain } = useNetwork();
   const getLogs = async () => {
     const publicClient = getPublicClient();
-    const chainId = chain?.id;
     const filter = await publicClient.createContractEventFilter({
       abi: tankGameABI,
       strict: true,
       fromBlock: BigInt(0),
-      address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+      address: gameAddress,
     });
     return await publicClient.getFilterLogs({
       filter,
