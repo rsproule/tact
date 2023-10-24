@@ -12,25 +12,26 @@ contract TankGameFactoryTest is Test {
     TankGame public game;
 
     function setUp() public {
-        game = new TankGame(getSettings(), msg.sender);
+        game = new TankGame();
+        game.initialize(getSettings(), msg.sender);
         bytes32[] memory proof = new bytes32[](1);
         vm.prank(address(1));
         game.join(ITankGame.JoinParams(address(1), proof, "player1"));
         game.start();
-        gameView = new GameView(game);
+        gameView = new GameView();
     }
 
     function test_view_getAllTanks() public {
-        GameView.TankLocation[] memory tanks = gameView.getAllTanks();
+        GameView.TankLocation[] memory tanks = gameView.getAllTanks(address(game));
         assertTrue(tanks.length == 1, "tanks length is 1");
     }
 
     function test_view_getAllHearts() public {
-        GameView.HeartLocation[] memory hearts = gameView.getAllHearts();
+        GameView.HeartLocation[] memory hearts = gameView.getAllHearts(address(game));
         assertTrue(hearts.length == 0, "tanks length is 0");
         vm.roll(2);
         game.reveal();
-        hearts = gameView.getAllHearts();
+        hearts = gameView.getAllHearts(address(game));
         assertTrue(hearts.length == 1, "tanks length is 1");
     }
 

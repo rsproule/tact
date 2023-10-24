@@ -5,24 +5,28 @@ import { DefaultEmptyHooks } from "src/hooks/DefaultEmptyHooks.sol";
 import { IHooks } from "src/interfaces/IHooks.sol";
 import { ITreaty } from "src/interfaces/ITreaty.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
+import { IGameView } from "src/view/IGameView.sol";
 
 contract NonAggression is DefaultEmptyHooks, ITreaty {
     uint256 public ownerTank;
-    ITankGame public tankGame;
+    address public tankGame;
+    IGameView public tankGameView;
     mapping(uint256 tankId => uint256 expiry) public proposals;
     mapping(uint256 tankId => uint256 expiry) public allies;
 
-    event NonAggressionCreated(uint256 ownerTank, ITankGame tankGame);
+    event NonAggressionCreated(uint256 ownerTank, address tankGame);
 
     modifier hasTankAuth(uint256 tankId) {
-        require(tankGame.isAuth(tankId, msg.sender), "NonAggression: not owner");
+        // TODO: pass the address, do the casting in the view contract
+        require(tankGameView.isAuth(tankGame, tankId, msg.sender), "NonAggression: not owner");
         _;
     }
 
-    constructor(ITankGame _tankGame, uint256 _ownerTank) {
+    constructor(address _tankGame, address _gameView, uint256 _ownerTank) {
         // this should only be deployable by the guy that actually has auth on the tank
         // require(_tankGame.isAuth(_ownerTank, msg.sender), "NonAggression: not owner");
         tankGame = _tankGame;
+        tankGameView = IGameView(_gameView);
         ownerTank = _ownerTank;
         emit NonAggressionCreated(_ownerTank, tankGame);
     }
@@ -37,7 +41,8 @@ contract NonAggression is DefaultEmptyHooks, ITreaty {
         override
         returns (bytes4)
     {
-        uint256 epoch = ITankGame(tankGame).getGameEpoch();
+        // TODO: pass the address, do the casting in the view contract
+        uint256 epoch = tankGameView.getGameEpoch(tankGame);
         require(epoch > allies[shootParams.toId], "NonAggression: cannot shoot ally");
         return IHooks.beforeShoot.selector;
     }
@@ -47,7 +52,8 @@ contract NonAggression is DefaultEmptyHooks, ITreaty {
         uint256 externalAlliance = NonAggression(treaty).allies(ownerTank);
         uint256 internalProposal = proposals[tankId];
         uint256 internalAlliance = allies[tankId];
-        uint256 epoch = ITankGame(tankGame).getGameEpoch();
+        // TODO: pass the address, do the casting in the view contract
+        uint256 epoch = tankGameView.getGameEpoch(tankGame);
         require(epoch < externalProposal, "NonAggression: proposal expired");
         if (internalProposal == externalProposal) {
             // this is the loop back
@@ -56,7 +62,8 @@ contract NonAggression is DefaultEmptyHooks, ITreaty {
         } else {
             // this is the first loop
             require(internalProposal < externalProposal, "NonAggression: proposal expired");
-            require(tankGame.isAuth(ownerTank, msg.sender), "NonAggression: not owner");
+            // TODO: pass the address, do the casting in the view contract
+            require(tankGameView.isAuth(tankGame, ownerTank, msg.sender), "NonAggression: not owner");
         }
         require(
             !_areAllies(externalProposal, internalProposal, externalAlliance, internalAlliance),
@@ -88,7 +95,8 @@ contract NonAggression is DefaultEmptyHooks, ITreaty {
     }
 
     function propose(uint256 tankId, uint256 expiry) public override hasTankAuth(ownerTank) {
-        uint256 epoch = ITankGame(tankGame).getGameEpoch();
+        // TODO: pass the address, do the casting in the view contract
+        uint256 epoch = tankGameView.getGameEpoch(tankGame);
         require(epoch < expiry, "NonAggression: past expiry");
         proposals[tankId] = expiry;
         emit ProposedTreaty(ownerTank, tankId, address(this), expiry);

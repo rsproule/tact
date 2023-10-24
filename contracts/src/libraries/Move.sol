@@ -12,7 +12,7 @@ library MoveLib {
         Board.Tile memory tile,
         uint256 apsRequired
     )
-        internal
+        external
         view
     {
         uint256 tankId = params.tankId;
@@ -29,7 +29,7 @@ library MoveLib {
         Board.Tile memory tile,
         uint256 apsRequired
     )
-        internal
+        external
     {
         uint256 tankId = params.tankId;
         Board.Point memory to = params.to;
