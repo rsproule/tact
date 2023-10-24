@@ -1,11 +1,5 @@
 "use client";
-import { useContractRead } from "wagmi";
-import {
-  tankGameABI,
-  useTankGameGetSettings,
-  useTankGameState,
-  useITankGameGetSettings,
-} from "../../generated";
+import { useTankGameGetSettings, useTankGameState } from "../../generated";
 import { LeaderBoard } from "../LeaderBoard";
 import { Treaties } from "../treaties/Treaties";
 import { HexBoard } from "./HexGameBoard";
@@ -37,7 +31,7 @@ export function TankGame({ address }: { address: `0x${string}` }) {
         {gameState.data === 2 && <GameOver />}
         {gameState.data !== 2 && <Donate />}
       </div>
-      <LeaderBoard gameAddress={ address} />
+      <LeaderBoard gameAddress={address} />
     </div>
   );
 }

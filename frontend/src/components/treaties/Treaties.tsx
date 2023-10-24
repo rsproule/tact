@@ -23,6 +23,7 @@ import {
 } from "../ui/accordion";
 
 export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
+  const { chain } = useNetwork();
   const { address } = useAccount();
   const { data: blockNumber } = useBlockNumber({ watch: true });
   let ownerTank = useTankGamePlayers({
@@ -38,12 +39,13 @@ export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
   useEffect(() => {
     const getLogs = async () => {
       const publicClient = getPublicClient();
+      const chainId = chain?.id;
       const filter = await publicClient.createContractEventFilter({
         abi: hookFactoryABI,
         strict: true,
         eventName: "HookCreated",
         fromBlock: BigInt(0),
-        address: gameAddress,
+        address: hookFactoryAddress[chainId as keyof typeof hookFactoryAddress],
       });
       const hooks = await publicClient.getFilterLogs({
         filter,
