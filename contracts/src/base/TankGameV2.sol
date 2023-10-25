@@ -19,6 +19,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function initialize(ITankGame.GameSettings memory gs, address _owner) public payable override {
         require(gs.boardSize % 3 == 0, "invalid board size");
+        require(gs.playerCount > 1, "invalid player count");
         emit GameInit(gs);
         settings = gs;
         state = GameState.WaitingForPlayers;
@@ -347,7 +348,9 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Death(killer, tankId);
         if (numTanksAlive == 1) {
             podium[1] = deadTanks[deadTanks.length - 1];
-            podium[2] = deadTanks[deadTanks.length - 2];
+            if (deadTanks.length > 1) {
+                podium[2] = deadTanks[deadTanks.length - 2];
+            }
             // since we know that there is only 1 remaining tank
             // we can set the first podium position to the sum of all alive tanks
             // can't trust the `from` because you can kill yourself
