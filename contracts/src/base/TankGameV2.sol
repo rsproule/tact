@@ -19,6 +19,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
 
     function initialize(ITankGame.GameSettings memory gs, address _owner) public payable override {
         require(gs.boardSize % 3 == 0, "invalid board size");
+        require(gs.boardSize >= 1, "invalid board size");
         require(gs.playerCount > 1, "invalid player count");
         emit GameInit(gs);
         settings = gs;

@@ -1,22 +1,20 @@
 "use client";
-import { Button } from "@/src/components/ui/button";
-import { useToast } from "@/src/components/ui/use-toast";
 import {
   tankGameAddress,
   tankGameFactoryABI,
   tankGameFactoryAddress,
-  usePrepareTankGameFactoryCreateGame,
-  useTankGameFactoryCreateGame,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
-import { BaseError } from "viem";
-import {
-  useAccount,
-  useBlockNumber,
-  useNetwork,
-  useWaitForTransaction,
-} from "wagmi";
+import { useBlockNumber, useNetwork } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
+import CreateGameForm from "@/src/components/CreateGameForm";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/src/components/ui/accordion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 
 export default function GamesList() {
   const { data: blockNumber } = useBlockNumber({ watch: true });
@@ -47,74 +45,47 @@ export default function GamesList() {
   }, [blockNumber]);
   console.log(games);
   return (
-    <div className="container">
-      <div>
-        create game
-        <CreateGame
-          implAddress={
-            tankGameAddress[chain?.id as keyof typeof tankGameAddress]
-          }
-        />
-      </div>
-      <div>Tact games:</div>
-      {/* @ts-ignore */}
-      <>
+    <div className="container pb-20">
+      <Card>
+        <Accordion type="single" collapsible>
+          <AccordionItem value="manage">
+            <AccordionTrigger>
+              <div className="w-full">Create a game</div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <CreateGameForm
+                implAddress={
+                  tankGameAddress[chain?.id as keyof typeof tankGameAddress]
+                }
+              />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Card>
+      <div className="mt-10">Existing games:</div>
+      <div className="grid-flow-row auto-rows-max">
         {games &&
           // @ts-ignore
-          games?.map((game, i) => (
-            <a key={i} href={`game/${game.args.game}`}>
-              {game.args.game} <br />
-            </a>
+          games?.slice().reverse().map((game, i) => (
+            <div key={i} className="my-5">
+              <a href={`game/${game.args.game}`}>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Game address: {game.args.game}</CardTitle>
+                    <CardContent>
+                      {/* <div>NumPlayers : {game.args.settings.}</div> */}
+                      {Object.keys(game.args.settings).map((key, i) => (
+                        <div key={i}>
+                          {key}: {game.args.settings[key].toString()}
+                        </div>
+                      ))}
+                    </CardContent>
+                  </CardHeader>
+                </Card>
+              </a>
+            </div>
           ))}
-      </>
+      </div>
     </div>
-  );
-}
-
-function CreateGame({ implAddress }: { implAddress: `0x${string}` }) {
-  const { toast } = useToast();
-  const { address: deployerAddress } = useAccount();
-  let { config } = usePrepareTankGameFactoryCreateGame({
-    args: [
-      implAddress,
-      {
-        playerCount: BigInt(2),
-        boardSize: BigInt(12),
-        initAPs: BigInt(1),
-        initHearts: BigInt(3),
-        initShootRange: BigInt(3),
-        epochSeconds: BigInt(60),
-        buyInMinimum: BigInt(0),
-        revealWaitBlocks: BigInt(60),
-        autoStart: true,
-        root: "0x0000000000000000000000000000000000000000000000000000000000000000",
-      },
-      deployerAddress!,
-    ],
-    enabled: true,
-  });
-  const { write: create, data } = useTankGameFactoryCreateGame(config);
-  useWaitForTransaction({
-    hash: data?.hash,
-    enabled: !!data,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
-      toast({
-        variant: "success",
-        title: "Transaction Confirmed.",
-        description: s.transactionHash,
-      });
-    },
-  });
-  return (
-    // <DropdownMenuContent className="w-56">
-    <Button onClick={() => create?.()}>Create Game</Button>
-    // </DropdownMenuContent>
   );
 }
