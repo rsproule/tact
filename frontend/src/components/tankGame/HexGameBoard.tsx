@@ -2,12 +2,13 @@ import { Tile } from "./Tile";
 import { HexGrid, Layout, Hex, Pattern } from "react-hexgrid";
 
 import {
+  gameViewAddress,
   useGameViewGetAllHearts,
   useGameViewGetAllTanks,
   useTankGamePlayers,
 } from "@/src/generated";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { ITank } from "./ITank";
 
@@ -21,15 +22,18 @@ export function HexBoard({
   const [selectedTank, setSelectedTank] = useState<typeof ITank | undefined>();
   const [selectedTile, setSelectedTile] = useState<Hex | undefined>();
   const [highlightedTiles, setHighlightedTiles] = useState<Hex[] | undefined>();
+  const { chain } = useNetwork();
   let tanks = useGameViewGetAllTanks({
     watch: true,
     // @ts-ignore
-    address: gameAddress,
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    args: [gameAddress],
   });
   let hearts = useGameViewGetAllHearts({
     watch: true,
     // @ts-ignore
-    address: gameAddress,
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    args: [gameAddress],
   });
   const { address } = useAccount();
   let ownerTankId = useTankGamePlayers({
@@ -92,6 +96,7 @@ export function HexBoard({
                 });
                 return (
                   <Tile
+                    gameAddress={gameAddress}
                     key={i}
                     x={Number(hex.q)}
                     y={Number(hex.r)}

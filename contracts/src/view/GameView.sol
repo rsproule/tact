@@ -100,6 +100,7 @@ contract GameView is IGameView {
             uint256 epochSeconds,
             uint256 buyInMinimum,
             uint256 revealWaitBlocks,
+            bool autoStart,
             bytes32 root
         ) = game.settings();
         return ITankGame.GameSettings({
@@ -111,6 +112,7 @@ contract GameView is IGameView {
             epochSeconds: epochSeconds,
             buyInMinimum: buyInMinimum,
             revealWaitBlocks: revealWaitBlocks,
+            autoStart: autoStart,
             root: root
         });
     }

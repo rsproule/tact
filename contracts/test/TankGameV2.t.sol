@@ -28,6 +28,7 @@ contract TankTest is Test {
             epochSeconds: 4 hours,
             buyInMinimum: 1,
             revealWaitBlocks: 1000,
+            autoStart: false,
             root: bytes32(0)
         });
         tankGame = new TankGame();

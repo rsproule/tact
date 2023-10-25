@@ -3,14 +3,18 @@
 import { EventStream } from "@/src/components/tankGame/EventsStream";
 import { TankGame } from "@/src/components/tankGame/TankGame";
 import { Toaster } from "@/src/components/ui/toaster";
-import { useTankGameGetSettings } from "@/src/generated";
+import { gameViewAddress, useGameViewGetSettings } from "@/src/generated";
+import { useNetwork } from "wagmi";
 
 export function GamePage({ gameAddress }: { gameAddress: `0x${string}` }) {
-  let settings = useTankGameGetSettings({
+  const { chain } = useNetwork();
+  let settings = useGameViewGetSettings({
     watch: true,
     // @ts-ignore
-    address: gameAddress,
+    address : gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    args: [gameAddress]
   });
+  console.log(settings);
   return settings.data ? (
     <div className="container">
       <TankGame address={gameAddress as `0x${string}`} />

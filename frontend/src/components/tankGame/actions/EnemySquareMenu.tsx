@@ -30,14 +30,18 @@ export default function EnemySquareMenu({
   ownersTank,
   enemyTank,
   open,
+  gameAddress,
 }: {
   ownersTank: bigint | undefined;
   enemyTank: bigint | undefined;
   open: boolean;
+  gameAddress: `0x${string}`;
 }) {
   const [multiplier, setMultiplier] = useState(1);
   const { toast } = useToast();
   let { config: shootConfig } = usePrepareTankGameShoot({
+    // @ts-ignore
+    address: gameAddress,
     args: [
       {
         fromId: ownersTank!,
@@ -67,6 +71,8 @@ export default function EnemySquareMenu({
   });
 
   let { config: giftHeartConfig } = usePrepareTankGameGive({
+    // @ts-ignore
+    address: gameAddress,
     args: [
       {
         fromId: ownersTank!,
@@ -97,6 +103,8 @@ export default function EnemySquareMenu({
     },
   });
   let { config: giveAPConfig } = usePrepareTankGameGive({
+    // @ts-ignore
+    address: gameAddress,
     args: [
       {
         fromId: ownersTank!,
@@ -126,6 +134,8 @@ export default function EnemySquareMenu({
     },
   });
   let { config: curseConfig } = usePrepareTankGameVote({
+    // @ts-ignore
+    address: gameAddress,
     args: [{ voter: ownersTank!, cursed: enemyTank! }],
     enabled: open && !!ownersTank && !!enemyTank,
   });
@@ -149,6 +159,8 @@ export default function EnemySquareMenu({
   });
 
   let { config: dripConfig } = usePrepareTankGameDrip({
+    // @ts-ignore
+    address: gameAddress,
     args: [{ tankId: enemyTank! }],
     enabled: open && !!ownersTank,
   });

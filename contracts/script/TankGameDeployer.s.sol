@@ -47,6 +47,7 @@ contract TankGameDeployerScript is Script {
             epochSeconds: 15 minutes,
             buyInMinimum: 0,
             revealWaitBlocks: (45 minutes) / 12,
+            autoStart: false,
             root: bytes32(0x0)
         });
         tankGame = new TankGame();

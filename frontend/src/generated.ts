@@ -274,11 +274,8 @@ export const bountyABI = [
     stateMutability: 'nonpayable',
     type: 'constructor',
     inputs: [
-      {
-        name: '_tankGame',
-        internalType: 'contract ITankGame',
-        type: 'address',
-      },
+      { name: '_tankGame', internalType: 'address', type: 'address' },
+      { name: '_tankGameView', internalType: 'address', type: 'address' },
       { name: '_ownerTank', internalType: 'uint256', type: 'uint256' },
     ],
   },
@@ -294,7 +291,7 @@ export const bountyABI = [
       },
       {
         name: 'tankGame',
-        internalType: 'contract ITankGame',
+        internalType: 'address',
         type: 'address',
         indexed: false,
       },
@@ -825,8 +822,15 @@ export const bountyABI = [
     type: 'function',
     inputs: [],
     name: 'tankGame',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'tankGameView',
     outputs: [
-      { name: '', internalType: 'contract ITankGame', type: 'address' },
+      { name: '', internalType: 'contract IGameView', type: 'address' },
     ],
   },
   {
@@ -846,6 +850,14 @@ export const bountyABI = [
     name: 'withdrawals',
     outputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
   },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Clones
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const clonesABI = [
+  { type: 'error', inputs: [], name: 'ERC1167FailedCreateClone' },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1249,30 +1261,14 @@ export const defaultEmptyHooksABI = [
  */
 export const gameViewABI = [
   {
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-    inputs: [
-      { name: '_game', internalType: 'contract ITankGame', type: 'address' },
-    ],
-  },
-  {
     stateMutability: 'view',
     type: 'function',
-    inputs: [],
-    name: 'game',
-    outputs: [
-      { name: '', internalType: 'contract ITankGame', type: 'address' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
     name: 'getAllHearts',
     outputs: [
       {
         name: '',
-        internalType: 'struct GameView.HeartLocation[]',
+        internalType: 'struct IGameView.HeartLocation[]',
         type: 'tuple[]',
         components: [
           {
@@ -1293,12 +1289,12 @@ export const gameViewABI = [
   {
     stateMutability: 'view',
     type: 'function',
-    inputs: [],
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
     name: 'getAllTanks',
     outputs: [
       {
         name: '',
-        internalType: 'struct GameView.TankLocation[]',
+        internalType: 'struct IGameView.TankLocation[]',
         type: 'tuple[]',
         components: [
           {
@@ -1327,6 +1323,125 @@ export const gameViewABI = [
       },
     ],
   },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getBoard',
+    outputs: [{ name: '', internalType: 'contract Board', type: 'address' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getEpoch',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getGameEpoch',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'game', internalType: 'address', type: 'address' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getLastDrip',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getPlayerCount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getSettings',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct ITankGame.GameSettings',
+        type: 'tuple',
+        components: [
+          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'revealWaitBlocks',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
+          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getState',
+    outputs: [
+      { name: '', internalType: 'enum ITankGame.GameState', type: 'uint8' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'game', internalType: 'address', type: 'address' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getTank',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct ITankGame.Tank',
+        type: 'tuple',
+        components: [
+          { name: 'owner', internalType: 'address', type: 'address' },
+          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'aps', internalType: 'uint256', type: 'uint256' },
+          { name: 'range', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'game', internalType: 'address', type: 'address' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getUpgradeCost',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'game', internalType: 'address', type: 'address' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: '_owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'isAuth',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+  },
 ] as const
 
 /**
@@ -1335,7 +1450,7 @@ export const gameViewABI = [
  */
 export const gameViewAddress = {
   5: '0xAFf0E741b60288110bA7a400Ef6a99917faA593c',
-  31337: '0xAFf0E741b60288110bA7a400Ef6a99917faA593c',
+  31337: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
 } as const
 
 /**
@@ -1676,6 +1791,7 @@ export const hookFactoryABI = [
     type: 'function',
     inputs: [
       { name: 'tankGame', internalType: 'contract ITankGame', type: 'address' },
+      { name: 'gameView', internalType: 'contract IGameView', type: 'address' },
       { name: 'tankId', internalType: 'uint256', type: 'uint256' },
       {
         name: 'hookType',
@@ -1694,7 +1810,7 @@ export const hookFactoryABI = [
  */
 export const hookFactoryAddress = {
   5: '0x1397a0540F1CA3604518483F534E83fbeB60beF6',
-  31337: '0x1397a0540F1CA3604518483F534E83fbeB60beF6',
+  31337: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
 } as const
 
 /**
@@ -1720,6 +1836,185 @@ export const iAcceptableABI = [
     ],
     name: 'accept',
     outputs: [],
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IGameView
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const iGameViewABI = [
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getAllHearts',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct IGameView.HeartLocation[]',
+        type: 'tuple[]',
+        components: [
+          {
+            name: 'position',
+            internalType: 'struct Board.Point',
+            type: 'tuple',
+            components: [
+              { name: 'x', internalType: 'uint256', type: 'uint256' },
+              { name: 'y', internalType: 'uint256', type: 'uint256' },
+              { name: 'z', internalType: 'uint256', type: 'uint256' },
+            ],
+          },
+          { name: 'numHearts', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getAllTanks',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct IGameView.TankLocation[]',
+        type: 'tuple[]',
+        components: [
+          {
+            name: 'tank',
+            internalType: 'struct ITankGame.Tank',
+            type: 'tuple',
+            components: [
+              { name: 'owner', internalType: 'address', type: 'address' },
+              { name: 'hearts', internalType: 'uint256', type: 'uint256' },
+              { name: 'aps', internalType: 'uint256', type: 'uint256' },
+              { name: 'range', internalType: 'uint256', type: 'uint256' },
+            ],
+          },
+          {
+            name: 'position',
+            internalType: 'struct Board.Point',
+            type: 'tuple',
+            components: [
+              { name: 'x', internalType: 'uint256', type: 'uint256' },
+              { name: 'y', internalType: 'uint256', type: 'uint256' },
+              { name: 'z', internalType: 'uint256', type: 'uint256' },
+            ],
+          },
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getBoard',
+    outputs: [{ name: '', internalType: 'contract Board', type: 'address' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getEpoch',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getGameEpoch',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'game', internalType: 'address', type: 'address' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getLastDrip',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getPlayerCount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getSettings',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct ITankGame.GameSettings',
+        type: 'tuple',
+        components: [
+          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'revealWaitBlocks',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
+          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'game', internalType: 'address', type: 'address' }],
+    name: 'getState',
+    outputs: [
+      { name: '', internalType: 'enum ITankGame.GameState', type: 'uint8' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'game', internalType: 'address', type: 'address' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getTank',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct ITankGame.Tank',
+        type: 'tuple',
+        components: [
+          { name: 'owner', internalType: 'address', type: 'address' },
+          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'aps', internalType: 'uint256', type: 'uint256' },
+          { name: 'range', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'game', internalType: 'address', type: 'address' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'isAuth',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
 ] as const
 
@@ -2362,7 +2657,6 @@ export const iMulticall3ABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -2551,6 +2845,7 @@ export const iTankGameABI = [
             internalType: 'uint256',
             type: 'uint256',
           },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
           { name: 'root', internalType: 'bytes32', type: 'bytes32' },
         ],
         indexed: false,
@@ -2901,97 +3196,6 @@ export const iTankGameABI = [
     outputs: [],
   },
   {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getBoard',
-    outputs: [{ name: '', internalType: 'contract Board', type: 'address' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getEpoch',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getGameEpoch',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-    name: 'getLastDrip',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getPlayerCount',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getSettings',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct ITankGame.GameSettings',
-        type: 'tuple',
-        components: [
-          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
-          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
-          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
-          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
-          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
-          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
-          {
-            name: 'revealWaitBlocks',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
-        ],
-      },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getState',
-    outputs: [
-      { name: '', internalType: 'enum ITankGame.GameState', type: 'uint8' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-    name: 'getTank',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct ITankGame.Tank',
-        type: 'tuple',
-        components: [
-          { name: 'owner', internalType: 'address', type: 'address' },
-          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'aps', internalType: 'uint256', type: 'uint256' },
-          { name: 'range', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-  },
-  {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
@@ -3011,14 +3215,34 @@ export const iTankGameABI = [
     outputs: [],
   },
   {
-    stateMutability: 'view',
+    stateMutability: 'payable',
     type: 'function',
     inputs: [
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      { name: 'owner', internalType: 'address', type: 'address' },
+      {
+        name: 'settings',
+        internalType: 'struct ITankGame.GameSettings',
+        type: 'tuple',
+        components: [
+          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'revealWaitBlocks',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
+          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+      { name: '_owner', internalType: 'address', type: 'address' },
     ],
-    name: 'isAuth',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    name: 'initialize',
+    outputs: [],
   },
   {
     stateMutability: 'payable',
@@ -3125,18 +3349,15 @@ export const iTankGameABI = [
 ] as const
 
 /**
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
 export const iTankGameAddress = {
-  1: '0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743',
   5: '0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743',
-  31337: '0xCafac3dD18aC6c6e92c921884f9E4176737C052c',
+  31337: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
 } as const
 
 /**
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -3265,11 +3486,8 @@ export const nonAggressionABI = [
     stateMutability: 'nonpayable',
     type: 'constructor',
     inputs: [
-      {
-        name: '_tankGame',
-        internalType: 'contract ITankGame',
-        type: 'address',
-      },
+      { name: '_tankGame', internalType: 'address', type: 'address' },
+      { name: '_gameView', internalType: 'address', type: 'address' },
       { name: '_ownerTank', internalType: 'uint256', type: 'uint256' },
     ],
   },
@@ -3322,7 +3540,7 @@ export const nonAggressionABI = [
       },
       {
         name: 'tankGame',
-        internalType: 'contract ITankGame',
+        internalType: 'address',
         type: 'address',
         indexed: false,
       },
@@ -3790,8 +4008,15 @@ export const nonAggressionABI = [
     type: 'function',
     inputs: [],
     name: 'tankGame',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'tankGameView',
     outputs: [
-      { name: '', internalType: 'contract ITankGame', type: 'address' },
+      { name: '', internalType: 'contract IGameView', type: 'address' },
     ],
   },
 ] as const
@@ -4217,38 +4442,10 @@ export const stringsABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
 export const tankGameABI = [
-  {
-    stateMutability: 'payable',
-    type: 'constructor',
-    inputs: [
-      {
-        name: 'gs',
-        internalType: 'struct ITankGame.GameSettings',
-        type: 'tuple',
-        components: [
-          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
-          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
-          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
-          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
-          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
-          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
-          {
-            name: 'revealWaitBlocks',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
-        ],
-      },
-      { name: '_owner', internalType: 'address', type: 'address' },
-    ],
-  },
   {
     type: 'event',
     anonymous: false,
@@ -4433,6 +4630,7 @@ export const tankGameABI = [
             internalType: 'uint256',
             type: 'uint256',
           },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
           { name: 'root', internalType: 'bytes32', type: 'bytes32' },
         ],
         indexed: false,
@@ -4723,6 +4921,13 @@ export const tankGameABI = [
     name: 'Vote',
   },
   {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: '_getEpoch',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
@@ -4847,93 +5052,9 @@ export const tankGameABI = [
   {
     stateMutability: 'view',
     type: 'function',
-    inputs: [],
-    name: 'getBoard',
-    outputs: [{ name: '', internalType: 'contract Board', type: 'address' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getEpoch',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getGameEpoch',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
     inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
     name: 'getLastDrip',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getPlayerCount',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getSettings',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct ITankGame.GameSettings',
-        type: 'tuple',
-        components: [
-          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
-          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
-          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
-          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
-          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
-          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
-          {
-            name: 'revealWaitBlocks',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
-        ],
-      },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'getState',
-    outputs: [
-      { name: '', internalType: 'enum ITankGame.GameState', type: 'uint8' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-    name: 'getTank',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct ITankGame.Tank',
-        type: 'tuple',
-        components: [
-          { name: 'owner', internalType: 'address', type: 'address' },
-          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'aps', internalType: 'uint256', type: 'uint256' },
-          { name: 'range', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
   },
   {
     stateMutability: 'view',
@@ -4967,6 +5088,36 @@ export const tankGameABI = [
     inputs: [{ name: 'position', internalType: 'uint256', type: 'uint256' }],
     name: 'heartsOnBoard',
     outputs: [{ name: 'heartCount', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'payable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'gs',
+        internalType: 'struct ITankGame.GameSettings',
+        type: 'tuple',
+        components: [
+          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'revealWaitBlocks',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
+          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+      { name: '_owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'initialize',
+    outputs: [],
   },
   {
     stateMutability: 'view',
@@ -5113,6 +5264,7 @@ export const tankGameABI = [
       { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
       { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
       { name: 'revealWaitBlocks', internalType: 'uint256', type: 'uint256' },
+      { name: 'autoStart', internalType: 'bool', type: 'bool' },
       { name: 'root', internalType: 'bytes32', type: 'bytes32' },
     ],
   },
@@ -5271,24 +5423,119 @@ export const tankGameABI = [
 ] as const
 
 /**
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
 export const tankGameAddress = {
-  1: '0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743',
   5: '0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743',
-  31337: '0xCafac3dD18aC6c6e92c921884f9E4176737C052c',
+  31337: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
 } as const
 
 /**
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
 export const tankGameConfig = {
   address: tankGameAddress,
   abi: tankGameABI,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TankGameFactory
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export const tankGameFactoryABI = [
+  { type: 'error', inputs: [], name: 'ERC1167FailedCreateClone' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'game',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'settings',
+        internalType: 'struct ITankGame.GameSettings',
+        type: 'tuple',
+        components: [
+          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'revealWaitBlocks',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
+          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+        ],
+        indexed: false,
+      },
+    ],
+    name: 'GameCreated',
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: '_implementation', internalType: 'address', type: 'address' },
+      {
+        name: 'settings',
+        internalType: 'struct ITankGame.GameSettings',
+        type: 'tuple',
+        components: [
+          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'revealWaitBlocks',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
+          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+      { name: '_owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'createGame',
+    outputs: [
+      { name: 'game', internalType: 'contract ITankGame', type: 'address' },
+    ],
+  },
+] as const
+
+/**
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export const tankGameFactoryAddress = {
+  5: '0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08',
+  31337: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
+} as const
+
+/**
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export const tankGameFactoryConfig = {
+  address: tankGameFactoryAddress,
+  abi: tankGameFactoryABI,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -6437,6 +6684,7 @@ export const tankGameV2StorageABI = [
       { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
       { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
       { name: 'revealWaitBlocks', internalType: 'uint256', type: 'uint256' },
+      { name: 'autoStart', internalType: 'bool', type: 'bool' },
       { name: 'root', internalType: 'bytes32', type: 'bytes32' },
     ],
   },
@@ -7185,6 +7433,25 @@ export function useBountyTankGame<
   return useContractRead({
     abi: bountyABI,
     functionName: 'tankGame',
+    ...config,
+  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"tankGameView"`.
+ */
+export function useBountyTankGameView<
+  TFunctionName extends 'tankGameView',
+  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: bountyABI,
+    functionName: 'tankGameView',
     ...config,
   } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
 }
@@ -8724,32 +8991,6 @@ export function useGameViewRead<
 }
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"game"`.
- *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
- * -
- */
-export function useGameViewGame<
-  TFunctionName extends 'game',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'game',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
-
-/**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getAllHearts"`.
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
@@ -8797,6 +9038,266 @@ export function useGameViewGetAllTanks<
     abi: gameViewABI,
     address: gameViewAddress[chainId as keyof typeof gameViewAddress],
     functionName: 'getAllTanks',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getBoard"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewGetBoard<
+  TFunctionName extends 'getBoard',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'getBoard',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getEpoch"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewGetEpoch<
+  TFunctionName extends 'getEpoch',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'getEpoch',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getGameEpoch"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewGetGameEpoch<
+  TFunctionName extends 'getGameEpoch',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'getGameEpoch',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getLastDrip"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewGetLastDrip<
+  TFunctionName extends 'getLastDrip',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'getLastDrip',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getPlayerCount"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewGetPlayerCount<
+  TFunctionName extends 'getPlayerCount',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'getPlayerCount',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getSettings"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewGetSettings<
+  TFunctionName extends 'getSettings',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'getSettings',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getState"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewGetState<
+  TFunctionName extends 'getState',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'getState',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getTank"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewGetTank<
+  TFunctionName extends 'getTank',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'getTank',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getUpgradeCost"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewGetUpgradeCost<
+  TFunctionName extends 'getUpgradeCost',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'getUpgradeCost',
+    ...config,
+  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"isAuth"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * -
+ */
+export function useGameViewIsAuth<
+  TFunctionName extends 'isAuth',
+  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: gameViewABI,
+    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
+    functionName: 'isAuth',
     ...config,
   } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
 }
@@ -9450,6 +9951,233 @@ export function usePrepareIAcceptableAccept(
     functionName: 'accept',
     ...config,
   } as UsePrepareContractWriteConfig<typeof iAcceptableABI, 'accept'>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__.
+ */
+export function useIGameViewRead<
+  TFunctionName extends string,
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getAllHearts"`.
+ */
+export function useIGameViewGetAllHearts<
+  TFunctionName extends 'getAllHearts',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getAllHearts',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getAllTanks"`.
+ */
+export function useIGameViewGetAllTanks<
+  TFunctionName extends 'getAllTanks',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getAllTanks',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getBoard"`.
+ */
+export function useIGameViewGetBoard<
+  TFunctionName extends 'getBoard',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getBoard',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getEpoch"`.
+ */
+export function useIGameViewGetEpoch<
+  TFunctionName extends 'getEpoch',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getEpoch',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getGameEpoch"`.
+ */
+export function useIGameViewGetGameEpoch<
+  TFunctionName extends 'getGameEpoch',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getGameEpoch',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getLastDrip"`.
+ */
+export function useIGameViewGetLastDrip<
+  TFunctionName extends 'getLastDrip',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getLastDrip',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getPlayerCount"`.
+ */
+export function useIGameViewGetPlayerCount<
+  TFunctionName extends 'getPlayerCount',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getPlayerCount',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getSettings"`.
+ */
+export function useIGameViewGetSettings<
+  TFunctionName extends 'getSettings',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getSettings',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getState"`.
+ */
+export function useIGameViewGetState<
+  TFunctionName extends 'getState',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getState',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getTank"`.
+ */
+export function useIGameViewGetTank<
+  TFunctionName extends 'getTank',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'getTank',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"isAuth"`.
+ */
+export function useIGameViewIsAuth<
+  TFunctionName extends 'isAuth',
+  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: iGameViewABI,
+    functionName: 'isAuth',
+    ...config,
+  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
 }
 
 /**
@@ -10871,278 +11599,8 @@ export function usePrepareIMulticall3TryBlockAndAggregate(
 }
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"getBoard"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameGetBoard<
-  TFunctionName extends 'getBoard',
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'getBoard',
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"getEpoch"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameGetEpoch<
-  TFunctionName extends 'getEpoch',
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'getEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"getGameEpoch"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameGetGameEpoch<
-  TFunctionName extends 'getGameEpoch',
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'getGameEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"getLastDrip"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameGetLastDrip<
-  TFunctionName extends 'getLastDrip',
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'getLastDrip',
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"getPlayerCount"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameGetPlayerCount<
-  TFunctionName extends 'getPlayerCount',
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'getPlayerCount',
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"getSettings"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameGetSettings<
-  TFunctionName extends 'getSettings',
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'getSettings',
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"getState"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameGetState<
-  TFunctionName extends 'getState',
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'getState',
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"getTank"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameGetTank<
-  TFunctionName extends 'getTank',
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'getTank',
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"isAuth"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useITankGameIsAuth<
-  TFunctionName extends 'isAuth',
-  TSelectData = ReadContractResult<typeof iTankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'isAuth',
-    ...config,
-  } as UseContractReadConfig<typeof iTankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11179,7 +11637,6 @@ export function useITankGameWrite<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"addHooks"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11217,7 +11674,6 @@ export function useITankGameAddHooks<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"claim"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11255,7 +11711,6 @@ export function useITankGameClaim<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"delegate"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11293,7 +11748,6 @@ export function useITankGameDelegate<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"drip"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11331,7 +11785,6 @@ export function useITankGameDrip<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"give"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11367,9 +11820,45 @@ export function useITankGameGive<
 }
 
 /**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"initialize"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * -
+ */
+export function useITankGameInitialize<
+  TMode extends WriteContractMode = undefined,
+  TChainId extends number = keyof typeof iTankGameAddress,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof iTankGameABI,
+          'initialize'
+        >['request']['abi'],
+        'initialize',
+        TMode
+      > & { address?: Address; chainId?: TChainId; functionName?: 'initialize' }
+    : UseContractWriteConfig<typeof iTankGameABI, 'initialize', TMode> & {
+        abi?: never
+        address?: never
+        chainId?: TChainId
+        functionName?: 'initialize'
+      } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractWrite<typeof iTankGameABI, 'initialize', TMode>({
+    abi: iTankGameABI,
+    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+    functionName: 'initialize',
+    ...config,
+  } as any)
+}
+
+/**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"join"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11407,7 +11896,6 @@ export function useITankGameJoin<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"move"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11445,7 +11933,6 @@ export function useITankGameMove<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"reveal"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11483,7 +11970,6 @@ export function useITankGameReveal<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"shoot"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11521,7 +12007,6 @@ export function useITankGameShoot<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"upgrade"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11559,7 +12044,6 @@ export function useITankGameUpgrade<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"vote"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11597,7 +12081,6 @@ export function useITankGameVote<
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11620,7 +12103,6 @@ export function usePrepareITankGameWrite<TFunctionName extends string>(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"addHooks"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11644,7 +12126,6 @@ export function usePrepareITankGameAddHooks(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"claim"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11668,7 +12149,6 @@ export function usePrepareITankGameClaim(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"delegate"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11692,7 +12172,6 @@ export function usePrepareITankGameDelegate(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"drip"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11716,7 +12195,6 @@ export function usePrepareITankGameDrip(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"give"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11738,9 +12216,31 @@ export function usePrepareITankGameGive(
 }
 
 /**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"initialize"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * -
+ */
+export function usePrepareITankGameInitialize(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof iTankGameABI, 'initialize'>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return usePrepareContractWrite({
+    abi: iTankGameABI,
+    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+    functionName: 'initialize',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'initialize'>)
+}
+
+/**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"join"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11764,7 +12264,6 @@ export function usePrepareITankGameJoin(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"move"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11788,7 +12287,6 @@ export function usePrepareITankGameMove(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"reveal"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11812,7 +12310,6 @@ export function usePrepareITankGameReveal(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"shoot"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11836,7 +12333,6 @@ export function usePrepareITankGameShoot(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"upgrade"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11860,7 +12356,6 @@ export function usePrepareITankGameUpgrade(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"vote"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11884,7 +12379,6 @@ export function usePrepareITankGameVote(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11907,7 +12401,6 @@ export function useITankGameEvent<TEventName extends string>(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"BountyCompleted"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11931,7 +12424,6 @@ export function useITankGameBountyCompletedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Claim"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11955,7 +12447,6 @@ export function useITankGameClaimEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Commit"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -11979,7 +12470,6 @@ export function useITankGameCommitEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Curse"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12003,7 +12493,6 @@ export function useITankGameCurseEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Death"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12027,7 +12516,6 @@ export function useITankGameDeathEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Delegate"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12051,7 +12539,6 @@ export function useITankGameDelegateEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Drip"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12075,7 +12562,6 @@ export function useITankGameDripEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"GameInit"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12099,7 +12585,6 @@ export function useITankGameGameInitEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"GameOver"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12123,7 +12608,6 @@ export function useITankGameGameOverEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"GameStarted"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12147,7 +12631,6 @@ export function useITankGameGameStartedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Give"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12171,7 +12654,6 @@ export function useITankGameGiveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"HooksAdded"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12195,7 +12677,6 @@ export function useITankGameHooksAddedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Move"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12219,7 +12700,6 @@ export function useITankGameMoveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"PlayerJoined"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12243,7 +12723,6 @@ export function useITankGamePlayerJoinedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"PrizeIncrease"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12267,7 +12746,6 @@ export function useITankGamePrizeIncreaseEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Reveal"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12291,7 +12769,6 @@ export function useITankGameRevealEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Revive"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12315,7 +12792,6 @@ export function useITankGameReviveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Shoot"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12339,7 +12815,6 @@ export function useITankGameShootEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"SpawnHeart"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12363,7 +12838,6 @@ export function useITankGameSpawnHeartEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Upgrade"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12387,7 +12861,6 @@ export function useITankGameUpgradeEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Vote"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -12934,6 +13407,29 @@ export function useNonAggressionTankGame<
   return useContractRead({
     abi: nonAggressionABI,
     functionName: 'tankGame',
+    ...config,
+  } as UseContractReadConfig<
+    typeof nonAggressionABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"tankGameView"`.
+ */
+export function useNonAggressionTankGameView<
+  TFunctionName extends 'tankGameView',
+  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: nonAggressionABI,
+    functionName: 'tankGameView',
     ...config,
   } as UseContractReadConfig<
     typeof nonAggressionABI,
@@ -14395,7 +14891,6 @@ export function usePrepareNonAggressionHookBeforeVote(
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14419,9 +14914,34 @@ export function useTankGameRead<
 }
 
 /**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"_getEpoch"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * -
+ */
+export function useTankGameGetEpoch<
+  TFunctionName extends '_getEpoch',
+  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: tankGameABI,
+    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+    functionName: '_getEpoch',
+    ...config,
+  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
+}
+
+/**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"aliveTanksIdSum"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14448,7 +14968,6 @@ export function useTankGameAliveTanksIdSum<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"board"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14475,7 +14994,6 @@ export function useTankGameBoard<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"claimed"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14502,7 +15020,6 @@ export function useTankGameClaimed<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"deadTanks"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14529,7 +15046,6 @@ export function useTankGameDeadTanks<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"delegates"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14556,7 +15072,6 @@ export function useTankGameDelegates<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"epochStart"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14581,90 +15096,8 @@ export function useTankGameEpochStart<
 }
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getBoard"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useTankGameGetBoard<
-  TFunctionName extends 'getBoard',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'getBoard',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getEpoch"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useTankGameGetEpoch<
-  TFunctionName extends 'getEpoch',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'getEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getGameEpoch"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useTankGameGetGameEpoch<
-  TFunctionName extends 'getGameEpoch',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'getGameEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getLastDrip"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14689,117 +15122,8 @@ export function useTankGameGetLastDrip<
 }
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getPlayerCount"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useTankGameGetPlayerCount<
-  TFunctionName extends 'getPlayerCount',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'getPlayerCount',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getSettings"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useTankGameGetSettings<
-  TFunctionName extends 'getSettings',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'getSettings',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getState"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useTankGameGetState<
-  TFunctionName extends 'getState',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'getState',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getTank"`.
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
- * -
- */
-export function useTankGameGetTank<
-  TFunctionName extends 'getTank',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'getTank',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
-
-/**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getUpgradeCost"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14826,7 +15150,6 @@ export function useTankGameGetUpgradeCost<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"heartsOnBoard"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14853,7 +15176,6 @@ export function useTankGameHeartsOnBoard<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"isAuth"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14880,7 +15202,6 @@ export function useTankGameIsAuth<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"lastDripEpoch"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14907,7 +15228,6 @@ export function useTankGameLastDripEpoch<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"lastRevealBlock"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14934,7 +15254,6 @@ export function useTankGameLastRevealBlock<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"numTanksAlive"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14961,7 +15280,6 @@ export function useTankGameNumTanksAlive<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"owner"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -14988,7 +15306,6 @@ export function useTankGameOwner<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"players"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15015,7 +15332,6 @@ export function useTankGamePlayers<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"playersCount"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15042,7 +15358,6 @@ export function useTankGamePlayersCount<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"podium"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15069,7 +15384,6 @@ export function useTankGamePodium<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"prizePool"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15096,7 +15410,6 @@ export function useTankGamePrizePool<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"revealBlock"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15123,7 +15436,6 @@ export function useTankGameRevealBlock<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"settings"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15150,7 +15462,6 @@ export function useTankGameSettings<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"state"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15177,7 +15488,6 @@ export function useTankGameState<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"stateData"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15204,7 +15514,6 @@ export function useTankGameStateData<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tankHooks"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15231,7 +15540,6 @@ export function useTankGameTankHooks<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tankToPosition"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15258,7 +15566,6 @@ export function useTankGameTankToPosition<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tanks"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15285,7 +15592,6 @@ export function useTankGameTanks<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tanksOnBoard"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15312,7 +15618,6 @@ export function useTankGameTanksOnBoard<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"votedThisEpoch"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15339,7 +15644,6 @@ export function useTankGameVotedThisEpoch<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"votesPerEpoch"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15366,7 +15670,6 @@ export function useTankGameVotesPerEpoch<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"votingClosed"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15393,7 +15696,6 @@ export function useTankGameVotingClosed<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15430,7 +15732,6 @@ export function useTankGameWrite<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"addHooks"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15468,7 +15769,6 @@ export function useTankGameAddHooks<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"claim"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15506,7 +15806,6 @@ export function useTankGameClaim<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"delegate"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15544,7 +15843,6 @@ export function useTankGameDelegate<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"donate"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15582,7 +15880,6 @@ export function useTankGameDonate<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"drip"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15620,7 +15917,6 @@ export function useTankGameDrip<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15666,7 +15962,6 @@ export function useTankGameForceAddDefaultHook<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"give"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15702,9 +15997,45 @@ export function useTankGameGive<
 }
 
 /**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"initialize"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * -
+ */
+export function useTankGameInitialize<
+  TMode extends WriteContractMode = undefined,
+  TChainId extends number = keyof typeof tankGameAddress,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof tankGameABI,
+          'initialize'
+        >['request']['abi'],
+        'initialize',
+        TMode
+      > & { address?: Address; chainId?: TChainId; functionName?: 'initialize' }
+    : UseContractWriteConfig<typeof tankGameABI, 'initialize', TMode> & {
+        abi?: never
+        address?: never
+        chainId?: TChainId
+        functionName?: 'initialize'
+      } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractWrite<typeof tankGameABI, 'initialize', TMode>({
+    abi: tankGameABI,
+    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+    functionName: 'initialize',
+    ...config,
+  } as any)
+}
+
+/**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"join"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15742,7 +16073,6 @@ export function useTankGameJoin<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"move"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15780,7 +16110,6 @@ export function useTankGameMove<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"reveal"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15818,7 +16147,6 @@ export function useTankGameReveal<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"setOwner"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15856,7 +16184,6 @@ export function useTankGameSetOwner<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"shoot"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15894,7 +16221,6 @@ export function useTankGameShoot<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"start"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15932,7 +16258,6 @@ export function useTankGameStart<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"upgrade"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -15970,7 +16295,6 @@ export function useTankGameUpgrade<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"vote"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16008,7 +16332,6 @@ export function useTankGameVote<
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16031,7 +16354,6 @@ export function usePrepareTankGameWrite<TFunctionName extends string>(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"addHooks"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16055,7 +16377,6 @@ export function usePrepareTankGameAddHooks(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"claim"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16079,7 +16400,6 @@ export function usePrepareTankGameClaim(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"delegate"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16103,7 +16423,6 @@ export function usePrepareTankGameDelegate(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"donate"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16127,7 +16446,6 @@ export function usePrepareTankGameDonate(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"drip"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16151,7 +16469,6 @@ export function usePrepareTankGameDrip(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16175,7 +16492,6 @@ export function usePrepareTankGameForceAddDefaultHook(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"give"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16197,9 +16513,31 @@ export function usePrepareTankGameGive(
 }
 
 /**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"initialize"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * -
+ */
+export function usePrepareTankGameInitialize(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof tankGameABI, 'initialize'>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return usePrepareContractWrite({
+    abi: tankGameABI,
+    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+    functionName: 'initialize',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'initialize'>)
+}
+
+/**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"join"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16223,7 +16561,6 @@ export function usePrepareTankGameJoin(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"move"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16247,7 +16584,6 @@ export function usePrepareTankGameMove(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"reveal"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16271,7 +16607,6 @@ export function usePrepareTankGameReveal(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"setOwner"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16295,7 +16630,6 @@ export function usePrepareTankGameSetOwner(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"shoot"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16319,7 +16653,6 @@ export function usePrepareTankGameShoot(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"start"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16343,7 +16676,6 @@ export function usePrepareTankGameStart(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"upgrade"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16367,7 +16699,6 @@ export function usePrepareTankGameUpgrade(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"vote"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16391,7 +16722,6 @@ export function usePrepareTankGameVote(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16414,7 +16744,6 @@ export function useTankGameEvent<TEventName extends string>(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"BountyCompleted"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16438,7 +16767,6 @@ export function useTankGameBountyCompletedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Claim"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16462,7 +16790,6 @@ export function useTankGameClaimEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Commit"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16486,7 +16813,6 @@ export function useTankGameCommitEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Curse"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16510,7 +16836,6 @@ export function useTankGameCurseEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Death"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16534,7 +16859,6 @@ export function useTankGameDeathEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Delegate"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16558,7 +16882,6 @@ export function useTankGameDelegateEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Drip"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16582,7 +16905,6 @@ export function useTankGameDripEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"GameInit"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16606,7 +16928,6 @@ export function useTankGameGameInitEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"GameOver"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16630,7 +16951,6 @@ export function useTankGameGameOverEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"GameStarted"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16654,7 +16974,6 @@ export function useTankGameGameStartedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Give"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16678,7 +16997,6 @@ export function useTankGameGiveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"HooksAdded"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16702,7 +17020,6 @@ export function useTankGameHooksAddedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Move"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16726,7 +17043,6 @@ export function useTankGameMoveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"PlayerJoined"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16750,7 +17066,6 @@ export function useTankGamePlayerJoinedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"PrizeIncrease"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16774,7 +17089,6 @@ export function useTankGamePrizeIncreaseEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Reveal"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16798,7 +17112,6 @@ export function useTankGameRevealEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Revive"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16822,7 +17135,6 @@ export function useTankGameReviveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Shoot"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16846,7 +17158,6 @@ export function useTankGameShootEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"SpawnHeart"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16870,7 +17181,6 @@ export function useTankGameSpawnHeartEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Upgrade"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16894,7 +17204,6 @@ export function useTankGameUpgradeEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Vote"`.
  *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
  * -
  */
@@ -16913,6 +17222,179 @@ export function useTankGameVoteEvent(
     eventName: 'Vote',
     ...config,
   } as UseContractEventConfig<typeof tankGameABI, 'Vote'>)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export function useTankGameFactoryWrite<
+  TFunctionName extends string,
+  TMode extends WriteContractMode = undefined,
+  TChainId extends number = keyof typeof tankGameFactoryAddress,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof tankGameFactoryABI,
+          string
+        >['request']['abi'],
+        TFunctionName,
+        TMode
+      > & { address?: Address; chainId?: TChainId }
+    : UseContractWriteConfig<
+        typeof tankGameFactoryABI,
+        TFunctionName,
+        TMode
+      > & {
+        abi?: never
+        address?: never
+        chainId?: TChainId
+      } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractWrite<typeof tankGameFactoryABI, TFunctionName, TMode>({
+    abi: tankGameFactoryABI,
+    address:
+      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"createGame"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export function useTankGameFactoryCreateGame<
+  TMode extends WriteContractMode = undefined,
+  TChainId extends number = keyof typeof tankGameFactoryAddress,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof tankGameFactoryABI,
+          'createGame'
+        >['request']['abi'],
+        'createGame',
+        TMode
+      > & { address?: Address; chainId?: TChainId; functionName?: 'createGame' }
+    : UseContractWriteConfig<typeof tankGameFactoryABI, 'createGame', TMode> & {
+        abi?: never
+        address?: never
+        chainId?: TChainId
+        functionName?: 'createGame'
+      } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractWrite<typeof tankGameFactoryABI, 'createGame', TMode>({
+    abi: tankGameFactoryABI,
+    address:
+      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+    functionName: 'createGame',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export function usePrepareTankGameFactoryWrite<TFunctionName extends string>(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof tankGameFactoryABI, TFunctionName>,
+    'abi' | 'address'
+  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return usePrepareContractWrite({
+    abi: tankGameFactoryABI,
+    address:
+      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof tankGameFactoryABI, TFunctionName>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"createGame"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export function usePrepareTankGameFactoryCreateGame(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof tankGameFactoryABI, 'createGame'>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return usePrepareContractWrite({
+    abi: tankGameFactoryABI,
+    address:
+      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+    functionName: 'createGame',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof tankGameFactoryABI, 'createGame'>)
+}
+
+/**
+ * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameFactoryABI}__.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export function useTankGameFactoryEvent<TEventName extends string>(
+  config: Omit<
+    UseContractEventConfig<typeof tankGameFactoryABI, TEventName>,
+    'abi' | 'address'
+  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractEvent({
+    abi: tankGameFactoryABI,
+    address:
+      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+    ...config,
+  } as UseContractEventConfig<typeof tankGameFactoryABI, TEventName>)
+}
+
+/**
+ * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameFactoryABI}__ and `eventName` set to `"GameCreated"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export function useTankGameFactoryGameCreatedEvent(
+  config: Omit<
+    UseContractEventConfig<typeof tankGameFactoryABI, 'GameCreated'>,
+    'abi' | 'address' | 'eventName'
+  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractEvent({
+    abi: tankGameFactoryABI,
+    address:
+      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+    eventName: 'GameCreated',
+    ...config,
+  } as UseContractEventConfig<typeof tankGameFactoryABI, 'GameCreated'>)
 }
 
 /**

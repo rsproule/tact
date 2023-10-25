@@ -1,5 +1,10 @@
 "use client";
-import { useTankGameGetSettings, useTankGameState } from "../../generated";
+import { useNetwork } from "wagmi";
+import {
+  gameViewAddress,
+  useGameViewGetSettings,
+  useTankGameState,
+} from "../../generated";
 import { LeaderBoard } from "../LeaderBoard";
 import { Treaties } from "../treaties/Treaties";
 import { HexBoard } from "./HexGameBoard";
@@ -10,8 +15,14 @@ import { WaitingForPlayers } from "./states/WaitingForPlayers";
 export function TankGame({ address }: { address: `0x${string}` }) {
   // @ts-ignore
   let gameState = useTankGameState({ watch: true, address: address });
-  //@ts-ignore
-  let settings = useTankGameGetSettings({ watch: true, address: address });
+
+  const { chain } = useNetwork();
+  let settings = useGameViewGetSettings({
+    watch: true,
+    // @ts-ignore
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    args: [address],
+  });
   return (
     <div>
       {gameState.data === 0 && (
@@ -27,9 +38,9 @@ export function TankGame({ address }: { address: `0x${string}` }) {
       />
       <Treaties gameAddress={address} />
       <div className="block justify-evenly py-5 md:flex">
-        {gameState.data === 1 && <Timer />}
-        {gameState.data === 2 && <GameOver />}
-        {gameState.data !== 2 && <Donate />}
+        {gameState.data === 1 && <Timer address={address} />}
+        {gameState.data === 2 && <GameOver gameAddress={address} />}
+        {gameState.data !== 2 && <Donate gameAddress={address} />}
       </div>
       <LeaderBoard gameAddress={address} />
     </div>

@@ -19,24 +19,34 @@ import {
 import { Trophy } from "lucide-react";
 import { toTankName } from "../EventsStream";
 
-export function GameOver() {
+export function GameOver({ gameAddress }: { gameAddress: `0x${string}` }) {
   let { toast } = useToast();
 
   const first = useTankGamePodium({
+    // @ts-ignore
+    address: gameAddress,
     args: [BigInt(0)],
   });
   const second = useTankGamePodium({
+    // @ts-ignore
+    address: gameAddress,
     args: [BigInt(1)],
   });
   const third = useTankGamePodium({
+    // @ts-ignore
+    address: gameAddress,
     args: [BigInt(2)],
   });
   const { address } = useAccount();
   let ownersTankId = useTankGamePlayers({
     args: [address!],
     enabled: !!address,
+    // @ts-ignore
+    address: gameAddress,
   });
   let { config } = usePrepareTankGameClaim({
+    // @ts-ignore
+    address: gameAddress,
     args: [{ tankId: ownersTankId.data!, claimer: address! }],
     enabled:
       !!ownersTankId.data &&

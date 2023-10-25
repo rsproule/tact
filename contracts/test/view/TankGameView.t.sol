@@ -45,6 +45,7 @@ contract TankGameFactoryTest is Test {
             epochSeconds: 4 hours,
             buyInMinimum: 0,
             revealWaitBlocks: 1,
+            autoStart: false,
             root: bytes32(0)
         });
     }

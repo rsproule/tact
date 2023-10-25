@@ -36,6 +36,7 @@ interface ITankGame {
         uint256 epochSeconds;
         uint256 buyInMinimum;
         uint256 revealWaitBlocks;
+        bool autoStart;
         bytes32 root;
     }
 

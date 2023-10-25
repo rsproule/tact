@@ -29,6 +29,13 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit Commit(msg.sender, revealBlock);
     }
 
+    function start() public {
+        require(playersCount >= settings.playerCount, "not enough players");
+        epochStart = _getEpoch();
+        state = GameState.Started;
+        emit GameStarted();
+    }
+
     // should do some sort of commit reveal thing for the randomness instead of this
     // random point thing.
     function join(ITankGame.JoinParams calldata params) external payable override {
@@ -46,13 +53,10 @@ contract TankGame is ITankGame, TankGameV2Storage {
         emit PlayerJoined(params.joiner, playersCount, emptyPoint, params.playerName);
 
         runHooks(IHooks.afterJoin.selector, playersCount, abi.encode(params));
-    }
 
-    function start() external {
-        require(playersCount >= settings.playerCount, "not enough players");
-        epochStart = _getEpoch();
-        state = GameState.Started;
-        emit GameStarted();
+        if (settings.autoStart && playersCount == settings.playerCount) {
+            start();
+        }
     }
 
     function move(ITankGame.MoveParams calldata params)
