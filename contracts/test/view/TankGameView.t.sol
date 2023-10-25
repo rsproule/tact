@@ -17,13 +17,15 @@ contract TankGameFactoryTest is Test {
         bytes32[] memory proof = new bytes32[](1);
         vm.prank(address(1));
         game.join(ITankGame.JoinParams(address(1), proof, "player1"));
+        vm.prank(address(3));
+        game.join(ITankGame.JoinParams(address(3), proof, "player1"));
         game.start();
         gameView = new GameView();
     }
 
     function test_view_getAllTanks() public {
         GameView.TankLocation[] memory tanks = gameView.getAllTanks(address(game));
-        assertTrue(tanks.length == 1, "tanks length is 1");
+        assertTrue(tanks.length == 2, "tanks length is 1");
     }
 
     function test_view_getAllHearts() public {
@@ -37,7 +39,7 @@ contract TankGameFactoryTest is Test {
 
     function getSettings() internal pure returns (ITankGame.GameSettings memory) {
         return ITankGame.GameSettings({
-            playerCount: 1,
+            playerCount: 2,
             boardSize: 12,
             initAPs: 3,
             initHearts: 3,
