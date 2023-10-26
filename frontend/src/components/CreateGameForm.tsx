@@ -15,7 +15,6 @@ import {
   FormControl,
   FormDescription,
   FormField,
-  FormItem,
   FormLabel,
   FormMessage,
 } from "./ui/form";
@@ -118,12 +117,7 @@ export default function CreateGameForm({
     },
   });
   return (
-    <Form
-      {...form}
-      // onSubmit={(data) => console.log(data)}
-      // resolver={zodResolver(formSchema)}
-      defaultValues={formState}
-    >
+    <Form {...form}>
       <FormField
         name="playerCount"
         control={form.control}
@@ -131,7 +125,15 @@ export default function CreateGameForm({
           <div>
             <FormLabel>Player Count</FormLabel>
             <FormControl>
-              <Input {...field} onChange={handleInputChange} />
+              <Input
+                {...field}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    handleInputChange(e);
+                  }
+                }}
+                value={formState.playerCount}
+              />
             </FormControl>
             <FormDescription>Enter the number of players</FormDescription>
           </div>
@@ -144,7 +146,15 @@ export default function CreateGameForm({
           <div>
             <FormLabel>Board Size</FormLabel>
             <FormControl>
-              <Input {...field} onChange={handleInputChange} />
+              <Input
+                {...field}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    handleInputChange(e);
+                  }
+                }}
+                value={formState.boardSize}
+              />
             </FormControl>
             <FormDescription>
               Enter the size of the board (must be div by 3)
@@ -159,7 +169,15 @@ export default function CreateGameForm({
           <div>
             <FormLabel>Initial APs</FormLabel>
             <FormControl>
-              <Input {...field} onChange={handleInputChange} />
+              <Input
+                {...field}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    handleInputChange(e);
+                  }
+                }}
+                value={formState.initAPs}
+              />
             </FormControl>
             <FormDescription>Enter the initial APs</FormDescription>
           </div>
@@ -172,7 +190,15 @@ export default function CreateGameForm({
           <div>
             <FormLabel>Initial Hearts</FormLabel>
             <FormControl>
-              <Input {...field} onChange={handleInputChange} />
+              <Input
+                {...field}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    handleInputChange(e);
+                  }
+                }}
+                value={formState.initHearts}
+              />
             </FormControl>
             <FormDescription>
               Enter the initial number of hearts
@@ -187,7 +213,15 @@ export default function CreateGameForm({
           <div>
             <FormLabel>Initial Shoot Range</FormLabel>
             <FormControl>
-              <Input {...field} onChange={handleInputChange} />
+              <Input
+                {...field}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    handleInputChange(e);
+                  }
+                }}
+                value={formState.initShootRange}
+              />
             </FormControl>
             <FormDescription>Enter the initial shoot range</FormDescription>
           </div>
@@ -200,7 +234,15 @@ export default function CreateGameForm({
           <div>
             <FormLabel>Epoch Seconds</FormLabel>
             <FormControl>
-              <Input {...field} onChange={handleInputChange} />
+              <Input
+                {...field}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    handleInputChange(e);
+                  }
+                }}
+                value={formState.epochSeconds}
+              />
             </FormControl>
             <FormDescription>Enter the epoch seconds</FormDescription>
           </div>
@@ -213,7 +255,15 @@ export default function CreateGameForm({
           <div>
             <FormLabel>Buy In Minimum</FormLabel>
             <FormControl>
-              <Input {...field} onChange={handleInputChange} />
+              <Input
+                {...field}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    handleInputChange(e);
+                  }
+                }}
+                value={formState.buyInMinimum}
+              />
             </FormControl>
             <FormDescription>Enter the minimum buy in</FormDescription>
           </div>
@@ -226,7 +276,15 @@ export default function CreateGameForm({
           <div>
             <FormLabel>Reveal Wait Blocks</FormLabel>
             <FormControl>
-              <Input {...field} onChange={handleInputChange} />
+              <Input
+                {...field}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    handleInputChange(e);
+                  }
+                }}
+                value={formState.revealWaitBlocks}
+              />
             </FormControl>
             <FormDescription>
               Enter the number of blocks to wait for reveal
@@ -262,7 +320,9 @@ export default function CreateGameForm({
               <Input
                 type="checkbox"
                 {...field}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  handleInputChange(e);
+                }}
                 value={field.value ? "true" : "false"}
               />
             </FormControl>
