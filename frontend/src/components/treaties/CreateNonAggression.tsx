@@ -1,7 +1,6 @@
 import {
   usePrepareNonAggressionPropose,
   useNonAggressionPropose,
-  useTankGameGetSettings,
 } from "@/src/generated";
 import { useState } from "react";
 import { BaseError } from "viem";

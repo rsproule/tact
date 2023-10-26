@@ -11,28 +11,30 @@ import { BaseError, formatEther } from "viem";
 import {
   useAccount,
   useBlockNumber,
-  useNetwork,
   useWaitForTransaction,
 } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import { toTankName } from "../tankGame/EventsStream";
-import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 import { Card, CardHeader, CardContent } from "../ui/card";
 
 export default function Bounty({
   hookAddress,
+  gameAddress,
   tankId,
   hideNotMine,
   addedHooks,
 }: {
   tankId: bigint;
   hookAddress: `0x${string}`;
+  gameAddress: `0x${string}`;
   hideNotMine: boolean;
   addedHooks: any;
 }) {
   const { address } = useAccount();
   const ownerTank = useTankGamePlayers({
+    // @ts-ignore
+    address: gameAddress,
     args: [address!],
     enabled: !!address,
   });

@@ -1,46 +1,45 @@
 import {
   useTankGamePlayers,
-  useTankGameGetSettings,
   nonAggressionABI,
   usePrepareNonAggressionAccept,
   useNonAggressionAccept,
-  useTankGameGetGameEpoch,
+  useGameViewGetEpoch,
 } from "@/src/generated";
 import { useState, useEffect } from "react";
-import { BaseError, formatEther } from "viem";
-import {
-  useAccount,
-  useBlockNumber,
-  useNetwork,
-  useWaitForTransaction,
-} from "wagmi";
+import { BaseError } from "viem";
+import { useAccount, useBlockNumber, useWaitForTransaction } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import { toTankName } from "../tankGame/EventsStream";
-import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
-import { secondsToHMS } from "../tankGame/Timer";
 import { Card, CardContent, CardHeader } from "../ui/card";
 
 export default function NonAggression({
   hookAddress,
+  gameAddress,
   ownerHookAddress,
   tankId,
   hideNotMine,
 }: {
   tankId: bigint;
   hookAddress: `0x${string}`;
+  gameAddress: `0x${string}`;
   ownerHookAddress: `0x${string}`;
   hideNotMine: boolean;
 }) {
   const { address } = useAccount();
   const ownerTank = useTankGamePlayers({
+    // @ts-ignore
+    address: gameAddress,
     args: [address!],
     enabled: !!address,
   });
-  const { data: epoch } = useTankGameGetGameEpoch({ watch: true });
+  const { data: epoch } = useGameViewGetEpoch({
+    // @ts-ignore
+    address: gameAddress,
+    watch: true,
+  });
   const { data: blockNumber } = useBlockNumber({ watch: true });
   const [treaties, setTreaties] = useState<any>();
-  // const [bountiesWon, setBountiesWon] = useState<any>();
   useEffect(() => {
     const getLogs = async () => {
       const publicClient = getPublicClient();
@@ -142,7 +141,9 @@ export default function NonAggression({
                   return (
                     <div key={i} className="flex justify-between border">
                       <div>Proposer: {toTankName(bounty.args.proposer)}</div>
-                      <div>{bounty.isAccepted ? "🤝 accepted" : "⏳ pending..."}</div>
+                      <div>
+                        {bounty.isAccepted ? "🤝 accepted" : "⏳ pending..."}
+                      </div>
                       <div>Ally: {toTankName(bounty.args.proposee)}</div>
                       <div>
                         Non-aggression until epoch:{" "}

@@ -1,10 +1,8 @@
 "use client";
 import {
-  gameViewABI,
   hookFactoryABI,
   hookFactoryAddress,
   tankGameABI,
-  tankGameAddress,
   useTankGamePlayers,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
@@ -66,7 +64,7 @@ export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
       setHooksAdded(hookAddedEvents);
     };
     getLogs();
-  }, [blockNumber, gameAddress]);
+  }, [blockNumber, gameAddress, chain]);
   return (
     <div className="py-4">
       <Card>
@@ -134,6 +132,7 @@ export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
                               <Bounty
                                 key={i}
                                 hookAddress={hook.args.hookAddress}
+                                gameAddress={gameAddress}
                                 tankId={hook.args.tankId}
                                 hideNotMine={hideNotMine}
                                 addedHooks={hooksAdded}
@@ -145,6 +144,7 @@ export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
                                 hideNotMine={hideNotMine}
                                 key={i}
                                 hookAddress={hook.args.hookAddress}
+                                gameAddress={gameAddress}
                                 tankId={hook.args.tankId}
                                 ownerHookAddress={
                                   hooks.find(
