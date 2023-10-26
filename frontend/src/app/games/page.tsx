@@ -14,7 +14,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/src/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
 
 export default function GamesList() {
   const { data: blockNumber } = useBlockNumber({ watch: true });
@@ -65,26 +70,35 @@ export default function GamesList() {
       <div className="mt-10">Existing games:</div>
       <div className="grid-flow-row auto-rows-max">
         {games &&
-          // @ts-ignore
-          games?.slice().reverse().map((game, i) => (
-            <div key={i} className="my-5">
-              <a href={`game/${game.args.game}`}>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Game address: {game.args.game}</CardTitle>
-                    <CardContent>
-                      {/* <div>NumPlayers : {game.args.settings.}</div> */}
-                      {Object.keys(game.args.settings).map((key, i) => (
-                        <div key={i}>
-                          {key}: {game.args.settings[key].toString()}
-                        </div>
-                      ))}
-                    </CardContent>
-                  </CardHeader>
-                </Card>
-              </a>
-            </div>
-          ))}
+          games
+            // @ts-ignore
+            ?.slice()
+            .reverse()
+            .map((game: any, i: number) => (
+              <div key={i} className="my-5">
+                <a href={`game/${game.args.game}`}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>
+                        Game Address: {game.args.game.substring(0, 12) + "..."}
+                      </CardTitle>
+                      <CardContent>
+                        {Object.keys(game.args.settings).map((key, i) => (
+                          <div key={i}>
+                            {key}:{" "}
+                            {game.args.settings[key].toString().length > 20
+                              ? game.args.settings[key]
+                                  .toString()
+                                  .substring(0, 20) + "..."
+                              : game.args.settings[key].toString()}
+                          </div>
+                        ))}
+                      </CardContent>
+                    </CardHeader>
+                  </Card>
+                </a>
+              </div>
+            ))}
       </div>
     </div>
   );

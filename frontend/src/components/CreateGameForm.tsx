@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "./ui/button";
-import { BaseError } from "viem";
+import { BaseError, getAddress } from "viem";
 import { useAccount, useWaitForTransaction } from "wagmi";
 import {
   usePrepareTankGameFactoryCreateGame,
@@ -20,6 +21,7 @@ import {
 } from "./ui/form";
 import { useForm, useFormContext } from "react-hook-form";
 import { Input } from "./ui/input";
+import { Card } from "./ui/card";
 
 // Define your schema using Zod
 const formSchema = z.object({
@@ -111,7 +113,7 @@ export default function CreateGameForm({
       epochSeconds: formState.epochSeconds,
       buyInMinimum: formState.buyInMinimum,
       revealWaitBlocks: formState.revealWaitBlocks,
-      autoStart: formState.autoStart,
+      autoStart: Boolean(formState.autoStart),
       root: formState.root,
     },
   });
@@ -144,7 +146,9 @@ export default function CreateGameForm({
             <FormControl>
               <Input {...field} onChange={handleInputChange} />
             </FormControl>
-            <FormDescription>Enter the size of the board (must be div by 3)</FormDescription>
+            <FormDescription>
+              Enter the size of the board (must be div by 3)
+            </FormDescription>
           </div>
         )}
       />
@@ -235,11 +239,16 @@ export default function CreateGameForm({
         control={form.control}
         render={({ field }) => (
           <div>
-            <FormLabel>Root</FormLabel>
+            <FormLabel>Players</FormLabel>
             <FormControl>
-              <Input {...field} onChange={handleInputChange} />
+              <>
+                <RootGenerator setFormState={setFormState} />
+                <div>Merkle Root: {formState.root}</div>
+              </>
             </FormControl>
-            <FormDescription>Enter the root</FormDescription>
+            <FormDescription>
+              Enter the players to join, leave this blank and anyone can join
+            </FormDescription>
           </div>
         )}
       />
@@ -250,7 +259,12 @@ export default function CreateGameForm({
           <div>
             <FormLabel>Auto Start</FormLabel>
             <FormControl>
-              <Input type="checkbox" {...field} onChange={handleInputChange} />
+              <Input
+                type="checkbox"
+                {...field}
+                onChange={handleInputChange}
+                value={field.value ? "true" : "false"}
+              />
             </FormControl>
             <FormDescription>
               Check if the game should auto start
@@ -258,9 +272,107 @@ export default function CreateGameForm({
           </div>
         )}
       />
-      <Button className="w-full mt-5" type="submit" disabled={!create} onClick={() => create?.()}>
+      <Button
+        className="w-full mt-5"
+        type="submit"
+        disabled={!create}
+        onClick={() => create?.()}
+      >
         Submit
       </Button>
     </Form>
+  );
+}
+
+function RootGenerator({
+  setFormState,
+}: {
+  setFormState: React.Dispatch<
+    React.SetStateAction<{
+      playerCount: number;
+      boardSize: number;
+      initAPs: number;
+      initHearts: number;
+      initShootRange: number;
+      epochSeconds: number;
+      buyInMinimum: number;
+      revealWaitBlocks: number;
+      autoStart: string;
+      root: string;
+    }>
+  >;
+}) {
+  const [list, setList] = useState<Array<[string, string]>>([["", ""]]);
+  const [hasError, setHasError] = useState(false);
+
+  const handleAdd = () => {
+    setList([...list, ["", ""]]);
+  };
+
+  const handleDelete = (index: number) => {
+    setList(list.filter((_, i) => i !== index));
+  };
+
+  const handleInputChange = (
+    index: number,
+    position: number,
+    value: string
+  ) => {
+    const newList = [...list];
+    newList[index][position] = value;
+    setList(newList);
+  };
+
+  useEffect(() => {
+    // generate the merkle root here, and call update() with that root
+    try {
+      const values = list.map((item) => {
+        return [getAddress(item[1]), item[0]];
+      });
+      const tree = StandardMerkleTree.of(values, ["address", "string"]);
+      setFormState((prevState) => ({ ...prevState, root: tree.root }));
+      setHasError(false);
+    } catch (err) {
+      setHasError(true);
+    }
+  }, [list]);
+
+  return (
+    <div className={`container ${hasError ? "border-red-500 border-2" : ""}`}>
+      <Card>
+        {list.map((item, index) => (
+          <div key={index} className="flex flex-col">
+            <div className="flex flex-col sm:flex-row">
+              Player {index + 1}
+              <div className="sm:w-1/3">
+                <label htmlFor={`name-${index}`}>Name</label>
+                <Input
+                  id={`name-${index}`}
+                  value={item[0]}
+                  onChange={(e) => handleInputChange(index, 0, e.target.value)}
+                />
+              </div>
+              <div className="sm:w-1/3">
+                <label htmlFor={`address-${index}`}>Address</label>
+                <Input
+                  id={`address-${index}`}
+                  value={item[1]}
+                  onChange={(e) => handleInputChange(index, 1, e.target.value)}
+                />
+              </div>
+              <div className="sm:w-1/3 flex items-end justify-end">
+                <Button
+                  className="mt-2 sm:mt-0 bg-red-500"
+                  onClick={() => handleDelete(index)}
+                >
+                  X
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+        <Button onClick={handleAdd}>+</Button>
+      </Card>
+    </div>
   );
 }
