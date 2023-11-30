@@ -684,7 +684,7 @@ contract TankTest is Test {
         tankGame.addHooks(1, nonAggro);
 
         vm.startPrank(address(2));
-        NonAggression nonAggro2 = new NonAggression(address(address(tankGame)),address(tankGameView), 2);
+        NonAggression nonAggro2 = new NonAggression(address(address(tankGame)), address(tankGameView), 2);
         vm.label(address(nonAggro2), "nonAggro2");
         tankGame.addHooks(2, nonAggro2);
 
@@ -739,7 +739,7 @@ contract TankTest is Test {
         // new Bounty(ITankGame(address(tankGame)), 1);
 
         vm.startPrank(address(1));
-        Bounty bounty = new Bounty(address(address(tankGame)),address(tankGameView), 1);
+        Bounty bounty = new Bounty(address(address(tankGame)), address(tankGameView), 1);
         // you can add your own bounty, idgaf
         tankGame.addHooks(1, bounty);
 

@@ -31,7 +31,7 @@ contract HookFactory {
             emit HookCreated(tankGame, hookType, address(na), tankId, msg.sender);
             return na;
         } else if (hookType == HookRegistry.Bounty) {
-            Bounty b = new Bounty(address(tankGame),address(gameView), tankId);
+            Bounty b = new Bounty(address(tankGame), address(gameView), tankId);
             emit HookCreated(tankGame, hookType, address(b), tankId, msg.sender);
             return b;
         } else {

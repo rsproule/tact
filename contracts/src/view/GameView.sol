@@ -8,9 +8,7 @@ import { IGameView } from "src/view/IGameView.sol";
 
 contract GameView is IGameView {
     function getAllTanks(address game) external view override returns (TankLocation[] memory) {
-        TankLocation[] memory tanksWithLocation = new TankLocation[](
-           getPlayerCount(game) 
-        );
+        TankLocation[] memory tanksWithLocation = new TankLocation[](getPlayerCount(game));
         for (uint256 i = 1; i <= getPlayerCount(game); i++) {
             Board.Point memory position = getBoard(game).getTankPosition(i);
             ITankGame.Tank memory tank = getTank(game, i);
