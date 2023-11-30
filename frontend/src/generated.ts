@@ -280,112 +280,6 @@ export const bountyABI = [
     ],
   },
   {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'ownerTank',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'tankGame',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'BountyHookCreated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'bountyId',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'tankId',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'target',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'BountyPosted',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'bountyId',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'winner',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'victim',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'BountyWon',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'tankId',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'reciever',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'Withdraw',
-  },
-  {
     stateMutability: 'pure',
     type: 'function',
     inputs: [
@@ -849,6 +743,112 @@ export const bountyABI = [
     inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
     name: 'withdrawals',
     outputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'ownerTank',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'tankGame',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'BountyHookCreated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'bountyId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'tankId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'target',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'BountyPosted',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'bountyId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'winner',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'victim',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'BountyWon',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'tankId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'reciever',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'Withdraw',
   },
 ] as const
 
@@ -1450,7 +1450,7 @@ export const gameViewABI = [
  */
 export const gameViewAddress = {
   5: '0xAFf0E741b60288110bA7a400Ef6a99917faA593c',
-  31337: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
+  31337: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
 } as const
 
 /**
@@ -1750,6 +1750,22 @@ export const hexBoardABI = [
  */
 export const hookFactoryABI = [
   {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'tankGame', internalType: 'contract ITankGame', type: 'address' },
+      { name: 'gameView', internalType: 'contract IGameView', type: 'address' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'hookType',
+        internalType: 'enum HookFactory.HookRegistry',
+        type: 'uint8',
+      },
+    ],
+    name: 'createHook',
+    outputs: [{ name: '', internalType: 'contract IHooks', type: 'address' }],
+  },
+  {
     type: 'event',
     anonymous: false,
     inputs: [
@@ -1786,22 +1802,6 @@ export const hookFactoryABI = [
     ],
     name: 'HookCreated',
   },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: 'tankGame', internalType: 'contract ITankGame', type: 'address' },
-      { name: 'gameView', internalType: 'contract IGameView', type: 'address' },
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      {
-        name: 'hookType',
-        internalType: 'enum HookFactory.HookRegistry',
-        type: 'uint8',
-      },
-    ],
-    name: 'createHook',
-    outputs: [{ name: '', internalType: 'contract IHooks', type: 'address' }],
-  },
 ] as const
 
 /**
@@ -1810,7 +1810,7 @@ export const hookFactoryABI = [
  */
 export const hookFactoryAddress = {
   5: '0x1397a0540F1CA3604518483F534E83fbeB60beF6',
-  31337: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
+  31337: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
 } as const
 
 /**
@@ -2662,6 +2662,227 @@ export const iMulticall3ABI = [
  */
 export const iTankGameABI = [
   {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: 'hooks', internalType: 'contract IHooks', type: 'address' },
+    ],
+    name: 'addHooks',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'claimParams',
+        internalType: 'struct ITankGame.ClaimParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+          { name: 'claimer', internalType: 'address', type: 'address' },
+        ],
+      },
+    ],
+    name: 'claim',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'delegateParams',
+        internalType: 'struct ITankGame.DelegateParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+          { name: 'delegatee', internalType: 'address', type: 'address' },
+        ],
+      },
+    ],
+    name: 'delegate',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'dripParams',
+        internalType: 'struct ITankGame.DripParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'drip',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: 'hooks', internalType: 'contract IHooks', type: 'address' },
+    ],
+    name: 'forceAddDefaultHook',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'giveParams',
+        internalType: 'struct ITankGame.GiveParams',
+        type: 'tuple',
+        components: [
+          { name: 'fromId', internalType: 'uint256', type: 'uint256' },
+          { name: 'toId', internalType: 'uint256', type: 'uint256' },
+          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'aps', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'give',
+    outputs: [],
+  },
+  {
+    stateMutability: 'payable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'settings',
+        internalType: 'struct ITankGame.GameSettings',
+        type: 'tuple',
+        components: [
+          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'revealWaitBlocks',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
+          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+      { name: '_owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'initialize',
+    outputs: [],
+  },
+  {
+    stateMutability: 'payable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'joinParams',
+        internalType: 'struct ITankGame.JoinParams',
+        type: 'tuple',
+        components: [
+          { name: 'joiner', internalType: 'address', type: 'address' },
+          { name: 'proof', internalType: 'bytes32[]', type: 'bytes32[]' },
+          { name: 'playerName', internalType: 'string', type: 'string' },
+        ],
+      },
+    ],
+    name: 'join',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'moveParams',
+        internalType: 'struct ITankGame.MoveParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'to',
+            internalType: 'struct Board.Point',
+            type: 'tuple',
+            components: [
+              { name: 'x', internalType: 'uint256', type: 'uint256' },
+              { name: 'y', internalType: 'uint256', type: 'uint256' },
+              { name: 'z', internalType: 'uint256', type: 'uint256' },
+            ],
+          },
+        ],
+      },
+    ],
+    name: 'move',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [],
+    name: 'reveal',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'shootParams',
+        internalType: 'struct ITankGame.ShootParams',
+        type: 'tuple',
+        components: [
+          { name: 'fromId', internalType: 'uint256', type: 'uint256' },
+          { name: 'toId', internalType: 'uint256', type: 'uint256' },
+          { name: 'shots', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'shoot',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'upgradeParams',
+        internalType: 'struct ITankGame.UpgradeParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'upgrade',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'voteParams',
+        internalType: 'struct ITankGame.VoteParams',
+        type: 'tuple',
+        components: [
+          { name: 'voter', internalType: 'uint256', type: 'uint256' },
+          { name: 'cursed', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'vote',
+    outputs: [],
+  },
+  {
     type: 'event',
     anonymous: false,
     inputs: [
@@ -3135,217 +3356,6 @@ export const iTankGameABI = [
     ],
     name: 'Vote',
   },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      { name: 'hooks', internalType: 'contract IHooks', type: 'address' },
-    ],
-    name: 'addHooks',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'claimParams',
-        internalType: 'struct ITankGame.ClaimParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-          { name: 'claimer', internalType: 'address', type: 'address' },
-        ],
-      },
-    ],
-    name: 'claim',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'delegateParams',
-        internalType: 'struct ITankGame.DelegateParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-          { name: 'delegatee', internalType: 'address', type: 'address' },
-        ],
-      },
-    ],
-    name: 'delegate',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'dripParams',
-        internalType: 'struct ITankGame.DripParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'drip',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'giveParams',
-        internalType: 'struct ITankGame.GiveParams',
-        type: 'tuple',
-        components: [
-          { name: 'fromId', internalType: 'uint256', type: 'uint256' },
-          { name: 'toId', internalType: 'uint256', type: 'uint256' },
-          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'aps', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'give',
-    outputs: [],
-  },
-  {
-    stateMutability: 'payable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'settings',
-        internalType: 'struct ITankGame.GameSettings',
-        type: 'tuple',
-        components: [
-          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
-          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
-          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
-          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
-          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
-          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
-          {
-            name: 'revealWaitBlocks',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          { name: 'autoStart', internalType: 'bool', type: 'bool' },
-          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
-        ],
-      },
-      { name: '_owner', internalType: 'address', type: 'address' },
-    ],
-    name: 'initialize',
-    outputs: [],
-  },
-  {
-    stateMutability: 'payable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'joinParams',
-        internalType: 'struct ITankGame.JoinParams',
-        type: 'tuple',
-        components: [
-          { name: 'joiner', internalType: 'address', type: 'address' },
-          { name: 'proof', internalType: 'bytes32[]', type: 'bytes32[]' },
-          { name: 'playerName', internalType: 'string', type: 'string' },
-        ],
-      },
-    ],
-    name: 'join',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'moveParams',
-        internalType: 'struct ITankGame.MoveParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-          {
-            name: 'to',
-            internalType: 'struct Board.Point',
-            type: 'tuple',
-            components: [
-              { name: 'x', internalType: 'uint256', type: 'uint256' },
-              { name: 'y', internalType: 'uint256', type: 'uint256' },
-              { name: 'z', internalType: 'uint256', type: 'uint256' },
-            ],
-          },
-        ],
-      },
-    ],
-    name: 'move',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [],
-    name: 'reveal',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'shootParams',
-        internalType: 'struct ITankGame.ShootParams',
-        type: 'tuple',
-        components: [
-          { name: 'fromId', internalType: 'uint256', type: 'uint256' },
-          { name: 'toId', internalType: 'uint256', type: 'uint256' },
-          { name: 'shots', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'shoot',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'upgradeParams',
-        internalType: 'struct ITankGame.UpgradeParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'upgrade',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'voteParams',
-        internalType: 'struct ITankGame.VoteParams',
-        type: 'tuple',
-        components: [
-          { name: 'voter', internalType: 'uint256', type: 'uint256' },
-          { name: 'cursed', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'vote',
-    outputs: [],
-  },
 ] as const
 
 /**
@@ -3371,6 +3381,26 @@ export const iTankGameConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const iTreatyABI = [
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: 'hook', internalType: 'address', type: 'address' },
+    ],
+    name: 'accept',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: 'expiry', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'propose',
+    outputs: [],
+  },
   {
     type: 'event',
     anonymous: false,
@@ -3438,26 +3468,6 @@ export const iTreatyABI = [
       },
     ],
     name: 'ProposedTreaty',
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      { name: 'hook', internalType: 'address', type: 'address' },
-    ],
-    name: 'accept',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      { name: 'expiry', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'propose',
-    outputs: [],
   },
 ] as const
 
@@ -3490,93 +3500,6 @@ export const nonAggressionABI = [
       { name: '_gameView', internalType: 'address', type: 'address' },
       { name: '_ownerTank', internalType: 'uint256', type: 'uint256' },
     ],
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'proposer',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'proposee',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'hookProposer',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'hookAccepter',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'expiry',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'AcceptedTreaty',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'ownerTank',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'tankGame',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'NonAggressionCreated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'proposer',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'proposee',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'proposalHook',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'expiry',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'ProposedTreaty',
   },
   {
     stateMutability: 'nonpayable',
@@ -4019,6 +3942,93 @@ export const nonAggressionABI = [
       { name: '', internalType: 'contract IGameView', type: 'address' },
     ],
   },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'proposer',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'proposee',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'hookProposer',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'hookAccepter',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'expiry',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'AcceptedTreaty',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'ownerTank',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'tankGame',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'NonAggressionCreated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'proposer',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'proposee',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'proposalHook',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'expiry',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'ProposedTreaty',
+  },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4446,6 +4456,513 @@ export const stringsABI = [
  * -
  */
 export const tankGameABI = [
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: '_getEpoch',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: 'hooks', internalType: 'contract IHooks', type: 'address' },
+    ],
+    name: 'addHooks',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'aliveTanksIdSum',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'board',
+    outputs: [{ name: '', internalType: 'contract Board', type: 'address' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ITankGame.ClaimParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+          { name: 'claimer', internalType: 'address', type: 'address' },
+        ],
+      },
+    ],
+    name: 'claim',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
+    name: 'claimed',
+    outputs: [{ name: 'claimed', internalType: 'bool', type: 'bool' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'deadTanks',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ITankGame.DelegateParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+          { name: 'delegatee', internalType: 'address', type: 'address' },
+        ],
+      },
+    ],
+    name: 'delegate',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: 'delegate', internalType: 'address', type: 'address' },
+    ],
+    name: 'delegates',
+    outputs: [{ name: 'isDelegate', internalType: 'bool', type: 'bool' }],
+  },
+  {
+    stateMutability: 'payable',
+    type: 'function',
+    inputs: [],
+    name: 'donate',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ITankGame.DripParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'drip',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'epochStart',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'factory',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: 'hooks', internalType: 'contract IHooks', type: 'address' },
+    ],
+    name: 'forceAddDefaultHook',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getLastDrip',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getUpgradeCost',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ITankGame.GiveParams',
+        type: 'tuple',
+        components: [
+          { name: 'fromId', internalType: 'uint256', type: 'uint256' },
+          { name: 'toId', internalType: 'uint256', type: 'uint256' },
+          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'aps', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'give',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'position', internalType: 'uint256', type: 'uint256' }],
+    name: 'heartsOnBoard',
+    outputs: [{ name: 'heartCount', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'payable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'gs',
+        internalType: 'struct ITankGame.GameSettings',
+        type: 'tuple',
+        components: [
+          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'revealWaitBlocks',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
+          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+      { name: '_owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'initialize',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: '_owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'isAuth',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+  },
+  {
+    stateMutability: 'payable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ITankGame.JoinParams',
+        type: 'tuple',
+        components: [
+          { name: 'joiner', internalType: 'address', type: 'address' },
+          { name: 'proof', internalType: 'bytes32[]', type: 'bytes32[]' },
+          { name: 'playerName', internalType: 'string', type: 'string' },
+        ],
+      },
+    ],
+    name: 'join',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
+    name: 'lastDripEpoch',
+    outputs: [{ name: 'epoch', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'lastRevealBlock',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ITankGame.MoveParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'to',
+            internalType: 'struct Board.Point',
+            type: 'tuple',
+            components: [
+              { name: 'x', internalType: 'uint256', type: 'uint256' },
+              { name: 'y', internalType: 'uint256', type: 'uint256' },
+              { name: 'z', internalType: 'uint256', type: 'uint256' },
+            ],
+          },
+        ],
+      },
+    ],
+    name: 'move',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'numTanksAlive',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'player', internalType: 'address', type: 'address' }],
+    name: 'players',
+    outputs: [{ name: 'tank', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'playersCount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'podium',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'prizePool',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [],
+    name: 'reveal',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'revealBlock',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: '_owner', internalType: 'address', type: 'address' }],
+    name: 'setOwner',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'settings',
+    outputs: [
+      { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+      { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+      { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+      { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+      { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+      { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+      { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+      { name: 'revealWaitBlocks', internalType: 'uint256', type: 'uint256' },
+      { name: 'autoStart', internalType: 'bool', type: 'bool' },
+      { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+    ],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ITankGame.ShootParams',
+        type: 'tuple',
+        components: [
+          { name: 'fromId', internalType: 'uint256', type: 'uint256' },
+          { name: 'toId', internalType: 'uint256', type: 'uint256' },
+          { name: 'shots', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'shoot',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [],
+    name: 'start',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'state',
+    outputs: [
+      { name: '', internalType: 'enum ITankGame.GameState', type: 'uint8' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'stateData',
+    outputs: [
+      { name: 'playersCount', internalType: 'uint256', type: 'uint256' },
+      { name: 'numTanksAlive', internalType: 'uint256', type: 'uint256' },
+      { name: 'prizePool', internalType: 'uint256', type: 'uint256' },
+      { name: 'epochStart', internalType: 'uint256', type: 'uint256' },
+      { name: 'aliveTanksIdSum', internalType: 'uint256', type: 'uint256' },
+      { name: 'revealBlock', internalType: 'uint256', type: 'uint256' },
+      { name: 'lastRevealBlock', internalType: 'uint256', type: 'uint256' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'tankHooks',
+    outputs: [
+      { name: 'hooks', internalType: 'contract IHooks', type: 'address' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
+    name: 'tankToPosition',
+    outputs: [
+      { name: 'x', internalType: 'uint256', type: 'uint256' },
+      { name: 'y', internalType: 'uint256', type: 'uint256' },
+      { name: 'z', internalType: 'uint256', type: 'uint256' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
+    name: 'tanks',
+    outputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'hearts', internalType: 'uint256', type: 'uint256' },
+      { name: 'aps', internalType: 'uint256', type: 'uint256' },
+      { name: 'range', internalType: 'uint256', type: 'uint256' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'position', internalType: 'uint256', type: 'uint256' }],
+    name: 'tanksOnBoard',
+    outputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ITankGame.UpgradeParams',
+        type: 'tuple',
+        components: [
+          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'upgrade',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ITankGame.VoteParams',
+        type: 'tuple',
+        components: [
+          { name: 'voter', internalType: 'uint256', type: 'uint256' },
+          { name: 'cursed', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'vote',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'epoch', internalType: 'uint256', type: 'uint256' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'votedThisEpoch',
+    outputs: [{ name: 'voted', internalType: 'bool', type: 'bool' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'epoch', internalType: 'uint256', type: 'uint256' },
+      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'votesPerEpoch',
+    outputs: [{ name: 'votes', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'epoch', internalType: 'uint256', type: 'uint256' }],
+    name: 'votingClosed',
+    outputs: [{ name: 'votingClosed', internalType: 'bool', type: 'bool' }],
+  },
   {
     type: 'event',
     anonymous: false,
@@ -4920,506 +5437,6 @@ export const tankGameABI = [
     ],
     name: 'Vote',
   },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: '_getEpoch',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      { name: 'hooks', internalType: 'contract IHooks', type: 'address' },
-    ],
-    name: 'addHooks',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'aliveTanksIdSum',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'board',
-    outputs: [{ name: '', internalType: 'contract Board', type: 'address' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'params',
-        internalType: 'struct ITankGame.ClaimParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-          { name: 'claimer', internalType: 'address', type: 'address' },
-        ],
-      },
-    ],
-    name: 'claim',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-    name: 'claimed',
-    outputs: [{ name: 'claimed', internalType: 'bool', type: 'bool' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'deadTanks',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'params',
-        internalType: 'struct ITankGame.DelegateParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-          { name: 'delegatee', internalType: 'address', type: 'address' },
-        ],
-      },
-    ],
-    name: 'delegate',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      { name: 'delegate', internalType: 'address', type: 'address' },
-    ],
-    name: 'delegates',
-    outputs: [{ name: 'isDelegate', internalType: 'bool', type: 'bool' }],
-  },
-  {
-    stateMutability: 'payable',
-    type: 'function',
-    inputs: [],
-    name: 'donate',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'params',
-        internalType: 'struct ITankGame.DripParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'drip',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'epochStart',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      { name: 'hooks', internalType: 'contract IHooks', type: 'address' },
-    ],
-    name: 'forceAddDefaultHook',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-    name: 'getLastDrip',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-    name: 'getUpgradeCost',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'params',
-        internalType: 'struct ITankGame.GiveParams',
-        type: 'tuple',
-        components: [
-          { name: 'fromId', internalType: 'uint256', type: 'uint256' },
-          { name: 'toId', internalType: 'uint256', type: 'uint256' },
-          { name: 'hearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'aps', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'give',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'position', internalType: 'uint256', type: 'uint256' }],
-    name: 'heartsOnBoard',
-    outputs: [{ name: 'heartCount', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'payable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'gs',
-        internalType: 'struct ITankGame.GameSettings',
-        type: 'tuple',
-        components: [
-          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
-          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
-          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
-          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
-          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
-          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
-          {
-            name: 'revealWaitBlocks',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          { name: 'autoStart', internalType: 'bool', type: 'bool' },
-          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
-        ],
-      },
-      { name: '_owner', internalType: 'address', type: 'address' },
-    ],
-    name: 'initialize',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      { name: '_owner', internalType: 'address', type: 'address' },
-    ],
-    name: 'isAuth',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-  },
-  {
-    stateMutability: 'payable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'params',
-        internalType: 'struct ITankGame.JoinParams',
-        type: 'tuple',
-        components: [
-          { name: 'joiner', internalType: 'address', type: 'address' },
-          { name: 'proof', internalType: 'bytes32[]', type: 'bytes32[]' },
-          { name: 'playerName', internalType: 'string', type: 'string' },
-        ],
-      },
-    ],
-    name: 'join',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-    name: 'lastDripEpoch',
-    outputs: [{ name: 'epoch', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'lastRevealBlock',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'params',
-        internalType: 'struct ITankGame.MoveParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-          {
-            name: 'to',
-            internalType: 'struct Board.Point',
-            type: 'tuple',
-            components: [
-              { name: 'x', internalType: 'uint256', type: 'uint256' },
-              { name: 'y', internalType: 'uint256', type: 'uint256' },
-              { name: 'z', internalType: 'uint256', type: 'uint256' },
-            ],
-          },
-        ],
-      },
-    ],
-    name: 'move',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'numTanksAlive',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'player', internalType: 'address', type: 'address' }],
-    name: 'players',
-    outputs: [{ name: 'tank', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'playersCount',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'podium',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'prizePool',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [],
-    name: 'reveal',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'revealBlock',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: '_owner', internalType: 'address', type: 'address' }],
-    name: 'setOwner',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'settings',
-    outputs: [
-      { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
-      { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
-      { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
-      { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
-      { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
-      { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
-      { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
-      { name: 'revealWaitBlocks', internalType: 'uint256', type: 'uint256' },
-      { name: 'autoStart', internalType: 'bool', type: 'bool' },
-      { name: 'root', internalType: 'bytes32', type: 'bytes32' },
-    ],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'params',
-        internalType: 'struct ITankGame.ShootParams',
-        type: 'tuple',
-        components: [
-          { name: 'fromId', internalType: 'uint256', type: 'uint256' },
-          { name: 'toId', internalType: 'uint256', type: 'uint256' },
-          { name: 'shots', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'shoot',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [],
-    name: 'start',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'state',
-    outputs: [
-      { name: '', internalType: 'enum ITankGame.GameState', type: 'uint8' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'stateData',
-    outputs: [
-      { name: 'playersCount', internalType: 'uint256', type: 'uint256' },
-      { name: 'numTanksAlive', internalType: 'uint256', type: 'uint256' },
-      { name: 'prizePool', internalType: 'uint256', type: 'uint256' },
-      { name: 'epochStart', internalType: 'uint256', type: 'uint256' },
-      { name: 'aliveTanksIdSum', internalType: 'uint256', type: 'uint256' },
-      { name: 'revealBlock', internalType: 'uint256', type: 'uint256' },
-      { name: 'lastRevealBlock', internalType: 'uint256', type: 'uint256' },
-      { name: 'owner', internalType: 'address', type: 'address' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-      { name: '', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'tankHooks',
-    outputs: [
-      { name: 'hooks', internalType: 'contract IHooks', type: 'address' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-    name: 'tankToPosition',
-    outputs: [
-      { name: 'x', internalType: 'uint256', type: 'uint256' },
-      { name: 'y', internalType: 'uint256', type: 'uint256' },
-      { name: 'z', internalType: 'uint256', type: 'uint256' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-    name: 'tanks',
-    outputs: [
-      { name: 'owner', internalType: 'address', type: 'address' },
-      { name: 'hearts', internalType: 'uint256', type: 'uint256' },
-      { name: 'aps', internalType: 'uint256', type: 'uint256' },
-      { name: 'range', internalType: 'uint256', type: 'uint256' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'position', internalType: 'uint256', type: 'uint256' }],
-    name: 'tanksOnBoard',
-    outputs: [{ name: 'tankId', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'params',
-        internalType: 'struct ITankGame.UpgradeParams',
-        type: 'tuple',
-        components: [
-          { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'upgrade',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'params',
-        internalType: 'struct ITankGame.VoteParams',
-        type: 'tuple',
-        components: [
-          { name: 'voter', internalType: 'uint256', type: 'uint256' },
-          { name: 'cursed', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'vote',
-    outputs: [],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'epoch', internalType: 'uint256', type: 'uint256' },
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'votedThisEpoch',
-    outputs: [{ name: 'voted', internalType: 'bool', type: 'bool' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'epoch', internalType: 'uint256', type: 'uint256' },
-      { name: 'tankId', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'votesPerEpoch',
-    outputs: [{ name: 'votes', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'epoch', internalType: 'uint256', type: 'uint256' }],
-    name: 'votingClosed',
-    outputs: [{ name: 'votingClosed', internalType: 'bool', type: 'bool' }],
-  },
 ] as const
 
 /**
@@ -5449,7 +5466,67 @@ export const tankGameConfig = {
  * -
  */
 export const tankGameFactoryABI = [
-  { type: 'error', inputs: [], name: 'ERC1167FailedCreateClone' },
+  {
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+    inputs: [
+      { name: '_gameView', internalType: 'contract GameView', type: 'address' },
+      {
+        name: '_hookFactory',
+        internalType: 'contract HookFactory',
+        type: 'address',
+      },
+    ],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: '_implementation', internalType: 'address', type: 'address' },
+      {
+        name: 'settings',
+        internalType: 'struct ITankGame.GameSettings',
+        type: 'tuple',
+        components: [
+          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
+          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
+          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
+          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
+          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
+          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
+          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'revealWaitBlocks',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'autoStart', internalType: 'bool', type: 'bool' },
+          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+      { name: '_owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'createGame',
+    outputs: [
+      { name: 'game', internalType: 'contract ITankGame', type: 'address' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'gameView',
+    outputs: [{ name: '', internalType: 'contract GameView', type: 'address' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'hookFactory',
+    outputs: [
+      { name: '', internalType: 'contract HookFactory', type: 'address' },
+    ],
+  },
   {
     type: 'event',
     anonymous: false,
@@ -5485,39 +5562,7 @@ export const tankGameFactoryABI = [
     ],
     name: 'GameCreated',
   },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: '_implementation', internalType: 'address', type: 'address' },
-      {
-        name: 'settings',
-        internalType: 'struct ITankGame.GameSettings',
-        type: 'tuple',
-        components: [
-          { name: 'playerCount', internalType: 'uint256', type: 'uint256' },
-          { name: 'boardSize', internalType: 'uint256', type: 'uint256' },
-          { name: 'initAPs', internalType: 'uint256', type: 'uint256' },
-          { name: 'initHearts', internalType: 'uint256', type: 'uint256' },
-          { name: 'initShootRange', internalType: 'uint256', type: 'uint256' },
-          { name: 'epochSeconds', internalType: 'uint256', type: 'uint256' },
-          { name: 'buyInMinimum', internalType: 'uint256', type: 'uint256' },
-          {
-            name: 'revealWaitBlocks',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          { name: 'autoStart', internalType: 'bool', type: 'bool' },
-          { name: 'root', internalType: 'bytes32', type: 'bytes32' },
-        ],
-      },
-      { name: '_owner', internalType: 'address', type: 'address' },
-    ],
-    name: 'createGame',
-    outputs: [
-      { name: 'game', internalType: 'contract ITankGame', type: 'address' },
-    ],
-  },
+  { type: 'error', inputs: [], name: 'ERC1167FailedCreateClone' },
 ] as const
 
 /**
@@ -5526,7 +5571,7 @@ export const tankGameFactoryABI = [
  */
 export const tankGameFactoryAddress = {
   5: '0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08',
-  31337: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
+  31337: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
 } as const
 
 /**
@@ -11783,6 +11828,51 @@ export function useITankGameDrip<
 }
 
 /**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * -
+ */
+export function useITankGameForceAddDefaultHook<
+  TMode extends WriteContractMode = undefined,
+  TChainId extends number = keyof typeof iTankGameAddress,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof iTankGameABI,
+          'forceAddDefaultHook'
+        >['request']['abi'],
+        'forceAddDefaultHook',
+        TMode
+      > & {
+        address?: Address
+        chainId?: TChainId
+        functionName?: 'forceAddDefaultHook'
+      }
+    : UseContractWriteConfig<
+        typeof iTankGameABI,
+        'forceAddDefaultHook',
+        TMode
+      > & {
+        abi?: never
+        address?: never
+        chainId?: TChainId
+        functionName?: 'forceAddDefaultHook'
+      } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractWrite<typeof iTankGameABI, 'forceAddDefaultHook', TMode>({
+    abi: iTankGameABI,
+    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+    functionName: 'forceAddDefaultHook',
+    ...config,
+  } as any)
+}
+
+/**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"give"`.
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
@@ -12190,6 +12280,32 @@ export function usePrepareITankGameDrip(
     functionName: 'drip',
     ...config,
   } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'drip'>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * -
+ */
+export function usePrepareITankGameForceAddDefaultHook(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof iTankGameABI, 'forceAddDefaultHook'>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return usePrepareContractWrite({
+    abi: iTankGameABI,
+    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+    functionName: 'forceAddDefaultHook',
+    ...config,
+  } as UsePrepareContractWriteConfig<
+    typeof iTankGameABI,
+    'forceAddDefaultHook'
+  >)
 }
 
 /**
@@ -15096,6 +15212,32 @@ export function useTankGameEpochStart<
 }
 
 /**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"factory"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * -
+ */
+export function useTankGameFactory<
+  TFunctionName extends 'factory',
+  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: tankGameABI,
+    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+    functionName: 'factory',
+    ...config,
+  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
+}
+
+/**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getLastDrip"`.
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
@@ -17222,6 +17364,110 @@ export function useTankGameVoteEvent(
     eventName: 'Vote',
     ...config,
   } as UseContractEventConfig<typeof tankGameABI, 'Vote'>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameFactoryABI}__.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export function useTankGameFactoryRead<
+  TFunctionName extends string,
+  TSelectData = ReadContractResult<typeof tankGameFactoryABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<
+      typeof tankGameFactoryABI,
+      TFunctionName,
+      TSelectData
+    >,
+    'abi' | 'address'
+  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: tankGameFactoryABI,
+    address:
+      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+    ...config,
+  } as UseContractReadConfig<
+    typeof tankGameFactoryABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"gameView"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export function useTankGameFactoryGameView<
+  TFunctionName extends 'gameView',
+  TSelectData = ReadContractResult<typeof tankGameFactoryABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<
+      typeof tankGameFactoryABI,
+      TFunctionName,
+      TSelectData
+    >,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: tankGameFactoryABI,
+    address:
+      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+    functionName: 'gameView',
+    ...config,
+  } as UseContractReadConfig<
+    typeof tankGameFactoryABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"hookFactory"`.
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * -
+ */
+export function useTankGameFactoryHookFactory<
+  TFunctionName extends 'hookFactory',
+  TSelectData = ReadContractResult<typeof tankGameFactoryABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<
+      typeof tankGameFactoryABI,
+      TFunctionName,
+      TSelectData
+    >,
+    'abi' | 'address' | 'functionName'
+  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
+) {
+  const { chain } = useNetwork()
+  const defaultChainId = useChainId()
+  const chainId = config.chainId ?? chain?.id ?? defaultChainId
+  return useContractRead({
+    abi: tankGameFactoryABI,
+    address:
+      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+    functionName: 'hookFactory',
+    ...config,
+  } as UseContractReadConfig<
+    typeof tankGameFactoryABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**

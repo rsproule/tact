@@ -133,5 +133,7 @@ interface ITankGame {
 
     function addHooks(uint256 tankId, IHooks hooks) external;
 
+    function forceAddDefaultHook(uint256 tankId, IHooks hooks) external;
+
     function initialize(GameSettings calldata settings, address _owner) external payable;
 }
