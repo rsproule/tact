@@ -4,10 +4,11 @@ import {
   usePrepareNonAggressionAccept,
   useNonAggressionAccept,
   useGameViewGetEpoch,
+  gameViewAddress,
 } from "@/src/generated";
 import { useState, useEffect } from "react";
 import { BaseError } from "viem";
-import { useAccount, useBlockNumber, useWaitForTransaction } from "wagmi";
+import { useAccount, useBlockNumber, useNetwork, useWaitForTransaction } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import { toTankName } from "../tankGame/EventsStream";
 import { toast } from "../ui/use-toast";
@@ -33,10 +34,12 @@ export default function NonAggression({
     args: [address!],
     enabled: !!address,
   });
+  const { chain} = useNetwork();
   const { data: epoch } = useGameViewGetEpoch({
     // @ts-ignore
-    address: gameAddress,
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
     watch: true,
+    args: [gameAddress],
   });
   const { data: blockNumber } = useBlockNumber({ watch: true });
   const [treaties, setTreaties] = useState<any>();
@@ -67,8 +70,8 @@ export default function NonAggression({
                 acceptedTreaty.args.proposer === proposedTreaty.args.proposer &&
                 acceptedTreaty.args.proposee === proposedTreaty.args.proposee &&
                 acceptedTreaty.args.expiry === proposedTreaty.args.expiry &&
-                acceptedTreaty.args.proposalHook ===
-                  proposedTreaty.args.hookProposer
+                acceptedTreaty.args.hookProposer ===
+                proposedTreaty.args.proposalHook
             )
         )
         .filter((treaty: any) => treaty.args.expiry > epoch!);
@@ -171,34 +174,6 @@ export default function NonAggression({
             </CardContent>
           </Card>
         )}
-      {/* {acceptedTreaties && acceptedTreaties.length !== 0 && (
-        <Card>
-          <CardHeader>
-            <div className="text-xl">
-              Active alliances for {toTankName(tankId)}
-            </div>
-          </CardHeader>
-          <CardContent>
-            {acceptedTreaties.map((bounty: any, i: number) => {
-              return (
-                <div key={i} className="flex justify-between border p-1">
-                  <div>Proposer: {toTankName(bounty.args.proposer)}</div>
-                  <div>Ally: {toTankName(bounty.args.accepter)}</div>
-                  <div>
-                    Non-aggression until block: {bounty.args.expiry.toString()}
-                  </div>
-                  <div>
-                    Approx time:
-                    {secondsToHMS(
-                      Number(bounty.args.expiry - blockNumber!) * 12
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </CardContent>
-        </Card>
-      )} */}
     </div>
   );
 }

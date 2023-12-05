@@ -20,9 +20,11 @@ contract TankGame is ITankGame, TankGameV2Storage {
     address public factory;
 
     function initialize(ITankGame.GameSettings memory gs, address _owner) public payable override {
-        require(gs.boardSize % 3 == 0, "invalid board size");
-        require(gs.boardSize >= 1, "invalid board size");
+        require(gs.boardSize > 0 && gs.boardSize % 3 == 0, "invalid board size");
         require(gs.playerCount > 1, "invalid player count");
+        require(gs.epochSeconds > 0, "invalid epoch seconds");
+        require(gs.revealWaitBlocks > 0, "invalid reveal wait blocks");
+        require(gs.initHearts > 0, "invalid init hearts");
         emit GameInit(gs);
         settings = gs;
         state = GameState.WaitingForPlayers;
@@ -57,7 +59,7 @@ contract TankGame is ITankGame, TankGameV2Storage {
         playersCount = stateData.playersCount;
         emit PlayerJoined(params.joiner, playersCount, emptyPoint, params.playerName);
 
-        runHooks(IHooks.afterJoin.selector, playersCount, abi.encode(params));
+        // runHooks(IHooks.afterJoin.selector, playersCount, abi.encode(params));
 
         if (settings.autoStart && playersCount == settings.playerCount) {
             start();
@@ -259,6 +261,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
             } else if (hookFunction == IHooks.afterDelegate.selector) {
                 DelegateParams memory decodedParams = abi.decode(params, (DelegateParams));
                 selector = IHooks(hook).afterDelegate(address(this), decodedParams, "");
+            // } else if (hookFunction == IHooks.afterJoin.selector) {
+            //     JoinParams memory decodedParams = abi.decode(params, (JoinParams));
+            //     selector = IHooks(hook).afterJoin(address(this), decodedParams, "");
+            // } else if (hookFunction == IHooks.beforeJoin.selector) {
+            //     JoinParams memory decodedParams = abi.decode(params, (JoinParams));
+            //     selector = IHooks(hook).beforeJoin(address(this), decodedParams, "");
             } else if (hookFunction == IHooks.beforeMove.selector) {
                 MoveParams memory decodedParams = abi.decode(params, (MoveParams));
                 selector = IHooks(hook).beforeMove(address(this), decodedParams, "");

@@ -4,7 +4,7 @@ import {
 } from "@/src/generated";
 import { useState } from "react";
 import { BaseError } from "viem";
-import { useBlockNumber, useWaitForTransaction } from "wagmi";
+import { useWaitForTransaction } from "wagmi";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
