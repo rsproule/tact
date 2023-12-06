@@ -85,6 +85,7 @@ export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
                         return (
                           <CreateBounty
                             key={i}
+                            gameAddress={gameAddress}
                             hookAddress={hook.args.hookAddress}
                           />
                         );
@@ -92,6 +93,7 @@ export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
                         return (
                           <CreateNonAggression
                             key={i}
+                            gameAddress={gameAddress}
                             hookAddress={hook.args.hookAddress}
                           />
                         );

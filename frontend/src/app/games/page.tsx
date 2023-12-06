@@ -3,9 +3,10 @@ import {
   tankGameAddress,
   tankGameFactoryABI,
   tankGameFactoryAddress,
+  useTankGamePlayersCount,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
-import { useBlockNumber, useNetwork } from "wagmi";
+import { Address, useBalance, useBlockNumber, useNetwork } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import CreateGameForm from "@/src/components/CreateGameForm";
 import {
@@ -20,6 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card";
+import { formatEther } from "viem";
 
 export default function GamesList() {
   const { data: blockNumber } = useBlockNumber({ watch: true });
@@ -48,7 +50,7 @@ export default function GamesList() {
       })
       .catch(console.error);
   }, [blockNumber]);
-  console.log(games);
+  console.log({ games });
   return (
     <div className="container pb-20">
       <Card>
@@ -75,31 +77,58 @@ export default function GamesList() {
             ?.slice()
             .reverse()
             .map((game: any, i: number) => (
-              <div key={i} className="my-5">
-                <a href={`game/${game.args.game}`}>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>
-                        Game Address: {game.args.game.substring(0, 12) + "..."}
-                      </CardTitle>
-                      <CardContent>
-                        {Object.keys(game.args.settings).map((key, i) => (
-                          <div key={i}>
-                            {key}:{" "}
-                            {game.args.settings[key].toString().length > 20
-                              ? game.args.settings[key]
-                                  .toString()
-                                  .substring(0, 20) + "..."
-                              : game.args.settings[key].toString()}
-                          </div>
-                        ))}
-                      </CardContent>
-                    </CardHeader>
-                  </Card>
-                </a>
-              </div>
+              <GameTile
+                key={i}
+                address={game.args.game}
+                numPlayers={game.args.settings.playerCount}
+                isOpen={game.args.settings.root === zero}
+                buyIn={game.args.settings.buyInMinimum}
+              />
             ))}
       </div>
+    </div>
+  );
+}
+
+const zero =
+  "0x0000000000000000000000000000000000000000000000000000000000000000";
+
+function GameTile({
+  address,
+  numPlayers,
+  isOpen,
+  buyIn,
+}: {
+  address: Address;
+  numPlayers: bigint;
+  isOpen: boolean;
+  buyIn: bigint;
+}) {
+  let { data: players } = useTankGamePlayersCount({
+    watch: true,
+    // @ts-ignore
+    address: address,
+  });
+  let { data: balance } = useBalance({ address: address, watch: true });
+  return (
+    <div className="my-5">
+      <a href={`game/${address}`}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Game Address: {address}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div>
+              {players?.toString()}/{numPlayers.toString()} players in game
+            </div>
+            <div>Auth mode: {isOpen ? "Open to world" : "Whitelist"}</div>
+            <div>Buy in minimum: {formatEther(buyIn)} eth</div>
+            <div>
+              Current pot: {balance ? formatEther(balance.value) : "..."} eth
+            </div>
+          </CardContent>
+        </Card>
+      </a>
     </div>
   );
 }

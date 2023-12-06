@@ -67,6 +67,7 @@ export function Tile(props: TileProps) {
           tankObj={props.tank}
           open={hover}
           position={position2}
+          address={props.gameAddress}
         />
       )}
       <Hexagon

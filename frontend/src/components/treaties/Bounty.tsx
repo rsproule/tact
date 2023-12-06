@@ -7,14 +7,13 @@ import {
   useBountyWithdraw,
 } from "@/src/generated";
 import { useState, useEffect } from "react";
-import { BaseError, formatEther } from "viem";
-import {
-  useAccount,
-  useBlockNumber,
-  useWaitForTransaction,
-} from "wagmi";
+import { Address, BaseError, formatEther } from "viem";
+import { useAccount, useBlockNumber, useWaitForTransaction } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
-import { toTankName } from "../tankGame/EventsStream";
+import {
+  getTankNameFromJoinIndex,
+  useTankNameFromId,
+} from "../tankGame/EventsStream";
 import { toast } from "../ui/use-toast";
 import { Card, CardHeader, CardContent } from "../ui/card";
 
@@ -31,6 +30,9 @@ export default function Bounty({
   hideNotMine: boolean;
   addedHooks: any;
 }) {
+  const tankName = useTankNameFromId(gameAddress, tankId);
+  console.log({ tankName });
+  console.log({ tankId });
   const { address } = useAccount();
   const ownerTank = useTankGamePlayers({
     // @ts-ignore
@@ -69,9 +71,9 @@ export default function Bounty({
         } else {
           return acc.map((item: any) =>
             item.address === current.address &&
-            item.args.tankId === current.args.tankId &&
-            item.args.target === current.args.target &&
-            item.args.amount > current.args.amount
+              item.args.tankId === current.args.tankId &&
+              item.args.target === current.args.target &&
+              item.args.amount > current.args.amount
               ? current
               : item
           );
@@ -155,7 +157,7 @@ export default function Bounty({
     }).length !== 0 && (
       <Card>
         <CardHeader>
-          <div className="text-xl">💰 {toTankName(tankId)} Bounties</div>
+          <div className="text-xl">💰 {tankName} Bounties</div>
         </CardHeader>
         <CardContent>
           {bounties
@@ -172,75 +174,132 @@ export default function Bounty({
             })
             .map((bounty: any, i: number) => {
               return (
-                <div key={i} className="flex justify-between border">
-                  <div>Proposer: {toTankName(bounty.args.tankId)}</div>
-                  <div>Target: {toTankName(bounty.args.target)}</div>
-                  <div>
-                    Bounty amount: {formatEther(bounty.args.amount)} Ether
-                  </div>
-                  {bountiesWon?.find(
-                    (wonBounty: any) =>
-                      wonBounty.args.bountyId === bounty.args.bountyId
-                  ) ? (
-                    <div>
-                      {bountiesWon?.find(
-                        (wonBounty: any) =>
-                          wonBounty.args.winner === ownerTank.data
-                      ) ? (
-                        !withdraws?.find(
-                          (withdraw: any) =>
-                            withdraw.args.bountyId === bounty.args.bountyId
-                        ) ? (
-                          "Claimed by " +
-                          toTankName(
-                            bountiesWon?.filter(
-                              (withdraw: any) =>
-                                withdraw.args.bountyId === bounty.args.bountyId
-                            )[0].args.winner
-                          )
-                        ) : (
-                          <button
-                            className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
-                            disabled={!withdraw}
-                            onClick={() => withdraw?.()}
-                          >
-                            Claim
-                          </button>
-                        )
-                      ) : (
-                        "Has been won"
-                      )}
-                    </div>
-                  ) : addedHooks &&
-                    !addedHooks
-                      .filter((ha: any) => ha.args.hook === hookAddress)
-                      .map((ha: any) => ha.args.tankId)
-                      .includes(ownerTank.data!) ? (
-                    <button
-                      className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
-                      disabled={!addHook}
-                      onClick={() => addHook?.()}
-                    >
-                      Accept
-                    </button>
-                  ) : (
-                    "🤝"
-                  )}
-                  <div>
-                    Accepted by:{" "}
-                    {addedHooks &&
-                      addedHooks
-                        ?.filter((ha: any) => ha.args.hook === hookAddress)
-                        .map((ha: any) => {
-                          return toTankName(ha.args.tankId);
-                        })
-                        .toString()}
-                  </div>
-                </div>
+                <BountyCard
+                  key={i}
+                  bounty={bounty}
+                  bountiesWon={bountiesWon}
+                  withdraws={withdraws}
+                  ownerTank={ownerTank}
+                  addHook={addHook}
+                  withdraw={withdraw}
+                  addedHooks={addedHooks}
+                  hookAddress={hookAddress}
+                  gameAddress={gameAddress}
+                />
               );
             })}
         </CardContent>
       </Card>
     )
   );
+}
+
+function BountyCard({
+  bounty,
+  bountiesWon,
+  withdraws,
+  ownerTank,
+  addHook,
+  withdraw,
+  addedHooks,
+  hookAddress,
+  gameAddress,
+}: {
+  bounty: any;
+  bountiesWon: any;
+  withdraws: any;
+  ownerTank: any;
+  addHook: any;
+  withdraw: any;
+  addedHooks: any;
+  hookAddress: Address;
+  gameAddress: Address;
+}) {
+  const proposerName = useTankNameFromId(gameAddress, bounty.args.tankId);
+  const targetName = useTankNameFromId(gameAddress, bounty.args.target);
+  return (
+    <div className="flex justify-between border">
+      <div>Proposer: {proposerName}</div>
+      <div>Target: {targetName}</div>
+      <div>Bounty amount: {formatEther(bounty.args.amount)} Ether</div>
+      {bountiesWon?.find(
+        (wonBounty: any) => wonBounty.args.bountyId === bounty.args.bountyId
+      ) ? (
+        <div>
+          {bountiesWon?.find(
+            (wonBounty: any) => wonBounty.args.winner === ownerTank.data
+          ) ? (
+            !withdraws?.find(
+              (withdraw: any) => withdraw.args.bountyId === bounty.args.bountyId
+            ) ? (
+              <div>
+                {"Claimed by "}
+                <TankName
+                  key={bounty.args.bountyId}
+                  tankId={
+                    bountiesWon?.filter(
+                      (withdraw: any) =>
+                        withdraw.args.bountyId === bounty.args.bountyId
+                    )[0].args.winner
+                  }
+                  gameAddress={gameAddress}
+                />
+              </div>
+            ) : (
+              <button
+                className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
+                disabled={!withdraw}
+                onClick={() => withdraw?.()}
+              >
+                Claim
+              </button>
+            )
+          ) : (
+            "Has been won"
+          )}
+        </div>
+      ) : addedHooks &&
+        !addedHooks
+          .filter((ha: any) => ha.args.hook === hookAddress)
+          .map((ha: any) => ha.args.tankId)
+          .includes(ownerTank.data!) ? (
+        <button
+          className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
+          disabled={!addHook}
+          onClick={() => addHook?.()}
+        >
+          Accept
+        </button>
+      ) : (
+        "🤝"
+      )}
+      <div>
+        Accepted by:{" "}
+        {addedHooks &&
+          addedHooks
+            ?.filter((ha: any) => ha.args.hook === hookAddress)
+            .map((ha: any, i: number) => {
+              return (
+                <TankName
+                  key={i}
+                  tankId={ha.args.tankId}
+                  gameAddress={gameAddress}
+                />
+              );
+            })}
+      </div>
+    </div>
+  );
+}
+
+function TankName({
+  tankId,
+  gameAddress,
+}: {
+  tankId: bigint;
+  gameAddress: Address;
+}) {
+  const tankName = useTankNameFromId(gameAddress, tankId);
+  console.log({ tankName });
+  return <div>{tankName}</div>;
 }

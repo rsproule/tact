@@ -1,18 +1,15 @@
-import { useNetwork } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
-import { tankGameABI, tankGameAddress } from "../generated";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { tankGameABI, useTankGameSettings } from "../generated";
+import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { toTankName } from "./tankGame/EventsStream";
 import { useState } from "react";
+import { useTanks } from "./tankGame/EventsStream";
 
 export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
   const [murderCount, setMurderCount] = useState(undefined);
   const [reviveCount, setReviveCount] = useState(undefined);
   const [deathCount, setDeathCount] = useState(undefined);
   const [dripCount, setDripCount] = useState(undefined);
-  const [distances, setDistances] = useState(undefined);
-  const { chain } = useNetwork();
   const getLogs = async () => {
     const publicClient = getPublicClient();
     const filter = await publicClient.createContractEventFilter({
@@ -25,7 +22,7 @@ export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
       filter,
     });
   };
-  const getLeaderBoard = async () => {
+  const getLeaderBoard = async (numPlayers: number) => {
     const logs = await getLogs();
     const tanksByKills = logs
       .filter((log) => log.eventName === "Death")
@@ -105,7 +102,8 @@ export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
     const sortedTanksByDrips = Object.entries(tanksByDrips).sort(
       (a, b) => b[1] - a[1]
     );
-    const missingTankIds = Array.from({ length: 19 }, (_, i) => i + 1)
+
+    const missingTankIds = Array.from({ length: numPlayers }, (_, i) => i + 1)
       .map(String)
       .filter((id) => !sortedTanksByDrips.some(([num]) => num === id));
 
@@ -118,9 +116,18 @@ export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
     setDripCount(sortedTanksByDrips);
   };
 
+  const tanks = useTanks(gameAddress);
+  const { data: settings } = useTankGameSettings({
+    // @ts-ignore
+    address: gameAddress,
+  });
+
   return (
     <Card className="container">
-      <Button className="w-full my-2" onClick={() => getLeaderBoard()}>
+      <Button
+        className="w-full my-2"
+        onClick={() => getLeaderBoard(settings ? Number(settings[0]) : 0)}
+      >
         Refresh LeaderBoard
       </Button>
       <CardContent>
@@ -136,7 +143,7 @@ export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
                 murderCount.map(([tankId, murders]) => {
                   return (
                     <div key={tankId}>
-                      {toTankName(BigInt(tankId))}: {murders}
+                      {tanks[tankId -1]}: {murders}
                     </div>
                   );
                 })}
@@ -153,7 +160,7 @@ export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
                 reviveCount.map(([tankId, revives]) => {
                   return (
                     <div key={tankId}>
-                      {toTankName(BigInt(tankId))}: {revives}
+                      {tanks[tankId-1]}: {revives}
                     </div>
                   );
                 })}
@@ -169,7 +176,7 @@ export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
                 deathCount.map(([tankId, deaths]) => {
                   return (
                     <div key={tankId}>
-                      {toTankName(BigInt(tankId))}: {deaths}
+                      {tanks[tankId-1]}: {deaths}
                     </div>
                   );
                 })}
@@ -185,7 +192,7 @@ export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
                 dripCount.map(([num, drips]) => {
                   return (
                     <div key={num}>
-                      {toTankName(BigInt(num))}: {drips}
+                      {tanks[num-1]}: {drips}
                     </div>
                   );
                 })}

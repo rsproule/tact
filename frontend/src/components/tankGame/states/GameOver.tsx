@@ -17,7 +17,7 @@ import {
   CardTitle,
 } from "../../ui/card";
 import { Trophy } from "lucide-react";
-import { toTankName } from "../EventsStream";
+import { useTankNameFromId } from "../EventsStream";
 
 export function GameOver({ gameAddress }: { gameAddress: `0x${string}` }) {
   let { toast } = useToast();
@@ -37,6 +37,9 @@ export function GameOver({ gameAddress }: { gameAddress: `0x${string}` }) {
     address: gameAddress,
     args: [BigInt(2)],
   });
+  const firstName = useTankNameFromId(gameAddress, first.data!);
+  const secondName = useTankNameFromId(gameAddress, second.data!);
+  const thirdName = useTankNameFromId(gameAddress, third.data!);
   const { address } = useAccount();
   let ownersTankId = useTankGamePlayers({
     args: [address!],
@@ -84,9 +87,9 @@ export function GameOver({ gameAddress }: { gameAddress: `0x${string}` }) {
         </CardHeader>
         <CardContent>
           <ul>
-            <li>First: {!!first.data && toTankName(first.data!)}</li>
-            <li>Second: {!!second.data && toTankName(second.data!)}</li>
-            <li>Third: {!!third.data && toTankName(third.data!)}</li>
+            <li>First: {firstName}</li>
+            <li>Second: {secondName}</li>
+            <li>Third: {thirdName}</li>
           </ul>
         </CardContent>
         <CardFooter>
