@@ -8,8 +8,6 @@ import Manifesto from "../components/tankGame/Manifesto";
 export default function HomePage() {
   return (
     <div className="grid container mx-auto p-4">
-      <Manifesto />
-
       <Connected>
         <div className="flex justify-center items-center my-4">
           <Link href="/games">
@@ -17,6 +15,7 @@ export default function HomePage() {
           </Link>
         </div>
       </Connected>
+      <Manifesto />
     </div>
   );
 }
