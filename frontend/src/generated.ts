@@ -1256,7 +1256,7 @@ export const defaultEmptyHooksABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export const gameViewABI = [
@@ -1445,16 +1445,16 @@ export const gameViewABI = [
 ] as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export const gameViewAddress = {
-  5: '0xAFf0E741b60288110bA7a400Ef6a99917faA593c',
+  5: '0xE19866944E2CD0FfaE4e35d168149b9B934eA471',
   31337: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
 } as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export const gameViewConfig = {
@@ -1745,7 +1745,7 @@ export const hexBoardABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x1397a0540F1CA3604518483F534E83fbeB60beF6)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
 export const hookFactoryABI = [
@@ -1805,16 +1805,16 @@ export const hookFactoryABI = [
 ] as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x1397a0540F1CA3604518483F534E83fbeB60beF6)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
 export const hookFactoryAddress = {
-  5: '0x1397a0540F1CA3604518483F534E83fbeB60beF6',
+  5: '0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3',
   31337: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
 } as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x1397a0540F1CA3604518483F534E83fbeB60beF6)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
 export const hookFactoryConfig = {
@@ -2657,7 +2657,7 @@ export const iMulticall3ABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export const iTankGameABI = [
@@ -3359,16 +3359,16 @@ export const iTankGameABI = [
 ] as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export const iTankGameAddress = {
-  5: '0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743',
+  5: '0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414',
   31337: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
 } as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export const iTankGameConfig = {
@@ -4452,7 +4452,7 @@ export const stringsABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export const tankGameABI = [
@@ -5440,16 +5440,16 @@ export const tankGameABI = [
 ] as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export const tankGameAddress = {
-  5: '0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743',
+  5: '0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414',
   31337: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
 } as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export const tankGameConfig = {
@@ -5462,7 +5462,7 @@ export const tankGameConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export const tankGameFactoryABI = [
@@ -5566,16 +5566,16 @@ export const tankGameFactoryABI = [
 ] as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export const tankGameFactoryAddress = {
-  5: '0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08',
+  5: '0x9758ce8FE412C72893b42FFEdAEDff1840e1886f',
   31337: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
 } as const
 
 /**
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export const tankGameFactoryConfig = {
@@ -9013,7 +9013,7 @@ export function usePrepareDefaultEmptyHooksBeforeVote(
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewRead<
@@ -9038,7 +9038,7 @@ export function useGameViewRead<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getAllHearts"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetAllHearts<
@@ -9064,7 +9064,7 @@ export function useGameViewGetAllHearts<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getAllTanks"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetAllTanks<
@@ -9090,7 +9090,7 @@ export function useGameViewGetAllTanks<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getBoard"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetBoard<
@@ -9116,7 +9116,7 @@ export function useGameViewGetBoard<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getEpoch"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetEpoch<
@@ -9142,7 +9142,7 @@ export function useGameViewGetEpoch<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getGameEpoch"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetGameEpoch<
@@ -9168,7 +9168,7 @@ export function useGameViewGetGameEpoch<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getLastDrip"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetLastDrip<
@@ -9194,7 +9194,7 @@ export function useGameViewGetLastDrip<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getPlayerCount"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetPlayerCount<
@@ -9220,7 +9220,7 @@ export function useGameViewGetPlayerCount<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getSettings"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetSettings<
@@ -9246,7 +9246,7 @@ export function useGameViewGetSettings<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getState"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetState<
@@ -9272,7 +9272,7 @@ export function useGameViewGetState<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getTank"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetTank<
@@ -9298,7 +9298,7 @@ export function useGameViewGetTank<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getUpgradeCost"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewGetUpgradeCost<
@@ -9324,7 +9324,7 @@ export function useGameViewGetUpgradeCost<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"isAuth"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xAFf0E741b60288110bA7a400Ef6a99917faA593c)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
 export function useGameViewIsAuth<
@@ -9754,7 +9754,7 @@ export function usePrepareHexBoardSetTile(
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link hookFactoryABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x1397a0540F1CA3604518483F534E83fbeB60beF6)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
 export function useHookFactoryWrite<
@@ -9790,7 +9790,7 @@ export function useHookFactoryWrite<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link hookFactoryABI}__ and `functionName` set to `"createHook"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x1397a0540F1CA3604518483F534E83fbeB60beF6)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
 export function useHookFactoryCreateHook<
@@ -9827,7 +9827,7 @@ export function useHookFactoryCreateHook<
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link hookFactoryABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x1397a0540F1CA3604518483F534E83fbeB60beF6)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
 export function usePrepareHookFactoryWrite<TFunctionName extends string>(
@@ -9849,7 +9849,7 @@ export function usePrepareHookFactoryWrite<TFunctionName extends string>(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link hookFactoryABI}__ and `functionName` set to `"createHook"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x1397a0540F1CA3604518483F534E83fbeB60beF6)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
 export function usePrepareHookFactoryCreateHook(
@@ -9872,7 +9872,7 @@ export function usePrepareHookFactoryCreateHook(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link hookFactoryABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x1397a0540F1CA3604518483F534E83fbeB60beF6)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
 export function useHookFactoryEvent<TEventName extends string>(
@@ -9894,7 +9894,7 @@ export function useHookFactoryEvent<TEventName extends string>(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link hookFactoryABI}__ and `eventName` set to `"HookCreated"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x1397a0540F1CA3604518483F534E83fbeB60beF6)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
 export function useHookFactoryHookCreatedEvent(
@@ -11646,7 +11646,7 @@ export function usePrepareIMulticall3TryBlockAndAggregate(
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameWrite<
@@ -11682,7 +11682,7 @@ export function useITankGameWrite<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"addHooks"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameAddHooks<
@@ -11719,7 +11719,7 @@ export function useITankGameAddHooks<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"claim"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameClaim<
@@ -11756,7 +11756,7 @@ export function useITankGameClaim<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"delegate"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameDelegate<
@@ -11793,7 +11793,7 @@ export function useITankGameDelegate<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"drip"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameDrip<
@@ -11830,7 +11830,7 @@ export function useITankGameDrip<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameForceAddDefaultHook<
@@ -11875,7 +11875,7 @@ export function useITankGameForceAddDefaultHook<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"give"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameGive<
@@ -11912,7 +11912,7 @@ export function useITankGameGive<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"initialize"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameInitialize<
@@ -11949,7 +11949,7 @@ export function useITankGameInitialize<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"join"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameJoin<
@@ -11986,7 +11986,7 @@ export function useITankGameJoin<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"move"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameMove<
@@ -12023,7 +12023,7 @@ export function useITankGameMove<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"reveal"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameReveal<
@@ -12060,7 +12060,7 @@ export function useITankGameReveal<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"shoot"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameShoot<
@@ -12097,7 +12097,7 @@ export function useITankGameShoot<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"upgrade"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameUpgrade<
@@ -12134,7 +12134,7 @@ export function useITankGameUpgrade<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"vote"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameVote<
@@ -12171,7 +12171,7 @@ export function useITankGameVote<
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameWrite<TFunctionName extends string>(
@@ -12193,7 +12193,7 @@ export function usePrepareITankGameWrite<TFunctionName extends string>(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"addHooks"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameAddHooks(
@@ -12216,7 +12216,7 @@ export function usePrepareITankGameAddHooks(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"claim"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameClaim(
@@ -12239,7 +12239,7 @@ export function usePrepareITankGameClaim(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"delegate"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameDelegate(
@@ -12262,7 +12262,7 @@ export function usePrepareITankGameDelegate(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"drip"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameDrip(
@@ -12285,7 +12285,7 @@ export function usePrepareITankGameDrip(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameForceAddDefaultHook(
@@ -12311,7 +12311,7 @@ export function usePrepareITankGameForceAddDefaultHook(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"give"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameGive(
@@ -12334,7 +12334,7 @@ export function usePrepareITankGameGive(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"initialize"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameInitialize(
@@ -12357,7 +12357,7 @@ export function usePrepareITankGameInitialize(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"join"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameJoin(
@@ -12380,7 +12380,7 @@ export function usePrepareITankGameJoin(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"move"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameMove(
@@ -12403,7 +12403,7 @@ export function usePrepareITankGameMove(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"reveal"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameReveal(
@@ -12426,7 +12426,7 @@ export function usePrepareITankGameReveal(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"shoot"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameShoot(
@@ -12449,7 +12449,7 @@ export function usePrepareITankGameShoot(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"upgrade"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameUpgrade(
@@ -12472,7 +12472,7 @@ export function usePrepareITankGameUpgrade(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"vote"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareITankGameVote(
@@ -12495,7 +12495,7 @@ export function usePrepareITankGameVote(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameEvent<TEventName extends string>(
@@ -12517,7 +12517,7 @@ export function useITankGameEvent<TEventName extends string>(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"BountyCompleted"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameBountyCompletedEvent(
@@ -12540,7 +12540,7 @@ export function useITankGameBountyCompletedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Claim"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameClaimEvent(
@@ -12563,7 +12563,7 @@ export function useITankGameClaimEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Commit"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameCommitEvent(
@@ -12586,7 +12586,7 @@ export function useITankGameCommitEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Curse"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameCurseEvent(
@@ -12609,7 +12609,7 @@ export function useITankGameCurseEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Death"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameDeathEvent(
@@ -12632,7 +12632,7 @@ export function useITankGameDeathEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Delegate"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameDelegateEvent(
@@ -12655,7 +12655,7 @@ export function useITankGameDelegateEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Drip"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameDripEvent(
@@ -12678,7 +12678,7 @@ export function useITankGameDripEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"GameInit"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameGameInitEvent(
@@ -12701,7 +12701,7 @@ export function useITankGameGameInitEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"GameOver"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameGameOverEvent(
@@ -12724,7 +12724,7 @@ export function useITankGameGameOverEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"GameStarted"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameGameStartedEvent(
@@ -12747,7 +12747,7 @@ export function useITankGameGameStartedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Give"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameGiveEvent(
@@ -12770,7 +12770,7 @@ export function useITankGameGiveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"HooksAdded"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameHooksAddedEvent(
@@ -12793,7 +12793,7 @@ export function useITankGameHooksAddedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Move"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameMoveEvent(
@@ -12816,7 +12816,7 @@ export function useITankGameMoveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"PlayerJoined"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGamePlayerJoinedEvent(
@@ -12839,7 +12839,7 @@ export function useITankGamePlayerJoinedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"PrizeIncrease"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGamePrizeIncreaseEvent(
@@ -12862,7 +12862,7 @@ export function useITankGamePrizeIncreaseEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Reveal"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameRevealEvent(
@@ -12885,7 +12885,7 @@ export function useITankGameRevealEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Revive"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameReviveEvent(
@@ -12908,7 +12908,7 @@ export function useITankGameReviveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Shoot"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameShootEvent(
@@ -12931,7 +12931,7 @@ export function useITankGameShootEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"SpawnHeart"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameSpawnHeartEvent(
@@ -12954,7 +12954,7 @@ export function useITankGameSpawnHeartEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Upgrade"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameUpgradeEvent(
@@ -12977,7 +12977,7 @@ export function useITankGameUpgradeEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Vote"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useITankGameVoteEvent(
@@ -15007,7 +15007,7 @@ export function usePrepareNonAggressionHookBeforeVote(
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameRead<
@@ -15032,7 +15032,7 @@ export function useTankGameRead<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"_getEpoch"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameGetEpoch<
@@ -15058,7 +15058,7 @@ export function useTankGameGetEpoch<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"aliveTanksIdSum"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameAliveTanksIdSum<
@@ -15084,7 +15084,7 @@ export function useTankGameAliveTanksIdSum<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"board"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameBoard<
@@ -15110,7 +15110,7 @@ export function useTankGameBoard<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"claimed"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameClaimed<
@@ -15136,7 +15136,7 @@ export function useTankGameClaimed<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"deadTanks"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameDeadTanks<
@@ -15162,7 +15162,7 @@ export function useTankGameDeadTanks<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"delegates"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameDelegates<
@@ -15188,7 +15188,7 @@ export function useTankGameDelegates<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"epochStart"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameEpochStart<
@@ -15214,7 +15214,7 @@ export function useTankGameEpochStart<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"factory"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameFactory<
@@ -15240,7 +15240,7 @@ export function useTankGameFactory<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getLastDrip"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameGetLastDrip<
@@ -15266,7 +15266,7 @@ export function useTankGameGetLastDrip<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getUpgradeCost"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameGetUpgradeCost<
@@ -15292,7 +15292,7 @@ export function useTankGameGetUpgradeCost<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"heartsOnBoard"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameHeartsOnBoard<
@@ -15318,7 +15318,7 @@ export function useTankGameHeartsOnBoard<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"isAuth"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameIsAuth<
@@ -15344,7 +15344,7 @@ export function useTankGameIsAuth<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"lastDripEpoch"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameLastDripEpoch<
@@ -15370,7 +15370,7 @@ export function useTankGameLastDripEpoch<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"lastRevealBlock"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameLastRevealBlock<
@@ -15396,7 +15396,7 @@ export function useTankGameLastRevealBlock<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"numTanksAlive"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameNumTanksAlive<
@@ -15422,7 +15422,7 @@ export function useTankGameNumTanksAlive<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"owner"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameOwner<
@@ -15448,7 +15448,7 @@ export function useTankGameOwner<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"players"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGamePlayers<
@@ -15474,7 +15474,7 @@ export function useTankGamePlayers<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"playersCount"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGamePlayersCount<
@@ -15500,7 +15500,7 @@ export function useTankGamePlayersCount<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"podium"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGamePodium<
@@ -15526,7 +15526,7 @@ export function useTankGamePodium<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"prizePool"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGamePrizePool<
@@ -15552,7 +15552,7 @@ export function useTankGamePrizePool<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"revealBlock"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameRevealBlock<
@@ -15578,7 +15578,7 @@ export function useTankGameRevealBlock<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"settings"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameSettings<
@@ -15604,7 +15604,7 @@ export function useTankGameSettings<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"state"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameState<
@@ -15630,7 +15630,7 @@ export function useTankGameState<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"stateData"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameStateData<
@@ -15656,7 +15656,7 @@ export function useTankGameStateData<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tankHooks"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameTankHooks<
@@ -15682,7 +15682,7 @@ export function useTankGameTankHooks<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tankToPosition"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameTankToPosition<
@@ -15708,7 +15708,7 @@ export function useTankGameTankToPosition<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tanks"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameTanks<
@@ -15734,7 +15734,7 @@ export function useTankGameTanks<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tanksOnBoard"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameTanksOnBoard<
@@ -15760,7 +15760,7 @@ export function useTankGameTanksOnBoard<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"votedThisEpoch"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameVotedThisEpoch<
@@ -15786,7 +15786,7 @@ export function useTankGameVotedThisEpoch<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"votesPerEpoch"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameVotesPerEpoch<
@@ -15812,7 +15812,7 @@ export function useTankGameVotesPerEpoch<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"votingClosed"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameVotingClosed<
@@ -15838,7 +15838,7 @@ export function useTankGameVotingClosed<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameWrite<
@@ -15874,7 +15874,7 @@ export function useTankGameWrite<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"addHooks"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameAddHooks<
@@ -15911,7 +15911,7 @@ export function useTankGameAddHooks<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"claim"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameClaim<
@@ -15948,7 +15948,7 @@ export function useTankGameClaim<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"delegate"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameDelegate<
@@ -15985,7 +15985,7 @@ export function useTankGameDelegate<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"donate"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameDonate<
@@ -16022,7 +16022,7 @@ export function useTankGameDonate<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"drip"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameDrip<
@@ -16059,7 +16059,7 @@ export function useTankGameDrip<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameForceAddDefaultHook<
@@ -16104,7 +16104,7 @@ export function useTankGameForceAddDefaultHook<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"give"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameGive<
@@ -16141,7 +16141,7 @@ export function useTankGameGive<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"initialize"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameInitialize<
@@ -16178,7 +16178,7 @@ export function useTankGameInitialize<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"join"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameJoin<
@@ -16215,7 +16215,7 @@ export function useTankGameJoin<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"move"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameMove<
@@ -16252,7 +16252,7 @@ export function useTankGameMove<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"reveal"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameReveal<
@@ -16289,7 +16289,7 @@ export function useTankGameReveal<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"setOwner"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameSetOwner<
@@ -16326,7 +16326,7 @@ export function useTankGameSetOwner<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"shoot"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameShoot<
@@ -16363,7 +16363,7 @@ export function useTankGameShoot<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"start"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameStart<
@@ -16400,7 +16400,7 @@ export function useTankGameStart<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"upgrade"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameUpgrade<
@@ -16437,7 +16437,7 @@ export function useTankGameUpgrade<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"vote"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameVote<
@@ -16474,7 +16474,7 @@ export function useTankGameVote<
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameWrite<TFunctionName extends string>(
@@ -16496,7 +16496,7 @@ export function usePrepareTankGameWrite<TFunctionName extends string>(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"addHooks"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameAddHooks(
@@ -16519,7 +16519,7 @@ export function usePrepareTankGameAddHooks(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"claim"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameClaim(
@@ -16542,7 +16542,7 @@ export function usePrepareTankGameClaim(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"delegate"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameDelegate(
@@ -16565,7 +16565,7 @@ export function usePrepareTankGameDelegate(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"donate"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameDonate(
@@ -16588,7 +16588,7 @@ export function usePrepareTankGameDonate(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"drip"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameDrip(
@@ -16611,7 +16611,7 @@ export function usePrepareTankGameDrip(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameForceAddDefaultHook(
@@ -16634,7 +16634,7 @@ export function usePrepareTankGameForceAddDefaultHook(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"give"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameGive(
@@ -16657,7 +16657,7 @@ export function usePrepareTankGameGive(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"initialize"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameInitialize(
@@ -16680,7 +16680,7 @@ export function usePrepareTankGameInitialize(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"join"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameJoin(
@@ -16703,7 +16703,7 @@ export function usePrepareTankGameJoin(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"move"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameMove(
@@ -16726,7 +16726,7 @@ export function usePrepareTankGameMove(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"reveal"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameReveal(
@@ -16749,7 +16749,7 @@ export function usePrepareTankGameReveal(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"setOwner"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameSetOwner(
@@ -16772,7 +16772,7 @@ export function usePrepareTankGameSetOwner(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"shoot"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameShoot(
@@ -16795,7 +16795,7 @@ export function usePrepareTankGameShoot(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"start"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameStart(
@@ -16818,7 +16818,7 @@ export function usePrepareTankGameStart(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"upgrade"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameUpgrade(
@@ -16841,7 +16841,7 @@ export function usePrepareTankGameUpgrade(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"vote"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function usePrepareTankGameVote(
@@ -16864,7 +16864,7 @@ export function usePrepareTankGameVote(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameEvent<TEventName extends string>(
@@ -16886,7 +16886,7 @@ export function useTankGameEvent<TEventName extends string>(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"BountyCompleted"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameBountyCompletedEvent(
@@ -16909,7 +16909,7 @@ export function useTankGameBountyCompletedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Claim"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameClaimEvent(
@@ -16932,7 +16932,7 @@ export function useTankGameClaimEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Commit"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameCommitEvent(
@@ -16955,7 +16955,7 @@ export function useTankGameCommitEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Curse"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameCurseEvent(
@@ -16978,7 +16978,7 @@ export function useTankGameCurseEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Death"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameDeathEvent(
@@ -17001,7 +17001,7 @@ export function useTankGameDeathEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Delegate"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameDelegateEvent(
@@ -17024,7 +17024,7 @@ export function useTankGameDelegateEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Drip"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameDripEvent(
@@ -17047,7 +17047,7 @@ export function useTankGameDripEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"GameInit"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameGameInitEvent(
@@ -17070,7 +17070,7 @@ export function useTankGameGameInitEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"GameOver"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameGameOverEvent(
@@ -17093,7 +17093,7 @@ export function useTankGameGameOverEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"GameStarted"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameGameStartedEvent(
@@ -17116,7 +17116,7 @@ export function useTankGameGameStartedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Give"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameGiveEvent(
@@ -17139,7 +17139,7 @@ export function useTankGameGiveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"HooksAdded"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameHooksAddedEvent(
@@ -17162,7 +17162,7 @@ export function useTankGameHooksAddedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Move"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameMoveEvent(
@@ -17185,7 +17185,7 @@ export function useTankGameMoveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"PlayerJoined"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGamePlayerJoinedEvent(
@@ -17208,7 +17208,7 @@ export function useTankGamePlayerJoinedEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"PrizeIncrease"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGamePrizeIncreaseEvent(
@@ -17231,7 +17231,7 @@ export function useTankGamePrizeIncreaseEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Reveal"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameRevealEvent(
@@ -17254,7 +17254,7 @@ export function useTankGameRevealEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Revive"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameReviveEvent(
@@ -17277,7 +17277,7 @@ export function useTankGameReviveEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Shoot"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameShootEvent(
@@ -17300,7 +17300,7 @@ export function useTankGameShootEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"SpawnHeart"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameSpawnHeartEvent(
@@ -17323,7 +17323,7 @@ export function useTankGameSpawnHeartEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Upgrade"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameUpgradeEvent(
@@ -17346,7 +17346,7 @@ export function useTankGameUpgradeEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Vote"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x5Df10751352b7bA7b0Cea02c12d1a0b101F7b743)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
 export function useTankGameVoteEvent(
@@ -17369,7 +17369,7 @@ export function useTankGameVoteEvent(
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameFactoryABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export function useTankGameFactoryRead<
@@ -17403,7 +17403,7 @@ export function useTankGameFactoryRead<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"gameView"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export function useTankGameFactoryGameView<
@@ -17438,7 +17438,7 @@ export function useTankGameFactoryGameView<
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"hookFactory"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export function useTankGameFactoryHookFactory<
@@ -17473,7 +17473,7 @@ export function useTankGameFactoryHookFactory<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export function useTankGameFactoryWrite<
@@ -17514,7 +17514,7 @@ export function useTankGameFactoryWrite<
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"createGame"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export function useTankGameFactoryCreateGame<
@@ -17552,7 +17552,7 @@ export function useTankGameFactoryCreateGame<
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export function usePrepareTankGameFactoryWrite<TFunctionName extends string>(
@@ -17575,7 +17575,7 @@ export function usePrepareTankGameFactoryWrite<TFunctionName extends string>(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"createGame"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export function usePrepareTankGameFactoryCreateGame(
@@ -17599,7 +17599,7 @@ export function usePrepareTankGameFactoryCreateGame(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameFactoryABI}__.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export function useTankGameFactoryEvent<TEventName extends string>(
@@ -17622,7 +17622,7 @@ export function useTankGameFactoryEvent<TEventName extends string>(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameFactoryABI}__ and `eventName` set to `"GameCreated"`.
  *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xaE9036AEB055Fd322dfeaBc53d927EE31ddCca08)
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
 export function useTankGameFactoryGameCreatedEvent(

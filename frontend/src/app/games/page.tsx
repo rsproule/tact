@@ -22,6 +22,7 @@ import {
   CardTitle,
 } from "@/src/components/ui/card";
 import { formatEther } from "viem";
+import { Button } from "@/src/components/ui/button";
 
 export default function GamesList() {
   const { data: blockNumber } = useBlockNumber({ watch: true });
@@ -54,20 +55,23 @@ export default function GamesList() {
   return (
     <div className="container pb-20">
       <Card>
-        <Accordion type="single" collapsible>
-          <AccordionItem value="manage">
-            <AccordionTrigger>
-              <div className="w-full">Create a game</div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <CreateGameForm
-                implAddress={
-                  tankGameAddress[chain?.id as keyof typeof tankGameAddress]
-                }
-              />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        <CardHeader>here is where you can create a game</CardHeader>
+        <CardContent>
+          <Accordion type="single" collapsible>
+            <AccordionItem value="manage">
+              <AccordionTrigger title="test">
+                <div>Create the game</div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <CreateGameForm
+                  implAddress={
+                    tankGameAddress[chain?.id as keyof typeof tankGameAddress]
+                  }
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </CardContent>
       </Card>
       <div className="mt-10">Existing games:</div>
       <div className="grid-flow-row auto-rows-max">

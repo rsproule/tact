@@ -19,7 +19,7 @@ import {
 } from "./ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "./ui/input";
-import { Card } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 
 // Define your schema using Zod
 const formSchema = z.object({
@@ -55,7 +55,6 @@ export default function CreateGameForm({
     root: "0x0000000000000000000000000000000000000000000000000000000000000000",
   });
 
-  console.log(formState);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
@@ -116,230 +115,232 @@ export default function CreateGameForm({
     },
   });
   return (
-    <Form {...form}>
-      <FormField
-        name="playerCount"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Player Count</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
+    <CardContent>
+      <Form {...form}>
+        <FormField
+          name="playerCount"
+          control={form.control}
+          render={({ field }) => (
+            <div>
+              <FormLabel>Player Count</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  value={formState.playerCount}
+                />
+              </FormControl>
+              <FormDescription>Enter the number of players</FormDescription>
+            </div>
+          )}
+        />
+        <FormField
+          name="boardSize"
+          control={form.control}
+          render={({ field }) => (
+            <div>
+              <FormLabel>Board Size</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  value={formState.boardSize}
+                />
+              </FormControl>
+              <FormDescription>
+                Enter the size of the board (must be div by 3)
+              </FormDescription>
+            </div>
+          )}
+        />
+        <FormField
+          name="initAPs"
+          control={form.control}
+          render={({ field }) => (
+            <div>
+              <FormLabel>Initial APs</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  value={formState.initAPs}
+                />
+              </FormControl>
+              <FormDescription>Enter the initial APs</FormDescription>
+            </div>
+          )}
+        />
+        <FormField
+          name="initHearts"
+          control={form.control}
+          render={({ field }) => (
+            <div>
+              <FormLabel>Initial Hearts</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  value={formState.initHearts}
+                />
+              </FormControl>
+              <FormDescription>
+                Enter the initial number of hearts
+              </FormDescription>
+            </div>
+          )}
+        />
+        <FormField
+          name="initShootRange"
+          control={form.control}
+          render={({ field }) => (
+            <div>
+              <FormLabel>Initial Shoot Range</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  value={formState.initShootRange}
+                />
+              </FormControl>
+              <FormDescription>Enter the initial shoot range</FormDescription>
+            </div>
+          )}
+        />
+        <FormField
+          name="epochSeconds"
+          control={form.control}
+          render={({ field }) => (
+            <div>
+              <FormLabel>Epoch Seconds</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  value={formState.epochSeconds}
+                />
+              </FormControl>
+              <FormDescription>Enter the epoch seconds</FormDescription>
+            </div>
+          )}
+        />
+        <FormField
+          name="buyInMinimum"
+          control={form.control}
+          render={({ field }) => (
+            <div>
+              <FormLabel>Buy In Minimum</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  value={formState.buyInMinimum}
+                />
+              </FormControl>
+              <FormDescription>Enter the minimum buy in</FormDescription>
+            </div>
+          )}
+        />
+        <FormField
+          name="revealWaitBlocks"
+          control={form.control}
+          render={({ field }) => (
+            <div>
+              <FormLabel>Reveal Wait Blocks</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  value={formState.revealWaitBlocks}
+                />
+              </FormControl>
+              <FormDescription>
+                Enter the number of blocks to wait for reveal
+              </FormDescription>
+            </div>
+          )}
+        />
+        {/* <FormField */}
+        {/*   name="root" */}
+        {/*   control={form.control} */}
+        {/*   render={({ field }) => ( */}
+        {/*     <div> */}
+        {/*       <FormLabel>Players</FormLabel> */}
+        {/*       <FormControl> */}
+        {/*         <> */}
+        {/*           <RootGenerator setFormState={setFormState} /> */}
+        {/*           <div>Merkle Root: {formState.root}</div> */}
+        {/*         </> */}
+        {/*       </FormControl> */}
+        {/*       <FormDescription> */}
+        {/*         Enter the players to join, leave this blank and anyone can join */}
+        {/*       </FormDescription> */}
+        {/*     </div> */}
+        {/*   )} */}
+        {/* /> */}
+        <FormField
+          name="autoStart"
+          control={form.control}
+          render={({ field }) => (
+            <div>
+              <FormLabel>Auto Start</FormLabel>
+              <FormControl>
+                <Input
+                  type="checkbox"
+                  {...field}
+                  onChange={(e) => {
                     handleInputChange(e);
-                  }
-                }}
-                value={formState.playerCount}
-              />
-            </FormControl>
-            <FormDescription>Enter the number of players</FormDescription>
-          </div>
-        )}
-      />
-      <FormField
-        name="boardSize"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Board Size</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    handleInputChange(e);
-                  }
-                }}
-                value={formState.boardSize}
-              />
-            </FormControl>
-            <FormDescription>
-              Enter the size of the board (must be div by 3)
-            </FormDescription>
-          </div>
-        )}
-      />
-      <FormField
-        name="initAPs"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Initial APs</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    handleInputChange(e);
-                  }
-                }}
-                value={formState.initAPs}
-              />
-            </FormControl>
-            <FormDescription>Enter the initial APs</FormDescription>
-          </div>
-        )}
-      />
-      <FormField
-        name="initHearts"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Initial Hearts</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    handleInputChange(e);
-                  }
-                }}
-                value={formState.initHearts}
-              />
-            </FormControl>
-            <FormDescription>
-              Enter the initial number of hearts
-            </FormDescription>
-          </div>
-        )}
-      />
-      <FormField
-        name="initShootRange"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Initial Shoot Range</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    handleInputChange(e);
-                  }
-                }}
-                value={formState.initShootRange}
-              />
-            </FormControl>
-            <FormDescription>Enter the initial shoot range</FormDescription>
-          </div>
-        )}
-      />
-      <FormField
-        name="epochSeconds"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Epoch Seconds</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    handleInputChange(e);
-                  }
-                }}
-                value={formState.epochSeconds}
-              />
-            </FormControl>
-            <FormDescription>Enter the epoch seconds</FormDescription>
-          </div>
-        )}
-      />
-      <FormField
-        name="buyInMinimum"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Buy In Minimum</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    handleInputChange(e);
-                  }
-                }}
-                value={formState.buyInMinimum}
-              />
-            </FormControl>
-            <FormDescription>Enter the minimum buy in</FormDescription>
-          </div>
-        )}
-      />
-      <FormField
-        name="revealWaitBlocks"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Reveal Wait Blocks</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    handleInputChange(e);
-                  }
-                }}
-                value={formState.revealWaitBlocks}
-              />
-            </FormControl>
-            <FormDescription>
-              Enter the number of blocks to wait for reveal
-            </FormDescription>
-          </div>
-        )}
-      />
-      <FormField
-        name="root"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Players</FormLabel>
-            <FormControl>
-              <>
-                <RootGenerator setFormState={setFormState} />
-                <div>Merkle Root: {formState.root}</div>
-              </>
-            </FormControl>
-            <FormDescription>
-              Enter the players to join, leave this blank and anyone can join
-            </FormDescription>
-          </div>
-        )}
-      />
-      <FormField
-        name="autoStart"
-        control={form.control}
-        render={({ field }) => (
-          <div>
-            <FormLabel>Auto Start</FormLabel>
-            <FormControl>
-              <Input
-                type="checkbox"
-                {...field}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                value={field.value ? "true" : "false"}
-              />
-            </FormControl>
-            <FormDescription>
-              Check if the game should auto start
-            </FormDescription>
-          </div>
-        )}
-      />
-      <Button
-        className="w-full mt-5"
-        type="submit"
-        disabled={!create}
-        onClick={() => create?.()}
-      >
-        Submit
-      </Button>
-    </Form>
+                  }}
+                  value={field.value ? "true" : "false"}
+                />
+              </FormControl>
+              <FormDescription>
+                Check if the game should auto start
+              </FormDescription>
+            </div>
+          )}
+        />
+        <Button
+          className="w-full mt-5"
+          type="submit"
+          disabled={!create}
+          onClick={() => create?.()}
+        >
+          Submit
+        </Button>
+      </Form>
+    </CardContent>
   );
 }
 
