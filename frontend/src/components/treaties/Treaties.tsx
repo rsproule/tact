@@ -1,10 +1,8 @@
 "use client";
 import {
-  gameViewABI,
   hookFactoryABI,
   hookFactoryAddress,
   tankGameABI,
-  tankGameAddress,
   useTankGamePlayers,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
@@ -22,13 +20,15 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 
-export function Treaties() {
+export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { data: blockNumber } = useBlockNumber({ watch: true });
   let ownerTank = useTankGamePlayers({
     args: [address!],
     enabled: !!address,
+    // @ts-ignore
+    address: gameAddress,
   });
 
   const [hooks, setHooks] = useState<any>();
@@ -48,14 +48,14 @@ export function Treaties() {
       const hooks = await publicClient.getFilterLogs({
         filter,
       });
-      setHooks(hooks);
+      setHooks(hooks.filter((hook: any) => hook.args.tankGame === gameAddress));
 
       const addedFilter = await publicClient.createContractEventFilter({
         abi: tankGameABI,
         strict: true,
         eventName: "HooksAdded",
         fromBlock: BigInt(0),
-        address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+        address: gameAddress,
       });
 
       const hookAddedEvents = await publicClient.getFilterLogs({
@@ -64,7 +64,7 @@ export function Treaties() {
       setHooksAdded(hookAddedEvents);
     };
     getLogs();
-  }, [chain, blockNumber]);
+  }, [blockNumber, gameAddress, chain]);
   return (
     <div className="py-4">
       <Card>
@@ -85,6 +85,7 @@ export function Treaties() {
                         return (
                           <CreateBounty
                             key={i}
+                            gameAddress={gameAddress}
                             hookAddress={hook.args.hookAddress}
                           />
                         );
@@ -92,6 +93,7 @@ export function Treaties() {
                         return (
                           <CreateNonAggression
                             key={i}
+                            gameAddress={gameAddress}
                             hookAddress={hook.args.hookAddress}
                           />
                         );
@@ -125,36 +127,38 @@ export function Treaties() {
                 <div className="grid-flow-row auto-rows-max">
                   {hooks
                     ? hooks
-                        .sort((a: any, b: any) => a.args._type - b.args._type)
-                        .map((hook: any, i: number) => {
-                          if (hook.args._type === 1) {
-                            return (
-                              <Bounty
-                                key={i}
-                                hookAddress={hook.args.hookAddress}
-                                tankId={hook.args.tankId}
-                                hideNotMine={hideNotMine}
-                                addedHooks={hooksAdded}
-                              />
-                            );
-                          } else if (hook.args._type === 0) {
-                            return (
-                              <NonAggression
-                                hideNotMine={hideNotMine}
-                                key={i}
-                                hookAddress={hook.args.hookAddress}
-                                tankId={hook.args.tankId}
-                                ownerHookAddress={
-                                  hooks.find(
-                                    (h: any) =>
-                                      h.args._type === 0 &&
-                                      h.args.tankId === ownerTank.data
-                                  )?.args.hookAddress
-                                }
-                              />
-                            );
-                          }
-                        })
+                      .sort((a: any, b: any) => a.args._type - b.args._type)
+                      .map((hook: any, i: number) => {
+                        if (hook.args._type === 1) {
+                          return (
+                            <Bounty
+                              key={i}
+                              hookAddress={hook.args.hookAddress}
+                              gameAddress={gameAddress}
+                              tankId={hook.args.tankId}
+                              hideNotMine={hideNotMine}
+                              addedHooks={hooksAdded}
+                            />
+                          );
+                        } else if (hook.args._type === 0) {
+                          return (
+                            <NonAggression
+                              hideNotMine={hideNotMine}
+                              key={i}
+                              hookAddress={hook.args.hookAddress}
+                              gameAddress={gameAddress}
+                              tankId={hook.args.tankId}
+                              ownerHookAddress={
+                                hooks.find(
+                                  (h: any) =>
+                                    h.args._type === 0 &&
+                                    h.args.tankId === ownerTank.data
+                                )?.args.hookAddress
+                              }
+                            />
+                          );
+                        }
+                      })
                     : "Loading..."}
                 </div>
               </CardContent>

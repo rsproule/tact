@@ -1,6 +1,6 @@
 import { usePrepareBountyCreate, useBountyCreate } from "@/src/generated";
 import { useState } from "react";
-import { parseEther, BaseError } from "viem";
+import { parseEther, BaseError, Address } from "viem";
 import { useWaitForTransaction } from "wagmi";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -10,8 +10,10 @@ import PlayerDropdown from "../tankGame/PlayerDropdown";
 
 export default function CreateBounty({
   hookAddress,
+  gameAddress,
 }: {
-  hookAddress: `0x${string}`;
+  hookAddress: Address;
+  gameAddress: Address;
 }) {
   const [targetTank, setTargetTank] = useState<string | undefined>();
   const [bounty, setBounty] = useState<string | undefined>();
@@ -50,6 +52,7 @@ export default function CreateBounty({
       <CardContent>
         <div className="flex">
           <PlayerDropdown
+            gameAddress={gameAddress}
             setTargetTank={setTargetTank}
             targetTank={targetTank}
           />
@@ -60,7 +63,7 @@ export default function CreateBounty({
               try {
                 parseEther(e.target.value);
                 setBounty(e.target.value);
-              } catch (e) {}
+              } catch (e) { }
             }}
             placeholder="Bounty in ETH"
           />

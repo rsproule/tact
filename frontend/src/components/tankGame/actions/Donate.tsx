@@ -10,11 +10,21 @@ import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { useToast } from "../../ui/use-toast";
 
-export default function Donate() {
+export default function Donate({
+  gameAddress,
+}: {
+  gameAddress: `0x${string}`;
+}) {
   const { toast } = useToast();
   const [amount, setAmount] = useState<string>("");
-  let prizePool = useTankGamePrizePool({ watch: true });
+  let prizePool = useTankGamePrizePool({
+    // @ts-ignore
+    address: gameAddress,
+    watch: true,
+  });
   let { config } = usePrepareTankGameDonate({
+    // @ts-ignore
+    address: gameAddress,
     value: parseEther(amount as `${number}`),
     enabled: !!amount,
   });

@@ -8,8 +8,9 @@ import { useAccount, useWaitForTransaction } from "wagmi";
 import { Button } from "../../ui/button";
 import { Card, CardHeader } from "../../ui/card";
 import { useToast } from "../../ui/use-toast";
-import * as tree from "public/tree.json";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
+import { useState } from "react";
+import { Input } from "../../ui/input";
 
 const zero = [
   "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -18,27 +19,34 @@ const zero = [
 export function WaitingForPlayers({
   boardSize,
   expectedPlayersCount,
+  gameAddress,
 }: {
   boardSize: bigint | undefined;
   expectedPlayersCount: bigint | undefined;
+  gameAddress: `0x${string}`;
 }) {
-  const merkleTree = StandardMerkleTree.load(tree as any);
+  // const merkleTree = StandardMerkleTree.load(tree as any);
+  const [playerName, setPlayerName] = useState("");
+  // const merkleTree;
   const { address } = useAccount();
-  const value = tree.values.find((x) => x.value[0] === address);
-  const proof = value
-    ? merkleTree
-        .getProof(value.value)
-        .map((x) => Object.freeze(x) as `0x${string}`)
-    : zero;
+  // const value = tree.values.find((x) => x.value[0] === address);
+  // const proof = value
+  //   ? merkleTree
+  //     .getProof(value.value)
+  //     .map((x) => Object.freeze(x) as `0x${string}`)
+  //   : zero;
+  const proof = zero;
   let { config, refetch } = usePrepareTankGameJoin({
-    args: [
-      { joiner: address!, proof: proof, playerName: value?.value[1] ?? "" },
-    ],
+    // @ts-ignore
+    address: gameAddress,
+    args: [{ joiner: address!, proof: proof, playerName: playerName }],
     value: BigInt(0),
   });
   let { toast } = useToast();
   let numPlayers = useTankGamePlayersCount({
     watch: true,
+    // @ts-ignore
+    address: gameAddress,
   });
   const { write, data } = useTankGameJoin(config);
   useWaitForTransaction({
@@ -68,10 +76,20 @@ export function WaitingForPlayers({
             <span>{!!numPlayers.data && numPlayers.data.toString()} / </span>
             {!!expectedPlayersCount && expectedPlayersCount.toString()}
           </p>
+          <p>
+            Player Name:{" "}
+            <Input
+              type="text"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+            />
+          </p>
+
           <Button
             onClick={() => {
               write?.();
               refetch?.();
+    
             }}
             disabled={!write}
           >

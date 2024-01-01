@@ -40,10 +40,10 @@ export default function RootLayout({
                 Home
               </a>
               <a
-                href="/test"
+                href="/games"
                 className="text-white hover:text-gray-400 text-sm"
               >
-                Test
+                Games
               </a>
               <a
                 href="/rules"

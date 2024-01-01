@@ -2,24 +2,44 @@ import { Tile } from "./Tile";
 import { HexGrid, Layout, Hex, Pattern } from "react-hexgrid";
 
 import {
+  gameViewAddress,
   useGameViewGetAllHearts,
   useGameViewGetAllTanks,
   useTankGamePlayers,
 } from "@/src/generated";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { ITank } from "./ITank";
 
-export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
+export function HexBoard({
+  boardSize,
+  gameAddress,
+}: {
+  boardSize: bigint | undefined;
+  gameAddress: `0x${string}`;
+}) {
   const [selectedTank, setSelectedTank] = useState<typeof ITank | undefined>();
   const [selectedTile, setSelectedTile] = useState<Hex | undefined>();
   const [highlightedTiles, setHighlightedTiles] = useState<Hex[] | undefined>();
-  let tanks = useGameViewGetAllTanks({ watch: true });
-  let hearts = useGameViewGetAllHearts({ watch: true });
+  const { chain } = useNetwork();
+  let tanks = useGameViewGetAllTanks({
+    watch: true,
+    // @ts-ignore
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    args: [gameAddress],
+  });
+  let hearts = useGameViewGetAllHearts({
+    watch: true,
+    // @ts-ignore
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    args: [gameAddress],
+  });
   const { address } = useAccount();
   let ownerTankId = useTankGamePlayers({
     args: [address!],
+    // @ts-ignore
+    address: gameAddress,
     enabled: !!address,
   });
   let ownerTank = tanks.data?.find((tank) => tank.tankId === ownerTankId.data);
@@ -76,6 +96,7 @@ export function HexBoard({ boardSize }: { boardSize: bigint | undefined }) {
                 });
                 return (
                   <Tile
+                    gameAddress={gameAddress}
                     key={i}
                     x={Number(hex.q)}
                     y={Number(hex.r)}

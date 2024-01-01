@@ -36,6 +36,7 @@ interface ITankGame {
         uint256 epochSeconds;
         uint256 buyInMinimum;
         uint256 revealWaitBlocks;
+        bool autoStart;
         bytes32 root;
     }
 
@@ -132,23 +133,7 @@ interface ITankGame {
 
     function addHooks(uint256 tankId, IHooks hooks) external;
 
-    // view functions
+    function forceAddDefaultHook(uint256 tankId, IHooks hooks) external;
 
-    function getPlayerCount() external view returns (uint256);
-
-    function getTank(uint256 tankId) external view returns (Tank memory);
-
-    function getBoard() external view returns (Board);
-
-    function getSettings() external view returns (GameSettings memory);
-
-    function getLastDrip(uint256 tankId) external view returns (uint256);
-
-    function isAuth(uint256 tankId, address owner) external view returns (bool);
-
-    function getState() external view returns (ITankGame.GameState);
-
-    function getEpoch() external view returns (uint256);
-
-    function getGameEpoch() external view returns (uint256);
+    function initialize(GameSettings calldata settings, address _owner) external payable;
 }
