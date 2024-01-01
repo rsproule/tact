@@ -32,7 +32,7 @@ export function useTanks(address: Address) {
     getTanks(address).then(setTanks);
   }, [address]);
   return tanks;
-} 
+}
 
 export async function getTankNameFromAddress(
   address: Address,
@@ -112,14 +112,15 @@ export function EventStream({ address }: { address: `0x${string}` }) {
         typeof value === "bigint" ? value.toString() : value
       )
     );
-    const logText = await logToText(address, logs);
+    // const logText = await logToText(address, log);
+    let items = await Promise.all(
+      logs.map(async (log) => [log, await logToText(address, log)])
+    );
     setOldLogs([
-      ...logs
+      ...items
         .reverse()
-        .map(
-          (log) =>
-            "Block number: " + log.blockNumber + " " + logText
-        ),
+        // @ts-ignore
+        .map((log) => "Block number: " + log[0].blockNumber + " " + log[1]),
     ]);
   };
 
@@ -147,7 +148,7 @@ export function EventStream({ address }: { address: `0x${string}` }) {
 }
 
 // @ts-ignore
-const logToText = async (address: Address, event) => {
+const logToText = async (address: Address, event): Promise<String> => {
   if (event.eventName == "Move") {
     return await moveString(address, event);
   }
