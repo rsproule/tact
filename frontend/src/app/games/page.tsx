@@ -54,26 +54,21 @@ export default function GamesList() {
   console.log({ games });
   return (
     <div className="container pb-20">
-      <Card>
-        <CardHeader>here is where you can create a game</CardHeader>
-        <CardContent>
-          <Accordion type="single" collapsible>
-            <AccordionItem value="manage">
-              <AccordionTrigger title="test">
-                <div>Create the game</div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <CreateGameForm
-                  implAddress={
-                    tankGameAddress[chain?.id as keyof typeof tankGameAddress]
-                  }
-                />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </CardContent>
-      </Card>
-      <div className="mt-10">Existing games:</div>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="manage">
+          <AccordionTrigger title="test" className="text-center">
+            <Button className="mx-auto w-full">Create a game</Button>
+          </AccordionTrigger>
+          <AccordionContent>
+            <CreateGameForm
+              implAddress={
+                tankGameAddress[chain?.id as keyof typeof tankGameAddress]
+              }
+            />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+      <h2 className="mt-10 text-2xl">Existing games:</h2>
       <div className="grid-flow-row auto-rows-max">
         {games &&
           games
