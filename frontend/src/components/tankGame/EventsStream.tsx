@@ -112,12 +112,13 @@ export function EventStream({ address }: { address: `0x${string}` }) {
         typeof value === "bigint" ? value.toString() : value
       )
     );
+    const logText = await logToText(address, logs);
     setOldLogs([
       ...logs
         .reverse()
         .map(
           (log) =>
-            "Block number: " + log.blockNumber + " " + logToText(address, log)
+            "Block number: " + log.blockNumber + " " + logText
         ),
     ]);
   };
