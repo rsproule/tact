@@ -2,33 +2,9 @@ import { Droplet, Heart, Target, User, Zap } from "lucide-react";
 import { ITank } from "./ITank";
 import { useTankGameGetEpoch, useTankGameLastDripEpoch } from "@/src/generated";
 import { DropdownMenu, DropdownMenuContent } from "../ui/dropdown-menu";
-import { getAddress } from "viem";
+import { Address} from "viem";
+import { useTankNameFromId } from "./EventsStream";
 
-export const OWNERS: Map<String, String> = new Map<string, string>([
-  [getAddress("0x5337122c6b5ce24d970ce771510d22aeaf038c44"), "ryan"],
-  [getAddress("0xc15ebb4f1ac7f1c5d94db64a472e1718fa6b6dec"), "kinjal"],
-  [getAddress("0x3aab3396fede536accb3a578cd96617092270536"), "yuan"],
-  [getAddress("0x0ba85c9e1863e5efb8395a55cd042d61decd6e89"), "anay"],
-  [getAddress("0x259a3ab4a06d647380b046249ef3b12db212dc3e"), "spencer"],
-  [getAddress("0x3fb9a5f2158716a2ed1aafc4539e5a24feb2e4a8"), "jay"],
-  [getAddress("0x2fc7c69fdccea8ab0ac395d180b07f6e93db1b4d"), "joshua"],
-  [getAddress("0xe0e9a1807802a32544570832fe5a21ea09500872"), "shishi"],
-  [getAddress("0x9f90a3c2c1938f248241414754d977b897fb3fc5"), "sterling"],
-  [getAddress("0x2cb8636240693b445ac98f2091b58a898e35e60b"), "joe"],
-  [getAddress("0xb7430de9b4d8e5cdb951019d7651cd5fda630498"), "sam"],
-  [getAddress("0xb100d1e55c42a72a28fba012bb77ad9a497358b8"), "mason"],
-  [getAddress("0xac56bf73e73e252e962958b856d88f8264a2f2ab"), "daniel"],
-  [getAddress("0x1f08eb0a5f08117d3302212139d3804cf4810de8"), "pat"],
-  [getAddress("0x6c915b7d41566fa58b15962d829591ede914fc34"), "will"],
-  [getAddress("0xb3c296170c57a7510bb95ef2e9c47977bc2ff1c8"), "caleb"],
-  [getAddress("0xda744dacea631029430fd63d83b26f757e054cb7"), "brian"],
-  [getAddress("0x14174a3f8868b4b6ab023853e2ff5903ea0fd015"), "carra"],
-  [getAddress("0x60de91d489D41FAF4C42F5734fF5E8c95A0990F9"), "hopper"],
-  [getAddress("0x1f77d34deFF2B72B0A0258603eFFE72704742EBB"), "peter"],
-  [getAddress("0xb1B541A6460EF4b7b165aC50752451DCB7C01357"), "wnuelle"],
-  [getAddress("0x696969d25333e7E0a282b240aDE6b21b3E41719f"), "kristof"],
-  [getAddress("0x5CE306109b8de8d001d52F2140383A54AB55CdB2"), "jonah"],
-]);
 interface TankProps {
   tankObj: typeof ITank;
   open: boolean;
@@ -37,9 +13,11 @@ interface TankProps {
     left: number;
   } | null;
   onChange: () => void;
+  address: Address
 }
-export function Tank({ tankObj, open, position, onChange }: TankProps) {
+export function Tank({ tankObj, open, position, onChange, address }: TankProps) {
   const { tank, tankId } = tankObj;
+  const tankName = useTankNameFromId(address, tankId);
   let lastDripEpoch = useTankGameLastDripEpoch({
     args: [tankId],
     enabled: !!tankId,
@@ -71,7 +49,7 @@ export function Tank({ tankObj, open, position, onChange }: TankProps) {
                 <div className="flex items-center pt-2">
                   <User className="mr-2 h-4 w-4 " />
                   <span className="text-xs">
-                    Owner name: {OWNERS.get(tank.owner.toString())}
+                    Owner name: {tankName}
                   </span>
                 </div>
                 <div className="flex items-center pt-2">

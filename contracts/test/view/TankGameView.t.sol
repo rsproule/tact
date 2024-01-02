@@ -12,30 +12,34 @@ contract TankGameFactoryTest is Test {
     TankGame public game;
 
     function setUp() public {
-        game = new TankGame(getSettings(), msg.sender);
+        game = new TankGame();
+        game.initialize(getSettings(), msg.sender);
         bytes32[] memory proof = new bytes32[](1);
         vm.prank(address(1));
         game.join(ITankGame.JoinParams(address(1), proof, "player1"));
-        gameView = new GameView(game);
+        vm.prank(address(3));
+        game.join(ITankGame.JoinParams(address(3), proof, "player1"));
+        game.start();
+        gameView = new GameView();
     }
 
     function test_view_getAllTanks() public {
-        GameView.TankLocation[] memory tanks = gameView.getAllTanks();
-        assertTrue(tanks.length == 1, "tanks length is 1");
+        GameView.TankLocation[] memory tanks = gameView.getAllTanks(address(game));
+        assertTrue(tanks.length == 2, "tanks length is 1");
     }
 
     function test_view_getAllHearts() public {
-        GameView.HeartLocation[] memory hearts = gameView.getAllHearts();
+        GameView.HeartLocation[] memory hearts = gameView.getAllHearts(address(game));
         assertTrue(hearts.length == 0, "tanks length is 0");
         vm.roll(2);
         game.reveal();
-        hearts = gameView.getAllHearts();
+        hearts = gameView.getAllHearts(address(game));
         assertTrue(hearts.length == 1, "tanks length is 1");
     }
 
     function getSettings() internal pure returns (ITankGame.GameSettings memory) {
         return ITankGame.GameSettings({
-            playerCount: 1,
+            playerCount: 2,
             boardSize: 12,
             initAPs: 3,
             initHearts: 3,
@@ -43,6 +47,7 @@ contract TankGameFactoryTest is Test {
             epochSeconds: 4 hours,
             buyInMinimum: 0,
             revealWaitBlocks: 1,
+            autoStart: false,
             root: bytes32(0)
         });
     }

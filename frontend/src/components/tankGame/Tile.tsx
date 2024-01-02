@@ -22,6 +22,7 @@ interface TileProps {
   isMoveRange: boolean;
   onClick: () => void;
   onContextClick: () => void;
+  gameAddress: `0x${string}`;
 }
 export function Tile(props: TileProps) {
   const [open, setOpen] = useState(false);
@@ -66,6 +67,7 @@ export function Tile(props: TileProps) {
           tankObj={props.tank}
           open={hover}
           position={position2}
+          address={props.gameAddress}
         />
       )}
       <Hexagon
@@ -119,13 +121,19 @@ export function Tile(props: TileProps) {
               x={props.x}
               y={props.y}
               z={props.z}
+              gameAddress={props.gameAddress}
             />
           )}
           {props.tank && props.tank.tankId === props.ownersTankId && (
-            <SelfSquareMenu open={open} ownersTank={props.ownersTankId!} />
+            <SelfSquareMenu
+              open={open}
+              ownersTank={props.ownersTankId!}
+              gameAddress={props.gameAddress}
+            />
           )}
           {props.tank && props.tank.tankId !== props.ownersTankId && (
             <EnemySquareMenu
+              gameAddress={props.gameAddress}
               ownersTank={props.ownersTankId!}
               open={open}
               enemyTank={props.tank.tankId!}

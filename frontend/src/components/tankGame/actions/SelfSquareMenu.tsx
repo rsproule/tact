@@ -14,15 +14,21 @@ import { useToast } from "../../ui/use-toast";
 export default function SelfSquareMenu({
   ownersTank,
   open,
+  gameAddress,
 }: {
   ownersTank: bigint;
   open: boolean;
+  gameAddress: `0x${string}`;
 }) {
   let { toast } = useToast();
   let { data: upgradeCost } = useTankGameGetUpgradeCost({
+    // @ts-ignore
+    address: gameAddress,
     args: [ownersTank],
   });
   let { config: upgradeConfig } = usePrepareTankGameUpgrade({
+    // @ts-ignore
+    address: gameAddress,
     args: [{ tankId: ownersTank }],
     enabled: open && !!ownersTank,
   });
@@ -47,6 +53,8 @@ export default function SelfSquareMenu({
   });
 
   let { config: dripConfig } = usePrepareTankGameDrip({
+    // @ts-ignore
+    address: gameAddress,
     args: [{ tankId: ownersTank }],
     enabled: open && !!ownersTank,
   });

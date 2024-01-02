@@ -1,8 +1,9 @@
 import {
-  useITankGameGetSettings,
+  gameViewAddress,
+  useGameViewGetEpoch,
+  useGameViewGetSettings,
   usePrepareTankGameReveal,
   useTankGameEpochStart,
-  useTankGameGetEpoch,
   useTankGameReveal,
   useTankGameRevealBlock,
 } from "@/src/generated";
@@ -17,15 +18,31 @@ import {
 import { Button } from "../ui/button";
 import { Pointer } from "lucide-react";
 import { useToast } from "../ui/use-toast";
-import { useBlockNumber, useWaitForTransaction } from "wagmi";
+import { useBlockNumber, useNetwork, useWaitForTransaction } from "wagmi";
 
-export default function Timer() {
+export default function Timer({ address }: { address: `0x${string}` }) {
   const { toast } = useToast();
+  const { chain } = useNetwork();
   const { data: blockNumber } = useBlockNumber({ watch: true });
-  const startEpoch = useTankGameEpochStart();
-  const currentEpoch = useTankGameGetEpoch({ watch: true });
-  const settings = useITankGameGetSettings();
-  const { config: revealConfig } = usePrepareTankGameReveal();
+  const startEpoch = useTankGameEpochStart({
+    // @ts-ignore
+    address: address,
+  });
+  const currentEpoch = useGameViewGetEpoch({
+    watch: true,
+    // @ts-ignore
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    args: [address],
+  });
+  let settings = useGameViewGetSettings({
+    // @ts-ignore
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    args: [address],
+  });
+  const { config: revealConfig } = usePrepareTankGameReveal({
+    // @ts-ignore
+    address: address,
+  });
   const { write: reveal, data: revealData } = useTankGameReveal(revealConfig);
   const { data: revealBlock } = useTankGameRevealBlock({ watch: true });
   useWaitForTransaction({

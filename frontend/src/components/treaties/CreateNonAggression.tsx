@@ -1,11 +1,10 @@
 import {
   usePrepareNonAggressionPropose,
   useNonAggressionPropose,
-  useTankGameGetSettings,
 } from "@/src/generated";
 import { useState } from "react";
-import { BaseError } from "viem";
-import { useBlockNumber, useWaitForTransaction } from "wagmi";
+import { Address, BaseError } from "viem";
+import { useWaitForTransaction } from "wagmi";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
@@ -14,8 +13,10 @@ import PlayerDropdown from "../tankGame/PlayerDropdown";
 
 export default function CreateNonAggression({
   hookAddress,
+  gameAddress,
 }: {
-  hookAddress: `0x${string}`;
+  hookAddress: Address;
+  gameAddress: Address;
 }) {
   const [targetTank, setTargetTank] = useState<string | undefined>();
   const [expiry, setExpiry] = useState<string | undefined>();
@@ -56,6 +57,7 @@ export default function CreateNonAggression({
       <CardContent>
         <div className="flex">
           <PlayerDropdown
+            gameAddress={gameAddress}
             setTargetTank={setTargetTank}
             targetTank={targetTank}
           />
@@ -66,7 +68,7 @@ export default function CreateNonAggression({
               try {
                 BigInt(e.target.value);
                 setExpiry(e.target.value);
-              } catch (e) {}
+              } catch (e) { }
             }}
             placeholder="Expiration epoch"
           />

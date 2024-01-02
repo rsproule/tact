@@ -1,191 +1,131 @@
 "use client";
-import {
-  tankGameABI,
-  tankGameAddress,
-  useTankGameClaimEvent,
-  useTankGameDripEvent,
-  useTankGameGiveEvent,
-  useTankGameMoveEvent,
-  useTankGamePlayerJoinedEvent,
-  useTankGamePrizeIncreaseEvent,
-  useTankGameShootEvent,
-  useTankGameUpgradeEvent,
-  useTankGameVoteEvent,
-} from "@/src/generated";
-import { useState } from "react";
-import { formatEther } from "viem";
+import { tankGameABI } from "@/src/generated";
+import { useState, useEffect } from "react";
+import { Address, formatEther } from "viem";
 import { Card, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { getPublicClient } from "wagmi/actions";
-import { useNetwork } from "wagmi";
-import { OWNERS } from "./Tank";
 
-export const TANK_MAPPING = [
-  "ryan",
-  "kinjal",
-  "yuan",
-  "anay",
-  "spencer",
-  "jay",
-  "joshua",
-  "shishi",
-  "sterling",
-  "joe",
-  "sam",
-  "mason",
-  "daniel",
-  "pat",
-  "will",
-  "caleb",
-  "brian",
-  "carra",
-  "hopper",
-  "peter",
-  "wnuelle",
-  "kristof",
-  "jonah",
-];
+export async function getTankNameFromJoinIndex(
+  address: Address,
+  tankId: bigint
+) {
+  let logs = await getLogs(address);
+  let joinLogs = logs.filter((log) => log.eventName == "PlayerJoined");
+  console.log({ joinLogs });
+  // @ts-ignore
+  let name = joinLogs.find((log) => log.args.tankId === tankId);
+  // @ts-ignore
+  return name ? name.args.name : "Unknown Tank";
+}
 
-export const toTankName = (tankId: bigint | undefined) => {
-  if (!tankId) {
-    return "Unknown Tank";
+export async function getTanks(address: Address) {
+  let logs = await getLogs(address);
+  let joinLogs = logs.filter((log) => log.eventName == "PlayerJoined");
+  // @ts-ignore
+  return joinLogs.map((log) => log.args.name);
+}
+
+export function useTanks(address: Address) {
+  const [tanks, setTanks] = useState<string[]>([]);
+  useEffect(() => {
+    getTanks(address).then(setTanks);
+  }, [address]);
+  return tanks;
+}
+
+export async function getTankNameFromAddress(
+  address: Address,
+  player: Address
+) {
+  let logs = await getLogs(address);
+  let joinLogs = logs.filter((log) => log.eventName === "PlayerJoined");
+  // @ts-ignore
+  let relevantJoin = joinLogs.find((log) => log.args.player === player);
+
+  if (relevantJoin) {
+    // @ts-ignore
+    return relevantJoin.args.name;
   }
-  if (tankId && tankId! > TANK_MAPPING.length) {
-    return "Tank " + tankId!.toString();
+
+  let delegateLogs = logs.filter((log) => log.eventName === "Delegate");
+  let relevantDelegate = delegateLogs.find(
+    // @ts-ignore
+    (log) => log.args.delegate === player
+  );
+
+  if (relevantDelegate) {
+    // @ts-ignore
+    let owner = relevantDelegate.args.owner;
+    // @ts-ignore
+    let name = joinLogs.find((log) => log.args.player === owner);
+
+    if (name) {
+      // @ts-ignore
+      return name.args.name;
+    }
   }
-  return TANK_MAPPING[Number(tankId!) - 1];
+
+  return "Unknown Tank";
+}
+
+export function useTankNameFromId(address: Address, index: bigint) {
+  const [tankName, setTankName] = useState<string | null>(null);
+
+  useEffect(() => {
+    getTankNameFromJoinIndex(address, index).then(setTankName);
+  }, [address, index]);
+
+  return tankName;
+}
+
+export function useTankNameFromAddress(address: Address, player: Address) {
+  const [tankName, setTankName] = useState<string | null>(null);
+
+  useEffect(() => {
+    getTankNameFromAddress(address, player).then(setTankName);
+  }, [address, player]);
+
+  return tankName;
+}
+
+const getLogs = async (address: Address) => {
+  const publicClient = getPublicClient();
+  const filter = await publicClient.createContractEventFilter({
+    abi: tankGameABI,
+    strict: true,
+    fromBlock: BigInt(0),
+    address: address,
+  });
+  return await publicClient.getFilterLogs({
+    filter,
+  });
 };
-export function EventStream() {
+export function EventStream({ address }: { address: `0x${string}` }) {
   const [events, setEvents] = useState<string[]>([]);
-  // useTankGameMoveEvent({
-  //   listener: (e) => {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, moveString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameShootEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, shootString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameGiveEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, giveString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameUpgradeEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, upgradeString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameVoteEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, voteString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameDripEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, dripString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGameClaimEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, claimString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGamePlayerJoinedEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, joinString(event)];
-  //       });
-  //     });
-  //   },
-  // });
-  // useTankGamePrizeIncreaseEvent({
-  //   listener(e) {
-  //     e.map((event) => {
-  //       setEvents((prev) => {
-  //         return [...prev, donateString(event)];
-  //       });
-  //     });
-  //   },
-  // });
   const [oldLogs, setOldLogs] = useState<string[]>([]);
-  const { chain } = useNetwork();
-  const getLogs = async () => {
-    const publicClient = getPublicClient();
-    const chainId = chain?.id;
-    const filter = await publicClient.createContractEventFilter({
-      abi: tankGameABI,
-      strict: true,
-      fromBlock: BigInt(0),
-      address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    });
-    return await publicClient.getFilterLogs({
-      filter,
-    });
-  };
 
   const getOldLogs = async () => {
-    const logs = await getLogs();
+    const logs = await getLogs(address);
     console.log(
       JSON.stringify(logs, (key, value) =>
         typeof value === "bigint" ? value.toString() : value
       )
     );
+    // const logText = await logToText(address, log);
+    let items = await Promise.all(
+      logs.map(async (log) => [log, await logToText(address, log)])
+    );
     setOldLogs([
-      ...logs
+      ...items
         .reverse()
-        .map(
-          (log) => "Block number: " + log.blockNumber + " " + logToText(log)
-        ),
+        // @ts-ignore
+        .map((log) => "Block number: " + log[0].blockNumber + " " + log[1]),
     ]);
   };
 
   return (
     <div className="py-4">
-      {/* <Card>
-        <CardHeader>
-          <h1 className="text-xl">Action Feed</h1>
-        </CardHeader>
-        <div className="grid-flow-row auto-rows-max">
-          {events.reverse().map((event, i) => {
-            return (
-              <div key={i} className="border">
-                {event}
-              </div>
-            );
-          })}
-        </div>
-      </Card> */}
       <Card>
         <CardHeader>
           <h1 className="text-xl">Historical logs</h1>
@@ -208,160 +148,193 @@ export function EventStream() {
 }
 
 // @ts-ignore
-const logToText = (event) => {
+const logToText = async (address: Address, event): Promise<String> => {
   if (event.eventName == "Move") {
-    return moveString(event);
+    return await moveString(address, event);
   }
   if (event.eventName == "Shoot") {
-    return shootString(event);
+    return await shootString(address, event);
   }
   if (event.eventName == "Give") {
-    return giveString(event);
+    return await giveString(address, event);
   }
   if (event.eventName == "Upgrade") {
-    return upgradeString(event);
+    return await upgradeString(address, event);
   }
   if (event.eventName == "Vote") {
-    return voteString(event);
+    return await voteString(address, event);
   }
   if (event.eventName == "Drip") {
-    return dripString(event);
+    return await dripString(address, event);
   }
   if (event.eventName == "Claim") {
-    return claimString(event);
+    return await claimString(address, event);
   }
   if (event.eventName == "PlayerJoined") {
-    return joinString(event);
+    return await joinString(address, event);
   }
   if (event.eventName == "GameStarted") {
-    return startString(event);
+    return await startString();
   }
   if (event.eventName == "SpawnHeart") {
-    return spawnHeartString(event);
+    return await spawnHeartString(address, event);
   }
   if (event.eventName == "Revive") {
-    return reviveString(event);
+    return await reviveString(address, event);
   }
   if (event.eventName == "Death") {
-    return deathString(event);
+    return await deathString(address, event);
   }
   if (event.eventName == "Delegate") {
-    return delegateString(event);
+    return await delegateString(address, event);
   }
   if (event.eventName == "Commit") {
-    return commitString(event);
+    return await commitString(address, event);
   }
   if (event.eventName == "GameInit") {
-    return gameInitString(event);
+    return await gameInitString(address, event);
   }
   if (event.eventName == "Reveal") {
-    return revealString(event);
+    return await revealString(address, event);
   }
   if (event.eventName == "PrizeIncrease") {
-    return donateString(event);
+    return await donateString(address, event);
   }
   if (event.eventName == "BountyCompleted") {
-    return bountyString(event);
+    return await bountyString(address, event);
   }
   return event.eventName + "";
 };
-const moveString = (event: any) => {
-  return `🏃 ${toTankName(event.args.tankId)} moved to (${
-    event.args.position.x
-  }, 
+const moveString = async (address: Address, event: any) => {
+  return `🏃 ${await getTankNameFromJoinIndex(
+    address,
+    event.args.tankId
+  )} moved to (${event.args.position.x}, 
     ${event.args.position.y}, 
     ${event.args.position.z})`;
 };
 
-const shootString = (event: any) => {
-  return `🔫 ${toTankName(event.args.tankId)} shot ${toTankName(
-    event.args.targetId
-  )}`;
+const shootString = async (address: Address, event: any) => {
+  return `🔫 ${await getTankNameFromJoinIndex(
+    address,
+    event.args.tankId
+  )} shot ${await getTankNameFromJoinIndex(address, event.args.targetId)}`;
 };
 
-const delegateString = (event: any) => {
-  return `👨‍⚖️ ${OWNERS.get(event.args.owner)} delegated control of ${toTankName(
+const delegateString = async (address: Address, event: any) => {
+  return `👨‍⚖️ ${await getTankNameFromAddress(
+    address,
+    event.args.owner
+  )} delegated control of ${await getTankNameFromJoinIndex(
+    address,
     event.args.tank
   )} to ${event.args.delegate}`;
 };
 
-const commitString = (event: any) => {
+const commitString = async (address: Address, event: any) => {
   return `📥 Next heart will be available to spawn at block ${event.args.blocknumber}`;
 };
-const gameInitString = (event: any) => {
+const gameInitString = async (address: Address, event: any) => {
   return `Game started with ${event.args.settings.playerCount} players. Buy in is ${event.args.settings.buyInMinimum} ether.`;
 };
-const revealString = (event: any) => {
-  return `👇${OWNERS.get(event.args.poker)} poked the reveal!`;
+const revealString = async (address: Address, event: any) => {
+  return `👇${await getTankNameFromAddress(
+    address,
+    event.args.poker
+  )} poked the reveal!`;
 };
 
-const reviveString = (event: any) => {
-  return `🩸 ${toTankName(event.args.saved)} was revived by ${toTankName(
+const reviveString = async (address: Address, event: any) => {
+  return `🩸 ${await getTankNameFromJoinIndex(
+    address,
+    event.args.saved
+  )} was revived by ${await getTankNameFromJoinIndex(
+    address,
     event.args.savior
   )}`;
 };
 
-const deathString = (event: any) => {
-  return `💀 ${toTankName(event.args.killer)} killed ${toTankName(
-    event.args.killed
-  )}`;
+const deathString = async (address: Address, event: any) => {
+  return `💀 ${await getTankNameFromJoinIndex(
+    address,
+    event.args.killer
+  )} killed ${await getTankNameFromJoinIndex(address, event.args.killed)}`;
 };
 
-const spawnHeartString = (event: any) => {
+const spawnHeartString = async (address: Address, event: any) => {
   return `❤️ A heart spawned at ${event.args.position.x}, 
     ${event.args.position.y}, 
     ${event.args.position.z}`;
 };
-const giveString = (event: any) => {
-  return `🤝 ${toTankName(event.args.fromId)} gave ${
-    event.args.hearts || event.args.aps
-  } ${event.args.hearts ? "hearts" : "aps"} to ${toTankName(event.args.toId)}`;
+const giveString = async (address: Address, event: any) => {
+  return `🤝 ${await getTankNameFromJoinIndex(
+    address,
+    event.args.fromId
+  )} gave ${event.args.hearts || event.args.aps} ${
+    event.args.hearts ? "hearts" : "aps"
+  } to ${await getTankNameFromJoinIndex(address, event.args.toId)}`;
 };
 
-const upgradeString = (event: any) => {
-  return `📈 ${toTankName(event.args.tankId)} upgraded range to ${
-    event.args.range
-  } `;
+const upgradeString = async (address: Address, event: any) => {
+  return `📈 ${await getTankNameFromJoinIndex(
+    address,
+    event.args.tankId
+  )} upgraded range to ${event.args.range} `;
 };
 
-const voteString = (event: any) => {
-  return `🗳️ ${toTankName(event.args.voter)} voted to curse ${toTankName(
+const voteString = async (address: Address, event: any) => {
+  return `🗳️ ${await getTankNameFromJoinIndex(
+    address,
+    event.args.voter
+  )} voted to curse ${await getTankNameFromJoinIndex(
+    address,
     event.args.cursed
   )} during epoch ${event.args.epoch}`;
 };
 
-const dripString = (event: any) => {
-  return `🚰 ${toTankName(event.args.tankId)} claimed ${
-    event.args.amount
-  } action points from the faucet.`;
+const dripString = async (address: Address, event: any) => {
+  return `🚰 ${await getTankNameFromJoinIndex(
+    address,
+    event.args.tankId
+  )} claimed ${event.args.amount} action points from the faucet.`;
 };
 
-const claimString = (event: any) => {
-  return `🏆 ${toTankName(
+const claimString = async (address: Address, event: any) => {
+  return `🏆 ${await getTankNameFromJoinIndex(
+    address,
     event.args.tankId
   )} claimed their winnings of ${formatEther(
     event.args.amount!
-  )} ether and sent it to ${OWNERS.get(event.args.reciever)} .`;
+  )} ether and sent it to ${await getTankNameFromAddress(
+    address,
+    event.args.reciever
+  )} .`;
 };
 
-const joinString = (event: any) => {
+const joinString = async (address: Address, event: any) => {
   return `🆕 ${
-    OWNERS.get(event.args.player) || event.args.player
+    (await getTankNameFromAddress(address, event.args.player)) ||
+    event.args.player
   } has joined the game.`;
 };
 
-const donateString = (event: any) => {
+const donateString = async (address: Address, event: any) => {
   return `🎁 ${
-    OWNERS.get(event.args.donator) || event.args.donator
+    (await getTankNameFromAddress(address, event.args.donator)) ||
+    event.args.donator
   } has added ${formatEther(event.args.amount!)} ether to the prize pool.`;
 };
 
-const startString = (event: any) => {
+const startString = async () => {
   return `🎮 The game has started! 🎊`;
 };
 
-const bountyString = (event: any) => {
-  return `🎯 ${toTankName(event.args.hunter)} completed bounty on ${toTankName(
+const bountyString = async (address: Address, event: any) => {
+  return `🎯 ${await getTankNameFromJoinIndex(
+    address,
+    event.args.hunter
+  )} completed bounty on ${await getTankNameFromJoinIndex(
+    address,
     event.args.victim
   )} for ${event.args.reward} APs.`;
 };

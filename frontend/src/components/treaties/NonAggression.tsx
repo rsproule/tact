@@ -1,13 +1,13 @@
 import {
   useTankGamePlayers,
-  useTankGameGetSettings,
   nonAggressionABI,
   usePrepareNonAggressionAccept,
   useNonAggressionAccept,
-  useTankGameGetGameEpoch,
+  useGameViewGetEpoch,
+  gameViewAddress,
 } from "@/src/generated";
 import { useState, useEffect } from "react";
-import { BaseError, formatEther } from "viem";
+import { Address, BaseError } from "viem";
 import {
   useAccount,
   useBlockNumber,
@@ -15,32 +15,39 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
-import { toTankName } from "../tankGame/EventsStream";
-import { Button } from "../ui/button";
+import { useTankNameFromId } from "../tankGame/EventsStream";
 import { toast } from "../ui/use-toast";
-import { secondsToHMS } from "../tankGame/Timer";
 import { Card, CardContent, CardHeader } from "../ui/card";
 
 export default function NonAggression({
   hookAddress,
+  gameAddress,
   ownerHookAddress,
   tankId,
   hideNotMine,
 }: {
   tankId: bigint;
-  hookAddress: `0x${string}`;
-  ownerHookAddress: `0x${string}`;
+  hookAddress: Address;
+  gameAddress: Address;
+  ownerHookAddress: Address;
   hideNotMine: boolean;
 }) {
   const { address } = useAccount();
   const ownerTank = useTankGamePlayers({
+    // @ts-ignore
+    address: gameAddress,
     args: [address!],
     enabled: !!address,
   });
-  const { data: epoch } = useTankGameGetGameEpoch({ watch: true });
+  const { chain } = useNetwork();
+  const { data: epoch } = useGameViewGetEpoch({
+    // @ts-ignore
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    watch: true,
+    args: [gameAddress],
+  });
   const { data: blockNumber } = useBlockNumber({ watch: true });
   const [treaties, setTreaties] = useState<any>();
-  // const [bountiesWon, setBountiesWon] = useState<any>();
   useEffect(() => {
     const getLogs = async () => {
       const publicClient = getPublicClient();
@@ -68,8 +75,8 @@ export default function NonAggression({
                 acceptedTreaty.args.proposer === proposedTreaty.args.proposer &&
                 acceptedTreaty.args.proposee === proposedTreaty.args.proposee &&
                 acceptedTreaty.args.expiry === proposedTreaty.args.expiry &&
-                acceptedTreaty.args.proposalHook ===
-                  proposedTreaty.args.hookProposer
+                acceptedTreaty.args.hookProposer ===
+                proposedTreaty.args.proposalHook
             )
         )
         .filter((treaty: any) => treaty.args.expiry > epoch!);
@@ -111,6 +118,8 @@ export default function NonAggression({
       });
     },
   });
+
+  const tankName = useTankNameFromId(gameAddress, tankId);
   return (
     <div className="">
       {treaties &&
@@ -125,7 +134,7 @@ export default function NonAggression({
         }).length !== 0 && (
           <Card>
             <CardHeader>
-              <div className="text-xl">🛡️ {toTankName(tankId)} Alliances</div>
+              <div className="text-xl">🛡️ {tankName} Alliances</div>
             </CardHeader>
             <CardContent>
               {treaties
@@ -138,66 +147,50 @@ export default function NonAggression({
                   }
                   return true;
                 })
-                .map((bounty: any, i: number) => {
-                  return (
-                    <div key={i} className="flex justify-between border">
-                      <div>Proposer: {toTankName(bounty.args.proposer)}</div>
-                      <div>{bounty.isAccepted ? "🤝 accepted" : "⏳ pending..."}</div>
-                      <div>Ally: {toTankName(bounty.args.proposee)}</div>
-                      <div>
-                        Non-aggression until epoch:{" "}
-                        {bounty.args.expiry.toString()}
-                      </div>
-                      {/* <div>
-                          Approx time:
-                          {secondsToHMS(
-                            Number(bounty.args.expiry - blockNumber!) * 12
-                          )}
-                        </div> */}
-                      {bounty.args.proposee === ownerTank.data! &&
-                        !bounty.isAccepted && (
-                          <button
-                            className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
-                            disabled={!accept}
-                            onClick={() => accept?.()}
-                          >
-                            Accept
-                          </button>
-                        )}
-                    </div>
-                  );
-                })}
+                .map((bounty: any, i: number) => (
+                  <BountyComponent
+                    key={i}
+                    bounty={bounty}
+                    gameAddress={gameAddress}
+                    ownerTank={ownerTank}
+                    accept={accept}
+                  />
+                ))}
             </CardContent>
           </Card>
         )}
-      {/* {acceptedTreaties && acceptedTreaties.length !== 0 && (
-        <Card>
-          <CardHeader>
-            <div className="text-xl">
-              Active alliances for {toTankName(tankId)}
-            </div>
-          </CardHeader>
-          <CardContent>
-            {acceptedTreaties.map((bounty: any, i: number) => {
-              return (
-                <div key={i} className="flex justify-between border p-1">
-                  <div>Proposer: {toTankName(bounty.args.proposer)}</div>
-                  <div>Ally: {toTankName(bounty.args.accepter)}</div>
-                  <div>
-                    Non-aggression until block: {bounty.args.expiry.toString()}
-                  </div>
-                  <div>
-                    Approx time:
-                    {secondsToHMS(
-                      Number(bounty.args.expiry - blockNumber!) * 12
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </CardContent>
-        </Card>
-      )} */}
+    </div>
+  );
+}
+
+function BountyComponent({
+  bounty,
+  gameAddress,
+  ownerTank,
+  accept,
+}: {
+  bounty: any;
+  gameAddress: Address;
+  ownerTank: any;
+  accept: any;
+}) {
+  const proposerName = useTankNameFromId(gameAddress, bounty.args.proposer);
+  const proposeeName = useTankNameFromId(gameAddress, bounty.args.proposee);
+  return (
+    <div className="flex justify-between border">
+      <div>Proposer: {proposerName}</div>
+      <div>{bounty.isAccepted ? "🤝 accepted" : "⏳ pending..."}</div>
+      <div>Ally: {proposeeName}</div>
+      <div>Non-aggression until epoch: {bounty.args.expiry.toString()}</div>
+      {bounty.args.proposee === ownerTank.data! && !bounty.isAccepted && (
+        <button
+          className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
+          disabled={!accept}
+          onClick={() => accept?.()}
+        >
+          Accept
+        </button>
+      )}
     </div>
   );
 }

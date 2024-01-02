@@ -6,6 +6,7 @@ import "forge-std/console.sol";
 import { Vm } from "forge-std/Vm.sol";
 import { TankGame } from "src/base/TankGameV2.sol";
 import { ITankGame } from "src/interfaces/ITankGame.sol";
+import { GameView } from "src/view/GameView.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Board } from "src/interfaces/IBoard.sol";
 import { HexBoard } from "src/base/HexBoard.sol";
@@ -14,6 +15,7 @@ import { Bounty } from "src/hooks/Bounty.sol";
 
 contract TankTest is Test {
     TankGame public tankGame;
+    GameView public tankGameView;
     TankGame public tankGamePrivate;
 
     function setUp() public {
@@ -26,11 +28,15 @@ contract TankTest is Test {
             epochSeconds: 4 hours,
             buyInMinimum: 1,
             revealWaitBlocks: 1000,
+            autoStart: false,
             root: bytes32(0)
         });
-        tankGame = new TankGame{value: 10 ether}(gs, msg.sender);
+        tankGame = new TankGame();
+        tankGameView = new GameView();
+        tankGame.initialize{ value: 10 ether }(gs, msg.sender);
         gs.root = "0xdeadbeef";
-        tankGamePrivate = new TankGame{value: 10 ether}(gs, msg.sender);
+        tankGamePrivate = new TankGame();
+        tankGamePrivate.initialize{ value: 10 ether }(gs, msg.sender);
     }
 
     function initGame(uint160 offset) public {
@@ -111,14 +117,12 @@ contract TankTest is Test {
         initGame();
         Board.Point memory p0 = tankGame.board().getTankPosition(1);
         vm.mockCall(
-            address(tankGame.getBoard()),
-            abi.encodeWithSelector(HexBoard.getDistanceTankToPoint.selector),
-            abi.encode(1)
+            address(tankGame.board()), abi.encodeWithSelector(HexBoard.getDistanceTankToPoint.selector), abi.encode(1)
         );
-        uint256 apsBefore = tankGame.getTank(1).aps;
+        uint256 apsBefore = tankGameView.getTank(address(address(tankGame)), 1).aps;
         vm.prank(address(1));
         tankGame.move(ITankGame.MoveParams(1, Board.Point(p0.x + 1, p0.y - 1, p0.z)));
-        uint256 apsAfter = tankGame.getTank(1).aps;
+        uint256 apsAfter = tankGameView.getTank(address(address(tankGame)), 1).aps;
         Board.Point memory p = tankGame.board().getTankPosition(1);
         assertEq(p.x, p0.x + 1, "wrong x coord");
         assertEq(p.y, p0.y - 1, "wrong y coord");
@@ -139,12 +143,12 @@ contract TankTest is Test {
     function testMoveTooFar() public {
         initGame();
         Board.Point memory to = Board.Point({
-            x: tankGame.getBoard().boardSize(),
-            y: tankGame.getBoard().boardSize(),
-            z: tankGame.getBoard().boardSize()
+            x: tankGameView.getBoard(address(tankGame)).boardSize(),
+            y: tankGameView.getBoard(address(tankGame)).boardSize(),
+            z: tankGameView.getBoard(address(tankGame)).boardSize()
         });
         vm.mockCall(
-            address(tankGame.getBoard()),
+            address(tankGameView.getBoard(address(tankGame))),
             abi.encodeWithSelector(HexBoard.getDistanceTankToPoint.selector),
             abi.encode(4)
         );
@@ -155,9 +159,9 @@ contract TankTest is Test {
 
     function testMoveToOccupied() public {
         initGame();
-        Board.Point memory p0 = tankGame.board().getTankPosition(1);
+        Board.Point memory p0 = tankGameView.getBoard(address(tankGame)).getTankPosition(1);
         vm.mockCall(
-            address(tankGame.getBoard()),
+            address(tankGameView.getBoard(address(tankGame))),
             abi.encodeWithSelector(HexBoard.getTile.selector),
             abi.encode(Board.Tile({ tankId: 1, hearts: 0 }))
         );
@@ -170,12 +174,14 @@ contract TankTest is Test {
     function testShootNormal() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.prank(address(8));
         tankGame.shoot(ITankGame.ShootParams(8, 6, 1));
-        uint256 apsAfter = tankGame.getTank(8).aps;
-        uint256 hearts = tankGame.getTank(6).hearts;
+        uint256 apsAfter = tankGameView.getTank(address(address(tankGame)), 8).aps;
+        uint256 hearts = tankGameView.getTank(address(address(tankGame)), 6).hearts;
         assertEq(apsAfter, 2);
         assertEq(hearts, 2);
     }
@@ -183,7 +189,9 @@ contract TankTest is Test {
     function testShootOutOfRange() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(4)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(4)
         );
         vm.prank(address(1));
         vm.expectRevert("target out of range");
@@ -193,7 +201,9 @@ contract TankTest is Test {
     function testShootNotEnoughAP() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.prank(address(3));
         vm.expectRevert("not enough action points");
@@ -203,7 +213,9 @@ contract TankTest is Test {
     function testShootDeadTank() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.prank(address(5));
         tankGame.shoot(ITankGame.ShootParams(5, 3, 3));
@@ -215,9 +227,11 @@ contract TankTest is Test {
     function testShootTooMany() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
-        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        uint256 epochTime = tankGameView.getSettings(address(tankGame)).epochSeconds;
         skip(epochTime);
         vm.startPrank(address(5));
         tankGame.drip(ITankGame.DripParams(5));
@@ -228,46 +242,62 @@ contract TankTest is Test {
     function testShootAndKill() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
-        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        uint256 epochTime = tankGameView.getSettings(address(tankGame)).epochSeconds;
         skip(epochTime + 100 * epochTime);
         vm.startPrank(address(3));
         tankGame.drip(ITankGame.DripParams(3));
         vm.startPrank(address(5));
         tankGame.drip(ITankGame.DripParams(5));
         uint256 sum = tankGame.aliveTanksIdSum();
-        uint256 apsBefore5 = tankGame.getTank(5).aps;
-        uint256 apsBefore3 = tankGame.getTank(3).aps;
+        uint256 apsBefore5 = tankGameView.getTank(address(address(tankGame)), 5).aps;
+        uint256 apsBefore3 = tankGameView.getTank(address(address(tankGame)), 3).aps;
         tankGame.shoot(ITankGame.ShootParams(5, 3, 3));
-        assertEq(tankGame.numTanksAlive(), tankGame.getSettings().playerCount - 1, "wrong number of tanks alive");
+        assertEq(
+            tankGame.numTanksAlive(),
+            tankGameView.getSettings(address(tankGame)).playerCount - 1,
+            "wrong number of tanks alive"
+        );
         assertEq(tankGame.aliveTanksIdSum(), sum - 3, "wrong sum after kill");
-        assertEq(tankGame.getTank(5).aps - apsBefore5, 17); // gained 20% - 3
-        assertEq(apsBefore3 - tankGame.getTank(3).aps, 20); // lost 20%
+        assertEq(tankGameView.getTank(address(address(tankGame)), 5).aps - apsBefore5, 17); // gained 20% - 3
+        assertEq(apsBefore3 - tankGameView.getTank(address(address(tankGame)), 3).aps, 20); // lost 20%
     }
 
     function testShootAndRevive() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
-        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        uint256 epochTime = tankGameView.getSettings(address(tankGame)).epochSeconds;
         vm.startPrank(address(5));
         skip(epochTime + 1);
         uint256 sum = tankGame.aliveTanksIdSum();
         tankGame.shoot(ITankGame.ShootParams(5, 3, 3));
-        assertEq(tankGame.numTanksAlive(), tankGame.getSettings().playerCount - 1, "wrong number of tanks alive");
+        assertEq(
+            tankGame.numTanksAlive(),
+            tankGameView.getSettings(address(tankGame)).playerCount - 1,
+            "wrong number of tanks alive"
+        );
         assertEq(tankGame.aliveTanksIdSum(), sum - 3, "wrong sum after kill");
         tankGame.give(ITankGame.GiveParams(5, 3, 1, 0));
-        assertEq(tankGame.numTanksAlive(), tankGame.getSettings().playerCount, "wrong number of tanks alive");
+        assertEq(
+            tankGame.numTanksAlive(),
+            tankGameView.getSettings(address(tankGame)).playerCount,
+            "wrong number of tanks alive"
+        );
         assertEq(tankGame.aliveTanksIdSum(), sum, "wrong sum after revive");
-        uint256 from = tankGame.getTank(5).hearts;
-        uint256 to = tankGame.getTank(3).hearts;
+        uint256 from = tankGameView.getTank(address(address(tankGame)), 5).hearts;
+        uint256 to = tankGameView.getTank(address(address(tankGame)), 3).hearts;
         tankGame.drip(ITankGame.DripParams(5));
         vm.startPrank(address(3));
         vm.expectRevert("already dripped");
         tankGame.drip(ITankGame.DripParams(3));
-        uint256 apsAlive = tankGame.getTank(5).aps;
+        uint256 apsAlive = tankGameView.getTank(address(address(tankGame)), 5).aps;
         assertEq(apsAlive, 1);
         assertEq(from, 2);
         assertEq(to, 1);
@@ -276,9 +306,11 @@ contract TankTest is Test {
     function testGiveLastHeart() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
-        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        uint256 epochTime = tankGameView.getSettings(address(tankGame)).epochSeconds;
         skip(epochTime * 20);
 
         vm.startPrank(address(5));
@@ -287,7 +319,11 @@ contract TankTest is Test {
         vm.startPrank(address(3));
         tankGame.shoot(ITankGame.ShootParams(3, 5, 1));
         tankGame.give(ITankGame.GiveParams(3, 5, 1, 0));
-        assertEq(tankGame.numTanksAlive(), tankGame.getSettings().playerCount - 1, "wrong number of tanks alive");
+        assertEq(
+            tankGame.numTanksAlive(),
+            tankGameView.getSettings(address(tankGame)).playerCount - 1,
+            "wrong number of tanks alive"
+        );
     }
 
     function testShootNonexistentTank() public {
@@ -302,33 +338,39 @@ contract TankTest is Test {
     function testGiveHeart() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.prank(address(8));
         tankGame.give(ITankGame.GiveParams(8, 6, 1, 0));
-        uint256 hearts = tankGame.getTank(8).hearts;
+        uint256 hearts = tankGameView.getTank(address(address(tankGame)), 8).hearts;
         assertEq(hearts, 2);
-        uint256 giverHearts = tankGame.getTank(6).hearts;
+        uint256 giverHearts = tankGameView.getTank(address(address(tankGame)), 6).hearts;
         assertEq(giverHearts, 4);
     }
 
     function testGiveAps() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.prank(address(8));
         tankGame.give(ITankGame.GiveParams(8, 6, 0, 1));
-        uint256 ap = tankGame.getTank(8).aps;
+        uint256 ap = tankGameView.getTank(address(address(tankGame)), 8).aps;
         assertEq(ap, 2);
-        uint256 aps = tankGame.getTank(6).aps;
+        uint256 aps = tankGameView.getTank(address(address(tankGame)), 6).aps;
         assertEq(aps, 4);
     }
 
     function testGiveOutOfRange() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(4)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(4)
         );
         vm.prank(address(1));
         vm.expectRevert("target out of range");
@@ -338,7 +380,9 @@ contract TankTest is Test {
     function testGiveTooMuchAp() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.prank(address(8));
         vm.expectRevert("not enough action points");
@@ -348,7 +392,9 @@ contract TankTest is Test {
     function testGiveTooMuchHearts() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.prank(address(8));
         vm.expectRevert("not enough hearts");
@@ -358,14 +404,14 @@ contract TankTest is Test {
     /// upgrade tests ///
     function testUpgrade() public {
         initGame();
-        uint256 epochTime = tankGame.getSettings().epochSeconds;
-        uint256 apsBefore = tankGame.getTank(1).aps;
+        uint256 epochTime = tankGameView.getSettings(address(tankGame)).epochSeconds;
+        uint256 apsBefore = tankGameView.getTank(address(address(tankGame)), 1).aps;
         skip((12 - apsBefore) * epochTime);
         vm.startPrank(address(1));
         tankGame.drip(ITankGame.DripParams(1));
         tankGame.upgrade(ITankGame.UpgradeParams(1));
-        uint256 apsAfter = tankGame.getTank(1).aps;
-        uint256 range = tankGame.getTank(1).range;
+        uint256 apsAfter = tankGameView.getTank(address(address(tankGame)), 1).aps;
+        uint256 range = tankGameView.getTank(address(address(tankGame)), 1).range;
         assertEq(range, 4);
         assertEq(apsAfter, 0);
     }
@@ -373,7 +419,7 @@ contract TankTest is Test {
     function testUpgradeNotEnoughAps() public {
         initGame();
         // upgrade cose is 12
-        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        uint256 epochTime = tankGameView.getSettings(address(tankGame)).epochSeconds;
         skip(12 * epochTime);
         vm.startPrank(address(1));
         tankGame.drip(ITankGame.DripParams(1));
@@ -392,11 +438,11 @@ contract TankTest is Test {
     /// drip tests ///
     function testDrip() public {
         initGame();
-        uint256 epochtime = tankGame.getSettings().epochSeconds;
+        uint256 epochtime = tankGameView.getSettings(address(tankGame)).epochSeconds;
         skip(epochtime);
         vm.prank(address(1));
         tankGame.drip(ITankGame.DripParams(1));
-        uint256 aps = tankGame.getTank(1).aps;
+        uint256 aps = tankGameView.getTank(address(address(tankGame)), 1).aps;
         assertEq(aps, 4);
     }
 
@@ -409,7 +455,7 @@ contract TankTest is Test {
 
     function testDripInSameEpoch() public {
         initGame();
-        uint256 epochtime = tankGame.getSettings().epochSeconds;
+        uint256 epochtime = tankGameView.getSettings(address(tankGame)).epochSeconds;
         skip(epochtime);
         vm.prank(address(1));
         tankGame.drip(ITankGame.DripParams(1));
@@ -477,11 +523,13 @@ contract TankTest is Test {
     // importantly this is next n where killer needs to be at the front
     function killNPlayers(uint256 killerId, uint160 addressOffset, uint256 n) public {
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
-        uint256 epochTime = tankGame.getSettings().epochSeconds;
-        uint256 numplayers = tankGame.getSettings().playerCount;
-        uint256 initHearts = tankGame.getSettings().initHearts;
+        uint256 epochTime = tankGameView.getSettings(address(tankGame)).epochSeconds;
+        uint256 numplayers = tankGameView.getSettings(address(tankGame)).playerCount;
+        uint256 initHearts = tankGameView.getSettings(address(tankGame)).initHearts;
         skip(epochTime * numplayers * initHearts);
         vm.prank(address(uint160(killerId + addressOffset)));
         tankGame.drip(ITankGame.DripParams(killerId));
@@ -489,7 +537,7 @@ contract TankTest is Test {
             vm.prank(address(uint160(killerId + addressOffset)));
             tankGame.shoot(ITankGame.ShootParams(killerId, i, 3));
         }
-        assertTrue(tankGame.state() == ITankGame.GameState.Ended, "game should be over");
+        assertTrue(tankGameView.getState(address(tankGame)) == ITankGame.GameState.Ended, "game should be over");
     }
 
     function testClaim() public {
@@ -498,7 +546,7 @@ contract TankTest is Test {
         killNPlayers(1, precompileOffset, 8);
 
         // number 1 wins, second is 7 and third is 8
-        assertTrue(tankGame.state() == ITankGame.GameState.Ended, "game not ended");
+        assertTrue(tankGameView.getState(address(tankGame)) == ITankGame.GameState.Ended, "game not ended");
         assertEq(tankGame.podium(0), 1, "first place is wrong");
         assertEq(tankGame.podium(1), 8, "second place is wrong");
         assertEq(tankGame.podium(2), 7, "third place is wrong");
@@ -540,7 +588,7 @@ contract TankTest is Test {
         uint256 prizeAmountBefore = tankGame.prizePool();
         hoax(address(1), 1 ether);
         tankGame.donate{ value: 1 ether }();
-        assertEq(address(tankGame).balance - prizeAmountBefore, 1 ether);
+        assertEq(address(address(tankGame)).balance - prizeAmountBefore, 1 ether);
         assertEq(tankGame.prizePool() - prizeAmountBefore, 1 ether);
     }
 
@@ -548,16 +596,18 @@ contract TankTest is Test {
     function testDelegate() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.prank(address(1));
         tankGame.delegate(ITankGame.DelegateParams(1, address(69)));
         vm.startPrank(address(69));
-        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        uint256 epochTime = tankGameView.getSettings(address(tankGame)).epochSeconds;
         skip(100 * epochTime);
         // can do all the actions
         tankGame.drip(ITankGame.DripParams(1));
-        tankGame.move(ITankGame.MoveParams(1, tankGame.getBoard().getEmptyTile(1)));
+        tankGame.move(ITankGame.MoveParams(1, tankGameView.getBoard(address(tankGame)).getEmptyTile(1)));
         tankGame.shoot(ITankGame.ShootParams(1, 2, 1));
         tankGame.give(ITankGame.GiveParams(1, 2, 1, 1));
 
@@ -576,7 +626,9 @@ contract TankTest is Test {
     function testVote() public {
         initGame();
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.startPrank(address(1));
         tankGame.shoot(ITankGame.ShootParams(1, 2, 3));
@@ -589,11 +641,11 @@ contract TankTest is Test {
         vm.expectRevert("tank is alive");
         tankGame.vote(ITankGame.VoteParams(3, 1));
 
-        uint256 epochBefore = tankGame.getLastDrip(1);
+        uint256 epochBefore = tankGameView.getLastDrip(address(address(tankGame)), 1);
         vm.startPrank(address(2));
         vm.recordLogs();
         tankGame.vote(ITankGame.VoteParams(2, 1));
-        uint256 epochAfter = tankGame.getLastDrip(1);
+        uint256 epochAfter = tankGameView.getLastDrip(address(address(tankGame)), 1);
         assertEq(epochBefore + 1, epochAfter, "curse should push forward drip epoch");
         Vm.Log[] memory entries = vm.getRecordedLogs();
         assertEq(entries.length, 2);
@@ -604,7 +656,7 @@ contract TankTest is Test {
         tankGame.vote(ITankGame.VoteParams(2, 3));
         // vm.prank(address(1));
 
-        uint256 epochTime = tankGame.getSettings().epochSeconds;
+        uint256 epochTime = tankGameView.getSettings(address(tankGame)).epochSeconds;
         skip(epochTime + 1);
         vm.startPrank(address(4));
         tankGame.shoot(ITankGame.ShootParams(4, 6, 3));
@@ -612,9 +664,9 @@ contract TankTest is Test {
         tankGame.vote(ITankGame.VoteParams(2, 7));
 
         vm.startPrank(address(6));
-        uint256 apsBefore = tankGame.getTank(7).aps;
+        uint256 apsBefore = tankGameView.getTank(address(address(tankGame)), 7).aps;
         tankGame.vote(ITankGame.VoteParams(6, 7));
-        uint256 apsAfter = tankGame.getTank(7).aps;
+        uint256 apsAfter = tankGameView.getTank(address(address(tankGame)), 7).aps;
         assertEq(apsBefore - 1, apsAfter, "vote should remove aps");
     }
 
@@ -623,7 +675,7 @@ contract TankTest is Test {
         initGame();
 
         vm.startPrank(address(1));
-        NonAggression nonAggro = new NonAggression(ITankGame(tankGame), 1);
+        NonAggression nonAggro = new NonAggression(address(address(tankGame)), address(tankGameView), 1);
         vm.label(address(nonAggro), "nonAggro");
         tankGame.addHooks(1, nonAggro);
 
@@ -632,7 +684,7 @@ contract TankTest is Test {
         tankGame.addHooks(1, nonAggro);
 
         vm.startPrank(address(2));
-        NonAggression nonAggro2 = new NonAggression(ITankGame(tankGame), 2);
+        NonAggression nonAggro2 = new NonAggression(address(address(tankGame)), address(tankGameView), 2);
         vm.label(address(nonAggro2), "nonAggro2");
         tankGame.addHooks(2, nonAggro2);
 
@@ -642,7 +694,7 @@ contract TankTest is Test {
 
         // player 1 can propose a treaty
         vm.startPrank(address(1));
-        nonAggro.propose(2, tankGame.getGameEpoch() + 10);
+        nonAggro.propose(2, tankGameView.getGameEpoch(address(tankGame)) + 10);
 
         vm.startPrank(address(1));
         vm.expectRevert("NonAggression: not owner");
@@ -662,7 +714,9 @@ contract TankTest is Test {
         // assertEq(entries[0].topics[0], keccak256("AcceptedTreaty(uint256,uint256,address,address,uint256)"));
 
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
         vm.startPrank(address(1));
         vm.expectRevert("NonAggression: cannot shoot ally");
@@ -671,7 +725,7 @@ contract TankTest is Test {
         vm.expectRevert("NonAggression: cannot shoot ally");
         tankGame.shoot(ITankGame.ShootParams(2, 1, 3));
 
-        vm.warp(block.timestamp + 11 * tankGame.getSettings().epochSeconds);
+        vm.warp(block.timestamp + 11 * tankGameView.getSettings(address(tankGame)).epochSeconds);
 
         vm.startPrank(address(1));
         tankGame.shoot(ITankGame.ShootParams(1, 2, 3));
@@ -682,10 +736,10 @@ contract TankTest is Test {
 
         // vm.prank(address(2));
         // vm.expectRevert("Bounty: not owner");
-        // new Bounty(ITankGame(tankGame), 1);
+        // new Bounty(ITankGame(address(tankGame)), 1);
 
         vm.startPrank(address(1));
-        Bounty bounty = new Bounty(ITankGame(tankGame), 1);
+        Bounty bounty = new Bounty(address(address(tankGame)), address(tankGameView), 1);
         // you can add your own bounty, idgaf
         tankGame.addHooks(1, bounty);
 
@@ -704,7 +758,9 @@ contract TankTest is Test {
         bounty.create{ value: 100 }(1);
 
         vm.mockCall(
-            address(tankGame.getBoard()), abi.encodeWithSelector(HexBoard.getDistanceTanks.selector), abi.encode(1)
+            address(tankGameView.getBoard(address(tankGame))),
+            abi.encodeWithSelector(HexBoard.getDistanceTanks.selector),
+            abi.encode(1)
         );
 
         vm.startPrank(address(3));

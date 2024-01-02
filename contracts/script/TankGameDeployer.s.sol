@@ -51,11 +51,13 @@ contract TankGameDeployerScript is Script {
             epochSeconds: 15 minutes,
             buyInMinimum: 0,
             revealWaitBlocks: (45 minutes) / 12,
+            autoStart: false,
             root: bytes32(0x0)
         });
-        tankGame = new TankGame(gs, msg.sender);
+        tankGame = new TankGame();
+        tankGame.initialize(gs, msg.sender);
 
-        GameView gameView = new GameView(tankGame);
+        GameView gameView = new GameView();
         HookFactory hookFactory = new HookFactory();
         console.log("TankGame deployed at address: %s", address(tankGame));
         console.log("TankGameView at address: %s", address(gameView));
@@ -68,8 +70,8 @@ contract TankGameDeployerScript is Script {
             // for every player give them a default hook for NonAggression and Bounties
             // this wont be allowed because hooks only added by owner
             // can get around this by allownig the admin to at the beginning
-            IHooks nonAggro = hookFactory.createHook(tankGame, i + 1, HookFactory.HookRegistry.NonAggression);
-            IHooks bounty = hookFactory.createHook(tankGame, i + 1, HookFactory.HookRegistry.Bounty);
+            IHooks nonAggro = hookFactory.createHook(tankGame, gameView, i + 1, HookFactory.HookRegistry.NonAggression);
+            IHooks bounty = hookFactory.createHook(tankGame, gameView, i + 1, HookFactory.HookRegistry.Bounty);
 
             console.log("Adding bounty hook for %s at address %s", np.name, address(bounty));
             console.log("Adding nonaggression hook for %s at address %s", np.name, address(nonAggro));

@@ -10,7 +10,6 @@ export const config = createConfig(
     appName: "TactV2",
     walletConnectProjectId,
     alchemyId: alchemyId,
-    chains: [goerli],
-    // chains: [foundry],
+    chains: [goerli, foundry],
   })
 );

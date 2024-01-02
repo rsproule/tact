@@ -13,6 +13,7 @@ export default function EmptySquareMenu({
   z,
   distance,
   open,
+  gameAddress,
 }: {
   ownersTank: bigint;
   x: number;
@@ -20,9 +21,12 @@ export default function EmptySquareMenu({
   z: number;
   distance: number | undefined;
   open: boolean;
+  gameAddress: `0x${string}`;
 }) {
   const { toast } = useToast();
   let { config } = usePrepareTankGameMove({
+    // @ts-ignore
+    address: gameAddress,
     args: [
       { tankId: ownersTank, to: { x: BigInt(x), y: BigInt(y), z: BigInt(z) } },
     ],
