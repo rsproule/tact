@@ -261,12 +261,12 @@ contract TankGame is ITankGame, TankGameV2Storage {
             } else if (hookFunction == IHooks.afterDelegate.selector) {
                 DelegateParams memory decodedParams = abi.decode(params, (DelegateParams));
                 selector = IHooks(hook).afterDelegate(address(this), decodedParams, "");
-            // } else if (hookFunction == IHooks.afterJoin.selector) {
-            //     JoinParams memory decodedParams = abi.decode(params, (JoinParams));
-            //     selector = IHooks(hook).afterJoin(address(this), decodedParams, "");
-            // } else if (hookFunction == IHooks.beforeJoin.selector) {
-            //     JoinParams memory decodedParams = abi.decode(params, (JoinParams));
-            //     selector = IHooks(hook).beforeJoin(address(this), decodedParams, "");
+                // } else if (hookFunction == IHooks.afterJoin.selector) {
+                //     JoinParams memory decodedParams = abi.decode(params, (JoinParams));
+                //     selector = IHooks(hook).afterJoin(address(this), decodedParams, "");
+                // } else if (hookFunction == IHooks.beforeJoin.selector) {
+                //     JoinParams memory decodedParams = abi.decode(params, (JoinParams));
+                //     selector = IHooks(hook).beforeJoin(address(this), decodedParams, "");
             } else if (hookFunction == IHooks.beforeMove.selector) {
                 MoveParams memory decodedParams = abi.decode(params, (MoveParams));
                 selector = IHooks(hook).beforeMove(address(this), decodedParams, "");
