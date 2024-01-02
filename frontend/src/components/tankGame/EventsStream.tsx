@@ -11,7 +11,7 @@ export async function getTankNameFromJoinIndex(
   tankId: bigint
 ) {
   // HACK: jonah forgot to set his name so we are mapping it here :eyeroll:
-  if (tankId === BigInt(1)) {
+  if (tankId === BigInt(2)) {
     return "jonah-forgot-to-set-his-name";
   }
   let logs = await getLogs(address);
@@ -335,11 +335,15 @@ const startString = async () => {
 };
 
 const bountyString = async (address: Address, event: any) => {
-  return `🎯 ${await getTankNameFromJoinIndex(
-    address,
-    event.args.hunter
-  )} completed bounty on ${await getTankNameFromJoinIndex(
-    address,
-    event.args.victim
-  )} for ${event.args.reward} APs.`;
+  return `🎯 ${
+    await getTankNameFromJoinIndex(
+      address,
+      event.args.hunter
+    )
+  } completed bounty on ${
+    await getTankNameFromJoinIndex(
+      address,
+      event.args.victim
+    )
+  } for ${ event.args.reward } APs.`;
 };
