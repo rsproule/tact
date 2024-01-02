@@ -48,47 +48,47 @@ contract GameView is IGameView {
         return hls;
     }
 
-    function isAuth(address game, uint256 tankId, address _owner) public view override returns (bool) {
-        TankGame tankGame = TankGame(game);
-        return getTank(game, tankId).owner == _owner || tankGame.delegates(tankId, _owner);
+    function isAuth(address gameAddress, uint256 tankId, address _owner) public view override returns (bool) {
+        TankGame tankGame = TankGame(gameAddress);
+        return getTank(gameAddress, tankId).owner == _owner || tankGame.delegates(tankId, _owner);
     }
 
-    function getState(address game) public view override returns (ITankGame.GameState) {
-        TankGame game = TankGame(game);
+    function getState(address gameAddress) public view override returns (ITankGame.GameState) {
+        TankGame game = TankGame(gameAddress);
         return game.state();
     }
 
-    function getEpoch(address game) public view override returns (uint256) {
-        TankGame game = TankGame(game);
+    function getEpoch(address gameAddress) public view override returns (uint256) {
+        TankGame game = TankGame(gameAddress);
         return game._getEpoch();
     }
 
-    function getGameEpoch(address game) public view override returns (uint256) {
-        TankGame tankGame = TankGame(game);
-        if (getState(game) == ITankGame.GameState.WaitingForPlayers) {
+    function getGameEpoch(address gameAddress) public view override returns (uint256) {
+        TankGame tankGame = TankGame(gameAddress);
+        if (getState(gameAddress) == ITankGame.GameState.WaitingForPlayers) {
             return 0; // this is cuz epoch start would be 0
         }
         return tankGame._getEpoch() - tankGame.epochStart();
     }
 
-    function getTank(address game, uint256 tankId) public view returns (ITankGame.Tank memory) {
-        TankGame game = TankGame(game);
+    function getTank(address gameAddress, uint256 tankId) public view returns (ITankGame.Tank memory) {
+        TankGame game = TankGame(gameAddress);
         (address owner, uint256 hearts, uint256 aps, uint256 range) = game.tanks(tankId);
         return ITankGame.Tank({ owner: owner, hearts: hearts, aps: aps, range: range });
     }
 
-    function getPlayerCount(address game) public view returns (uint256) {
-        TankGame game = TankGame(game);
+    function getPlayerCount(address gameAddress) public view returns (uint256) {
+        TankGame game = TankGame(gameAddress);
         return game.playersCount();
     }
 
-    function getBoard(address game) public view returns (Board) {
-        TankGame game = TankGame(game);
+    function getBoard(address gameAddress) public view returns (Board) {
+        TankGame game = TankGame(gameAddress);
         return game.board();
     }
 
-    function getSettings(address game) public view returns (ITankGame.GameSettings memory) {
-        TankGame game = TankGame(game);
+    function getSettings(address gameAddress) public view returns (ITankGame.GameSettings memory) {
+        TankGame game = TankGame(gameAddress);
         (
             uint256 playerCount,
             uint256 boardSize,
@@ -115,18 +115,18 @@ contract GameView is IGameView {
         });
     }
 
-    function _getLastDrip(address game, uint256 tankId) internal view returns (uint256) {
-        TankGame game = TankGame(game);
+    function _getLastDrip(address gameAddress, uint256 tankId) internal view returns (uint256) {
+        TankGame game = TankGame(gameAddress);
         uint256 lastDrippedEpoch = game.lastDripEpoch(tankId);
         return lastDrippedEpoch = lastDrippedEpoch > 0 ? lastDrippedEpoch : game.epochStart();
     }
 
-    function getLastDrip(address game, uint256 tankId) public view returns (uint256) {
-        return _getLastDrip(game, tankId);
+    function getLastDrip(address gameAddress, uint256 tankId) public view returns (uint256) {
+        return _getLastDrip(gameAddress, tankId);
     }
 
-    function getUpgradeCost(address game, uint256 tankId) public view returns (uint256) {
+    function getUpgradeCost(address gameAddress, uint256 tankId) public view returns (uint256) {
         // 12, 18, 24, 30, 36, 42, 48, 54, 60
-        return getBoard(game).getPerimeterForRadius(getTank(game, tankId).range) - 6;
+        return getBoard(gameAddress).getPerimeterForRadius(getTank(gameAddress, tankId).range) - 6;
     }
 }
