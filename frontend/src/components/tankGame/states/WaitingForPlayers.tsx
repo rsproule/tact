@@ -41,6 +41,7 @@ export function WaitingForPlayers({
     address: gameAddress,
     args: [{ joiner: address!, proof: proof, playerName: playerName }],
     value: BigInt(0),
+    enabled: !!playerName,
   });
   let { toast } = useToast();
   let numPlayers = useTankGamePlayersCount({
@@ -89,7 +90,6 @@ export function WaitingForPlayers({
             onClick={() => {
               write?.();
               refetch?.();
-    
             }}
             disabled={!write}
           >
