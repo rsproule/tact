@@ -43,7 +43,10 @@ export async function getTankNameFromAddress(
   player: Address
 ) {
   // HACK: jonah forgot to set his name so we are mapping it here :eyeroll:
-  if (player === "0xc6d109eFf13844c1AE490Ed7e1dD46F56b337928") {
+  if (
+    player.toLowerCase() ===
+    "0xc6d109eFf13844c1AE490Ed7e1dD46F56b337928".toLowerCase()
+  ) {
     return "jonah-forgot-to-set-his-name";
   }
   let logs = await getLogs(address);
@@ -335,15 +338,11 @@ const startString = async () => {
 };
 
 const bountyString = async (address: Address, event: any) => {
-  return `🎯 ${
-    await getTankNameFromJoinIndex(
-      address,
-      event.args.hunter
-    )
-  } completed bounty on ${
-    await getTankNameFromJoinIndex(
-      address,
-      event.args.victim
-    )
-  } for ${ event.args.reward } APs.`;
+  return `🎯 ${await getTankNameFromJoinIndex(
+    address,
+    event.args.hunter
+  )} completed bounty on ${await getTankNameFromJoinIndex(
+    address,
+    event.args.victim
+  )} for ${event.args.reward} APs.`;
 };
