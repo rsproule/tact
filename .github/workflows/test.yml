@@ -30,7 +30,7 @@ jobs:
         run: |
           cd contracts
           forge --version
-          forge build --sizes
+          forge build --via-ir --sizes
         id: build
 
       - name: Run Forge tests
