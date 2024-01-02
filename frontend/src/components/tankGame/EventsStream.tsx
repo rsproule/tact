@@ -10,6 +10,10 @@ export async function getTankNameFromJoinIndex(
   address: Address,
   tankId: bigint
 ) {
+  // HACK: jonah forgot to set his name so we are mapping it here :eyeroll:
+  if (tankId === BigInt(1)) {
+    return "jonah-forgot-to-set-his-name";
+  }
   let logs = await getLogs(address);
   let joinLogs = logs.filter((log) => log.eventName == "PlayerJoined");
   console.log({ joinLogs });
@@ -38,6 +42,10 @@ export async function getTankNameFromAddress(
   address: Address,
   player: Address
 ) {
+  // HACK: jonah forgot to set his name so we are mapping it here :eyeroll:
+  if (player === "0xc6d109eFf13844c1AE490Ed7e1dD46F56b337928") {
+    return "jonah-forgot-to-set-his-name";
+  }
   let logs = await getLogs(address);
   let joinLogs = logs.filter((log) => log.eventName === "PlayerJoined");
   // @ts-ignore
@@ -270,9 +278,8 @@ const giveString = async (address: Address, event: any) => {
   return `🤝 ${await getTankNameFromJoinIndex(
     address,
     event.args.fromId
-  )} gave ${event.args.hearts || event.args.aps} ${
-    event.args.hearts ? "hearts" : "aps"
-  } to ${await getTankNameFromJoinIndex(address, event.args.toId)}`;
+  )} gave ${event.args.hearts || event.args.aps} ${event.args.hearts ? "hearts" : "aps"
+    } to ${await getTankNameFromJoinIndex(address, event.args.toId)}`;
 };
 
 const upgradeString = async (address: Address, event: any) => {
@@ -312,17 +319,15 @@ const claimString = async (address: Address, event: any) => {
 };
 
 const joinString = async (address: Address, event: any) => {
-  return `🆕 ${
-    (await getTankNameFromAddress(address, event.args.player)) ||
+  return `🆕 ${(await getTankNameFromAddress(address, event.args.player)) ||
     event.args.player
-  } has joined the game.`;
+    } has joined the game.`;
 };
 
 const donateString = async (address: Address, event: any) => {
-  return `🎁 ${
-    (await getTankNameFromAddress(address, event.args.donator)) ||
+  return `🎁 ${(await getTankNameFromAddress(address, event.args.donator)) ||
     event.args.donator
-  } has added ${formatEther(event.args.amount!)} ether to the prize pool.`;
+    } has added ${formatEther(event.args.amount!)} ether to the prize pool.`;
 };
 
 const startString = async () => {
