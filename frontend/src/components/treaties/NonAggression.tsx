@@ -5,6 +5,7 @@ import {
   useNonAggressionAccept,
   useGameViewGetEpoch,
   gameViewAddress,
+  useGameViewGetGameEpoch,
 } from "@/src/generated";
 import { useState, useEffect } from "react";
 import { Address, BaseError } from "viem";
@@ -40,7 +41,7 @@ export default function NonAggression({
     enabled: !!address,
   });
   const { chain } = useNetwork();
-  const { data: epoch } = useGameViewGetEpoch({
+  const { data: epoch } = useGameViewGetGameEpoch({
     // @ts-ignore
     address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
     watch: true,
@@ -66,7 +67,6 @@ export default function NonAggression({
       const acceptedTreaties = allLogs.filter(
         (bounty: any) => bounty.eventName === "AcceptedTreaty"
       );
-
       const filteredProposedTreaties = proposedTreaties
         .filter(
           (proposedTreaty: any) =>
@@ -76,7 +76,7 @@ export default function NonAggression({
                 acceptedTreaty.args.proposee === proposedTreaty.args.proposee &&
                 acceptedTreaty.args.expiry === proposedTreaty.args.expiry &&
                 acceptedTreaty.args.hookProposer ===
-                proposedTreaty.args.proposalHook
+                  proposedTreaty.args.proposalHook
             )
         )
         .filter((treaty: any) => treaty.args.expiry > epoch!);

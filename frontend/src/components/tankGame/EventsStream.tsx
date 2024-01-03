@@ -16,7 +16,6 @@ export async function getTankNameFromJoinIndex(
   }
   let logs = await getLogs(address);
   let joinLogs = logs.filter((log) => log.eventName == "PlayerJoined");
-  console.log({ joinLogs });
   // @ts-ignore
   let name = joinLogs.find((log) => log.args.tankId === tankId);
   // @ts-ignore

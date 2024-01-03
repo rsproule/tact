@@ -1,8 +1,5 @@
 import Link from "next/link";
-import { EventStream } from "../components/tankGame/EventsStream";
-import { TankGame } from "../components/tankGame/TankGame";
 import { Button } from "../components/ui/button";
-import { Toaster } from "../components/ui/toaster";
 import { Connected } from "../components/wagmi/Connected";
 import Manifesto from "../components/tankGame/Manifesto";
 export default function HomePage() {

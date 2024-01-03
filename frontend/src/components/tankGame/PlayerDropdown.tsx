@@ -16,9 +16,7 @@ export default function PlayerDropdown({
   targetTank: string | undefined;
   gameAddress: Address;
 }) {
-  console.log({ gameAddress })
   const tanks = useTanks(gameAddress);
-  console.log({ tanks });
   return (
     <Select value={targetTank} onValueChange={setTargetTank}>
       <SelectTrigger>
@@ -28,7 +26,7 @@ export default function PlayerDropdown({
         {tanks.map((tank, i) => {
           return (
             <SelectItem key={i} value={(i + 1).toString()}>
-              {tank}
+              {i} - {tank}
             </SelectItem>
           );
         })}

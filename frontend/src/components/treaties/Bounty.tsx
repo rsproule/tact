@@ -31,8 +31,6 @@ export default function Bounty({
   addedHooks: any;
 }) {
   const tankName = useTankNameFromId(gameAddress, tankId);
-  console.log({ tankName });
-  console.log({ tankId });
   const { address } = useAccount();
   const ownerTank = useTankGamePlayers({
     // @ts-ignore
@@ -300,6 +298,5 @@ function TankName({
   gameAddress: Address;
 }) {
   const tankName = useTankNameFromId(gameAddress, tankId);
-  console.log({ tankName });
   return <div>{tankName}</div>;
 }
