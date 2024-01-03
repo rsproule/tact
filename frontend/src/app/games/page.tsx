@@ -6,7 +6,13 @@ import {
   useTankGamePlayersCount,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
-import { Address, useAccount, useBalance, useBlockNumber, useNetwork } from "wagmi";
+import {
+  Address,
+  useAccount,
+  useBalance,
+  useBlockNumber,
+  useNetwork,
+} from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import CreateGameForm from "@/src/components/CreateGameForm";
 import {
@@ -54,7 +60,17 @@ export default function GamesList() {
   }, [blockNumber]);
 
   if (!address) {
-    return <div>Connect your wallet to see games.</div>;
+    return;
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      Connect your wallet to see games.
+    </div>;
   }
   return (
     <div className="container pb-20">
