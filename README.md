@@ -5,7 +5,7 @@
 [twitter-badge]: https://img.shields.io/twitter/follow/sproule_
 [twitter-url]: https://twitter.com/sproule_
 
-# Tank Trust Tactics
+# Tact - an onchain strategy game
 
 [![MIT licensed][licence-badge]][licence-url]
 [![Build Status][actions-badge]][actions-url]
@@ -16,24 +16,6 @@
 <p align="center">
  <img width="80%" src="assets/tank.jpeg" alt="logo">
 </p>
-
-## Version 2 Rules
-
-- When joining players are randomly placed on the board with 3 lives and 1 action point (AP). They must pay the entry fee if there is one (configurable).
-- Every epoch (30 min default, configurable) every player is given an AP.
-- APs can be spent at any time in the following ways:
-
-  - Move to an adjacent hexagon (1 AP)
-  - Shoot a tank within range (1 AP). Removes 1 heart.
-  - Upgrade your range (the cost of the upgrade is equal to the new perimeter of the range plus 10%)
-
-- Tanks can shoot or trade with (give APs or hearts) any other tanks that are in range
-
-- Initially, all tanks have range of 3 (configurable).
-- Player are dead whenever they have 0 hearts.
-- Dead players can be revived by someone who sends them a heart (they do not accumulate APs during the time they are dead)
-- once a day a heart spawns randomly on the field, whoever goes to that square earns a heart
-- Dead players form a "cursing jury" who can vote on who to curse (take ap) once per epoch
 
 ## Motivation
 
@@ -55,15 +37,21 @@ The advent of blockchain technology, equipped with smart contracts, offers a sol
 
 "Tact" is more than just a game; it's a case study for a world built on the foundation that blockchain offers—a world driven by credible economic commitments. It shows us what is possible when we employ the coordination tools that a decentralized infrastructure can provide, potentially revolutionizing how we organize and trust one another.`;
 
-## V2 launch checklist
+## Version 2 Rules
 
-- [x] Where do we launch? Goerli
-- [x] Run this on testnet? yes
-- [ ] Clean up the botkit
-- [x] build the merkle root
-  - [ ] make the frontend use this
-- [ ] decide board size
-- [ ] frontend for the factory?
-  - not going to do this in the beta
-- [ ] centering the images in the tiles (low prio)
-- [x] write some rules, put them somewhere on the frontend
+- When joining players are randomly placed on the board with 3 lives and 1 action point (AP). They must pay the entry fee if there is one (configurable).
+- Every epoch (30 min default, configurable) every player is given an AP.
+- APs can be spent at any time in the following ways:
+
+  - Move to an adjacent hexagon (1 AP)
+  - Shoot a tank within range (1 AP). Removes 1 heart.
+  - Upgrade your range (the cost of the upgrade is equal to the new perimeter of the range plus 10%)
+
+- Tanks can shoot or trade with (give APs or hearts) any other tanks that are in range
+
+- Initially, all tanks have range of 3 (configurable).
+- Player are dead whenever they have 0 hearts.
+- Dead players can be revived by someone who sends them a heart (they do not accumulate APs during the time they are dead)
+- once a day a heart spawns randomly on the field, whoever goes to that square earns a heart
+- Dead players form a "cursing jury" who can vote on who to curse (take ap) once per epoch
+
