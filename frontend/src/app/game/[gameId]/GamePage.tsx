@@ -2,6 +2,7 @@
 
 import { EventStream } from "@/src/components/tankGame/EventsStream";
 import { TankGame } from "@/src/components/tankGame/TankGame";
+import { Button } from "@/src/components/ui/button";
 import { Toaster } from "@/src/components/ui/toaster";
 import { gameViewAddress, useGameViewGetSettings } from "@/src/generated";
 import Link from "next/link";
@@ -45,8 +46,11 @@ export function GamePage({ gameAddress }: { gameAddress: `0x${string}` }) {
       }}
     >
       Game not found at address: {gameAddress}
-      <br />
-      <Link href="/games">Back to Games</Link>
+      <div>
+        <Link href="/games">
+          <Button>Back to Games</Button>
+        </Link>
+      </div>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import {
   useTankGamePlayersCount,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
-import { Address, useBalance, useBlockNumber, useNetwork } from "wagmi";
+import { Address, useAccount, useBalance, useBlockNumber, useNetwork } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import CreateGameForm from "@/src/components/CreateGameForm";
 import {
@@ -26,6 +26,7 @@ import { Button } from "@/src/components/ui/button";
 
 export default function GamesList() {
   const { data: blockNumber } = useBlockNumber({ watch: true });
+  const { address } = useAccount();
   const [games, setGames] = useState();
   const { chain } = useNetwork();
   const getLogs = async () => {
@@ -51,7 +52,10 @@ export default function GamesList() {
       })
       .catch(console.error);
   }, [blockNumber]);
-  console.log({ games });
+
+  if (!address) {
+    return <div>Connect your wallet to see games.</div>;
+  }
   return (
     <div className="container pb-20">
       <Accordion type="single" collapsible>
