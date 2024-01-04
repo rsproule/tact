@@ -2,7 +2,7 @@ import { Droplet, Heart, Target, User, Zap } from "lucide-react";
 import { ITank } from "./ITank";
 import { useTankGameGetEpoch, useTankGameLastDripEpoch } from "@/src/generated";
 import { DropdownMenu, DropdownMenuContent } from "../ui/dropdown-menu";
-import { Address} from "viem";
+import { Address } from "viem";
 import { useTankNameFromId } from "./EventsStream";
 
 interface TankProps {
@@ -13,17 +13,29 @@ interface TankProps {
     left: number;
   } | null;
   onChange: () => void;
-  address: Address
+  address: Address;
 }
-export function Tank({ tankObj, open, position, onChange, address }: TankProps) {
+export function Tank({
+  tankObj,
+  open,
+  position,
+  onChange,
+  address,
+}: TankProps) {
   const { tank, tankId } = tankObj;
   const tankName = useTankNameFromId(address, tankId);
   let lastDripEpoch = useTankGameLastDripEpoch({
     args: [tankId],
     enabled: !!tankId,
     watch: true,
+    // @ts-ignore 
+    address: address,
   });
-  let currentEpoch = useTankGameGetEpoch({ watch: true });
+  let currentEpoch = useTankGameGetEpoch({
+    watch: true,
+    // @ts-ignore 
+    address: address,
+  });
   return (
     <div>
       <DropdownMenu open={open} onOpenChange={onChange}>
@@ -48,9 +60,7 @@ export function Tank({ tankObj, open, position, onChange, address }: TankProps) 
                 </div>
                 <div className="flex items-center pt-2">
                   <User className="mr-2 h-4 w-4 " />
-                  <span className="text-xs">
-                    Owner name: {tankName}
-                  </span>
+                  <span className="text-xs">Owner name: {tankName}</span>
                 </div>
                 <div className="flex items-center pt-2">
                   <Heart className="mr-2 h-4 w-4 " />{" "}

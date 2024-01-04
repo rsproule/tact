@@ -8,7 +8,11 @@ import {
 } from "@/src/generated";
 import { useState, useEffect } from "react";
 import { Address, BaseError, formatEther } from "viem";
-import { useAccount, useBlockNumber, useWaitForTransaction } from "wagmi";
+import {
+  useAccount,
+  useBlockNumber,
+  useWaitForTransaction,
+} from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import {
   getTankNameFromJoinIndex,
@@ -69,9 +73,9 @@ export default function Bounty({
         } else {
           return acc.map((item: any) =>
             item.address === current.address &&
-              item.args.tankId === current.args.tankId &&
-              item.args.target === current.args.target &&
-              item.args.amount > current.args.amount
+            item.args.tankId === current.args.tankId &&
+            item.args.target === current.args.target &&
+            item.args.amount > current.args.amount
               ? current
               : item
           );
@@ -92,8 +96,11 @@ export default function Bounty({
   }, [hookAddress, blockNumber]);
   const { config: addHooksConfig } = usePrepareTankGameAddHooks({
     args: [ownerTank.data!, hookAddress],
-    enabled: !!ownerTank,
+    // @ts-ignore
+    address: gameAddress,
+    enabled: !!ownerTank.data,
   });
+  // console.log(addHooksConfig);
   const { write: addHook, data: addHookData } =
     useTankGameAddHooks(addHooksConfig);
   useWaitForTransaction({
@@ -264,7 +271,9 @@ function BountyCard({
         <button
           className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
           disabled={!addHook}
-          onClick={() => addHook?.()}
+          onClick={() => 
+            addHook?.()
+          }
         >
           Accept
         </button>
