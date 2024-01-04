@@ -90,6 +90,7 @@ export function WaitingForPlayers({
             onClick={() => {
               write?.();
               refetch?.();
+              setPlayerName("");
             }}
             disabled={!write}
           >
