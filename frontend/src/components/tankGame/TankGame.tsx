@@ -37,13 +37,12 @@ export function TankGame({ address }: { address: `0x${string}` }) {
         gameAddress={address}
       />
       <div className="block justify-evenly py-5 md:flex">
-        <Timer address={address} />
+        {gameState.data !== 2 && <Timer address={address} />}
+        {gameState.data === 2 && <GameOver gameAddress={address} />}
+        {gameState.data !== 2 && <Donate gameAddress={address} />}
       </div>
       <Treaties gameAddress={address} />
       <div className="block justify-evenly py-5 md:flex">
-        {/* {gameState.data === 1 && <Timer address={address} />} */}
-        {gameState.data === 2 && <GameOver gameAddress={address} />}
-        {gameState.data !== 2 && <Donate gameAddress={address} />}
       </div>
       <LeaderBoard gameAddress={address} />
     </div>
