@@ -3,9 +3,9 @@ import {
   nonAggressionABI,
   usePrepareNonAggressionAccept,
   useNonAggressionAccept,
-  useGameViewGetEpoch,
   gameViewAddress,
   useGameViewGetGameEpoch,
+  usePrepareITreatyAccept,
 } from "@/src/generated";
 import { useState, useEffect } from "react";
 import { Address, BaseError } from "viem";
@@ -94,9 +94,11 @@ export default function NonAggression({
     };
     getLogs();
   }, [hookAddress, blockNumber, epoch]);
+
+  const tankName = useTankNameFromId(gameAddress, tankId);
   const { config: acceptConfig } = usePrepareNonAggressionAccept({
-    args: [tankId, hookAddress],
-    address: ownerHookAddress, // should be MY hook address
+    args: [tankId, hookAddress], // the information for the treaty we want to accept
+    address: ownerHookAddress, // MY hook address
   });
   const { write: accept, data: acceptData } =
     useNonAggressionAccept(acceptConfig);
@@ -119,7 +121,6 @@ export default function NonAggression({
     },
   });
 
-  const tankName = useTankNameFromId(gameAddress, tankId);
   return (
     <div className="">
       {treaties &&
@@ -186,7 +187,9 @@ function BountyComponent({
         <button
           className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
           disabled={!accept}
-          onClick={() => accept?.()}
+          onClick={() => {
+            accept?.();
+          }}
         >
           Accept
         </button>

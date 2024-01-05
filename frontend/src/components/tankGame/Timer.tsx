@@ -1,5 +1,6 @@
 import {
   gameViewAddress,
+  useGameViewGetGameEpoch,
   useGameViewGetEpoch,
   useGameViewGetSettings,
   usePrepareTankGameReveal,
@@ -27,6 +28,12 @@ export default function Timer({ address }: { address: `0x${string}` }) {
   const startEpoch = useTankGameEpochStart({
     // @ts-ignore
     address: address,
+  });
+  const currentGameEpoch = useGameViewGetGameEpoch({
+    watch: true,
+    // @ts-ignore
+    address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
+    args: [address],
   });
   const currentEpoch = useGameViewGetEpoch({
     watch: true,
@@ -71,22 +78,25 @@ export default function Timer({ address }: { address: `0x${string}` }) {
         </CardHeader>
         <CardContent>
           <>
-            Current Epoch:{" "}
-            {currentEpoch.data &&
-              startEpoch.data &&
-              (currentEpoch.data! - startEpoch.data!).toString()}
+            Current Game Epoch: {currentGameEpoch.data?.toString()}
             <br />
-            Time till next epoch:{" "}
-            {currentEpoch.data &&
-              settings.data &&
-              secondsToHMS(
-                Number(
-                  getTimeTillNextEpoch(
-                    currentEpoch.data!,
-                    settings.data?.epochSeconds!
-                  )
-                )
-              )}
+            Current Epoch: {currentEpoch.data?.toString()}
+            <br />
+            {currentGameEpoch ?? currentGameEpoch.data == BigInt(0) ?? (
+              <>
+                Time till next epoch:
+                {currentEpoch.data &&
+                  settings.data &&
+                  secondsToHMS(
+                    Number(
+                      getTimeTillNextEpoch(
+                        currentEpoch.data!,
+                        settings.data?.epochSeconds!
+                      )
+                    )
+                  )}
+              </>
+            )}
           </>
         </CardContent>
         <CardFooter>
