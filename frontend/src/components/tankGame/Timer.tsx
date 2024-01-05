@@ -82,7 +82,7 @@ export default function Timer({ address }: { address: `0x${string}` }) {
             <br />
             Current Epoch: {currentEpoch.data?.toString()}
             <br />
-            {currentGameEpoch ?? currentGameEpoch.data == BigInt(0) ?? (
+            {(currentGameEpoch && currentGameEpoch.data) == BigInt(0) ?? (
               <>
                 Time till next epoch:
                 {currentEpoch.data &&
