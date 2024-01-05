@@ -4,6 +4,7 @@ import {
   tankGameFactoryABI,
   tankGameFactoryAddress,
   useTankGamePlayersCount,
+  useTankGameState,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
 import {
@@ -32,6 +33,7 @@ import { Button } from "@/src/components/ui/button";
 
 export default function GamesList() {
   const { data: blockNumber } = useBlockNumber({ watch: true });
+  const [shouldFilter, setShouldFilter] = useState(true);
   const { address } = useAccount();
   const [games, setGames] = useState();
   const { chain } = useNetwork();
@@ -60,17 +62,18 @@ export default function GamesList() {
   }, [blockNumber]);
 
   if (!address) {
-    return;
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      Connect your wallet to see games.
-    </div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        Connect your wallet to see games.
+      </div>
+    );
   }
   return (
     <div className="container pb-20">
@@ -89,6 +92,16 @@ export default function GamesList() {
         </AccordionItem>
       </Accordion>
       <h2 className="mt-10 text-2xl">Existing games:</h2>
+      <div>
+        <input
+          type="checkbox"
+          id="filter"
+          name="filter"
+          checked={shouldFilter}
+          onChange={() => setShouldFilter(!shouldFilter)}
+        />
+        <label htmlFor="filter">Filter Joinable Games</label>
+      </div>
       <div className="grid-flow-row auto-rows-max">
         {games &&
           games
@@ -102,6 +115,7 @@ export default function GamesList() {
                 numPlayers={game.args.settings.playerCount}
                 isOpen={game.args.settings.root === zero}
                 buyIn={game.args.settings.buyInMinimum}
+                filter={shouldFilter}
               />
             ))}
       </div>
@@ -117,11 +131,13 @@ function GameTile({
   numPlayers,
   isOpen,
   buyIn,
+  filter,
 }: {
   address: Address;
   numPlayers: bigint;
   isOpen: boolean;
   buyIn: bigint;
+  filter: boolean;
 }) {
   let { data: players } = useTankGamePlayersCount({
     watch: true,
@@ -129,6 +145,22 @@ function GameTile({
     address: address,
   });
   let { data: balance } = useBalance({ address: address, watch: true });
+  let { data: gameState } = useTankGameState({
+    watch: true,
+    // @ts-ignore
+    address: address,
+  });
+  let stateString =
+    gameState !== undefined
+      ? gameState === 0
+        ? "Waiting for players"
+        : gameState === 1
+        ? "In Progress"
+        : "Game Over"
+      : "...";
+  if (filter && stateString !== "Waiting for players") {
+    return null;
+  }
   return (
     <div className="my-5">
       <a href={`game/${address}`}>
@@ -141,6 +173,7 @@ function GameTile({
               {players?.toString()}/{numPlayers.toString()} players in game
             </div>
             <div>Auth mode: {isOpen ? "Open to world" : "Whitelist"}</div>
+            <div>State: {stateString}</div>
             <div>Buy in minimum: {formatEther(buyIn)} eth</div>
             <div>
               Current pot: {balance ? formatEther(balance.value) : "..."} eth
