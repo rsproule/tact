@@ -3,7 +3,7 @@ import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "./ui/button";
-import { BaseError, getAddress } from "viem";
+import { BaseError, getAddress, parseEther } from "viem";
 import { useAccount, useWaitForTransaction } from "wagmi";
 import {
   usePrepareTankGameFactoryCreateGame,
@@ -29,7 +29,7 @@ const formSchema = z.object({
   initHearts: z.number(),
   initShootRange: z.number(),
   epochSeconds: z.number(),
-  buyInMinimum: z.number(),
+  buyInMinimum: z.string(),
   revealWaitBlocks: z.number(),
   autoStart: z.boolean(),
   root: z.string(),
@@ -49,7 +49,7 @@ export default function CreateGameForm({
     initHearts: 3,
     initShootRange: 3,
     epochSeconds: 60,
-    buyInMinimum: 0,
+    buyInMinimum: "0",
     revealWaitBlocks: 60,
     autoStart: "true",
     root: "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -71,7 +71,7 @@ export default function CreateGameForm({
         initHearts: BigInt(formState.initHearts),
         initShootRange: BigInt(formState.initShootRange),
         epochSeconds: BigInt(formState.epochSeconds),
-        buyInMinimum: BigInt(formState.buyInMinimum),
+        buyInMinimum: parseEther(formState.buyInMinimum),
         revealWaitBlocks: BigInt(formState.revealWaitBlocks),
         autoStart: Boolean(formState.autoStart),
         root: formState.root as `0x${string}`,
@@ -127,8 +127,11 @@ export default function CreateGameForm({
                 <Input
                   {...field}
                   onChange={(e) => {
-                    if (!isNaN(Number(e.target.value))) {
+                    try {
+                      BigInt(e.target.value);
                       handleInputChange(e);
+                    } catch {
+                      console.error("Value is not convertible to BigInt");
                     }
                   }}
                   value={formState.playerCount}
@@ -148,15 +151,18 @@ export default function CreateGameForm({
                 <Input
                   {...field}
                   onChange={(e) => {
-                    if (!isNaN(Number(e.target.value))) {
+                    try {
+                      BigInt(e.target.value);
                       handleInputChange(e);
+                    } catch {
+                      console.error("Value is not convertible to BigInt");
                     }
                   }}
                   value={formState.boardSize}
                 />
               </FormControl>
               <FormDescription>
-                Enter the size of the board (must be div by 3)
+                Enter the size of the board (must be div by 3){" "}
               </FormDescription>
             </div>
           )}
@@ -171,8 +177,11 @@ export default function CreateGameForm({
                 <Input
                   {...field}
                   onChange={(e) => {
-                    if (!isNaN(Number(e.target.value))) {
+                    try {
+                      BigInt(e.target.value);
                       handleInputChange(e);
+                    } catch {
+                      console.error("Value is not convertible to BigInt");
                     }
                   }}
                   value={formState.initAPs}
@@ -192,8 +201,11 @@ export default function CreateGameForm({
                 <Input
                   {...field}
                   onChange={(e) => {
-                    if (!isNaN(Number(e.target.value))) {
+                    try {
+                      BigInt(e.target.value);
                       handleInputChange(e);
+                    } catch {
+                      console.error("Value is not convertible to BigInt");
                     }
                   }}
                   value={formState.initHearts}
@@ -236,8 +248,11 @@ export default function CreateGameForm({
                 <Input
                   {...field}
                   onChange={(e) => {
-                    if (!isNaN(Number(e.target.value))) {
+                    try {
+                      BigInt(e.target.value);
                       handleInputChange(e);
+                    } catch {
+                      console.error("Value is not convertible to BigInt");
                     }
                   }}
                   value={formState.epochSeconds}
@@ -278,8 +293,11 @@ export default function CreateGameForm({
                 <Input
                   {...field}
                   onChange={(e) => {
-                    if (!isNaN(Number(e.target.value))) {
+                    try {
+                      BigInt(e.target.value);
                       handleInputChange(e);
+                    } catch {
+                      console.error("Value is not convertible to BigInt");
                     }
                   }}
                   value={formState.revealWaitBlocks}
