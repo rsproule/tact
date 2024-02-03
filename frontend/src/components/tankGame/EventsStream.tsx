@@ -1,10 +1,11 @@
 "use client";
-import { tankGameABI } from "@/src/generated";
+import { tankGameAbi } from "@/src/generated";
 import { useState, useEffect } from "react";
 import { Address, formatEther } from "viem";
 import { Card, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { getPublicClient } from "wagmi/actions";
+import { config } from "@/src/wagmi";
 
 export async function getTankNameFromJoinIndex(
   address: Address,
@@ -89,14 +90,14 @@ export function useTankNameFromAddress(address: Address, player: Address) {
 }
 
 const getLogs = async (address: Address) => {
-  const publicClient = getPublicClient();
-  const filter = await publicClient.createContractEventFilter({
-    abi: tankGameABI,
+  const publicClient = getPublicClient(config);
+  const filter = await publicClient!.createContractEventFilter({
+    abi: tankGameAbi,
     strict: true,
     fromBlock: BigInt(0),
     address: address,
   });
-  return await publicClient.getFilterLogs({
+  return await publicClient!.getFilterLogs({
     filter,
   });
 };

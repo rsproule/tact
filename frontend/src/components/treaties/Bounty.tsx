@@ -1,25 +1,23 @@
 import {
-  useTankGamePlayers,
-  bountyABI,
+  bountyAbi,
+  useBountyWithdraw,
+  usePrepareBountyWithdraw,
   usePrepareTankGameAddHooks,
   useTankGameAddHooks,
-  usePrepareBountyWithdraw,
-  useBountyWithdraw,
+  useTankGamePlayers,
 } from "@/src/generated";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Address, BaseError, formatEther } from "viem";
 import {
   useAccount,
   useBlockNumber,
-  useWaitForTransaction,
+  useWaitForTransactionReceipt,
 } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
-import {
-  getTankNameFromJoinIndex,
-  useTankNameFromId,
-} from "../tankGame/EventsStream";
+import { useTankNameFromId } from "../tankGame/EventsStream";
+import { Card, CardContent, CardHeader } from "../ui/card";
 import { toast } from "../ui/use-toast";
-import { Card, CardHeader, CardContent } from "../ui/card";
+import { config } from "@/src/wagmi";
 
 export default function Bounty({
   hookAddress,
@@ -48,14 +46,14 @@ export default function Bounty({
   const [withdraws, setWithdraws] = useState<any>();
   useEffect(() => {
     const getLogs = async () => {
-      const publicClient = getPublicClient();
-      const filter = await publicClient.createContractEventFilter({
-        abi: bountyABI,
+      const publicClient = getPublicClient(config);
+      const filter = await publicClient!.createContractEventFilter({
+        abi: bountyAbi,
         strict: true,
         fromBlock: BigInt(0),
         address: hookAddress,
       });
-      const bounties = await publicClient.getFilterLogs({
+      const bounties = await publicClient!.getFilterLogs({
         filter,
       });
       const postedBounties = bounties.filter(
@@ -94,58 +92,61 @@ export default function Bounty({
     };
     getLogs();
   }, [hookAddress, blockNumber]);
-  const { config: addHooksConfig } = usePrepareTankGameAddHooks({
+  const { data: addHooksConfig } = usePrepareTankGameAddHooks({
     args: [ownerTank.data!, hookAddress],
     // @ts-ignore
     address: gameAddress,
     enabled: !!ownerTank.data,
   });
   // console.log(addHooksConfig);
-  const { write: addHook, data: addHookData } =
-    useTankGameAddHooks(addHooksConfig);
-  useWaitForTransaction({
-    hash: addHookData?.hash,
-    enabled: !!addHookData,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: addHook, data: addHookData } = useTankGameAddHooks();
+  const { data: addReceipt, error: addHookError } =
+    useWaitForTransactionReceipt({
+      hash: addHookData,
+    });
+
+  useEffect(() => {
+    if (addReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: addReceipt.transactionHash,
       });
-    },
-  });
-  const { config: withdrawConfig } = usePrepareBountyWithdraw({
+    }
+    if (addHookError) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: addHookError.message,
+      });
+    }
+  }, [addReceipt, addHookError]);
+
+  const { data: withdrawConfig } = usePrepareBountyWithdraw({
     args: [ownerTank.data!, address!],
-    enabled: !!ownerTank,
     address: hookAddress,
   });
-  const { write: withdraw, data: withdrawData } =
-    useBountyWithdraw(withdrawConfig);
-  useWaitForTransaction({
-    hash: withdrawData?.hash,
-    enabled: !!withdrawData,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: withdraw, data: withdrawData } = useBountyWithdraw();
+  const { data: receipt, error: withdrawError } = useWaitForTransactionReceipt({
+    hash: withdrawData,
+  });
+
+  useEffect(() => {
+    if (receipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: receipt.transactionHash,
       });
-    },
-  });
+    }
+    if (withdrawError) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: withdrawError.message,
+      });
+    }
+  }, [receipt, withdrawError]);
 
   return (
     bounties &&
@@ -186,6 +187,8 @@ export default function Bounty({
                   withdraws={withdraws}
                   ownerTank={ownerTank}
                   addHook={addHook}
+                  addHookConfig={addHooksConfig}
+                  withdrawConfig={withdrawConfig}
                   withdraw={withdraw}
                   addedHooks={addedHooks}
                   hookAddress={hookAddress}
@@ -205,6 +208,8 @@ function BountyCard({
   withdraws,
   ownerTank,
   addHook,
+  addHookConfig,
+  withdrawConfig,
   withdraw,
   addedHooks,
   hookAddress,
@@ -215,6 +220,8 @@ function BountyCard({
   withdraws: any;
   ownerTank: any;
   addHook: any;
+  addHookConfig: any;
+  withdrawConfig: any;
   withdraw: any;
   addedHooks: any;
   hookAddress: Address;
@@ -254,7 +261,7 @@ function BountyCard({
               <button
                 className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
                 disabled={!withdraw}
-                onClick={() => withdraw?.()}
+                onClick={() => withdraw?.(withdrawConfig!.request)}
               >
                 Claim
               </button>
@@ -271,9 +278,7 @@ function BountyCard({
         <button
           className="bg-white text-black px-2 disabled:opacity-50 enabled:cursor-pointer"
           disabled={!addHook}
-          onClick={() => 
-            addHook?.()
-          }
+          onClick={() => addHook?.(addHookConfig!.request)}
         >
           Accept
         </button>

@@ -1,5 +1,5 @@
 import { defineConfig } from "@wagmi/cli";
-import { foundry, react } from "@wagmi/cli/plugins";
+import { actions, foundry, react } from "@wagmi/cli/plugins";
 import * as chains from "wagmi/chains";
 export default defineConfig({
   out: "src/generated.ts",
@@ -30,6 +30,8 @@ export default defineConfig({
       },
       project: "../contracts",
     }),
-    react(),
+    react({
+      getHookName: "legacy" 
+    }),
   ],
 });

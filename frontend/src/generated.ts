@@ -1,27 +1,15 @@
 import {
-  useContractRead,
-  UseContractReadConfig,
-  useContractWrite,
-  UseContractWriteConfig,
-  usePrepareContractWrite,
-  UsePrepareContractWriteConfig,
-  useContractEvent,
-  UseContractEventConfig,
-  useNetwork,
-  useChainId,
-  Address,
-} from 'wagmi'
-import {
-  ReadContractResult,
-  WriteContractMode,
-  PrepareWriteContractResult,
-} from 'wagmi/actions'
+  createUseReadContract,
+  createUseWriteContract,
+  createUseSimulateContract,
+  createUseWatchContractEvent,
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Board
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const boardABI = [
+export const boardAbi = [
   {
     stateMutability: 'view',
     type: 'function',
@@ -269,7 +257,7 @@ export const boardABI = [
 // Bounty
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const bountyABI = [
+export const bountyAbi = [
   {
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -856,7 +844,7 @@ export const bountyABI = [
 // Clones
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const clonesABI = [
+export const clonesAbi = [
   { type: 'error', inputs: [], name: 'ERC1167FailedCreateClone' },
 ] as const
 
@@ -864,7 +852,7 @@ export const clonesABI = [
 // DefaultEmptyHooks
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const defaultEmptyHooksABI = [
+export const defaultEmptyHooksAbi = [
   {
     stateMutability: 'pure',
     type: 'function',
@@ -1259,7 +1247,7 @@ export const defaultEmptyHooksABI = [
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export const gameViewABI = [
+export const gameViewAbi = [
   {
     stateMutability: 'view',
     type: 'function',
@@ -1459,14 +1447,14 @@ export const gameViewAddress = {
  */
 export const gameViewConfig = {
   address: gameViewAddress,
-  abi: gameViewABI,
+  abi: gameViewAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // HexBoard
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const hexBoardABI = [
+export const hexBoardAbi = [
   {
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -1748,7 +1736,7 @@ export const hexBoardABI = [
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
-export const hookFactoryABI = [
+export const hookFactoryAbi = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1819,14 +1807,14 @@ export const hookFactoryAddress = {
  */
 export const hookFactoryConfig = {
   address: hookFactoryAddress,
-  abi: hookFactoryABI,
+  abi: hookFactoryAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IGameView
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const iGameViewABI = [
+export const iGameViewAbi = [
   {
     stateMutability: 'view',
     type: 'function',
@@ -2005,7 +1993,7 @@ export const iGameViewABI = [
 // IHooks
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const iHooksABI = [
+export const iHooksAbi = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -2396,7 +2384,7 @@ export const iHooksABI = [
 // IMulticall3
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const iMulticall3ABI = [
+export const iMulticall3Abi = [
   {
     stateMutability: 'payable',
     type: 'function',
@@ -2643,7 +2631,7 @@ export const iMulticall3ABI = [
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export const iTankGameABI = [
+export const iTankGameAbi = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -3356,14 +3344,14 @@ export const iTankGameAddress = {
  */
 export const iTankGameConfig = {
   address: iTankGameAddress,
-  abi: iTankGameABI,
+  abi: iTankGameAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ITreaty
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const iTreatyABI = [
+export const iTreatyAbi = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -3458,7 +3446,7 @@ export const iTreatyABI = [
 // Math
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const mathABI = [
+export const mathAbi = [
   { type: 'error', inputs: [], name: 'MathOverflowedMulDiv' },
 ] as const
 
@@ -3466,7 +3454,7 @@ export const mathABI = [
 // MerkleProof
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const merkleProofABI = [
+export const merkleProofAbi = [
   { type: 'error', inputs: [], name: 'MerkleProofInvalidMultiproof' },
 ] as const
 
@@ -3474,7 +3462,7 @@ export const merkleProofABI = [
 // NonAggression
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const nonAggressionABI = [
+export const nonAggressionAbi = [
   {
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -4018,7 +4006,7 @@ export const nonAggressionABI = [
 // Strings
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const stringsABI = [
+export const stringsAbi = [
   {
     type: 'error',
     inputs: [
@@ -4037,7 +4025,7 @@ export const stringsABI = [
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export const tankGameABI = [
+export const tankGameAbi = [
   {
     stateMutability: 'view',
     type: 'function',
@@ -5011,7 +4999,7 @@ export const tankGameAddress = {
  */
 export const tankGameConfig = {
   address: tankGameAddress,
-  abi: tankGameABI,
+  abi: tankGameAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5022,7 +5010,7 @@ export const tankGameConfig = {
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export const tankGameFactoryABI = [
+export const tankGameFactoryAbi = [
   {
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -5137,14 +5125,14 @@ export const tankGameFactoryAddress = {
  */
 export const tankGameFactoryConfig = {
   address: tankGameFactoryAddress,
-  abi: tankGameFactoryABI,
+  abi: tankGameFactoryAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TankGameV2Storage
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const tankGameV2StorageABI = [
+export const tankGameV2StorageAbi = [
   {
     stateMutability: 'view',
     type: 'function',
@@ -5354,10427 +5342,4285 @@ export const tankGameV2StorageABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__
  */
-export function useBoardRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi'
-  > = {} as any,
-) {
-  return useContractRead({ abi: boardABI, ...config } as UseContractReadConfig<
-    typeof boardABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useBoardRead = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"boardSize"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"boardSize"`
  */
-export function useBoardBoardSize<
-  TFunctionName extends 'boardSize',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'boardSize',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardBoardSize = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'boardSize',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"getDistance"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"getDistance"`
  */
-export function useBoardGetDistance<
-  TFunctionName extends 'getDistance',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'getDistance',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardGetDistance = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'getDistance',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"getDistanceTankToPoint"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"getDistanceTankToPoint"`
  */
-export function useBoardGetDistanceTankToPoint<
-  TFunctionName extends 'getDistanceTankToPoint',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
+export const useBoardGetDistanceTankToPoint =
+  /*#__PURE__*/ createUseReadContract({
+    abi: boardAbi,
     functionName: 'getDistanceTankToPoint',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"getDistanceTanks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"getDistanceTanks"`
  */
-export function useBoardGetDistanceTanks<
-  TFunctionName extends 'getDistanceTanks',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'getDistanceTanks',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardGetDistanceTanks = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'getDistanceTanks',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"getEmptyTile"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"getEmptyTile"`
  */
-export function useBoardGetEmptyTile<
-  TFunctionName extends 'getEmptyTile',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'getEmptyTile',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardGetEmptyTile = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'getEmptyTile',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"getHeartAtPosition"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"getHeartAtPosition"`
  */
-export function useBoardGetHeartAtPosition<
-  TFunctionName extends 'getHeartAtPosition',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'getHeartAtPosition',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardGetHeartAtPosition = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'getHeartAtPosition',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"getPerimeterForRadius"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"getPerimeterForRadius"`
  */
-export function useBoardGetPerimeterForRadius<
-  TFunctionName extends 'getPerimeterForRadius',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
+export const useBoardGetPerimeterForRadius =
+  /*#__PURE__*/ createUseReadContract({
+    abi: boardAbi,
     functionName: 'getPerimeterForRadius',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"getTankPosition"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"getTankPosition"`
  */
-export function useBoardGetTankPosition<
-  TFunctionName extends 'getTankPosition',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'getTankPosition',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardGetTankPosition = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'getTankPosition',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"getTile"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"getTile"`
  */
-export function useBoardGetTile<
-  TFunctionName extends 'getTile',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'getTile',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardGetTile = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'getTile',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"getTotalTiles"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"getTotalTiles"`
  */
-export function useBoardGetTotalTiles<
-  TFunctionName extends 'getTotalTiles',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'getTotalTiles',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardGetTotalTiles = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'getTotalTiles',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"isValidPoint"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"isValidPoint"`
  */
-export function useBoardIsValidPoint<
-  TFunctionName extends 'isValidPoint',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'isValidPoint',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardIsValidPoint = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'isValidPoint',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"pointToIndex"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"pointToIndex"`
  */
-export function useBoardPointToIndex<
-  TFunctionName extends 'pointToIndex',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'pointToIndex',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardPointToIndex = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'pointToIndex',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"randomPoint"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"randomPoint"`
  */
-export function useBoardRandomPoint<
-  TFunctionName extends 'randomPoint',
-  TSelectData = ReadContractResult<typeof boardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: boardABI,
-    functionName: 'randomPoint',
-    ...config,
-  } as UseContractReadConfig<typeof boardABI, TFunctionName, TSelectData>)
-}
+export const useBoardRandomPoint = /*#__PURE__*/ createUseReadContract({
+  abi: boardAbi,
+  functionName: 'randomPoint',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link boardABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link boardAbi}__
  */
-export function useBoardWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<typeof boardABI, string>['request']['abi'],
-        TFunctionName,
-        TMode
-      >
-    : UseContractWriteConfig<typeof boardABI, TFunctionName, TMode> & {
-        abi?: never
-      } = {} as any,
-) {
-  return useContractWrite<typeof boardABI, TFunctionName, TMode>({
-    abi: boardABI,
-    ...config,
-  } as any)
-}
+export const useBoardWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: boardAbi,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"setTile"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"setTile"`
  */
-export function useBoardSetTile<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof boardABI,
-          'setTile'
-        >['request']['abi'],
-        'setTile',
-        TMode
-      > & { functionName?: 'setTile' }
-    : UseContractWriteConfig<typeof boardABI, 'setTile', TMode> & {
-        abi?: never
-        functionName?: 'setTile'
-      } = {} as any,
-) {
-  return useContractWrite<typeof boardABI, 'setTile', TMode>({
-    abi: boardABI,
-    functionName: 'setTile',
-    ...config,
-  } as any)
-}
+export const useBoardSetTile = /*#__PURE__*/ createUseWriteContract({
+  abi: boardAbi,
+  functionName: 'setTile',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link boardABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link boardAbi}__
  */
-export function usePrepareBoardWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof boardABI, TFunctionName>,
-    'abi'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: boardABI,
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof boardABI, TFunctionName>)
-}
+export const usePrepareBoardWrite = /*#__PURE__*/ createUseSimulateContract({
+  abi: boardAbi,
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link boardABI}__ and `functionName` set to `"setTile"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link boardAbi}__ and `functionName` set to `"setTile"`
  */
-export function usePrepareBoardSetTile(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof boardABI, 'setTile'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: boardABI,
-    functionName: 'setTile',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof boardABI, 'setTile'>)
-}
+export const usePrepareBoardSetTile = /*#__PURE__*/ createUseSimulateContract({
+  abi: boardAbi,
+  functionName: 'setTile',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__
  */
-export function useBountyRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi'
-  > = {} as any,
-) {
-  return useContractRead({ abi: bountyABI, ...config } as UseContractReadConfig<
-    typeof bountyABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useBountyRead = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterClaim"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterClaim"`
  */
-export function useBountyAfterClaim<
-  TFunctionName extends 'afterClaim',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'afterClaim',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyAfterClaim = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'afterClaim',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterDelegate"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterDelegate"`
  */
-export function useBountyAfterDelegate<
-  TFunctionName extends 'afterDelegate',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'afterDelegate',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyAfterDelegate = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'afterDelegate',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterDrip"`
  */
-export function useBountyAfterDrip<
-  TFunctionName extends 'afterDrip',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'afterDrip',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyAfterDrip = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'afterDrip',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterJoin"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterJoin"`
  */
-export function useBountyAfterJoin<
-  TFunctionName extends 'afterJoin',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'afterJoin',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyAfterJoin = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'afterJoin',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeClaim"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeClaim"`
  */
-export function useBountyBeforeClaim<
-  TFunctionName extends 'beforeClaim',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'beforeClaim',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyBeforeClaim = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'beforeClaim',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeDelegate"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeDelegate"`
  */
-export function useBountyBeforeDelegate<
-  TFunctionName extends 'beforeDelegate',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'beforeDelegate',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyBeforeDelegate = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'beforeDelegate',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeDrip"`
  */
-export function useBountyBeforeDrip<
-  TFunctionName extends 'beforeDrip',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'beforeDrip',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyBeforeDrip = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'beforeDrip',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeGive"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeGive"`
  */
-export function useBountyBeforeGive<
-  TFunctionName extends 'beforeGive',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'beforeGive',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyBeforeGive = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'beforeGive',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeJoin"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeJoin"`
  */
-export function useBountyBeforeJoin<
-  TFunctionName extends 'beforeJoin',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'beforeJoin',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyBeforeJoin = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'beforeJoin',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeReveal"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeReveal"`
  */
-export function useBountyBeforeReveal<
-  TFunctionName extends 'beforeReveal',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'beforeReveal',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyBeforeReveal = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'beforeReveal',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"bounties"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"bounties"`
  */
-export function useBountyBounties<
-  TFunctionName extends 'bounties',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'bounties',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyBounties = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'bounties',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"bountiesData"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"bountiesData"`
  */
-export function useBountyBountiesData<
-  TFunctionName extends 'bountiesData',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'bountiesData',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyBountiesData = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'bountiesData',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"bountyCount"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"bountyCount"`
  */
-export function useBountyBountyCount<
-  TFunctionName extends 'bountyCount',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'bountyCount',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyBountyCount = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'bountyCount',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"ownerTank"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"ownerTank"`
  */
-export function useBountyOwnerTank<
-  TFunctionName extends 'ownerTank',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'ownerTank',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyOwnerTank = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'ownerTank',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"tankGame"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"tankGame"`
  */
-export function useBountyTankGame<
-  TFunctionName extends 'tankGame',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'tankGame',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyTankGame = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'tankGame',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"tankGameView"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"tankGameView"`
  */
-export function useBountyTankGameView<
-  TFunctionName extends 'tankGameView',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'tankGameView',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyTankGameView = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'tankGameView',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"withdrawals"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"withdrawals"`
  */
-export function useBountyWithdrawals<
-  TFunctionName extends 'withdrawals',
-  TSelectData = ReadContractResult<typeof bountyABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: bountyABI,
-    functionName: 'withdrawals',
-    ...config,
-  } as UseContractReadConfig<typeof bountyABI, TFunctionName, TSelectData>)
-}
+export const useBountyWithdrawals = /*#__PURE__*/ createUseReadContract({
+  abi: bountyAbi,
+  functionName: 'withdrawals',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__
  */
-export function useBountyWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<typeof bountyABI, string>['request']['abi'],
-        TFunctionName,
-        TMode
-      >
-    : UseContractWriteConfig<typeof bountyABI, TFunctionName, TMode> & {
-        abi?: never
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, TFunctionName, TMode>({
-    abi: bountyABI,
-    ...config,
-  } as any)
-}
+export const useBountyWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterGive"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterGive"`
  */
-export function useBountyAfterGive<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'afterGive'
-        >['request']['abi'],
-        'afterGive',
-        TMode
-      > & { functionName?: 'afterGive' }
-    : UseContractWriteConfig<typeof bountyABI, 'afterGive', TMode> & {
-        abi?: never
-        functionName?: 'afterGive'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'afterGive', TMode>({
-    abi: bountyABI,
+export const useBountyAfterGive = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'afterGive',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterMove"`
+ */
+export const useBountyAfterMove = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'afterMove',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterReveal"`
+ */
+export const useBountyAfterReveal = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'afterReveal',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterShoot"`
+ */
+export const useBountyAfterShoot = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'afterShoot',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterUpgrade"`
+ */
+export const useBountyAfterUpgrade = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'afterUpgrade',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterVote"`
+ */
+export const useBountyAfterVote = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'afterVote',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeMove"`
+ */
+export const useBountyBeforeMove = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'beforeMove',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeShoot"`
+ */
+export const useBountyBeforeShoot = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'beforeShoot',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeUpgrade"`
+ */
+export const useBountyBeforeUpgrade = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'beforeUpgrade',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeVote"`
+ */
+export const useBountyBeforeVote = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'beforeVote',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"cancel"`
+ */
+export const useBountyCancel = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'cancel',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"create"`
+ */
+export const useBountyCreate = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'create',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"withdraw"`
+ */
+export const useBountyWithdraw = /*#__PURE__*/ createUseWriteContract({
+  abi: bountyAbi,
+  functionName: 'withdraw',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__
+ */
+export const usePrepareBountyWrite = /*#__PURE__*/ createUseSimulateContract({
+  abi: bountyAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterGive"`
+ */
+export const usePrepareBountyAfterGive =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'afterGive',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterMove"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterMove"`
  */
-export function useBountyAfterMove<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'afterMove'
-        >['request']['abi'],
-        'afterMove',
-        TMode
-      > & { functionName?: 'afterMove' }
-    : UseContractWriteConfig<typeof bountyABI, 'afterMove', TMode> & {
-        abi?: never
-        functionName?: 'afterMove'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'afterMove', TMode>({
-    abi: bountyABI,
+export const usePrepareBountyAfterMove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'afterMove',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterReveal"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterReveal"`
  */
-export function useBountyAfterReveal<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'afterReveal'
-        >['request']['abi'],
-        'afterReveal',
-        TMode
-      > & { functionName?: 'afterReveal' }
-    : UseContractWriteConfig<typeof bountyABI, 'afterReveal', TMode> & {
-        abi?: never
-        functionName?: 'afterReveal'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'afterReveal', TMode>({
-    abi: bountyABI,
+export const usePrepareBountyAfterReveal =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'afterReveal',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterShoot"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterShoot"`
  */
-export function useBountyAfterShoot<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'afterShoot'
-        >['request']['abi'],
-        'afterShoot',
-        TMode
-      > & { functionName?: 'afterShoot' }
-    : UseContractWriteConfig<typeof bountyABI, 'afterShoot', TMode> & {
-        abi?: never
-        functionName?: 'afterShoot'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'afterShoot', TMode>({
-    abi: bountyABI,
+export const usePrepareBountyAfterShoot =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'afterShoot',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterUpgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterUpgrade"`
  */
-export function useBountyAfterUpgrade<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'afterUpgrade'
-        >['request']['abi'],
-        'afterUpgrade',
-        TMode
-      > & { functionName?: 'afterUpgrade' }
-    : UseContractWriteConfig<typeof bountyABI, 'afterUpgrade', TMode> & {
-        abi?: never
-        functionName?: 'afterUpgrade'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'afterUpgrade', TMode>({
-    abi: bountyABI,
+export const usePrepareBountyAfterUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'afterUpgrade',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterVote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"afterVote"`
  */
-export function useBountyAfterVote<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'afterVote'
-        >['request']['abi'],
-        'afterVote',
-        TMode
-      > & { functionName?: 'afterVote' }
-    : UseContractWriteConfig<typeof bountyABI, 'afterVote', TMode> & {
-        abi?: never
-        functionName?: 'afterVote'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'afterVote', TMode>({
-    abi: bountyABI,
+export const usePrepareBountyAfterVote =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'afterVote',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeMove"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeMove"`
  */
-export function useBountyBeforeMove<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'beforeMove'
-        >['request']['abi'],
-        'beforeMove',
-        TMode
-      > & { functionName?: 'beforeMove' }
-    : UseContractWriteConfig<typeof bountyABI, 'beforeMove', TMode> & {
-        abi?: never
-        functionName?: 'beforeMove'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'beforeMove', TMode>({
-    abi: bountyABI,
+export const usePrepareBountyBeforeMove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'beforeMove',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeShoot"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeShoot"`
  */
-export function useBountyBeforeShoot<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'beforeShoot'
-        >['request']['abi'],
-        'beforeShoot',
-        TMode
-      > & { functionName?: 'beforeShoot' }
-    : UseContractWriteConfig<typeof bountyABI, 'beforeShoot', TMode> & {
-        abi?: never
-        functionName?: 'beforeShoot'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'beforeShoot', TMode>({
-    abi: bountyABI,
+export const usePrepareBountyBeforeShoot =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'beforeShoot',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeUpgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeUpgrade"`
  */
-export function useBountyBeforeUpgrade<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'beforeUpgrade'
-        >['request']['abi'],
-        'beforeUpgrade',
-        TMode
-      > & { functionName?: 'beforeUpgrade' }
-    : UseContractWriteConfig<typeof bountyABI, 'beforeUpgrade', TMode> & {
-        abi?: never
-        functionName?: 'beforeUpgrade'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'beforeUpgrade', TMode>({
-    abi: bountyABI,
+export const usePrepareBountyBeforeUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'beforeUpgrade',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeVote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"beforeVote"`
  */
-export function useBountyBeforeVote<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'beforeVote'
-        >['request']['abi'],
-        'beforeVote',
-        TMode
-      > & { functionName?: 'beforeVote' }
-    : UseContractWriteConfig<typeof bountyABI, 'beforeVote', TMode> & {
-        abi?: never
-        functionName?: 'beforeVote'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'beforeVote', TMode>({
-    abi: bountyABI,
+export const usePrepareBountyBeforeVote =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: bountyAbi,
     functionName: 'beforeVote',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"cancel"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"cancel"`
  */
-export function useBountyCancel<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'cancel'
-        >['request']['abi'],
-        'cancel',
-        TMode
-      > & { functionName?: 'cancel' }
-    : UseContractWriteConfig<typeof bountyABI, 'cancel', TMode> & {
-        abi?: never
-        functionName?: 'cancel'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'cancel', TMode>({
-    abi: bountyABI,
-    functionName: 'cancel',
-    ...config,
-  } as any)
-}
+export const usePrepareBountyCancel = /*#__PURE__*/ createUseSimulateContract({
+  abi: bountyAbi,
+  functionName: 'cancel',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"create"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"create"`
  */
-export function useBountyCreate<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'create'
-        >['request']['abi'],
-        'create',
-        TMode
-      > & { functionName?: 'create' }
-    : UseContractWriteConfig<typeof bountyABI, 'create', TMode> & {
-        abi?: never
-        functionName?: 'create'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'create', TMode>({
-    abi: bountyABI,
-    functionName: 'create',
-    ...config,
-  } as any)
-}
+export const usePrepareBountyCreate = /*#__PURE__*/ createUseSimulateContract({
+  abi: bountyAbi,
+  functionName: 'create',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"withdraw"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link bountyAbi}__ and `functionName` set to `"withdraw"`
  */
-export function useBountyWithdraw<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof bountyABI,
-          'withdraw'
-        >['request']['abi'],
-        'withdraw',
-        TMode
-      > & { functionName?: 'withdraw' }
-    : UseContractWriteConfig<typeof bountyABI, 'withdraw', TMode> & {
-        abi?: never
-        functionName?: 'withdraw'
-      } = {} as any,
-) {
-  return useContractWrite<typeof bountyABI, 'withdraw', TMode>({
-    abi: bountyABI,
-    functionName: 'withdraw',
-    ...config,
-  } as any)
-}
+export const usePrepareBountyWithdraw = /*#__PURE__*/ createUseSimulateContract(
+  { abi: bountyAbi, functionName: 'withdraw' },
+)
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link bountyAbi}__
  */
-export function usePrepareBountyWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, TFunctionName>,
-    'abi'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, TFunctionName>)
-}
+export const useBountyEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: bountyAbi,
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterGive"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link bountyAbi}__ and `eventName` set to `"BountyHookCreated"`
  */
-export function usePrepareBountyAfterGive(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'afterGive'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'afterGive',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'afterGive'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterMove"`.
- */
-export function usePrepareBountyAfterMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'afterMove'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'afterMove',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'afterMove'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterReveal"`.
- */
-export function usePrepareBountyAfterReveal(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'afterReveal'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'afterReveal',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'afterReveal'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterShoot"`.
- */
-export function usePrepareBountyAfterShoot(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'afterShoot'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'afterShoot',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'afterShoot'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterUpgrade"`.
- */
-export function usePrepareBountyAfterUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'afterUpgrade'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'afterUpgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'afterUpgrade'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"afterVote"`.
- */
-export function usePrepareBountyAfterVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'afterVote'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'afterVote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'afterVote'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeMove"`.
- */
-export function usePrepareBountyBeforeMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'beforeMove'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'beforeMove',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'beforeMove'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeShoot"`.
- */
-export function usePrepareBountyBeforeShoot(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'beforeShoot'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'beforeShoot',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'beforeShoot'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeUpgrade"`.
- */
-export function usePrepareBountyBeforeUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'beforeUpgrade'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'beforeUpgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'beforeUpgrade'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"beforeVote"`.
- */
-export function usePrepareBountyBeforeVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'beforeVote'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'beforeVote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'beforeVote'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"cancel"`.
- */
-export function usePrepareBountyCancel(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'cancel'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'cancel',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'cancel'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"create"`.
- */
-export function usePrepareBountyCreate(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'create'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'create',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'create'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link bountyABI}__ and `functionName` set to `"withdraw"`.
- */
-export function usePrepareBountyWithdraw(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof bountyABI, 'withdraw'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: bountyABI,
-    functionName: 'withdraw',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof bountyABI, 'withdraw'>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link bountyABI}__.
- */
-export function useBountyEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof bountyABI, TEventName>,
-    'abi'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: bountyABI,
-    ...config,
-  } as UseContractEventConfig<typeof bountyABI, TEventName>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link bountyABI}__ and `eventName` set to `"BountyHookCreated"`.
- */
-export function useBountyBountyHookCreatedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof bountyABI, 'BountyHookCreated'>,
-    'abi' | 'eventName'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: bountyABI,
+export const useBountyBountyHookCreatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: bountyAbi,
     eventName: 'BountyHookCreated',
-    ...config,
-  } as UseContractEventConfig<typeof bountyABI, 'BountyHookCreated'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link bountyABI}__ and `eventName` set to `"BountyPosted"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link bountyAbi}__ and `eventName` set to `"BountyPosted"`
  */
-export function useBountyBountyPostedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof bountyABI, 'BountyPosted'>,
-    'abi' | 'eventName'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: bountyABI,
+export const useBountyBountyPostedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: bountyAbi,
     eventName: 'BountyPosted',
-    ...config,
-  } as UseContractEventConfig<typeof bountyABI, 'BountyPosted'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link bountyABI}__ and `eventName` set to `"BountyWon"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link bountyAbi}__ and `eventName` set to `"BountyWon"`
  */
-export function useBountyBountyWonEvent(
-  config: Omit<
-    UseContractEventConfig<typeof bountyABI, 'BountyWon'>,
-    'abi' | 'eventName'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: bountyABI,
+export const useBountyBountyWonEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: bountyAbi,
     eventName: 'BountyWon',
-    ...config,
-  } as UseContractEventConfig<typeof bountyABI, 'BountyWon'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link bountyABI}__ and `eventName` set to `"Withdraw"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link bountyAbi}__ and `eventName` set to `"Withdraw"`
  */
-export function useBountyWithdrawEvent(
-  config: Omit<
-    UseContractEventConfig<typeof bountyABI, 'Withdraw'>,
-    'abi' | 'eventName'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: bountyABI,
-    eventName: 'Withdraw',
-    ...config,
-  } as UseContractEventConfig<typeof bountyABI, 'Withdraw'>)
-}
+export const useBountyWithdrawEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: bountyAbi, eventName: 'Withdraw' },
+)
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__
  */
-export function useDefaultEmptyHooksRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useDefaultEmptyHooksRead = /*#__PURE__*/ createUseReadContract({
+  abi: defaultEmptyHooksAbi,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterClaim"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterClaim"`
  */
-export function useDefaultEmptyHooksAfterClaim<
-  TFunctionName extends 'afterClaim',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterClaim =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterClaim',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterDelegate"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterDelegate"`
  */
-export function useDefaultEmptyHooksAfterDelegate<
-  TFunctionName extends 'afterDelegate',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterDelegate =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterDelegate',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterDrip"`
  */
-export function useDefaultEmptyHooksAfterDrip<
-  TFunctionName extends 'afterDrip',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterDrip =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterDrip',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterJoin"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterJoin"`
  */
-export function useDefaultEmptyHooksAfterJoin<
-  TFunctionName extends 'afterJoin',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterJoin =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterJoin',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeClaim"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeClaim"`
  */
-export function useDefaultEmptyHooksBeforeClaim<
-  TFunctionName extends 'beforeClaim',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeClaim =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeClaim',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeDelegate"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeDelegate"`
  */
-export function useDefaultEmptyHooksBeforeDelegate<
-  TFunctionName extends 'beforeDelegate',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeDelegate =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeDelegate',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeDrip"`
  */
-export function useDefaultEmptyHooksBeforeDrip<
-  TFunctionName extends 'beforeDrip',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeDrip =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeDrip',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeGive"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeGive"`
  */
-export function useDefaultEmptyHooksBeforeGive<
-  TFunctionName extends 'beforeGive',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeGive =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeGive',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeJoin"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeJoin"`
  */
-export function useDefaultEmptyHooksBeforeJoin<
-  TFunctionName extends 'beforeJoin',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeJoin =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeJoin',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeReveal"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeReveal"`
  */
-export function useDefaultEmptyHooksBeforeReveal<
-  TFunctionName extends 'beforeReveal',
-  TSelectData = ReadContractResult<typeof defaultEmptyHooksABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof defaultEmptyHooksABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeReveal =
+  /*#__PURE__*/ createUseReadContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeReveal',
-    ...config,
-  } as UseContractReadConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__
  */
-export function useDefaultEmptyHooksWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          string
-        >['request']['abi'],
-        TFunctionName,
-        TMode
-      >
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        TFunctionName,
-        TMode
-      > & {
-        abi?: never
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, TFunctionName, TMode>({
-    abi: defaultEmptyHooksABI,
-    ...config,
-  } as any)
-}
+export const useDefaultEmptyHooksWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: defaultEmptyHooksAbi,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterGive"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterGive"`
  */
-export function useDefaultEmptyHooksAfterGive<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'afterGive'
-        >['request']['abi'],
-        'afterGive',
-        TMode
-      > & { functionName?: 'afterGive' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'afterGive',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'afterGive'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'afterGive', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterGive =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterGive',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterMove"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterMove"`
  */
-export function useDefaultEmptyHooksAfterMove<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'afterMove'
-        >['request']['abi'],
-        'afterMove',
-        TMode
-      > & { functionName?: 'afterMove' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'afterMove',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'afterMove'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'afterMove', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterMove =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterMove',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterReveal"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterReveal"`
  */
-export function useDefaultEmptyHooksAfterReveal<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'afterReveal'
-        >['request']['abi'],
-        'afterReveal',
-        TMode
-      > & { functionName?: 'afterReveal' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'afterReveal',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'afterReveal'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'afterReveal', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterReveal =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterReveal',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterShoot"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterShoot"`
  */
-export function useDefaultEmptyHooksAfterShoot<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'afterShoot'
-        >['request']['abi'],
-        'afterShoot',
-        TMode
-      > & { functionName?: 'afterShoot' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'afterShoot',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'afterShoot'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'afterShoot', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterShoot =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterShoot',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterUpgrade"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterUpgrade"`
  */
-export function useDefaultEmptyHooksAfterUpgrade<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'afterUpgrade'
-        >['request']['abi'],
-        'afterUpgrade',
-        TMode
-      > & { functionName?: 'afterUpgrade' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'afterUpgrade',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'afterUpgrade'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'afterUpgrade', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterUpgrade =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterUpgrade',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterVote"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterVote"`
  */
-export function useDefaultEmptyHooksAfterVote<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'afterVote'
-        >['request']['abi'],
-        'afterVote',
-        TMode
-      > & { functionName?: 'afterVote' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'afterVote',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'afterVote'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'afterVote', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksAfterVote =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterVote',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeMove"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeMove"`
  */
-export function useDefaultEmptyHooksBeforeMove<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'beforeMove'
-        >['request']['abi'],
-        'beforeMove',
-        TMode
-      > & { functionName?: 'beforeMove' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'beforeMove',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'beforeMove'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'beforeMove', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeMove =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeMove',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeShoot"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeShoot"`
  */
-export function useDefaultEmptyHooksBeforeShoot<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'beforeShoot'
-        >['request']['abi'],
-        'beforeShoot',
-        TMode
-      > & { functionName?: 'beforeShoot' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'beforeShoot',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'beforeShoot'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'beforeShoot', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeShoot =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeShoot',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeUpgrade"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeUpgrade"`
  */
-export function useDefaultEmptyHooksBeforeUpgrade<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'beforeUpgrade'
-        >['request']['abi'],
-        'beforeUpgrade',
-        TMode
-      > & { functionName?: 'beforeUpgrade' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'beforeUpgrade',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'beforeUpgrade'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'beforeUpgrade', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeUpgrade =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeUpgrade',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeVote"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeVote"`
  */
-export function useDefaultEmptyHooksBeforeVote<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof defaultEmptyHooksABI,
-          'beforeVote'
-        >['request']['abi'],
-        'beforeVote',
-        TMode
-      > & { functionName?: 'beforeVote' }
-    : UseContractWriteConfig<
-        typeof defaultEmptyHooksABI,
-        'beforeVote',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'beforeVote'
-      } = {} as any,
-) {
-  return useContractWrite<typeof defaultEmptyHooksABI, 'beforeVote', TMode>({
-    abi: defaultEmptyHooksABI,
+export const useDefaultEmptyHooksBeforeVote =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeVote',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__
  */
-export function usePrepareDefaultEmptyHooksWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, TFunctionName>,
-    'abi'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
-    ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof defaultEmptyHooksABI,
-    TFunctionName
-  >)
-}
+export const usePrepareDefaultEmptyHooksWrite =
+  /*#__PURE__*/ createUseSimulateContract({ abi: defaultEmptyHooksAbi })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterGive"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterGive"`
  */
-export function usePrepareDefaultEmptyHooksAfterGive(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterGive'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksAfterGive =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterGive',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterGive'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterMove"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterMove"`
  */
-export function usePrepareDefaultEmptyHooksAfterMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterMove'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksAfterMove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterMove',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterMove'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterReveal"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterReveal"`
  */
-export function usePrepareDefaultEmptyHooksAfterReveal(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterReveal'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksAfterReveal =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterReveal',
-    ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof defaultEmptyHooksABI,
-    'afterReveal'
-  >)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterShoot"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterShoot"`
  */
-export function usePrepareDefaultEmptyHooksAfterShoot(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterShoot'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksAfterShoot =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterShoot',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterShoot'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterUpgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterUpgrade"`
  */
-export function usePrepareDefaultEmptyHooksAfterUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterUpgrade'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksAfterUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterUpgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof defaultEmptyHooksABI,
-    'afterUpgrade'
-  >)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"afterVote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"afterVote"`
  */
-export function usePrepareDefaultEmptyHooksAfterVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterVote'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksAfterVote =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'afterVote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'afterVote'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeMove"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeMove"`
  */
-export function usePrepareDefaultEmptyHooksBeforeMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'beforeMove'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksBeforeMove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeMove',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'beforeMove'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeShoot"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeShoot"`
  */
-export function usePrepareDefaultEmptyHooksBeforeShoot(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'beforeShoot'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksBeforeShoot =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeShoot',
-    ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof defaultEmptyHooksABI,
-    'beforeShoot'
-  >)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeUpgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeUpgrade"`
  */
-export function usePrepareDefaultEmptyHooksBeforeUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'beforeUpgrade'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksBeforeUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeUpgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof defaultEmptyHooksABI,
-    'beforeUpgrade'
-  >)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link defaultEmptyHooksABI}__ and `functionName` set to `"beforeVote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link defaultEmptyHooksAbi}__ and `functionName` set to `"beforeVote"`
  */
-export function usePrepareDefaultEmptyHooksBeforeVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'beforeVote'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: defaultEmptyHooksABI,
+export const usePrepareDefaultEmptyHooksBeforeVote =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: defaultEmptyHooksAbi,
     functionName: 'beforeVote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof defaultEmptyHooksABI, 'beforeVote'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewRead = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getAllHearts"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getAllHearts"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetAllHearts<
-  TFunctionName extends 'getAllHearts',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getAllHearts',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetAllHearts = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getAllHearts',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getAllTanks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getAllTanks"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetAllTanks<
-  TFunctionName extends 'getAllTanks',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getAllTanks',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetAllTanks = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getAllTanks',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getBoard"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getBoard"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetBoard<
-  TFunctionName extends 'getBoard',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getBoard',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetBoard = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getBoard',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getEpoch"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetEpoch<
-  TFunctionName extends 'getEpoch',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetEpoch = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getEpoch',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getGameEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getGameEpoch"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetGameEpoch<
-  TFunctionName extends 'getGameEpoch',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getGameEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetGameEpoch = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getGameEpoch',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getLastDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getLastDrip"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetLastDrip<
-  TFunctionName extends 'getLastDrip',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getLastDrip',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetLastDrip = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getLastDrip',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getPlayerCount"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getPlayerCount"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetPlayerCount<
-  TFunctionName extends 'getPlayerCount',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getPlayerCount',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetPlayerCount = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getPlayerCount',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getSettings"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getSettings"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetSettings<
-  TFunctionName extends 'getSettings',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getSettings',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetSettings = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getSettings',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getState"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getState"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetState<
-  TFunctionName extends 'getState',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getState',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetState = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getState',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getTank"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getTank"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetTank<
-  TFunctionName extends 'getTank',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getTank',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetTank = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getTank',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"getUpgradeCost"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"getUpgradeCost"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewGetUpgradeCost<
-  TFunctionName extends 'getUpgradeCost',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'getUpgradeCost',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewGetUpgradeCost = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'getUpgradeCost',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link gameViewABI}__ and `functionName` set to `"isAuth"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gameViewAbi}__ and `functionName` set to `"isAuth"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0xE19866944E2CD0FfaE4e35d168149b9B934eA471)
  * -
  */
-export function useGameViewIsAuth<
-  TFunctionName extends 'isAuth',
-  TSelectData = ReadContractResult<typeof gameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof gameViewAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: gameViewABI,
-    address: gameViewAddress[chainId as keyof typeof gameViewAddress],
-    functionName: 'isAuth',
-    ...config,
-  } as UseContractReadConfig<typeof gameViewABI, TFunctionName, TSelectData>)
-}
+export const useGameViewIsAuth = /*#__PURE__*/ createUseReadContract({
+  abi: gameViewAbi,
+  address: gameViewAddress,
+  functionName: 'isAuth',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__
  */
-export function useHexBoardRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardRead = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"boardSize"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"boardSize"`
  */
-export function useHexBoardBoardSize<
-  TFunctionName extends 'boardSize',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'boardSize',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardBoardSize = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'boardSize',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"getDistance"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"getDistance"`
  */
-export function useHexBoardGetDistance<
-  TFunctionName extends 'getDistance',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'getDistance',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardGetDistance = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'getDistance',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"getDistanceTankToPoint"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"getDistanceTankToPoint"`
  */
-export function useHexBoardGetDistanceTankToPoint<
-  TFunctionName extends 'getDistanceTankToPoint',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
+export const useHexBoardGetDistanceTankToPoint =
+  /*#__PURE__*/ createUseReadContract({
+    abi: hexBoardAbi,
     functionName: 'getDistanceTankToPoint',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"getDistanceTanks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"getDistanceTanks"`
  */
-export function useHexBoardGetDistanceTanks<
-  TFunctionName extends 'getDistanceTanks',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'getDistanceTanks',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardGetDistanceTanks = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'getDistanceTanks',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"getEmptyTile"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"getEmptyTile"`
  */
-export function useHexBoardGetEmptyTile<
-  TFunctionName extends 'getEmptyTile',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'getEmptyTile',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardGetEmptyTile = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'getEmptyTile',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"getHeartAtPosition"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"getHeartAtPosition"`
  */
-export function useHexBoardGetHeartAtPosition<
-  TFunctionName extends 'getHeartAtPosition',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
+export const useHexBoardGetHeartAtPosition =
+  /*#__PURE__*/ createUseReadContract({
+    abi: hexBoardAbi,
     functionName: 'getHeartAtPosition',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"getPerimeterForRadius"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"getPerimeterForRadius"`
  */
-export function useHexBoardGetPerimeterForRadius<
-  TFunctionName extends 'getPerimeterForRadius',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
+export const useHexBoardGetPerimeterForRadius =
+  /*#__PURE__*/ createUseReadContract({
+    abi: hexBoardAbi,
     functionName: 'getPerimeterForRadius',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"getTankPosition"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"getTankPosition"`
  */
-export function useHexBoardGetTankPosition<
-  TFunctionName extends 'getTankPosition',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'getTankPosition',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardGetTankPosition = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'getTankPosition',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"getTile"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"getTile"`
  */
-export function useHexBoardGetTile<
-  TFunctionName extends 'getTile',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'getTile',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardGetTile = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'getTile',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"getTotalTiles"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"getTotalTiles"`
  */
-export function useHexBoardGetTotalTiles<
-  TFunctionName extends 'getTotalTiles',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'getTotalTiles',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardGetTotalTiles = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'getTotalTiles',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"heartsOnBoard"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"heartsOnBoard"`
  */
-export function useHexBoardHeartsOnBoard<
-  TFunctionName extends 'heartsOnBoard',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'heartsOnBoard',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardHeartsOnBoard = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'heartsOnBoard',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"isValidPoint"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"isValidPoint"`
  */
-export function useHexBoardIsValidPoint<
-  TFunctionName extends 'isValidPoint',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'isValidPoint',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardIsValidPoint = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'isValidPoint',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"pointToIndex"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"pointToIndex"`
  */
-export function useHexBoardPointToIndex<
-  TFunctionName extends 'pointToIndex',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'pointToIndex',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardPointToIndex = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'pointToIndex',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"randomPoint"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"randomPoint"`
  */
-export function useHexBoardRandomPoint<
-  TFunctionName extends 'randomPoint',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'randomPoint',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardRandomPoint = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'randomPoint',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"tankToPosition"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"tankToPosition"`
  */
-export function useHexBoardTankToPosition<
-  TFunctionName extends 'tankToPosition',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'tankToPosition',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardTankToPosition = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'tankToPosition',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"tanksOnBoard"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"tanksOnBoard"`
  */
-export function useHexBoardTanksOnBoard<
-  TFunctionName extends 'tanksOnBoard',
-  TSelectData = ReadContractResult<typeof hexBoardABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: hexBoardABI,
-    functionName: 'tanksOnBoard',
-    ...config,
-  } as UseContractReadConfig<typeof hexBoardABI, TFunctionName, TSelectData>)
-}
+export const useHexBoardTanksOnBoard = /*#__PURE__*/ createUseReadContract({
+  abi: hexBoardAbi,
+  functionName: 'tanksOnBoard',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link hexBoardABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link hexBoardAbi}__
  */
-export function useHexBoardWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof hexBoardABI,
-          string
-        >['request']['abi'],
-        TFunctionName,
-        TMode
-      >
-    : UseContractWriteConfig<typeof hexBoardABI, TFunctionName, TMode> & {
-        abi?: never
-      } = {} as any,
-) {
-  return useContractWrite<typeof hexBoardABI, TFunctionName, TMode>({
-    abi: hexBoardABI,
-    ...config,
-  } as any)
-}
+export const useHexBoardWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: hexBoardAbi,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"setTile"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"setTile"`
  */
-export function useHexBoardSetTile<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof hexBoardABI,
-          'setTile'
-        >['request']['abi'],
-        'setTile',
-        TMode
-      > & { functionName?: 'setTile' }
-    : UseContractWriteConfig<typeof hexBoardABI, 'setTile', TMode> & {
-        abi?: never
-        functionName?: 'setTile'
-      } = {} as any,
-) {
-  return useContractWrite<typeof hexBoardABI, 'setTile', TMode>({
-    abi: hexBoardABI,
+export const useHexBoardSetTile = /*#__PURE__*/ createUseWriteContract({
+  abi: hexBoardAbi,
+  functionName: 'setTile',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link hexBoardAbi}__
+ */
+export const usePrepareHexBoardWrite = /*#__PURE__*/ createUseSimulateContract({
+  abi: hexBoardAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link hexBoardAbi}__ and `functionName` set to `"setTile"`
+ */
+export const usePrepareHexBoardSetTile =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: hexBoardAbi,
     functionName: 'setTile',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link hexBoardABI}__.
- */
-export function usePrepareHexBoardWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof hexBoardABI, TFunctionName>,
-    'abi'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: hexBoardABI,
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof hexBoardABI, TFunctionName>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link hexBoardABI}__ and `functionName` set to `"setTile"`.
- */
-export function usePrepareHexBoardSetTile(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof hexBoardABI, 'setTile'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: hexBoardABI,
-    functionName: 'setTile',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof hexBoardABI, 'setTile'>)
-}
-
-/**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link hookFactoryABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link hookFactoryAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
-export function useHookFactoryWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof hookFactoryAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof hookFactoryABI,
-          string
-        >['request']['abi'],
-        TFunctionName,
-        TMode
-      > & { address?: Address; chainId?: TChainId }
-    : UseContractWriteConfig<typeof hookFactoryABI, TFunctionName, TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof hookFactoryABI, TFunctionName, TMode>({
-    abi: hookFactoryABI,
-    address: hookFactoryAddress[chainId as keyof typeof hookFactoryAddress],
-    ...config,
-  } as any)
-}
+export const useHookFactoryWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: hookFactoryAbi,
+  address: hookFactoryAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link hookFactoryABI}__ and `functionName` set to `"createHook"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link hookFactoryAbi}__ and `functionName` set to `"createHook"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
-export function useHookFactoryCreateHook<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof hookFactoryAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof hookFactoryABI,
-          'createHook'
-        >['request']['abi'],
-        'createHook',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'createHook' }
-    : UseContractWriteConfig<typeof hookFactoryABI, 'createHook', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'createHook'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof hookFactoryABI, 'createHook', TMode>({
-    abi: hookFactoryABI,
-    address: hookFactoryAddress[chainId as keyof typeof hookFactoryAddress],
+export const useHookFactoryCreateHook = /*#__PURE__*/ createUseWriteContract({
+  abi: hookFactoryAbi,
+  address: hookFactoryAddress,
+  functionName: 'createHook',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link hookFactoryAbi}__
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
+ * -
+ */
+export const usePrepareHookFactoryWrite =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: hookFactoryAbi,
+    address: hookFactoryAddress,
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link hookFactoryAbi}__ and `functionName` set to `"createHook"`
+ *
+ * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
+ * -
+ */
+export const usePrepareHookFactoryCreateHook =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: hookFactoryAbi,
+    address: hookFactoryAddress,
     functionName: 'createHook',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link hookFactoryABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link hookFactoryAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
-export function usePrepareHookFactoryWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof hookFactoryABI, TFunctionName>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof hookFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: hookFactoryABI,
-    address: hookFactoryAddress[chainId as keyof typeof hookFactoryAddress],
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof hookFactoryABI, TFunctionName>)
-}
+export const useHookFactoryEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: hookFactoryAbi,
+  address: hookFactoryAddress,
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link hookFactoryABI}__ and `functionName` set to `"createHook"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link hookFactoryAbi}__ and `eventName` set to `"HookCreated"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
  * -
  */
-export function usePrepareHookFactoryCreateHook(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof hookFactoryABI, 'createHook'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof hookFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: hookFactoryABI,
-    address: hookFactoryAddress[chainId as keyof typeof hookFactoryAddress],
-    functionName: 'createHook',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof hookFactoryABI, 'createHook'>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link hookFactoryABI}__.
- *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
- * -
- */
-export function useHookFactoryEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof hookFactoryABI, TEventName>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof hookFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: hookFactoryABI,
-    address: hookFactoryAddress[chainId as keyof typeof hookFactoryAddress],
-    ...config,
-  } as UseContractEventConfig<typeof hookFactoryABI, TEventName>)
-}
-
-/**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link hookFactoryABI}__ and `eventName` set to `"HookCreated"`.
- *
- * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2833Ee23DdAFa959D5ca459c6A64df2164B367b3)
- * -
- */
-export function useHookFactoryHookCreatedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof hookFactoryABI, 'HookCreated'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof hookFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: hookFactoryABI,
-    address: hookFactoryAddress[chainId as keyof typeof hookFactoryAddress],
+export const useHookFactoryHookCreatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: hookFactoryAbi,
+    address: hookFactoryAddress,
     eventName: 'HookCreated',
-    ...config,
-  } as UseContractEventConfig<typeof hookFactoryABI, 'HookCreated'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__
  */
-export function useIGameViewRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewRead = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getAllHearts"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getAllHearts"`
  */
-export function useIGameViewGetAllHearts<
-  TFunctionName extends 'getAllHearts',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getAllHearts',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetAllHearts = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getAllHearts',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getAllTanks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getAllTanks"`
  */
-export function useIGameViewGetAllTanks<
-  TFunctionName extends 'getAllTanks',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getAllTanks',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetAllTanks = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getAllTanks',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getBoard"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getBoard"`
  */
-export function useIGameViewGetBoard<
-  TFunctionName extends 'getBoard',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getBoard',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetBoard = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getBoard',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getEpoch"`
  */
-export function useIGameViewGetEpoch<
-  TFunctionName extends 'getEpoch',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetEpoch = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getEpoch',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getGameEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getGameEpoch"`
  */
-export function useIGameViewGetGameEpoch<
-  TFunctionName extends 'getGameEpoch',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getGameEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetGameEpoch = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getGameEpoch',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getLastDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getLastDrip"`
  */
-export function useIGameViewGetLastDrip<
-  TFunctionName extends 'getLastDrip',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getLastDrip',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetLastDrip = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getLastDrip',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getPlayerCount"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getPlayerCount"`
  */
-export function useIGameViewGetPlayerCount<
-  TFunctionName extends 'getPlayerCount',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getPlayerCount',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetPlayerCount = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getPlayerCount',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getSettings"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getSettings"`
  */
-export function useIGameViewGetSettings<
-  TFunctionName extends 'getSettings',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getSettings',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetSettings = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getSettings',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getState"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getState"`
  */
-export function useIGameViewGetState<
-  TFunctionName extends 'getState',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getState',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetState = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getState',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"getTank"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"getTank"`
  */
-export function useIGameViewGetTank<
-  TFunctionName extends 'getTank',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'getTank',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewGetTank = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'getTank',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iGameViewABI}__ and `functionName` set to `"isAuth"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iGameViewAbi}__ and `functionName` set to `"isAuth"`
  */
-export function useIGameViewIsAuth<
-  TFunctionName extends 'isAuth',
-  TSelectData = ReadContractResult<typeof iGameViewABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iGameViewABI,
-    functionName: 'isAuth',
-    ...config,
-  } as UseContractReadConfig<typeof iGameViewABI, TFunctionName, TSelectData>)
-}
+export const useIGameViewIsAuth = /*#__PURE__*/ createUseReadContract({
+  abi: iGameViewAbi,
+  functionName: 'isAuth',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__
  */
-export function useIHooksWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<typeof iHooksABI, string>['request']['abi'],
-        TFunctionName,
-        TMode
-      >
-    : UseContractWriteConfig<typeof iHooksABI, TFunctionName, TMode> & {
-        abi?: never
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, TFunctionName, TMode>({
-    abi: iHooksABI,
-    ...config,
-  } as any)
-}
+export const useIHooksWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterClaim"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterClaim"`
  */
-export function useIHooksAfterClaim<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterClaim'
-        >['request']['abi'],
-        'afterClaim',
-        TMode
-      > & { functionName?: 'afterClaim' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterClaim', TMode> & {
-        abi?: never
-        functionName?: 'afterClaim'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterClaim', TMode>({
-    abi: iHooksABI,
+export const useIHooksAfterClaim = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterClaim',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterDelegate"`
+ */
+export const useIHooksAfterDelegate = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterDelegate',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterDrip"`
+ */
+export const useIHooksAfterDrip = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterDrip',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterGive"`
+ */
+export const useIHooksAfterGive = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterGive',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterJoin"`
+ */
+export const useIHooksAfterJoin = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterJoin',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterMove"`
+ */
+export const useIHooksAfterMove = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterMove',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterReveal"`
+ */
+export const useIHooksAfterReveal = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterReveal',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterShoot"`
+ */
+export const useIHooksAfterShoot = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterShoot',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterUpgrade"`
+ */
+export const useIHooksAfterUpgrade = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterUpgrade',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterVote"`
+ */
+export const useIHooksAfterVote = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'afterVote',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeClaim"`
+ */
+export const useIHooksBeforeClaim = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeClaim',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeDelegate"`
+ */
+export const useIHooksBeforeDelegate = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeDelegate',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeDrip"`
+ */
+export const useIHooksBeforeDrip = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeDrip',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeGive"`
+ */
+export const useIHooksBeforeGive = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeGive',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeJoin"`
+ */
+export const useIHooksBeforeJoin = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeJoin',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeMove"`
+ */
+export const useIHooksBeforeMove = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeMove',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeReveal"`
+ */
+export const useIHooksBeforeReveal = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeReveal',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeShoot"`
+ */
+export const useIHooksBeforeShoot = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeShoot',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeUpgrade"`
+ */
+export const useIHooksBeforeUpgrade = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeUpgrade',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeVote"`
+ */
+export const useIHooksBeforeVote = /*#__PURE__*/ createUseWriteContract({
+  abi: iHooksAbi,
+  functionName: 'beforeVote',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__
+ */
+export const usePrepareIHooksWrite = /*#__PURE__*/ createUseSimulateContract({
+  abi: iHooksAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterClaim"`
+ */
+export const usePrepareIHooksAfterClaim =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterClaim',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterDelegate"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterDelegate"`
  */
-export function useIHooksAfterDelegate<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterDelegate'
-        >['request']['abi'],
-        'afterDelegate',
-        TMode
-      > & { functionName?: 'afterDelegate' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterDelegate', TMode> & {
-        abi?: never
-        functionName?: 'afterDelegate'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterDelegate', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksAfterDelegate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterDelegate',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterDrip"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterDrip"`
  */
-export function useIHooksAfterDrip<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterDrip'
-        >['request']['abi'],
-        'afterDrip',
-        TMode
-      > & { functionName?: 'afterDrip' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterDrip', TMode> & {
-        abi?: never
-        functionName?: 'afterDrip'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterDrip', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksAfterDrip =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterDrip',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterGive"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterGive"`
  */
-export function useIHooksAfterGive<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterGive'
-        >['request']['abi'],
-        'afterGive',
-        TMode
-      > & { functionName?: 'afterGive' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterGive', TMode> & {
-        abi?: never
-        functionName?: 'afterGive'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterGive', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksAfterGive =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterGive',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterJoin"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterJoin"`
  */
-export function useIHooksAfterJoin<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterJoin'
-        >['request']['abi'],
-        'afterJoin',
-        TMode
-      > & { functionName?: 'afterJoin' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterJoin', TMode> & {
-        abi?: never
-        functionName?: 'afterJoin'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterJoin', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksAfterJoin =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterJoin',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterMove"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterMove"`
  */
-export function useIHooksAfterMove<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterMove'
-        >['request']['abi'],
-        'afterMove',
-        TMode
-      > & { functionName?: 'afterMove' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterMove', TMode> & {
-        abi?: never
-        functionName?: 'afterMove'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterMove', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksAfterMove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterMove',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterReveal"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterReveal"`
  */
-export function useIHooksAfterReveal<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterReveal'
-        >['request']['abi'],
-        'afterReveal',
-        TMode
-      > & { functionName?: 'afterReveal' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterReveal', TMode> & {
-        abi?: never
-        functionName?: 'afterReveal'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterReveal', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksAfterReveal =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterReveal',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterShoot"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterShoot"`
  */
-export function useIHooksAfterShoot<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterShoot'
-        >['request']['abi'],
-        'afterShoot',
-        TMode
-      > & { functionName?: 'afterShoot' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterShoot', TMode> & {
-        abi?: never
-        functionName?: 'afterShoot'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterShoot', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksAfterShoot =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterShoot',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterUpgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterUpgrade"`
  */
-export function useIHooksAfterUpgrade<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterUpgrade'
-        >['request']['abi'],
-        'afterUpgrade',
-        TMode
-      > & { functionName?: 'afterUpgrade' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterUpgrade', TMode> & {
-        abi?: never
-        functionName?: 'afterUpgrade'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterUpgrade', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksAfterUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterUpgrade',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterVote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"afterVote"`
  */
-export function useIHooksAfterVote<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'afterVote'
-        >['request']['abi'],
-        'afterVote',
-        TMode
-      > & { functionName?: 'afterVote' }
-    : UseContractWriteConfig<typeof iHooksABI, 'afterVote', TMode> & {
-        abi?: never
-        functionName?: 'afterVote'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'afterVote', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksAfterVote =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'afterVote',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeClaim"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeClaim"`
  */
-export function useIHooksBeforeClaim<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeClaim'
-        >['request']['abi'],
-        'beforeClaim',
-        TMode
-      > & { functionName?: 'beforeClaim' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeClaim', TMode> & {
-        abi?: never
-        functionName?: 'beforeClaim'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeClaim', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeClaim =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeClaim',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeDelegate"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeDelegate"`
  */
-export function useIHooksBeforeDelegate<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeDelegate'
-        >['request']['abi'],
-        'beforeDelegate',
-        TMode
-      > & { functionName?: 'beforeDelegate' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeDelegate', TMode> & {
-        abi?: never
-        functionName?: 'beforeDelegate'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeDelegate', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeDelegate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeDelegate',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeDrip"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeDrip"`
  */
-export function useIHooksBeforeDrip<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeDrip'
-        >['request']['abi'],
-        'beforeDrip',
-        TMode
-      > & { functionName?: 'beforeDrip' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeDrip', TMode> & {
-        abi?: never
-        functionName?: 'beforeDrip'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeDrip', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeDrip =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeDrip',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeGive"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeGive"`
  */
-export function useIHooksBeforeGive<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeGive'
-        >['request']['abi'],
-        'beforeGive',
-        TMode
-      > & { functionName?: 'beforeGive' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeGive', TMode> & {
-        abi?: never
-        functionName?: 'beforeGive'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeGive', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeGive =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeGive',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeJoin"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeJoin"`
  */
-export function useIHooksBeforeJoin<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeJoin'
-        >['request']['abi'],
-        'beforeJoin',
-        TMode
-      > & { functionName?: 'beforeJoin' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeJoin', TMode> & {
-        abi?: never
-        functionName?: 'beforeJoin'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeJoin', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeJoin =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeJoin',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeMove"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeMove"`
  */
-export function useIHooksBeforeMove<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeMove'
-        >['request']['abi'],
-        'beforeMove',
-        TMode
-      > & { functionName?: 'beforeMove' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeMove', TMode> & {
-        abi?: never
-        functionName?: 'beforeMove'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeMove', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeMove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeMove',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeReveal"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeReveal"`
  */
-export function useIHooksBeforeReveal<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeReveal'
-        >['request']['abi'],
-        'beforeReveal',
-        TMode
-      > & { functionName?: 'beforeReveal' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeReveal', TMode> & {
-        abi?: never
-        functionName?: 'beforeReveal'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeReveal', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeReveal =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeReveal',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeShoot"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeShoot"`
  */
-export function useIHooksBeforeShoot<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeShoot'
-        >['request']['abi'],
-        'beforeShoot',
-        TMode
-      > & { functionName?: 'beforeShoot' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeShoot', TMode> & {
-        abi?: never
-        functionName?: 'beforeShoot'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeShoot', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeShoot =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeShoot',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeUpgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeUpgrade"`
  */
-export function useIHooksBeforeUpgrade<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeUpgrade'
-        >['request']['abi'],
-        'beforeUpgrade',
-        TMode
-      > & { functionName?: 'beforeUpgrade' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeUpgrade', TMode> & {
-        abi?: never
-        functionName?: 'beforeUpgrade'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeUpgrade', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeUpgrade',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeVote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iHooksAbi}__ and `functionName` set to `"beforeVote"`
  */
-export function useIHooksBeforeVote<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iHooksABI,
-          'beforeVote'
-        >['request']['abi'],
-        'beforeVote',
-        TMode
-      > & { functionName?: 'beforeVote' }
-    : UseContractWriteConfig<typeof iHooksABI, 'beforeVote', TMode> & {
-        abi?: never
-        functionName?: 'beforeVote'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iHooksABI, 'beforeVote', TMode>({
-    abi: iHooksABI,
+export const usePrepareIHooksBeforeVote =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iHooksAbi,
     functionName: 'beforeVote',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__
  */
-export function usePrepareIHooksWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, TFunctionName>,
-    'abi'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, TFunctionName>)
-}
+export const useIMulticall3Read = /*#__PURE__*/ createUseReadContract({
+  abi: iMulticall3Abi,
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterClaim"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getBasefee"`
  */
-export function usePrepareIHooksAfterClaim(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterClaim'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterClaim',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterClaim'>)
-}
+export const useIMulticall3GetBasefee = /*#__PURE__*/ createUseReadContract({
+  abi: iMulticall3Abi,
+  functionName: 'getBasefee',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterDelegate"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getBlockHash"`
  */
-export function usePrepareIHooksAfterDelegate(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterDelegate'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterDelegate',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterDelegate'>)
-}
+export const useIMulticall3GetBlockHash = /*#__PURE__*/ createUseReadContract({
+  abi: iMulticall3Abi,
+  functionName: 'getBlockHash',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getBlockNumber"`
  */
-export function usePrepareIHooksAfterDrip(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterDrip'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterDrip',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterDrip'>)
-}
+export const useIMulticall3GetBlockNumber = /*#__PURE__*/ createUseReadContract(
+  { abi: iMulticall3Abi, functionName: 'getBlockNumber' },
+)
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterGive"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getChainId"`
  */
-export function usePrepareIHooksAfterGive(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterGive'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterGive',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterGive'>)
-}
+export const useIMulticall3GetChainId = /*#__PURE__*/ createUseReadContract({
+  abi: iMulticall3Abi,
+  functionName: 'getChainId',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterJoin"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getCurrentBlockCoinbase"`
  */
-export function usePrepareIHooksAfterJoin(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterJoin'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterJoin',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterJoin'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterMove"`.
- */
-export function usePrepareIHooksAfterMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterMove'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterMove',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterMove'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterReveal"`.
- */
-export function usePrepareIHooksAfterReveal(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterReveal'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterReveal',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterReveal'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterShoot"`.
- */
-export function usePrepareIHooksAfterShoot(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterShoot'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterShoot',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterShoot'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterUpgrade"`.
- */
-export function usePrepareIHooksAfterUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterUpgrade'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterUpgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterUpgrade'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"afterVote"`.
- */
-export function usePrepareIHooksAfterVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'afterVote'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'afterVote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'afterVote'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeClaim"`.
- */
-export function usePrepareIHooksBeforeClaim(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeClaim'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeClaim',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeClaim'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeDelegate"`.
- */
-export function usePrepareIHooksBeforeDelegate(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeDelegate'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeDelegate',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeDelegate'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeDrip"`.
- */
-export function usePrepareIHooksBeforeDrip(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeDrip'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeDrip',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeDrip'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeGive"`.
- */
-export function usePrepareIHooksBeforeGive(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeGive'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeGive',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeGive'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeJoin"`.
- */
-export function usePrepareIHooksBeforeJoin(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeJoin'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeJoin',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeJoin'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeMove"`.
- */
-export function usePrepareIHooksBeforeMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeMove'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeMove',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeMove'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeReveal"`.
- */
-export function usePrepareIHooksBeforeReveal(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeReveal'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeReveal',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeReveal'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeShoot"`.
- */
-export function usePrepareIHooksBeforeShoot(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeShoot'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeShoot',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeShoot'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeUpgrade"`.
- */
-export function usePrepareIHooksBeforeUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeUpgrade'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeUpgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeUpgrade'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iHooksABI}__ and `functionName` set to `"beforeVote"`.
- */
-export function usePrepareIHooksBeforeVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeVote'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iHooksABI,
-    functionName: 'beforeVote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iHooksABI, 'beforeVote'>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__.
- */
-export function useIMulticall3Read<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getBasefee"`.
- */
-export function useIMulticall3GetBasefee<
-  TFunctionName extends 'getBasefee',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
-    functionName: 'getBasefee',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getBlockHash"`.
- */
-export function useIMulticall3GetBlockHash<
-  TFunctionName extends 'getBlockHash',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
-    functionName: 'getBlockHash',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getBlockNumber"`.
- */
-export function useIMulticall3GetBlockNumber<
-  TFunctionName extends 'getBlockNumber',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
-    functionName: 'getBlockNumber',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getChainId"`.
- */
-export function useIMulticall3GetChainId<
-  TFunctionName extends 'getChainId',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
-    functionName: 'getChainId',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
-
-/**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getCurrentBlockCoinbase"`.
- */
-export function useIMulticall3GetCurrentBlockCoinbase<
-  TFunctionName extends 'getCurrentBlockCoinbase',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
+export const useIMulticall3GetCurrentBlockCoinbase =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iMulticall3Abi,
     functionName: 'getCurrentBlockCoinbase',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getCurrentBlockDifficulty"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getCurrentBlockDifficulty"`
  */
-export function useIMulticall3GetCurrentBlockDifficulty<
-  TFunctionName extends 'getCurrentBlockDifficulty',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
+export const useIMulticall3GetCurrentBlockDifficulty =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iMulticall3Abi,
     functionName: 'getCurrentBlockDifficulty',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getCurrentBlockGasLimit"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getCurrentBlockGasLimit"`
  */
-export function useIMulticall3GetCurrentBlockGasLimit<
-  TFunctionName extends 'getCurrentBlockGasLimit',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
+export const useIMulticall3GetCurrentBlockGasLimit =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iMulticall3Abi,
     functionName: 'getCurrentBlockGasLimit',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getCurrentBlockTimestamp"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getCurrentBlockTimestamp"`
  */
-export function useIMulticall3GetCurrentBlockTimestamp<
-  TFunctionName extends 'getCurrentBlockTimestamp',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
+export const useIMulticall3GetCurrentBlockTimestamp =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iMulticall3Abi,
     functionName: 'getCurrentBlockTimestamp',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getEthBalance"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getEthBalance"`
  */
-export function useIMulticall3GetEthBalance<
-  TFunctionName extends 'getEthBalance',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
-    functionName: 'getEthBalance',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
+export const useIMulticall3GetEthBalance = /*#__PURE__*/ createUseReadContract({
+  abi: iMulticall3Abi,
+  functionName: 'getEthBalance',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"getLastBlockHash"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"getLastBlockHash"`
  */
-export function useIMulticall3GetLastBlockHash<
-  TFunctionName extends 'getLastBlockHash',
-  TSelectData = ReadContractResult<typeof iMulticall3ABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: iMulticall3ABI,
+export const useIMulticall3GetLastBlockHash =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iMulticall3Abi,
     functionName: 'getLastBlockHash',
-    ...config,
-  } as UseContractReadConfig<typeof iMulticall3ABI, TFunctionName, TSelectData>)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iMulticall3Abi}__
  */
-export function useIMulticall3Write<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iMulticall3ABI,
-          string
-        >['request']['abi'],
-        TFunctionName,
-        TMode
-      >
-    : UseContractWriteConfig<typeof iMulticall3ABI, TFunctionName, TMode> & {
-        abi?: never
-      } = {} as any,
-) {
-  return useContractWrite<typeof iMulticall3ABI, TFunctionName, TMode>({
-    abi: iMulticall3ABI,
-    ...config,
-  } as any)
-}
+export const useIMulticall3Write = /*#__PURE__*/ createUseWriteContract({
+  abi: iMulticall3Abi,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"aggregate"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"aggregate"`
  */
-export function useIMulticall3Aggregate<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iMulticall3ABI,
-          'aggregate'
-        >['request']['abi'],
-        'aggregate',
-        TMode
-      > & { functionName?: 'aggregate' }
-    : UseContractWriteConfig<typeof iMulticall3ABI, 'aggregate', TMode> & {
-        abi?: never
-        functionName?: 'aggregate'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iMulticall3ABI, 'aggregate', TMode>({
-    abi: iMulticall3ABI,
-    functionName: 'aggregate',
-    ...config,
-  } as any)
-}
+export const useIMulticall3Aggregate = /*#__PURE__*/ createUseWriteContract({
+  abi: iMulticall3Abi,
+  functionName: 'aggregate',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"aggregate3"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"aggregate3"`
  */
-export function useIMulticall3Aggregate3<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iMulticall3ABI,
-          'aggregate3'
-        >['request']['abi'],
-        'aggregate3',
-        TMode
-      > & { functionName?: 'aggregate3' }
-    : UseContractWriteConfig<typeof iMulticall3ABI, 'aggregate3', TMode> & {
-        abi?: never
-        functionName?: 'aggregate3'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iMulticall3ABI, 'aggregate3', TMode>({
-    abi: iMulticall3ABI,
-    functionName: 'aggregate3',
-    ...config,
-  } as any)
-}
+export const useIMulticall3Aggregate3 = /*#__PURE__*/ createUseWriteContract({
+  abi: iMulticall3Abi,
+  functionName: 'aggregate3',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"aggregate3Value"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"aggregate3Value"`
  */
-export function useIMulticall3Aggregate3Value<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iMulticall3ABI,
-          'aggregate3Value'
-        >['request']['abi'],
-        'aggregate3Value',
-        TMode
-      > & { functionName?: 'aggregate3Value' }
-    : UseContractWriteConfig<
-        typeof iMulticall3ABI,
-        'aggregate3Value',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'aggregate3Value'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iMulticall3ABI, 'aggregate3Value', TMode>({
-    abi: iMulticall3ABI,
+export const useIMulticall3Aggregate3Value =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iMulticall3Abi,
     functionName: 'aggregate3Value',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"blockAndAggregate"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"blockAndAggregate"`
  */
-export function useIMulticall3BlockAndAggregate<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iMulticall3ABI,
-          'blockAndAggregate'
-        >['request']['abi'],
-        'blockAndAggregate',
-        TMode
-      > & { functionName?: 'blockAndAggregate' }
-    : UseContractWriteConfig<
-        typeof iMulticall3ABI,
-        'blockAndAggregate',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'blockAndAggregate'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iMulticall3ABI, 'blockAndAggregate', TMode>({
-    abi: iMulticall3ABI,
+export const useIMulticall3BlockAndAggregate =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iMulticall3Abi,
     functionName: 'blockAndAggregate',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"tryAggregate"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"tryAggregate"`
  */
-export function useIMulticall3TryAggregate<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iMulticall3ABI,
-          'tryAggregate'
-        >['request']['abi'],
-        'tryAggregate',
-        TMode
-      > & { functionName?: 'tryAggregate' }
-    : UseContractWriteConfig<typeof iMulticall3ABI, 'tryAggregate', TMode> & {
-        abi?: never
-        functionName?: 'tryAggregate'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iMulticall3ABI, 'tryAggregate', TMode>({
-    abi: iMulticall3ABI,
-    functionName: 'tryAggregate',
-    ...config,
-  } as any)
-}
+export const useIMulticall3TryAggregate = /*#__PURE__*/ createUseWriteContract({
+  abi: iMulticall3Abi,
+  functionName: 'tryAggregate',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"tryBlockAndAggregate"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"tryBlockAndAggregate"`
  */
-export function useIMulticall3TryBlockAndAggregate<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iMulticall3ABI,
-          'tryBlockAndAggregate'
-        >['request']['abi'],
-        'tryBlockAndAggregate',
-        TMode
-      > & { functionName?: 'tryBlockAndAggregate' }
-    : UseContractWriteConfig<
-        typeof iMulticall3ABI,
-        'tryBlockAndAggregate',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'tryBlockAndAggregate'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iMulticall3ABI, 'tryBlockAndAggregate', TMode>(
-    {
-      abi: iMulticall3ABI,
-      functionName: 'tryBlockAndAggregate',
-      ...config,
-    } as any,
-  )
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__.
- */
-export function usePrepareIMulticall3Write<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iMulticall3ABI, TFunctionName>,
-    'abi'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iMulticall3ABI,
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iMulticall3ABI, TFunctionName>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"aggregate"`.
- */
-export function usePrepareIMulticall3Aggregate(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iMulticall3ABI, 'aggregate'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iMulticall3ABI,
-    functionName: 'aggregate',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iMulticall3ABI, 'aggregate'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"aggregate3"`.
- */
-export function usePrepareIMulticall3Aggregate3(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iMulticall3ABI, 'aggregate3'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iMulticall3ABI,
-    functionName: 'aggregate3',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iMulticall3ABI, 'aggregate3'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"aggregate3Value"`.
- */
-export function usePrepareIMulticall3Aggregate3Value(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iMulticall3ABI, 'aggregate3Value'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iMulticall3ABI,
-    functionName: 'aggregate3Value',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iMulticall3ABI, 'aggregate3Value'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"blockAndAggregate"`.
- */
-export function usePrepareIMulticall3BlockAndAggregate(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iMulticall3ABI, 'blockAndAggregate'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iMulticall3ABI,
-    functionName: 'blockAndAggregate',
-    ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof iMulticall3ABI,
-    'blockAndAggregate'
-  >)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"tryAggregate"`.
- */
-export function usePrepareIMulticall3TryAggregate(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iMulticall3ABI, 'tryAggregate'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iMulticall3ABI,
-    functionName: 'tryAggregate',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iMulticall3ABI, 'tryAggregate'>)
-}
-
-/**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iMulticall3ABI}__ and `functionName` set to `"tryBlockAndAggregate"`.
- */
-export function usePrepareIMulticall3TryBlockAndAggregate(
-  config: Omit<
-    UsePrepareContractWriteConfig<
-      typeof iMulticall3ABI,
-      'tryBlockAndAggregate'
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iMulticall3ABI,
+export const useIMulticall3TryBlockAndAggregate =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iMulticall3Abi,
     functionName: 'tryBlockAndAggregate',
-    ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof iMulticall3ABI,
-    'tryBlockAndAggregate'
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iMulticall3Abi}__
+ */
+export const usePrepareIMulticall3Write =
+  /*#__PURE__*/ createUseSimulateContract({ abi: iMulticall3Abi })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"aggregate"`
+ */
+export const usePrepareIMulticall3Aggregate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iMulticall3Abi,
+    functionName: 'aggregate',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"aggregate3"`
+ */
+export const usePrepareIMulticall3Aggregate3 =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iMulticall3Abi,
+    functionName: 'aggregate3',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"aggregate3Value"`
+ */
+export const usePrepareIMulticall3Aggregate3Value =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iMulticall3Abi,
+    functionName: 'aggregate3Value',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"blockAndAggregate"`
+ */
+export const usePrepareIMulticall3BlockAndAggregate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iMulticall3Abi,
+    functionName: 'blockAndAggregate',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"tryAggregate"`
+ */
+export const usePrepareIMulticall3TryAggregate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iMulticall3Abi,
+    functionName: 'tryAggregate',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iMulticall3Abi}__ and `functionName` set to `"tryBlockAndAggregate"`
+ */
+export const usePrepareIMulticall3TryBlockAndAggregate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iMulticall3Abi,
+    functionName: 'tryBlockAndAggregate',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          string
-        >['request']['abi'],
-        TFunctionName,
-        TMode
-      > & { address?: Address; chainId?: TChainId }
-    : UseContractWriteConfig<typeof iTankGameABI, TFunctionName, TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, TFunctionName, TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    ...config,
-  } as any)
-}
+export const useITankGameWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"addHooks"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"addHooks"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameAddHooks<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'addHooks'
-        >['request']['abi'],
-        'addHooks',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'addHooks' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'addHooks', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'addHooks'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'addHooks', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'addHooks',
-    ...config,
-  } as any)
-}
+export const useITankGameAddHooks = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'addHooks',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"claim"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"claim"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameClaim<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'claim'
-        >['request']['abi'],
-        'claim',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'claim' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'claim', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'claim'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'claim', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'claim',
-    ...config,
-  } as any)
-}
+export const useITankGameClaim = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'claim',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"delegate"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"delegate"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameDelegate<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'delegate'
-        >['request']['abi'],
-        'delegate',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'delegate' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'delegate', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'delegate'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'delegate', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'delegate',
-    ...config,
-  } as any)
-}
+export const useITankGameDelegate = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'delegate',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"drip"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"drip"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameDrip<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'drip'
-        >['request']['abi'],
-        'drip',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'drip' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'drip', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'drip'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'drip', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'drip',
-    ...config,
-  } as any)
-}
+export const useITankGameDrip = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'drip',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"forceAddDefaultHook"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameForceAddDefaultHook<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'forceAddDefaultHook'
-        >['request']['abi'],
-        'forceAddDefaultHook',
-        TMode
-      > & {
-        address?: Address
-        chainId?: TChainId
-        functionName?: 'forceAddDefaultHook'
-      }
-    : UseContractWriteConfig<
-        typeof iTankGameABI,
-        'forceAddDefaultHook',
-        TMode
-      > & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'forceAddDefaultHook'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'forceAddDefaultHook', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameForceAddDefaultHook =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     functionName: 'forceAddDefaultHook',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"give"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"give"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameGive<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'give'
-        >['request']['abi'],
-        'give',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'give' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'give', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'give'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'give', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'give',
-    ...config,
-  } as any)
-}
+export const useITankGameGive = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'give',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"initialize"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"initialize"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameInitialize<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'initialize'
-        >['request']['abi'],
-        'initialize',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'initialize' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'initialize', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'initialize'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'initialize', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'initialize',
-    ...config,
-  } as any)
-}
+export const useITankGameInitialize = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'initialize',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"join"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"join"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameJoin<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'join'
-        >['request']['abi'],
-        'join',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'join' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'join', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'join'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'join', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'join',
-    ...config,
-  } as any)
-}
+export const useITankGameJoin = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'join',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"move"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"move"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameMove<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'move'
-        >['request']['abi'],
-        'move',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'move' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'move', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'move'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'move', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'move',
-    ...config,
-  } as any)
-}
+export const useITankGameMove = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'move',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"reveal"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"reveal"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameReveal<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'reveal'
-        >['request']['abi'],
-        'reveal',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'reveal' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'reveal', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'reveal'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'reveal', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'reveal',
-    ...config,
-  } as any)
-}
+export const useITankGameReveal = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'reveal',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"shoot"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"shoot"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameShoot<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'shoot'
-        >['request']['abi'],
-        'shoot',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'shoot' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'shoot', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'shoot'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'shoot', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'shoot',
-    ...config,
-  } as any)
-}
+export const useITankGameShoot = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'shoot',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"upgrade"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"upgrade"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameUpgrade<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'upgrade'
-        >['request']['abi'],
-        'upgrade',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'upgrade' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'upgrade', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'upgrade'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'upgrade', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'upgrade',
-    ...config,
-  } as any)
-}
+export const useITankGameUpgrade = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'upgrade',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"vote"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"vote"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameVote<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof iTankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTankGameABI,
-          'vote'
-        >['request']['abi'],
-        'vote',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'vote' }
-    : UseContractWriteConfig<typeof iTankGameABI, 'vote', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'vote'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof iTankGameABI, 'vote', TMode>({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'vote',
-    ...config,
-  } as any)
-}
+export const useITankGameVote = /*#__PURE__*/ createUseWriteContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'vote',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, TFunctionName>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, TFunctionName>)
-}
+export const usePrepareITankGameWrite = /*#__PURE__*/ createUseSimulateContract(
+  { abi: iTankGameAbi, address: iTankGameAddress },
+)
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"addHooks"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"addHooks"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameAddHooks(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'addHooks'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const usePrepareITankGameAddHooks =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     functionName: 'addHooks',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'addHooks'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"claim"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"claim"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameClaim(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'claim'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'claim',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'claim'>)
-}
+export const usePrepareITankGameClaim = /*#__PURE__*/ createUseSimulateContract(
+  { abi: iTankGameAbi, address: iTankGameAddress, functionName: 'claim' },
+)
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"delegate"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"delegate"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameDelegate(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'delegate'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const usePrepareITankGameDelegate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     functionName: 'delegate',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'delegate'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"drip"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"drip"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameDrip(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'drip'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'drip',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'drip'>)
-}
+export const usePrepareITankGameDrip = /*#__PURE__*/ createUseSimulateContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'drip',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"forceAddDefaultHook"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameForceAddDefaultHook(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'forceAddDefaultHook'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const usePrepareITankGameForceAddDefaultHook =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     functionName: 'forceAddDefaultHook',
-    ...config,
-  } as UsePrepareContractWriteConfig<
-    typeof iTankGameABI,
-    'forceAddDefaultHook'
-  >)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"give"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"give"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameGive(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'give'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'give',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'give'>)
-}
+export const usePrepareITankGameGive = /*#__PURE__*/ createUseSimulateContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'give',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"initialize"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"initialize"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameInitialize(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'initialize'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const usePrepareITankGameInitialize =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     functionName: 'initialize',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'initialize'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"join"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"join"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameJoin(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'join'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'join',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'join'>)
-}
+export const usePrepareITankGameJoin = /*#__PURE__*/ createUseSimulateContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'join',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"move"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"move"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'move'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'move',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'move'>)
-}
+export const usePrepareITankGameMove = /*#__PURE__*/ createUseSimulateContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'move',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"reveal"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"reveal"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameReveal(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'reveal'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const usePrepareITankGameReveal =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     functionName: 'reveal',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'reveal'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"shoot"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"shoot"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameShoot(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'shoot'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'shoot',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'shoot'>)
-}
+export const usePrepareITankGameShoot = /*#__PURE__*/ createUseSimulateContract(
+  { abi: iTankGameAbi, address: iTankGameAddress, functionName: 'shoot' },
+)
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"upgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"upgrade"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'upgrade'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const usePrepareITankGameUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     functionName: 'upgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'upgrade'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTankGameABI}__ and `functionName` set to `"vote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTankGameAbi}__ and `functionName` set to `"vote"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareITankGameVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTankGameABI, 'vote'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    functionName: 'vote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTankGameABI, 'vote'>)
-}
+export const usePrepareITankGameVote = /*#__PURE__*/ createUseSimulateContract({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  functionName: 'vote',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, TEventName>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, TEventName>)
-}
+export const useITankGameEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"BountyCompleted"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"BountyCompleted"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameBountyCompletedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'BountyCompleted'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameBountyCompletedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'BountyCompleted',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'BountyCompleted'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Claim"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Claim"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameClaimEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Claim'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    eventName: 'Claim',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Claim'>)
-}
+export const useITankGameClaimEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: iTankGameAbi, address: iTankGameAddress, eventName: 'Claim' },
+)
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Commit"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Commit"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameCommitEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Commit'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameCommitEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'Commit',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Commit'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Curse"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Curse"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameCurseEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Curse'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    eventName: 'Curse',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Curse'>)
-}
+export const useITankGameCurseEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: iTankGameAbi, address: iTankGameAddress, eventName: 'Curse' },
+)
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Death"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Death"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameDeathEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Death'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    eventName: 'Death',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Death'>)
-}
+export const useITankGameDeathEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: iTankGameAbi, address: iTankGameAddress, eventName: 'Death' },
+)
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Delegate"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Delegate"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameDelegateEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Delegate'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameDelegateEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'Delegate',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Delegate'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Drip"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Drip"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameDripEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Drip'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    eventName: 'Drip',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Drip'>)
-}
+export const useITankGameDripEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  eventName: 'Drip',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"GameInit"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"GameInit"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameGameInitEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'GameInit'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameGameInitEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'GameInit',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'GameInit'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"GameOver"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"GameOver"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameGameOverEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'GameOver'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameGameOverEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'GameOver',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'GameOver'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"GameStarted"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"GameStarted"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameGameStartedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'GameStarted'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameGameStartedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'GameStarted',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'GameStarted'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Give"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Give"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameGiveEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Give'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    eventName: 'Give',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Give'>)
-}
+export const useITankGameGiveEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  eventName: 'Give',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"HooksAdded"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"HooksAdded"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameHooksAddedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'HooksAdded'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameHooksAddedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'HooksAdded',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'HooksAdded'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Move"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Move"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameMoveEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Move'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    eventName: 'Move',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Move'>)
-}
+export const useITankGameMoveEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  eventName: 'Move',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"PlayerJoined"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"PlayerJoined"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGamePlayerJoinedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'PlayerJoined'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGamePlayerJoinedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'PlayerJoined',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'PlayerJoined'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"PrizeIncrease"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"PrizeIncrease"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGamePrizeIncreaseEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'PrizeIncrease'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGamePrizeIncreaseEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'PrizeIncrease',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'PrizeIncrease'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Reveal"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Reveal"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameRevealEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Reveal'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameRevealEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'Reveal',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Reveal'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Revive"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Revive"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameReviveEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Revive'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameReviveEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'Revive',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Revive'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Shoot"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Shoot"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameShootEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Shoot'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    eventName: 'Shoot',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Shoot'>)
-}
+export const useITankGameShootEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: iTankGameAbi, address: iTankGameAddress, eventName: 'Shoot' },
+)
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"SpawnHeart"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"SpawnHeart"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameSpawnHeartEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'SpawnHeart'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameSpawnHeartEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'SpawnHeart',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'SpawnHeart'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Upgrade"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Upgrade"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameUpgradeEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Upgrade'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
+export const useITankGameUpgradeEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTankGameAbi,
+    address: iTankGameAddress,
     eventName: 'Upgrade',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Upgrade'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTankGameABI}__ and `eventName` set to `"Vote"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTankGameAbi}__ and `eventName` set to `"Vote"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useITankGameVoteEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTankGameABI, 'Vote'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof iTankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: iTankGameABI,
-    address: iTankGameAddress[chainId as keyof typeof iTankGameAddress],
-    eventName: 'Vote',
-    ...config,
-  } as UseContractEventConfig<typeof iTankGameABI, 'Vote'>)
-}
+export const useITankGameVoteEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: iTankGameAbi,
+  address: iTankGameAddress,
+  eventName: 'Vote',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTreatyABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTreatyAbi}__
  */
-export function useITreatyWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<typeof iTreatyABI, string>['request']['abi'],
-        TFunctionName,
-        TMode
-      >
-    : UseContractWriteConfig<typeof iTreatyABI, TFunctionName, TMode> & {
-        abi?: never
-      } = {} as any,
-) {
-  return useContractWrite<typeof iTreatyABI, TFunctionName, TMode>({
-    abi: iTreatyABI,
-    ...config,
-  } as any)
-}
+export const useITreatyWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: iTreatyAbi,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTreatyABI}__ and `functionName` set to `"accept"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTreatyAbi}__ and `functionName` set to `"accept"`
  */
-export function useITreatyAccept<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTreatyABI,
-          'accept'
-        >['request']['abi'],
-        'accept',
-        TMode
-      > & { functionName?: 'accept' }
-    : UseContractWriteConfig<typeof iTreatyABI, 'accept', TMode> & {
-        abi?: never
-        functionName?: 'accept'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iTreatyABI, 'accept', TMode>({
-    abi: iTreatyABI,
-    functionName: 'accept',
-    ...config,
-  } as any)
-}
+export const useITreatyAccept = /*#__PURE__*/ createUseWriteContract({
+  abi: iTreatyAbi,
+  functionName: 'accept',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link iTreatyABI}__ and `functionName` set to `"propose"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTreatyAbi}__ and `functionName` set to `"propose"`
  */
-export function useITreatyPropose<TMode extends WriteContractMode = undefined>(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof iTreatyABI,
-          'propose'
-        >['request']['abi'],
-        'propose',
-        TMode
-      > & { functionName?: 'propose' }
-    : UseContractWriteConfig<typeof iTreatyABI, 'propose', TMode> & {
-        abi?: never
-        functionName?: 'propose'
-      } = {} as any,
-) {
-  return useContractWrite<typeof iTreatyABI, 'propose', TMode>({
-    abi: iTreatyABI,
-    functionName: 'propose',
-    ...config,
-  } as any)
-}
+export const useITreatyPropose = /*#__PURE__*/ createUseWriteContract({
+  abi: iTreatyAbi,
+  functionName: 'propose',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTreatyABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTreatyAbi}__
  */
-export function usePrepareITreatyWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTreatyABI, TFunctionName>,
-    'abi'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iTreatyABI,
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTreatyABI, TFunctionName>)
-}
+export const usePrepareITreatyWrite = /*#__PURE__*/ createUseSimulateContract({
+  abi: iTreatyAbi,
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTreatyABI}__ and `functionName` set to `"accept"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTreatyAbi}__ and `functionName` set to `"accept"`
  */
-export function usePrepareITreatyAccept(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTreatyABI, 'accept'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iTreatyABI,
-    functionName: 'accept',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTreatyABI, 'accept'>)
-}
+export const usePrepareITreatyAccept = /*#__PURE__*/ createUseSimulateContract({
+  abi: iTreatyAbi,
+  functionName: 'accept',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link iTreatyABI}__ and `functionName` set to `"propose"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTreatyAbi}__ and `functionName` set to `"propose"`
  */
-export function usePrepareITreatyPropose(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof iTreatyABI, 'propose'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: iTreatyABI,
-    functionName: 'propose',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof iTreatyABI, 'propose'>)
-}
+export const usePrepareITreatyPropose = /*#__PURE__*/ createUseSimulateContract(
+  { abi: iTreatyAbi, functionName: 'propose' },
+)
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTreatyABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTreatyAbi}__
  */
-export function useITreatyEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof iTreatyABI, TEventName>,
-    'abi'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: iTreatyABI,
-    ...config,
-  } as UseContractEventConfig<typeof iTreatyABI, TEventName>)
-}
+export const useITreatyEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: iTreatyAbi,
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTreatyABI}__ and `eventName` set to `"AcceptedTreaty"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTreatyAbi}__ and `eventName` set to `"AcceptedTreaty"`
  */
-export function useITreatyAcceptedTreatyEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTreatyABI, 'AcceptedTreaty'>,
-    'abi' | 'eventName'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: iTreatyABI,
+export const useITreatyAcceptedTreatyEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTreatyAbi,
     eventName: 'AcceptedTreaty',
-    ...config,
-  } as UseContractEventConfig<typeof iTreatyABI, 'AcceptedTreaty'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link iTreatyABI}__ and `eventName` set to `"ProposedTreaty"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iTreatyAbi}__ and `eventName` set to `"ProposedTreaty"`
  */
-export function useITreatyProposedTreatyEvent(
-  config: Omit<
-    UseContractEventConfig<typeof iTreatyABI, 'ProposedTreaty'>,
-    'abi' | 'eventName'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: iTreatyABI,
+export const useITreatyProposedTreatyEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iTreatyAbi,
     eventName: 'ProposedTreaty',
-    ...config,
-  } as UseContractEventConfig<typeof iTreatyABI, 'ProposedTreaty'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__
  */
-export function useNonAggressionRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionRead = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterClaim"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterClaim"`
  */
-export function useNonAggressionAfterClaim<
-  TFunctionName extends 'afterClaim',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'afterClaim',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionAfterClaim = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'afterClaim',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterDelegate"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterDelegate"`
  */
-export function useNonAggressionAfterDelegate<
-  TFunctionName extends 'afterDelegate',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
+export const useNonAggressionAfterDelegate =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nonAggressionAbi,
     functionName: 'afterDelegate',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterDrip"`
  */
-export function useNonAggressionAfterDrip<
-  TFunctionName extends 'afterDrip',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'afterDrip',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionAfterDrip = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'afterDrip',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterJoin"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterJoin"`
  */
-export function useNonAggressionAfterJoin<
-  TFunctionName extends 'afterJoin',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'afterJoin',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionAfterJoin = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'afterJoin',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"allies"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"allies"`
  */
-export function useNonAggressionAllies<
-  TFunctionName extends 'allies',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'allies',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionAllies = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'allies',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeClaim"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeClaim"`
  */
-export function useNonAggressionBeforeClaim<
-  TFunctionName extends 'beforeClaim',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'beforeClaim',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionBeforeClaim = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'beforeClaim',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeDelegate"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeDelegate"`
  */
-export function useNonAggressionBeforeDelegate<
-  TFunctionName extends 'beforeDelegate',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
+export const useNonAggressionBeforeDelegate =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nonAggressionAbi,
     functionName: 'beforeDelegate',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeDrip"`
  */
-export function useNonAggressionBeforeDrip<
-  TFunctionName extends 'beforeDrip',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'beforeDrip',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionBeforeDrip = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'beforeDrip',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeGive"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeGive"`
  */
-export function useNonAggressionBeforeGive<
-  TFunctionName extends 'beforeGive',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'beforeGive',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionBeforeGive = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'beforeGive',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeJoin"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeJoin"`
  */
-export function useNonAggressionBeforeJoin<
-  TFunctionName extends 'beforeJoin',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'beforeJoin',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionBeforeJoin = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'beforeJoin',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeReveal"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeReveal"`
  */
-export function useNonAggressionBeforeReveal<
-  TFunctionName extends 'beforeReveal',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'beforeReveal',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionBeforeReveal = /*#__PURE__*/ createUseReadContract(
+  { abi: nonAggressionAbi, functionName: 'beforeReveal' },
+)
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeShoot"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeShoot"`
  */
-export function useNonAggressionBeforeShoot<
-  TFunctionName extends 'beforeShoot',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'beforeShoot',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionBeforeShoot = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'beforeShoot',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"ownerTank"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"ownerTank"`
  */
-export function useNonAggressionOwnerTank<
-  TFunctionName extends 'ownerTank',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'ownerTank',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionOwnerTank = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'ownerTank',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"proposals"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"proposals"`
  */
-export function useNonAggressionProposals<
-  TFunctionName extends 'proposals',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'proposals',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionProposals = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'proposals',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"tankGame"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"tankGame"`
  */
-export function useNonAggressionTankGame<
-  TFunctionName extends 'tankGame',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'tankGame',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionTankGame = /*#__PURE__*/ createUseReadContract({
+  abi: nonAggressionAbi,
+  functionName: 'tankGame',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"tankGameView"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"tankGameView"`
  */
-export function useNonAggressionTankGameView<
-  TFunctionName extends 'tankGameView',
-  TSelectData = ReadContractResult<typeof nonAggressionABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof nonAggressionABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: nonAggressionABI,
-    functionName: 'tankGameView',
-    ...config,
-  } as UseContractReadConfig<
-    typeof nonAggressionABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useNonAggressionTankGameView = /*#__PURE__*/ createUseReadContract(
+  { abi: nonAggressionAbi, functionName: 'tankGameView' },
+)
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__
  */
-export function useNonAggressionWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          string
-        >['request']['abi'],
-        TFunctionName,
-        TMode
-      >
-    : UseContractWriteConfig<typeof nonAggressionABI, TFunctionName, TMode> & {
-        abi?: never
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, TFunctionName, TMode>({
-    abi: nonAggressionABI,
-    ...config,
-  } as any)
-}
+export const useNonAggressionWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: nonAggressionAbi,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"accept"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"accept"`
  */
-export function useNonAggressionAccept<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'accept'
-        >['request']['abi'],
-        'accept',
-        TMode
-      > & { functionName?: 'accept' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'accept', TMode> & {
-        abi?: never
-        functionName?: 'accept'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'accept', TMode>({
-    abi: nonAggressionABI,
-    functionName: 'accept',
-    ...config,
-  } as any)
-}
+export const useNonAggressionAccept = /*#__PURE__*/ createUseWriteContract({
+  abi: nonAggressionAbi,
+  functionName: 'accept',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterGive"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterGive"`
  */
-export function useNonAggressionAfterGive<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'afterGive'
-        >['request']['abi'],
-        'afterGive',
-        TMode
-      > & { functionName?: 'afterGive' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'afterGive', TMode> & {
-        abi?: never
-        functionName?: 'afterGive'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'afterGive', TMode>({
-    abi: nonAggressionABI,
-    functionName: 'afterGive',
-    ...config,
-  } as any)
-}
+export const useNonAggressionAfterGive = /*#__PURE__*/ createUseWriteContract({
+  abi: nonAggressionAbi,
+  functionName: 'afterGive',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterMove"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterMove"`
  */
-export function useNonAggressionAfterMove<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'afterMove'
-        >['request']['abi'],
-        'afterMove',
-        TMode
-      > & { functionName?: 'afterMove' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'afterMove', TMode> & {
-        abi?: never
-        functionName?: 'afterMove'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'afterMove', TMode>({
-    abi: nonAggressionABI,
-    functionName: 'afterMove',
-    ...config,
-  } as any)
-}
+export const useNonAggressionAfterMove = /*#__PURE__*/ createUseWriteContract({
+  abi: nonAggressionAbi,
+  functionName: 'afterMove',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterReveal"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterReveal"`
  */
-export function useNonAggressionAfterReveal<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'afterReveal'
-        >['request']['abi'],
-        'afterReveal',
-        TMode
-      > & { functionName?: 'afterReveal' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'afterReveal', TMode> & {
-        abi?: never
-        functionName?: 'afterReveal'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'afterReveal', TMode>({
-    abi: nonAggressionABI,
-    functionName: 'afterReveal',
-    ...config,
-  } as any)
-}
+export const useNonAggressionAfterReveal = /*#__PURE__*/ createUseWriteContract(
+  { abi: nonAggressionAbi, functionName: 'afterReveal' },
+)
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterShoot"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterShoot"`
  */
-export function useNonAggressionAfterShoot<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'afterShoot'
-        >['request']['abi'],
-        'afterShoot',
-        TMode
-      > & { functionName?: 'afterShoot' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'afterShoot', TMode> & {
-        abi?: never
-        functionName?: 'afterShoot'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'afterShoot', TMode>({
-    abi: nonAggressionABI,
-    functionName: 'afterShoot',
-    ...config,
-  } as any)
-}
+export const useNonAggressionAfterShoot = /*#__PURE__*/ createUseWriteContract({
+  abi: nonAggressionAbi,
+  functionName: 'afterShoot',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterUpgrade"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterUpgrade"`
  */
-export function useNonAggressionAfterUpgrade<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'afterUpgrade'
-        >['request']['abi'],
-        'afterUpgrade',
-        TMode
-      > & { functionName?: 'afterUpgrade' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'afterUpgrade', TMode> & {
-        abi?: never
-        functionName?: 'afterUpgrade'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'afterUpgrade', TMode>({
-    abi: nonAggressionABI,
+export const useNonAggressionAfterUpgrade =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: nonAggressionAbi,
     functionName: 'afterUpgrade',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterVote"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterVote"`
  */
-export function useNonAggressionAfterVote<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'afterVote'
-        >['request']['abi'],
-        'afterVote',
-        TMode
-      > & { functionName?: 'afterVote' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'afterVote', TMode> & {
-        abi?: never
-        functionName?: 'afterVote'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'afterVote', TMode>({
-    abi: nonAggressionABI,
-    functionName: 'afterVote',
-    ...config,
-  } as any)
-}
+export const useNonAggressionAfterVote = /*#__PURE__*/ createUseWriteContract({
+  abi: nonAggressionAbi,
+  functionName: 'afterVote',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeMove"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeMove"`
  */
-export function useNonAggressionBeforeMove<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'beforeMove'
-        >['request']['abi'],
-        'beforeMove',
-        TMode
-      > & { functionName?: 'beforeMove' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'beforeMove', TMode> & {
-        abi?: never
-        functionName?: 'beforeMove'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'beforeMove', TMode>({
-    abi: nonAggressionABI,
-    functionName: 'beforeMove',
-    ...config,
-  } as any)
-}
+export const useNonAggressionBeforeMove = /*#__PURE__*/ createUseWriteContract({
+  abi: nonAggressionAbi,
+  functionName: 'beforeMove',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeUpgrade"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeUpgrade"`
  */
-export function useNonAggressionBeforeUpgrade<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'beforeUpgrade'
-        >['request']['abi'],
-        'beforeUpgrade',
-        TMode
-      > & { functionName?: 'beforeUpgrade' }
-    : UseContractWriteConfig<
-        typeof nonAggressionABI,
-        'beforeUpgrade',
-        TMode
-      > & {
-        abi?: never
-        functionName?: 'beforeUpgrade'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'beforeUpgrade', TMode>({
-    abi: nonAggressionABI,
+export const useNonAggressionBeforeUpgrade =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: nonAggressionAbi,
     functionName: 'beforeUpgrade',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeVote"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeVote"`
  */
-export function useNonAggressionBeforeVote<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'beforeVote'
-        >['request']['abi'],
-        'beforeVote',
-        TMode
-      > & { functionName?: 'beforeVote' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'beforeVote', TMode> & {
-        abi?: never
-        functionName?: 'beforeVote'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'beforeVote', TMode>({
-    abi: nonAggressionABI,
-    functionName: 'beforeVote',
-    ...config,
-  } as any)
-}
+export const useNonAggressionBeforeVote = /*#__PURE__*/ createUseWriteContract({
+  abi: nonAggressionAbi,
+  functionName: 'beforeVote',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"propose"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"propose"`
  */
-export function useNonAggressionPropose<
-  TMode extends WriteContractMode = undefined,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof nonAggressionABI,
-          'propose'
-        >['request']['abi'],
-        'propose',
-        TMode
-      > & { functionName?: 'propose' }
-    : UseContractWriteConfig<typeof nonAggressionABI, 'propose', TMode> & {
-        abi?: never
-        functionName?: 'propose'
-      } = {} as any,
-) {
-  return useContractWrite<typeof nonAggressionABI, 'propose', TMode>({
-    abi: nonAggressionABI,
-    functionName: 'propose',
-    ...config,
-  } as any)
-}
+export const useNonAggressionPropose = /*#__PURE__*/ createUseWriteContract({
+  abi: nonAggressionAbi,
+  functionName: 'propose',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__
  */
-export function usePrepareNonAggressionWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, TFunctionName>,
-    'abi'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, TFunctionName>)
-}
+export const usePrepareNonAggressionWrite =
+  /*#__PURE__*/ createUseSimulateContract({ abi: nonAggressionAbi })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"accept"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"accept"`
  */
-export function usePrepareNonAggressionAccept(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'accept'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionAccept =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'accept',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'accept'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterGive"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterGive"`
  */
-export function usePrepareNonAggressionAfterGive(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterGive'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionAfterGive =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'afterGive',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterGive'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterMove"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterMove"`
  */
-export function usePrepareNonAggressionAfterMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterMove'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionAfterMove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'afterMove',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterMove'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterReveal"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterReveal"`
  */
-export function usePrepareNonAggressionAfterReveal(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterReveal'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionAfterReveal =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'afterReveal',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterReveal'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterShoot"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterShoot"`
  */
-export function usePrepareNonAggressionAfterShoot(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterShoot'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionAfterShoot =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'afterShoot',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterShoot'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterUpgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterUpgrade"`
  */
-export function usePrepareNonAggressionAfterUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterUpgrade'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionAfterUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'afterUpgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterUpgrade'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"afterVote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"afterVote"`
  */
-export function usePrepareNonAggressionAfterVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterVote'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionAfterVote =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'afterVote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'afterVote'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeMove"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeMove"`
  */
-export function usePrepareNonAggressionBeforeMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'beforeMove'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionBeforeMove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'beforeMove',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'beforeMove'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeUpgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeUpgrade"`
  */
-export function usePrepareNonAggressionBeforeUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'beforeUpgrade'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionBeforeUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'beforeUpgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'beforeUpgrade'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"beforeVote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"beforeVote"`
  */
-export function usePrepareNonAggressionBeforeVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'beforeVote'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionBeforeVote =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'beforeVote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'beforeVote'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link nonAggressionABI}__ and `functionName` set to `"propose"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nonAggressionAbi}__ and `functionName` set to `"propose"`
  */
-export function usePrepareNonAggressionPropose(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof nonAggressionABI, 'propose'>,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return usePrepareContractWrite({
-    abi: nonAggressionABI,
+export const usePrepareNonAggressionPropose =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nonAggressionAbi,
     functionName: 'propose',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof nonAggressionABI, 'propose'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link nonAggressionABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nonAggressionAbi}__
  */
-export function useNonAggressionEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof nonAggressionABI, TEventName>,
-    'abi'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: nonAggressionABI,
-    ...config,
-  } as UseContractEventConfig<typeof nonAggressionABI, TEventName>)
-}
+export const useNonAggressionEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: nonAggressionAbi,
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link nonAggressionABI}__ and `eventName` set to `"AcceptedTreaty"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nonAggressionAbi}__ and `eventName` set to `"AcceptedTreaty"`
  */
-export function useNonAggressionAcceptedTreatyEvent(
-  config: Omit<
-    UseContractEventConfig<typeof nonAggressionABI, 'AcceptedTreaty'>,
-    'abi' | 'eventName'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: nonAggressionABI,
+export const useNonAggressionAcceptedTreatyEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nonAggressionAbi,
     eventName: 'AcceptedTreaty',
-    ...config,
-  } as UseContractEventConfig<typeof nonAggressionABI, 'AcceptedTreaty'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link nonAggressionABI}__ and `eventName` set to `"NonAggressionCreated"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nonAggressionAbi}__ and `eventName` set to `"NonAggressionCreated"`
  */
-export function useNonAggressionNonAggressionCreatedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof nonAggressionABI, 'NonAggressionCreated'>,
-    'abi' | 'eventName'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: nonAggressionABI,
+export const useNonAggressionNonAggressionCreatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nonAggressionAbi,
     eventName: 'NonAggressionCreated',
-    ...config,
-  } as UseContractEventConfig<typeof nonAggressionABI, 'NonAggressionCreated'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link nonAggressionABI}__ and `eventName` set to `"ProposedTreaty"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nonAggressionAbi}__ and `eventName` set to `"ProposedTreaty"`
  */
-export function useNonAggressionProposedTreatyEvent(
-  config: Omit<
-    UseContractEventConfig<typeof nonAggressionABI, 'ProposedTreaty'>,
-    'abi' | 'eventName'
-  > = {} as any,
-) {
-  return useContractEvent({
-    abi: nonAggressionABI,
+export const useNonAggressionProposedTreatyEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nonAggressionAbi,
     eventName: 'ProposedTreaty',
-    ...config,
-  } as UseContractEventConfig<typeof nonAggressionABI, 'ProposedTreaty'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameRead = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"_getEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"_getEpoch"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameGetEpoch<
-  TFunctionName extends '_getEpoch',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: '_getEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameGetEpoch = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: '_getEpoch',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"aliveTanksIdSum"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"aliveTanksIdSum"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameAliveTanksIdSum<
-  TFunctionName extends 'aliveTanksIdSum',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'aliveTanksIdSum',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameAliveTanksIdSum = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'aliveTanksIdSum',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"board"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"board"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameBoard<
-  TFunctionName extends 'board',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'board',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameBoard = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'board',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"claimed"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"claimed"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameClaimed<
-  TFunctionName extends 'claimed',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'claimed',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameClaimed = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'claimed',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"deadTanks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"deadTanks"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameDeadTanks<
-  TFunctionName extends 'deadTanks',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'deadTanks',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameDeadTanks = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'deadTanks',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"delegates"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"delegates"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameDelegates<
-  TFunctionName extends 'delegates',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'delegates',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameDelegates = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'delegates',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"epochStart"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"epochStart"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameEpochStart<
-  TFunctionName extends 'epochStart',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'epochStart',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameEpochStart = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'epochStart',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"factory"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"factory"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameFactory<
-  TFunctionName extends 'factory',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'factory',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameFactory = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'factory',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getLastDrip"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"getLastDrip"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameGetLastDrip<
-  TFunctionName extends 'getLastDrip',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'getLastDrip',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameGetLastDrip = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'getLastDrip',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"getUpgradeCost"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"getUpgradeCost"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameGetUpgradeCost<
-  TFunctionName extends 'getUpgradeCost',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'getUpgradeCost',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameGetUpgradeCost = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'getUpgradeCost',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"isAuth"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"isAuth"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameIsAuth<
-  TFunctionName extends 'isAuth',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'isAuth',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameIsAuth = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'isAuth',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"lastDripEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"lastDripEpoch"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameLastDripEpoch<
-  TFunctionName extends 'lastDripEpoch',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'lastDripEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameLastDripEpoch = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'lastDripEpoch',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"lastRevealBlock"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"lastRevealBlock"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameLastRevealBlock<
-  TFunctionName extends 'lastRevealBlock',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'lastRevealBlock',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameLastRevealBlock = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'lastRevealBlock',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"numTanksAlive"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"numTanksAlive"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameNumTanksAlive<
-  TFunctionName extends 'numTanksAlive',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'numTanksAlive',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameNumTanksAlive = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'numTanksAlive',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"owner"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"owner"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameOwner<
-  TFunctionName extends 'owner',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'owner',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameOwner = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'owner',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"players"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"players"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGamePlayers<
-  TFunctionName extends 'players',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'players',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGamePlayers = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'players',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"playersCount"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"playersCount"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGamePlayersCount<
-  TFunctionName extends 'playersCount',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'playersCount',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGamePlayersCount = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'playersCount',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"podium"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"podium"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGamePodium<
-  TFunctionName extends 'podium',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'podium',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGamePodium = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'podium',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"prizePool"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"prizePool"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGamePrizePool<
-  TFunctionName extends 'prizePool',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'prizePool',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGamePrizePool = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'prizePool',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"revealBlock"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"revealBlock"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameRevealBlock<
-  TFunctionName extends 'revealBlock',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'revealBlock',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameRevealBlock = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'revealBlock',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"settings"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"settings"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameSettings<
-  TFunctionName extends 'settings',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'settings',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameSettings = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'settings',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"state"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"state"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameState<
-  TFunctionName extends 'state',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'state',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameState = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'state',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"stateData"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"stateData"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameStateData<
-  TFunctionName extends 'stateData',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'stateData',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameStateData = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'stateData',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tankHooks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"tankHooks"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameTankHooks<
-  TFunctionName extends 'tankHooks',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'tankHooks',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameTankHooks = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'tankHooks',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"tanks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"tanks"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameTanks<
-  TFunctionName extends 'tanks',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'tanks',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameTanks = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'tanks',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"votedThisEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"votedThisEpoch"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameVotedThisEpoch<
-  TFunctionName extends 'votedThisEpoch',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'votedThisEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameVotedThisEpoch = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'votedThisEpoch',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"votesPerEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"votesPerEpoch"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameVotesPerEpoch<
-  TFunctionName extends 'votesPerEpoch',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'votesPerEpoch',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameVotesPerEpoch = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'votesPerEpoch',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"votingClosed"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"votingClosed"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameVotingClosed<
-  TFunctionName extends 'votingClosed',
-  TSelectData = ReadContractResult<typeof tankGameABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'votingClosed',
-    ...config,
-  } as UseContractReadConfig<typeof tankGameABI, TFunctionName, TSelectData>)
-}
+export const useTankGameVotingClosed = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'votingClosed',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          string
-        >['request']['abi'],
-        TFunctionName,
-        TMode
-      > & { address?: Address; chainId?: TChainId }
-    : UseContractWriteConfig<typeof tankGameABI, TFunctionName, TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, TFunctionName, TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    ...config,
-  } as any)
-}
+export const useTankGameWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"addHooks"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"addHooks"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameAddHooks<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'addHooks'
-        >['request']['abi'],
-        'addHooks',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'addHooks' }
-    : UseContractWriteConfig<typeof tankGameABI, 'addHooks', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'addHooks'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'addHooks', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'addHooks',
-    ...config,
-  } as any)
-}
+export const useTankGameAddHooks = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'addHooks',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"claim"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"claim"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameClaim<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'claim'
-        >['request']['abi'],
-        'claim',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'claim' }
-    : UseContractWriteConfig<typeof tankGameABI, 'claim', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'claim'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'claim', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'claim',
-    ...config,
-  } as any)
-}
+export const useTankGameClaim = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'claim',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"delegate"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"delegate"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameDelegate<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'delegate'
-        >['request']['abi'],
-        'delegate',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'delegate' }
-    : UseContractWriteConfig<typeof tankGameABI, 'delegate', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'delegate'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'delegate', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'delegate',
-    ...config,
-  } as any)
-}
+export const useTankGameDelegate = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'delegate',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"donate"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"donate"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameDonate<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'donate'
-        >['request']['abi'],
-        'donate',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'donate' }
-    : UseContractWriteConfig<typeof tankGameABI, 'donate', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'donate'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'donate', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'donate',
-    ...config,
-  } as any)
-}
+export const useTankGameDonate = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'donate',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"drip"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"drip"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameDrip<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'drip'
-        >['request']['abi'],
-        'drip',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'drip' }
-    : UseContractWriteConfig<typeof tankGameABI, 'drip', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'drip'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'drip', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'drip',
-    ...config,
-  } as any)
-}
+export const useTankGameDrip = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'drip',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"forceAddDefaultHook"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameForceAddDefaultHook<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'forceAddDefaultHook'
-        >['request']['abi'],
-        'forceAddDefaultHook',
-        TMode
-      > & {
-        address?: Address
-        chainId?: TChainId
-        functionName?: 'forceAddDefaultHook'
-      }
-    : UseContractWriteConfig<
-        typeof tankGameABI,
-        'forceAddDefaultHook',
-        TMode
-      > & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'forceAddDefaultHook'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'forceAddDefaultHook', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGameForceAddDefaultHook =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     functionName: 'forceAddDefaultHook',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"give"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"give"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameGive<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'give'
-        >['request']['abi'],
-        'give',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'give' }
-    : UseContractWriteConfig<typeof tankGameABI, 'give', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'give'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'give', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'give',
-    ...config,
-  } as any)
-}
+export const useTankGameGive = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'give',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"initialize"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"initialize"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameInitialize<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'initialize'
-        >['request']['abi'],
-        'initialize',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'initialize' }
-    : UseContractWriteConfig<typeof tankGameABI, 'initialize', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'initialize'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'initialize', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'initialize',
-    ...config,
-  } as any)
-}
+export const useTankGameInitialize = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'initialize',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"join"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"join"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameJoin<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'join'
-        >['request']['abi'],
-        'join',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'join' }
-    : UseContractWriteConfig<typeof tankGameABI, 'join', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'join'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'join', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'join',
-    ...config,
-  } as any)
-}
+export const useTankGameJoin = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'join',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"move"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"move"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameMove<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'move'
-        >['request']['abi'],
-        'move',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'move' }
-    : UseContractWriteConfig<typeof tankGameABI, 'move', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'move'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'move', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'move',
-    ...config,
-  } as any)
-}
+export const useTankGameMove = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'move',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"reveal"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"reveal"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameReveal<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'reveal'
-        >['request']['abi'],
-        'reveal',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'reveal' }
-    : UseContractWriteConfig<typeof tankGameABI, 'reveal', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'reveal'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'reveal', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'reveal',
-    ...config,
-  } as any)
-}
+export const useTankGameReveal = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'reveal',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"setOwner"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"setOwner"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameSetOwner<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'setOwner'
-        >['request']['abi'],
-        'setOwner',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'setOwner' }
-    : UseContractWriteConfig<typeof tankGameABI, 'setOwner', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'setOwner'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'setOwner', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'setOwner',
-    ...config,
-  } as any)
-}
+export const useTankGameSetOwner = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'setOwner',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"shoot"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"shoot"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameShoot<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'shoot'
-        >['request']['abi'],
-        'shoot',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'shoot' }
-    : UseContractWriteConfig<typeof tankGameABI, 'shoot', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'shoot'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'shoot', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'shoot',
-    ...config,
-  } as any)
-}
+export const useTankGameShoot = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'shoot',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"start"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"start"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameStart<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'start'
-        >['request']['abi'],
-        'start',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'start' }
-    : UseContractWriteConfig<typeof tankGameABI, 'start', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'start'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'start', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'start',
-    ...config,
-  } as any)
-}
+export const useTankGameStart = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'start',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"upgrade"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"upgrade"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameUpgrade<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'upgrade'
-        >['request']['abi'],
-        'upgrade',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'upgrade' }
-    : UseContractWriteConfig<typeof tankGameABI, 'upgrade', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'upgrade'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'upgrade', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'upgrade',
-    ...config,
-  } as any)
-}
+export const useTankGameUpgrade = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'upgrade',
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"vote"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"vote"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameVote<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameABI,
-          'vote'
-        >['request']['abi'],
-        'vote',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'vote' }
-    : UseContractWriteConfig<typeof tankGameABI, 'vote', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'vote'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameABI, 'vote', TMode>({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'vote',
-    ...config,
-  } as any)
-}
+export const useTankGameVote = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'vote',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, TFunctionName>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, TFunctionName>)
-}
+export const usePrepareTankGameWrite = /*#__PURE__*/ createUseSimulateContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"addHooks"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"addHooks"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameAddHooks(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'addHooks'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const usePrepareTankGameAddHooks =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     functionName: 'addHooks',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'addHooks'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"claim"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"claim"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameClaim(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'claim'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'claim',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'claim'>)
-}
+export const usePrepareTankGameClaim = /*#__PURE__*/ createUseSimulateContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'claim',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"delegate"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"delegate"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameDelegate(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'delegate'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const usePrepareTankGameDelegate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     functionName: 'delegate',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'delegate'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"donate"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"donate"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameDonate(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'donate'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'donate',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'donate'>)
-}
+export const usePrepareTankGameDonate = /*#__PURE__*/ createUseSimulateContract(
+  { abi: tankGameAbi, address: tankGameAddress, functionName: 'donate' },
+)
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"drip"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"drip"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameDrip(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'drip'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'drip',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'drip'>)
-}
+export const usePrepareTankGameDrip = /*#__PURE__*/ createUseSimulateContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'drip',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"forceAddDefaultHook"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"forceAddDefaultHook"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameForceAddDefaultHook(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'forceAddDefaultHook'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const usePrepareTankGameForceAddDefaultHook =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     functionName: 'forceAddDefaultHook',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'forceAddDefaultHook'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"give"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"give"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameGive(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'give'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'give',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'give'>)
-}
+export const usePrepareTankGameGive = /*#__PURE__*/ createUseSimulateContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'give',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"initialize"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"initialize"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameInitialize(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'initialize'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const usePrepareTankGameInitialize =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     functionName: 'initialize',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'initialize'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"join"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"join"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameJoin(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'join'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'join',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'join'>)
-}
+export const usePrepareTankGameJoin = /*#__PURE__*/ createUseSimulateContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'join',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"move"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"move"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameMove(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'move'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'move',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'move'>)
-}
+export const usePrepareTankGameMove = /*#__PURE__*/ createUseSimulateContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'move',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"reveal"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"reveal"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameReveal(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'reveal'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'reveal',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'reveal'>)
-}
+export const usePrepareTankGameReveal = /*#__PURE__*/ createUseSimulateContract(
+  { abi: tankGameAbi, address: tankGameAddress, functionName: 'reveal' },
+)
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"setOwner"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"setOwner"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameSetOwner(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'setOwner'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const usePrepareTankGameSetOwner =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     functionName: 'setOwner',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'setOwner'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"shoot"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"shoot"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameShoot(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'shoot'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'shoot',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'shoot'>)
-}
+export const usePrepareTankGameShoot = /*#__PURE__*/ createUseSimulateContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'shoot',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"start"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"start"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameStart(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'start'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'start',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'start'>)
-}
+export const usePrepareTankGameStart = /*#__PURE__*/ createUseSimulateContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'start',
+})
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"upgrade"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"upgrade"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameUpgrade(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'upgrade'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const usePrepareTankGameUpgrade =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     functionName: 'upgrade',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'upgrade'>)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameABI}__ and `functionName` set to `"vote"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameAbi}__ and `functionName` set to `"vote"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function usePrepareTankGameVote(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameABI, 'vote'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    functionName: 'vote',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameABI, 'vote'>)
-}
+export const usePrepareTankGameVote = /*#__PURE__*/ createUseSimulateContract({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  functionName: 'vote',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, TEventName>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, TEventName>)
-}
+export const useTankGameEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"BountyCompleted"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"BountyCompleted"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameBountyCompletedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'BountyCompleted'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGameBountyCompletedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'BountyCompleted',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'BountyCompleted'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Claim"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Claim"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameClaimEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Claim'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Claim',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Claim'>)
-}
+export const useTankGameClaimEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  eventName: 'Claim',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Commit"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Commit"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameCommitEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Commit'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Commit',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Commit'>)
-}
+export const useTankGameCommitEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: tankGameAbi, address: tankGameAddress, eventName: 'Commit' },
+)
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Curse"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Curse"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameCurseEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Curse'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Curse',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Curse'>)
-}
+export const useTankGameCurseEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  eventName: 'Curse',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Death"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Death"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameDeathEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Death'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Death',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Death'>)
-}
+export const useTankGameDeathEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  eventName: 'Death',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Delegate"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Delegate"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameDelegateEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Delegate'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGameDelegateEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'Delegate',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Delegate'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Drip"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Drip"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameDripEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Drip'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Drip',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Drip'>)
-}
+export const useTankGameDripEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  eventName: 'Drip',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"GameInit"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"GameInit"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameGameInitEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'GameInit'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGameGameInitEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'GameInit',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'GameInit'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"GameOver"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"GameOver"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameGameOverEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'GameOver'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGameGameOverEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'GameOver',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'GameOver'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"GameStarted"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"GameStarted"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameGameStartedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'GameStarted'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGameGameStartedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'GameStarted',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'GameStarted'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Give"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Give"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameGiveEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Give'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Give',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Give'>)
-}
+export const useTankGameGiveEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  eventName: 'Give',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"HooksAdded"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"HooksAdded"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameHooksAddedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'HooksAdded'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGameHooksAddedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'HooksAdded',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'HooksAdded'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Move"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Move"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameMoveEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Move'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Move',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Move'>)
-}
+export const useTankGameMoveEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  eventName: 'Move',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"PlayerJoined"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"PlayerJoined"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGamePlayerJoinedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'PlayerJoined'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGamePlayerJoinedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'PlayerJoined',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'PlayerJoined'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"PrizeIncrease"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"PrizeIncrease"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGamePrizeIncreaseEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'PrizeIncrease'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGamePrizeIncreaseEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'PrizeIncrease',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'PrizeIncrease'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Reveal"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Reveal"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameRevealEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Reveal'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Reveal',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Reveal'>)
-}
+export const useTankGameRevealEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: tankGameAbi, address: tankGameAddress, eventName: 'Reveal' },
+)
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Revive"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Revive"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameReviveEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Revive'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Revive',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Revive'>)
-}
+export const useTankGameReviveEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: tankGameAbi, address: tankGameAddress, eventName: 'Revive' },
+)
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Shoot"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Shoot"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameShootEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Shoot'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Shoot',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Shoot'>)
-}
+export const useTankGameShootEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  eventName: 'Shoot',
+})
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"SpawnHeart"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"SpawnHeart"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameSpawnHeartEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'SpawnHeart'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGameSpawnHeartEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'SpawnHeart',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'SpawnHeart'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Upgrade"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Upgrade"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameUpgradeEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Upgrade'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
+export const useTankGameUpgradeEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameAbi,
+    address: tankGameAddress,
     eventName: 'Upgrade',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Upgrade'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameABI}__ and `eventName` set to `"Vote"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameAbi}__ and `eventName` set to `"Vote"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x2c927e3b60586eb229Dcc55978Bc96A7E00Fb414)
  * -
  */
-export function useTankGameVoteEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameABI, 'Vote'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameABI,
-    address: tankGameAddress[chainId as keyof typeof tankGameAddress],
-    eventName: 'Vote',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameABI, 'Vote'>)
-}
+export const useTankGameVoteEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: tankGameAbi,
+  address: tankGameAddress,
+  eventName: 'Vote',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameFactoryABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameFactoryAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export function useTankGameFactoryRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof tankGameFactoryABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameFactoryABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameFactoryABI,
-    address:
-      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameFactoryABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameFactoryRead = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameFactoryAbi,
+  address: tankGameFactoryAddress,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"gameView"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameFactoryAbi}__ and `functionName` set to `"gameView"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export function useTankGameFactoryGameView<
-  TFunctionName extends 'gameView',
-  TSelectData = ReadContractResult<typeof tankGameFactoryABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameFactoryABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameFactoryABI,
-    address:
-      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
-    functionName: 'gameView',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameFactoryABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameFactoryGameView = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameFactoryAbi,
+  address: tankGameFactoryAddress,
+  functionName: 'gameView',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"hookFactory"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameFactoryAbi}__ and `functionName` set to `"hookFactory"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export function useTankGameFactoryHookFactory<
-  TFunctionName extends 'hookFactory',
-  TSelectData = ReadContractResult<typeof tankGameFactoryABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameFactoryABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractRead({
-    abi: tankGameFactoryABI,
-    address:
-      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+export const useTankGameFactoryHookFactory =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameFactoryAbi,
+    address: tankGameFactoryAddress,
     functionName: 'hookFactory',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameFactoryABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameFactoryAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export function useTankGameFactoryWrite<
-  TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameFactoryAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameFactoryABI,
-          string
-        >['request']['abi'],
-        TFunctionName,
-        TMode
-      > & { address?: Address; chainId?: TChainId }
-    : UseContractWriteConfig<
-        typeof tankGameFactoryABI,
-        TFunctionName,
-        TMode
-      > & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameFactoryABI, TFunctionName, TMode>({
-    abi: tankGameFactoryABI,
-    address:
-      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
-    ...config,
-  } as any)
-}
+export const useTankGameFactoryWrite = /*#__PURE__*/ createUseWriteContract({
+  abi: tankGameFactoryAbi,
+  address: tankGameFactoryAddress,
+})
 
 /**
- * Wraps __{@link useContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"createGame"`.
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link tankGameFactoryAbi}__ and `functionName` set to `"createGame"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export function useTankGameFactoryCreateGame<
-  TMode extends WriteContractMode = undefined,
-  TChainId extends number = keyof typeof tankGameFactoryAddress,
->(
-  config: TMode extends 'prepared'
-    ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof tankGameFactoryABI,
-          'createGame'
-        >['request']['abi'],
-        'createGame',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'createGame' }
-    : UseContractWriteConfig<typeof tankGameFactoryABI, 'createGame', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'createGame'
-      } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractWrite<typeof tankGameFactoryABI, 'createGame', TMode>({
-    abi: tankGameFactoryABI,
-    address:
-      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+export const useTankGameFactoryCreateGame =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: tankGameFactoryAbi,
+    address: tankGameFactoryAddress,
     functionName: 'createGame',
-    ...config,
-  } as any)
-}
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameFactoryAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export function usePrepareTankGameFactoryWrite<TFunctionName extends string>(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameFactoryABI, TFunctionName>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameFactoryABI,
-    address:
-      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameFactoryABI, TFunctionName>)
-}
+export const usePrepareTankGameFactoryWrite =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: tankGameFactoryAbi,
+    address: tankGameFactoryAddress,
+  })
 
 /**
- * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link tankGameFactoryABI}__ and `functionName` set to `"createGame"`.
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link tankGameFactoryAbi}__ and `functionName` set to `"createGame"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export function usePrepareTankGameFactoryCreateGame(
-  config: Omit<
-    UsePrepareContractWriteConfig<typeof tankGameFactoryABI, 'createGame'>,
-    'abi' | 'address' | 'functionName'
-  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return usePrepareContractWrite({
-    abi: tankGameFactoryABI,
-    address:
-      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+export const usePrepareTankGameFactoryCreateGame =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: tankGameFactoryAbi,
+    address: tankGameFactoryAddress,
     functionName: 'createGame',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof tankGameFactoryABI, 'createGame'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameFactoryABI}__.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameFactoryAbi}__
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export function useTankGameFactoryEvent<TEventName extends string>(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameFactoryABI, TEventName>,
-    'abi' | 'address'
-  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameFactoryABI,
-    address:
-      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
-    ...config,
-  } as UseContractEventConfig<typeof tankGameFactoryABI, TEventName>)
-}
+export const useTankGameFactoryEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameFactoryAbi,
+    address: tankGameFactoryAddress,
+  })
 
 /**
- * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tankGameFactoryABI}__ and `eventName` set to `"GameCreated"`.
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link tankGameFactoryAbi}__ and `eventName` set to `"GameCreated"`
  *
  * - [__View Contract on Goerli Etherscan__](https://goerli.etherscan.io/address/0x9758ce8FE412C72893b42FFEdAEDff1840e1886f)
  * -
  */
-export function useTankGameFactoryGameCreatedEvent(
-  config: Omit<
-    UseContractEventConfig<typeof tankGameFactoryABI, 'GameCreated'>,
-    'abi' | 'address' | 'eventName'
-  > & { chainId?: keyof typeof tankGameFactoryAddress } = {} as any,
-) {
-  const { chain } = useNetwork()
-  const defaultChainId = useChainId()
-  const chainId = config.chainId ?? chain?.id ?? defaultChainId
-  return useContractEvent({
-    abi: tankGameFactoryABI,
-    address:
-      tankGameFactoryAddress[chainId as keyof typeof tankGameFactoryAddress],
+export const useTankGameFactoryGameCreatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: tankGameFactoryAbi,
+    address: tankGameFactoryAddress,
     eventName: 'GameCreated',
-    ...config,
-  } as UseContractEventConfig<typeof tankGameFactoryABI, 'GameCreated'>)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__
  */
-export function useTankGameV2StorageRead<
-  TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameV2StorageRead = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameV2StorageAbi,
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"aliveTanksIdSum"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"aliveTanksIdSum"`
  */
-export function useTankGameV2StorageAliveTanksIdSum<
-  TFunctionName extends 'aliveTanksIdSum',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageAliveTanksIdSum =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'aliveTanksIdSum',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"board"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"board"`
  */
-export function useTankGameV2StorageBoard<
-  TFunctionName extends 'board',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
-    functionName: 'board',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameV2StorageBoard = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameV2StorageAbi,
+  functionName: 'board',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"claimed"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"claimed"`
  */
-export function useTankGameV2StorageClaimed<
-  TFunctionName extends 'claimed',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
-    functionName: 'claimed',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameV2StorageClaimed = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameV2StorageAbi,
+  functionName: 'claimed',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"deadTanks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"deadTanks"`
  */
-export function useTankGameV2StorageDeadTanks<
-  TFunctionName extends 'deadTanks',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageDeadTanks =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'deadTanks',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"delegates"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"delegates"`
  */
-export function useTankGameV2StorageDelegates<
-  TFunctionName extends 'delegates',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageDelegates =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'delegates',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"epochStart"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"epochStart"`
  */
-export function useTankGameV2StorageEpochStart<
-  TFunctionName extends 'epochStart',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageEpochStart =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'epochStart',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"lastDripEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"lastDripEpoch"`
  */
-export function useTankGameV2StorageLastDripEpoch<
-  TFunctionName extends 'lastDripEpoch',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageLastDripEpoch =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'lastDripEpoch',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"lastRevealBlock"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"lastRevealBlock"`
  */
-export function useTankGameV2StorageLastRevealBlock<
-  TFunctionName extends 'lastRevealBlock',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageLastRevealBlock =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'lastRevealBlock',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"numTanksAlive"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"numTanksAlive"`
  */
-export function useTankGameV2StorageNumTanksAlive<
-  TFunctionName extends 'numTanksAlive',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageNumTanksAlive =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'numTanksAlive',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"owner"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"owner"`
  */
-export function useTankGameV2StorageOwner<
-  TFunctionName extends 'owner',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
-    functionName: 'owner',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameV2StorageOwner = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameV2StorageAbi,
+  functionName: 'owner',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"players"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"players"`
  */
-export function useTankGameV2StoragePlayers<
-  TFunctionName extends 'players',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
-    functionName: 'players',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameV2StoragePlayers = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameV2StorageAbi,
+  functionName: 'players',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"playersCount"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"playersCount"`
  */
-export function useTankGameV2StoragePlayersCount<
-  TFunctionName extends 'playersCount',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StoragePlayersCount =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'playersCount',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"podium"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"podium"`
  */
-export function useTankGameV2StoragePodium<
-  TFunctionName extends 'podium',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
-    functionName: 'podium',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameV2StoragePodium = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameV2StorageAbi,
+  functionName: 'podium',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"prizePool"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"prizePool"`
  */
-export function useTankGameV2StoragePrizePool<
-  TFunctionName extends 'prizePool',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StoragePrizePool =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'prizePool',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"revealBlock"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"revealBlock"`
  */
-export function useTankGameV2StorageRevealBlock<
-  TFunctionName extends 'revealBlock',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageRevealBlock =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'revealBlock',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"settings"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"settings"`
  */
-export function useTankGameV2StorageSettings<
-  TFunctionName extends 'settings',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
-    functionName: 'settings',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameV2StorageSettings = /*#__PURE__*/ createUseReadContract(
+  { abi: tankGameV2StorageAbi, functionName: 'settings' },
+)
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"state"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"state"`
  */
-export function useTankGameV2StorageState<
-  TFunctionName extends 'state',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
-    functionName: 'state',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameV2StorageState = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameV2StorageAbi,
+  functionName: 'state',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"stateData"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"stateData"`
  */
-export function useTankGameV2StorageStateData<
-  TFunctionName extends 'stateData',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageStateData =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'stateData',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"tankHooks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"tankHooks"`
  */
-export function useTankGameV2StorageTankHooks<
-  TFunctionName extends 'tankHooks',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageTankHooks =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'tankHooks',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"tanks"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"tanks"`
  */
-export function useTankGameV2StorageTanks<
-  TFunctionName extends 'tanks',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
-    functionName: 'tanks',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+export const useTankGameV2StorageTanks = /*#__PURE__*/ createUseReadContract({
+  abi: tankGameV2StorageAbi,
+  functionName: 'tanks',
+})
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"votedThisEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"votedThisEpoch"`
  */
-export function useTankGameV2StorageVotedThisEpoch<
-  TFunctionName extends 'votedThisEpoch',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageVotedThisEpoch =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'votedThisEpoch',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"votesPerEpoch"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"votesPerEpoch"`
  */
-export function useTankGameV2StorageVotesPerEpoch<
-  TFunctionName extends 'votesPerEpoch',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageVotesPerEpoch =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'votesPerEpoch',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })
 
 /**
- * Wraps __{@link useContractRead}__ with `abi` set to __{@link tankGameV2StorageABI}__ and `functionName` set to `"votingClosed"`.
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link tankGameV2StorageAbi}__ and `functionName` set to `"votingClosed"`
  */
-export function useTankGameV2StorageVotingClosed<
-  TFunctionName extends 'votingClosed',
-  TSelectData = ReadContractResult<typeof tankGameV2StorageABI, TFunctionName>,
->(
-  config: Omit<
-    UseContractReadConfig<
-      typeof tankGameV2StorageABI,
-      TFunctionName,
-      TSelectData
-    >,
-    'abi' | 'functionName'
-  > = {} as any,
-) {
-  return useContractRead({
-    abi: tankGameV2StorageABI,
+export const useTankGameV2StorageVotingClosed =
+  /*#__PURE__*/ createUseReadContract({
+    abi: tankGameV2StorageAbi,
     functionName: 'votingClosed',
-    ...config,
-  } as UseContractReadConfig<
-    typeof tankGameV2StorageABI,
-    TFunctionName,
-    TSelectData
-  >)
-}
+  })

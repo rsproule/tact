@@ -1,16 +1,19 @@
 import {
   usePrepareTankGameJoin,
-  useTankGamePlayersCount,
   useTankGameJoin,
+  useTankGamePlayersCount,
 } from "@/src/generated";
+import { useEffect, useState } from "react";
 import { BaseError } from "viem";
-import { useAccount, useWaitForTransaction } from "wagmi";
+import {
+  useAccount,
+  useBlockNumber,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 import { Button } from "../../ui/button";
 import { Card, CardHeader } from "../../ui/card";
-import { useToast } from "../../ui/use-toast";
-import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
-import { useState } from "react";
 import { Input } from "../../ui/input";
+import { useToast } from "../../ui/use-toast";
 
 const zero = [
   "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -25,18 +28,10 @@ export function WaitingForPlayers({
   expectedPlayersCount: bigint | undefined;
   gameAddress: `0x${string}`;
 }) {
-  // const merkleTree = StandardMerkleTree.load(tree as any);
   const [playerName, setPlayerName] = useState("");
-  // const merkleTree;
   const { address } = useAccount();
-  // const value = tree.values.find((x) => x.value[0] === address);
-  // const proof = value
-  //   ? merkleTree
-  //     .getProof(value.value)
-  //     .map((x) => Object.freeze(x) as `0x${string}`)
-  //   : zero;
   const proof = zero;
-  let { config, refetch } = usePrepareTankGameJoin({
+  let { data: joinConfig, refetch } = usePrepareTankGameJoin({
     // @ts-ignore
     address: gameAddress,
     args: [{ joiner: address!, proof: proof, playerName: playerName }],
@@ -44,30 +39,33 @@ export function WaitingForPlayers({
     enabled: !!playerName,
   });
   let { toast } = useToast();
+  let { data: blockNumber } = useBlockNumber({ watch: true });
   let numPlayers = useTankGamePlayersCount({
-    watch: true,
+    blockNumber: blockNumber,
     // @ts-ignore
     address: gameAddress,
   });
-  const { write, data } = useTankGameJoin(config);
-  useWaitForTransaction({
-    hash: data?.hash,
-    enabled: !!data,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: join, data: hash } = useTankGameJoin();
+  const { data: receipt, error } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  useEffect(() => {
+    if (receipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: receipt.transactionHash,
       });
-    },
-  });
+    }
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: error.message,
+      });
+    }
+  }, [receipt, error, toast]);
   return (
     <div className="flex justify-center pb-3">
       <Card>
@@ -88,11 +86,11 @@ export function WaitingForPlayers({
 
           <Button
             onClick={() => {
-              write?.();
+              join?.(joinConfig!.request);
               refetch?.();
               setPlayerName("");
             }}
-            disabled={!write}
+            disabled={!join}
           >
             Join Game
           </Button>

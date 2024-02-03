@@ -5,7 +5,7 @@ import {
   useTankGameClaim,
 } from "@/src/generated";
 import { BaseError } from "viem";
-import { useAccount, useWaitForTransaction } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { Button } from "../../ui/button";
 import { useToast } from "../../ui/use-toast";
 import {
@@ -18,6 +18,7 @@ import {
 } from "../../ui/card";
 import { Trophy } from "lucide-react";
 import { useTankNameFromId } from "../EventsStream";
+import { useEffect } from "react";
 
 export function GameOver({ gameAddress }: { gameAddress: `0x${string}` }) {
   let { toast } = useToast();
@@ -43,11 +44,10 @@ export function GameOver({ gameAddress }: { gameAddress: `0x${string}` }) {
   const { address } = useAccount();
   let ownersTankId = useTankGamePlayers({
     args: [address!],
-    enabled: !!address,
     // @ts-ignore
     address: gameAddress,
   });
-  let { config } = usePrepareTankGameClaim({
+  let { data: claimConfig } = usePrepareTankGameClaim({
     // @ts-ignore
     address: gameAddress,
     args: [{ tankId: ownersTankId.data!, claimer: address! }],
@@ -59,25 +59,27 @@ export function GameOver({ gameAddress }: { gameAddress: `0x${string}` }) {
         third.data === ownersTankId.data),
   });
 
-  let { write: claim, data } = useTankGameClaim(config);
-  useWaitForTransaction({
-    hash: data?.hash,
-    enabled: !!data,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  let { writeContract: claim, data:hash } = useTankGameClaim();
+  const { data: receipt, error } = useWaitForTransactionReceipt({
+    hash 
+  });
+
+  useEffect(() => {
+    if (receipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: receipt.transactionHash,
       });
-    },
-  });
+    }
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: error.message,
+      });
+    }
+  }, [receipt, error, toast]);
   return (
     <div className="flex justify-center pb-3">
       <Card>
@@ -93,7 +95,7 @@ export function GameOver({ gameAddress }: { gameAddress: `0x${string}` }) {
           </ul>
         </CardContent>
         <CardFooter>
-          <Button disabled={!claim} onClick={() => claim?.()}>
+          <Button disabled={!claim} onClick={() => claim?.(claimConfig!.request)}>
             <Trophy className="mr-2 h-4 w-4" />
             Claim Prize
           </Button>

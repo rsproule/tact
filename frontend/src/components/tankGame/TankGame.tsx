@@ -1,5 +1,5 @@
 "use client";
-import { useNetwork } from "wagmi";
+import { useAccount, useBlockNumber } from "wagmi";
 import {
   gameViewAddress,
   useGameViewGetSettings,
@@ -12,13 +12,16 @@ import Timer from "./Timer";
 import Donate from "./actions/Donate";
 import { GameOver } from "./states/GameOver";
 import { WaitingForPlayers } from "./states/WaitingForPlayers";
+import { config } from "@/src/wagmi";
+
 export function TankGame({ address }: { address: `0x${string}` }) {
   // @ts-ignore
   let gameState = useTankGameState({ watch: true, address: address });
 
-  const { chain } = useNetwork();
+  const { chain } = useAccount({config});
+  const {data: blockNumber} = useBlockNumber({watch: true});
   let settings = useGameViewGetSettings({
-    watch: true,
+    blockNumber,
     // @ts-ignore
     address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
     args: [address],

@@ -1,14 +1,21 @@
 import {
   gameViewAddress,
-  useGameViewGetGameEpoch,
   useGameViewGetEpoch,
+  useGameViewGetGameEpoch,
   useGameViewGetSettings,
   usePrepareTankGameReveal,
   useTankGameEpochStart,
   useTankGameReveal,
   useTankGameRevealBlock,
 } from "@/src/generated";
+import { Pointer } from "lucide-react";
 import { BaseError } from "viem";
+import {
+  useAccount,
+  useBlockNumber,
+  useWaitForTransactionReceipt,
+} from "wagmi";
+import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
@@ -16,27 +23,26 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Button } from "../ui/button";
-import { Pointer } from "lucide-react";
 import { useToast } from "../ui/use-toast";
-import { useBlockNumber, useNetwork, useWaitForTransaction } from "wagmi";
+import { config } from "@/src/wagmi";
+import { useEffect } from "react";
 
 export default function Timer({ address }: { address: `0x${string}` }) {
   const { toast } = useToast();
-  const { chain } = useNetwork();
+  const { chain } = useAccount({ config });
   const { data: blockNumber } = useBlockNumber({ watch: true });
   const startEpoch = useTankGameEpochStart({
     // @ts-ignore
     address: address,
   });
   const currentGameEpoch = useGameViewGetGameEpoch({
-    watch: true,
+    blockNumber,
     // @ts-ignore
     address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
     args: [address],
   });
   const currentEpoch = useGameViewGetEpoch({
-    watch: true,
+    blockNumber,
     // @ts-ignore
     address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
     args: [address],
@@ -46,30 +52,32 @@ export default function Timer({ address }: { address: `0x${string}` }) {
     address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
     args: [address],
   });
-  const { config: revealConfig } = usePrepareTankGameReveal({
+  const { data: revealConfig } = usePrepareTankGameReveal({
     // @ts-ignore
     address: address,
   });
-  const { write: reveal, data: revealData } = useTankGameReveal(revealConfig);
-  const { data: revealBlock } = useTankGameRevealBlock({ watch: true });
-  useWaitForTransaction({
-    hash: revealData?.hash,
-    enabled: !!revealData,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: reveal, data: hash } = useTankGameReveal();
+  const { data: revealBlock } = useTankGameRevealBlock({ blockNumber });
+  const { data: receipt, error } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  useEffect(() => {
+    if (receipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: receipt.transactionHash,
       });
-    },
-  });
+    }
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: error.message,
+      });
+    }
+  }, [receipt, error, toast]);
   return (
     <div className="flex justify-center pb-3">
       <Card>
@@ -106,7 +114,7 @@ export default function Timer({ address }: { address: `0x${string}` }) {
                 className="w-full"
                 disabled={!reveal}
                 onClick={() => {
-                  reveal?.();
+                  reveal?.(revealConfig!.request);
                 }}
               >
                 <Pointer className="mr-2 h-4 w-4" /> Spawn heart

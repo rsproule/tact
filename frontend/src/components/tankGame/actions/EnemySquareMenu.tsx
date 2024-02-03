@@ -9,22 +9,26 @@ import {
   useTankGameVote,
 } from "@/src/generated";
 import {
-  Droplet,
   Crosshair,
+  Droplet,
   GiftIcon,
   HeartHandshake,
   SkullIcon,
 } from "lucide-react";
-import { BaseError, parseEther } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useEffect, useState } from "react";
+import { BaseError } from "viem";
+import {
+  useWaitForTransactionReceipt,
+  useWatchPendingTransactions,
+} from "wagmi";
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "../../ui/dropdown-menu";
-import { useToast } from "../../ui/use-toast";
 import { Input } from "../../ui/input";
-import { useState } from "react";
+import { useToast } from "../../ui/use-toast";
+import { config } from "@/src/wagmi";
 
 export default function EnemySquareMenu({
   ownersTank,
@@ -39,7 +43,7 @@ export default function EnemySquareMenu({
 }) {
   const [multiplier, setMultiplier] = useState(1);
   const { toast } = useToast();
-  let { config: shootConfig } = usePrepareTankGameShoot({
+  let { data: shootConfig } = usePrepareTankGameShoot({
     // @ts-ignore
     address: gameAddress,
     args: [
@@ -51,26 +55,28 @@ export default function EnemySquareMenu({
     ],
     enabled: open && !!ownersTank && !!enemyTank,
   });
-  const { write: shoot, data: shootHash } = useTankGameShoot(shootConfig);
-  useWaitForTransaction({
-    hash: shootHash?.hash,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: shoot, data: shootHash } = useTankGameShoot();
+  const { data: shootReceipt, error: shootFailure } = useWaitForTransactionReceipt({
+    hash: shootHash,
+  });
+  useEffect(() => {
+    if (shootReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: shootReceipt.transactionHash,
       });
-    },
-  });
+    }
+    if (shootFailure) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: shootFailure.message,
+      });
+    }
+  }, [shootReceipt, shootFailure, toast]);
 
-  let { config: giftHeartConfig } = usePrepareTankGameGive({
+  let { data: giftHeartConfig } = usePrepareTankGameGive({
     // @ts-ignore
     address: gameAddress,
     args: [
@@ -83,26 +89,28 @@ export default function EnemySquareMenu({
     ],
     enabled: open && !!ownersTank && !!enemyTank,
   });
-  const { write: giveHeart, data: giveHeartHash } =
-    useTankGameGive(giftHeartConfig);
-  useWaitForTransaction({
-    hash: giveHeartHash?.hash,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: giveHeart, data: giveHeartHash } = useTankGameGive();
+  const { data: giveHeartReceipt, error: giveHeartFailure } = useWaitForTransactionReceipt({
+    hash: giveHeartHash,
+  });
+  useEffect(() => {
+    if (giveHeartReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: giveHeartReceipt.transactionHash,
       });
-    },
-  });
-  let { config: giveAPConfig } = usePrepareTankGameGive({
+    }
+    if (giveHeartFailure) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: giveHeartFailure.message,
+      });
+    }
+  }, [giveHeartReceipt, giveHeartFailure, toast]);
+
+  let { data: giveAPConfig } = usePrepareTankGameGive({
     // @ts-ignore
     address: gameAddress,
     args: [
@@ -115,73 +123,82 @@ export default function EnemySquareMenu({
     ],
     enabled: open && !!ownersTank && !!enemyTank,
   });
-  const { write: giveAp, data: giveHash } = useTankGameGive(giveAPConfig);
-  useWaitForTransaction({
-    hash: giveHash?.hash,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: giveAp, data: giveAPHash } = useTankGameGive();
+  const { data: giveAPReceipt, error: giveAPFailure } =
+    useWaitForTransactionReceipt({
+      hash: giveAPHash,
+    });
+  useEffect(() => {
+    if (giveAPReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: giveAPReceipt.transactionHash,
       });
-    },
-  });
-  let { config: curseConfig } = usePrepareTankGameVote({
+    }
+    if (giveAPFailure) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: giveAPFailure.message,
+      });
+    }
+  }, [giveAPReceipt, giveAPFailure, toast]);
+
+  let { data: curseConfig } = usePrepareTankGameVote({
     // @ts-ignore
     address: gameAddress,
     args: [{ voter: ownersTank!, cursed: enemyTank! }],
     enabled: open && !!ownersTank && !!enemyTank,
   });
-  const { write: curse, data: curseHash } = useTankGameVote(curseConfig);
-  useWaitForTransaction({
-    hash: curseHash?.hash,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: curse, data: curseHash } = useTankGameVote();
+  const { data: curseReceipt, error: curseFailure } = useWaitForTransactionReceipt({
+    hash: curseHash,
+  });
+  useEffect(() => {
+    if (curseReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: curseReceipt.transactionHash,
       });
-    },
-  });
+    }
+    if (curseFailure) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: curseFailure.message,
+      });
+    }
+  }, [curseReceipt, curseFailure, toast]);
 
-  let { config: dripConfig } = usePrepareTankGameDrip({
+  let { data: dripConfig } = usePrepareTankGameDrip({
     // @ts-ignore
     address: gameAddress,
     args: [{ tankId: enemyTank! }],
     enabled: open && !!ownersTank,
   });
-  const { write: drip, data: dripHash } = useTankGameDrip(dripConfig);
-  useWaitForTransaction({
-    hash: dripHash?.hash,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: drip, data: dripHash } = useTankGameDrip();
+  const { data: dripReceipt, error: dripFailure } = useWaitForTransactionReceipt({
+    hash: dripHash,
+  });
+  useEffect(() => {
+    if (dripReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: dripReceipt.transactionHash,
       });
-    },
-  });
+    }
+    if (dripFailure) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: dripFailure.message,
+      });
+    }
+  }, [dripReceipt, dripFailure, toast]);
+
   return (
     <DropdownMenuGroup>
       <span>Multiplier</span>
@@ -196,24 +213,39 @@ export default function EnemySquareMenu({
         }}
       />
       <DropdownMenuSeparator />
-      <DropdownMenuItem disabled={!shoot} onSelect={() => shoot?.()}>
+      <DropdownMenuItem
+        disabled={!shoot}
+        onSelect={() => shoot?.(shootConfig!.request)}
+      >
         <Crosshair className="mr-2 h-4 w-4" />
         <span>Shoot</span>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem disabled={!giveHeart} onSelect={() => giveHeart?.()}>
+      <DropdownMenuItem
+        disabled={!giveHeart}
+        onSelect={() => giveHeart?.(giftHeartConfig!.request)}
+      >
         <HeartHandshake className="mr-2 h-4 w-4" />
         <span>Give heart</span>
       </DropdownMenuItem>
-      <DropdownMenuItem disabled={!giveAp} onSelect={() => giveAp?.()}>
+      <DropdownMenuItem
+        disabled={!giveAp}
+        onSelect={() => giveAp?.(giveAPConfig!.request)}
+      >
         <GiftIcon className="mr-2 h-4 w-4" />
         <span>Give AP</span>
       </DropdownMenuItem>
-      <DropdownMenuItem disabled={!curse} onSelect={() => curse?.()}>
+      <DropdownMenuItem
+        disabled={!curse}
+        onSelect={() => curse?.(curseConfig!.request)}
+      >
         <SkullIcon className="mr-2 h-4 w-4" />
         <span>Curse</span>
       </DropdownMenuItem>
-      <DropdownMenuItem disabled={!drip} onSelect={() => drip?.()}>
+      <DropdownMenuItem
+        disabled={!drip}
+        onSelect={() => drip?.(dripConfig!.request)}
+      >
         <Droplet className="mr-2 h-4 w-4" />
         <span>Force Claim APs</span>
       </DropdownMenuItem>

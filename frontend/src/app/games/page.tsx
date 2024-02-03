@@ -1,19 +1,14 @@
 "use client";
 import {
   tankGameAddress,
-  tankGameFactoryABI,
+  tankGameFactoryAbi,
   tankGameFactoryAddress,
+  useIGameViewGetPlayerCount,
   useTankGamePlayersCount,
   useTankGameState,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
-import {
-  Address,
-  useAccount,
-  useBalance,
-  useBlockNumber,
-  useNetwork,
-} from "wagmi";
+import { useAccount, useBalance, useBlockNumber } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import CreateGameForm from "@/src/components/CreateGameForm";
 import {
@@ -28,20 +23,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card";
-import { formatEther } from "viem";
+import { Address, formatEther } from "viem";
 import { Button } from "@/src/components/ui/button";
+import { config } from "@/src/wagmi";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function GamesList() {
   const { data: blockNumber } = useBlockNumber({ watch: true });
   const [shouldFilter, setShouldFilter] = useState(true);
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
   const [games, setGames] = useState();
-  const { chain } = useNetwork();
   const getLogs = async () => {
-    const publicClient = getPublicClient();
+    const publicClient = getPublicClient(config)!;
     const chainId = chain?.id;
     const filter = await publicClient.createContractEventFilter({
-      abi: tankGameFactoryABI,
+      abi: tankGameFactoryAbi,
       strict: true,
       fromBlock: BigInt(0),
       address:
@@ -57,6 +53,7 @@ export default function GamesList() {
       .then((logs) => {
         // @ts-ignore
         setGames(logs);
+        console.log(logs);
       })
       .catch(console.error);
   }, [blockNumber]);
@@ -139,17 +136,25 @@ function GameTile({
   buyIn: bigint;
   filter: boolean;
 }) {
-  let { data: players } = useTankGamePlayersCount({
-    watch: true,
-    // @ts-ignore
+  const queryClient = useQueryClient();
+  let { data: blockNumber } = useBlockNumber({ watch: true });
+
+  let { data: players, queryKey: playerKey } = useTankGamePlayersCount({
     address: address,
   });
-  let { data: balance } = useBalance({ address: address, watch: true });
-  let { data: gameState } = useTankGameState({
-    watch: true,
-    // @ts-ignore
+
+  let { data: balance, queryKey: balanceKey } = useBalance({
     address: address,
   });
+  let { data: gameState, queryKey: gameStateKey } = useTankGameState({
+    address: address,
+  });
+  // useEffect(() => {
+    // queryClient.invalidateQueries({ queryKey: balanceKey });
+    // queryClient.invalidateQueries({ queryKey: playerKey });
+    // queryClient.invalidateQueries({ queryKey: gameStateKey });
+  // }, [blockNumber]);
+
   let stateString =
     gameState !== undefined
       ? gameState === 0

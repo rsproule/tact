@@ -1,15 +1,15 @@
 import {
-  usePrepareNonAggressionPropose,
   useNonAggressionPropose,
+  usePrepareNonAggressionPropose,
 } from "@/src/generated";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Address, BaseError } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useWaitForTransactionReceipt } from "wagmi";
+import PlayerDropdown from "../tankGame/PlayerDropdown";
 import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
-import { Card, CardHeader, CardContent } from "../ui/card";
-import PlayerDropdown from "../tankGame/PlayerDropdown";
 
 export default function CreateNonAggression({
   hookAddress,
@@ -20,37 +20,37 @@ export default function CreateNonAggression({
 }) {
   const [targetTank, setTargetTank] = useState<string | undefined>();
   const [expiry, setExpiry] = useState<string | undefined>();
-  const { config: createConfig } = usePrepareNonAggressionPropose({
+  const { data: createConfig } = usePrepareNonAggressionPropose({
     address: hookAddress,
     args: [
       targetTank ? BigInt(targetTank) : BigInt(0),
       expiry ? BigInt(expiry) : BigInt(0),
     ],
-    enabled: !!targetTank && !!expiry,
   });
 
-  const { write: create, data: createData } =
-    useNonAggressionPropose(createConfig);
-  useWaitForTransaction({
-    hash: createData?.hash,
-    enabled: !!createData,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: create, data: createData } = useNonAggressionPropose();
+  const { data: receipt, error } = useWaitForTransactionReceipt({
+    hash: createData,
+  });
+
+  useEffect(() => {
+    if (receipt) {
       setTargetTank(undefined);
       setExpiry(undefined);
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: receipt.transactionHash,
       });
-    },
-  });
+    }
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: (error as BaseError)?.shortMessage,
+      });
+    }
+  }, [receipt, error]);
   return (
     <Card>
       <CardHeader>Create Non-aggression pact</CardHeader>
@@ -68,14 +68,14 @@ export default function CreateNonAggression({
               try {
                 BigInt(e.target.value);
                 setExpiry(e.target.value);
-              } catch (e) { }
+              } catch (e) {}
             }}
             placeholder="Expiration epoch"
           />
           <Button
             disabled={!create}
             onClick={() => {
-              create?.();
+              create?.(createConfig!.request);
             }}
           >
             Create

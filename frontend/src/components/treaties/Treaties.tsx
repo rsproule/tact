@@ -1,12 +1,12 @@
 "use client";
 import {
-  hookFactoryABI,
+  hookFactoryAbi,
   hookFactoryAddress,
-  tankGameABI,
+  tankGameAbi,
   useTankGamePlayers,
 } from "@/src/generated";
 import { useEffect, useState } from "react";
-import { useAccount, useBlockNumber, useNetwork } from "wagmi";
+import { useAccount, useBlockNumber } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import CreateBounty from "./CreateBounty";
@@ -19,14 +19,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import {config} from "@/src/wagmi";
 
 export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
-  const { chain } = useNetwork();
-  const { address } = useAccount();
+  const { address, chain } = useAccount({config});
   const { data: blockNumber } = useBlockNumber({ watch: true });
   let ownerTank = useTankGamePlayers({
     args: [address!],
-    enabled: !!address,
     // @ts-ignore
     address: gameAddress,
   });
@@ -36,29 +35,29 @@ export function Treaties({ gameAddress }: { gameAddress: `0x${string}` }) {
   const [hideNotMine, setHideNotMine] = useState<boolean>(false);
   useEffect(() => {
     const getLogs = async () => {
-      const publicClient = getPublicClient();
+      const publicClient = getPublicClient(config);
       const chainId = chain?.id;
-      const filter = await publicClient.createContractEventFilter({
-        abi: hookFactoryABI,
+      const filter = await publicClient!.createContractEventFilter({
+        abi: hookFactoryAbi,
         strict: true,
         eventName: "HookCreated",
         fromBlock: BigInt(0),
         address: hookFactoryAddress[chainId as keyof typeof hookFactoryAddress],
       });
-      const hooks = await publicClient.getFilterLogs({
+      const hooks = await publicClient!.getFilterLogs({
         filter,
       });
       setHooks(hooks.filter((hook: any) => hook.args.tankGame === gameAddress));
 
-      const addedFilter = await publicClient.createContractEventFilter({
-        abi: tankGameABI,
+      const addedFilter = await publicClient!.createContractEventFilter({
+        abi: tankGameAbi,
         strict: true,
         eventName: "HooksAdded",
         fromBlock: BigInt(0),
         address: gameAddress,
       });
 
-      const hookAddedEvents = await publicClient.getFilterLogs({
+      const hookAddedEvents = await publicClient!.getFilterLogs({
         filter: addedFilter,
       });
       setHooksAdded(hookAddedEvents);

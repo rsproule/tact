@@ -4,6 +4,7 @@ import { useTankGameGetEpoch, useTankGameLastDripEpoch } from "@/src/generated";
 import { DropdownMenu, DropdownMenuContent } from "../ui/dropdown-menu";
 import { Address } from "viem";
 import { useTankNameFromId } from "./EventsStream";
+import { useBlockNumber } from "wagmi";
 
 interface TankProps {
   tankObj: typeof ITank;
@@ -24,15 +25,15 @@ export function Tank({
 }: TankProps) {
   const { tank, tankId } = tankObj;
   const tankName = useTankNameFromId(address, tankId);
+  const {data: blockNumber} = useBlockNumber({watch: true});
   let lastDripEpoch = useTankGameLastDripEpoch({
+    blockNumber,
     args: [tankId],
-    enabled: !!tankId,
-    watch: true,
     // @ts-ignore 
     address: address,
   });
   let currentEpoch = useTankGameGetEpoch({
-    watch: true,
+    blockNumber,
     // @ts-ignore 
     address: address,
   });

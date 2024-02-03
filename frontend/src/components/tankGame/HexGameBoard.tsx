@@ -8,7 +8,7 @@ import {
   useTankGamePlayers,
 } from "@/src/generated";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount, useBlockNumber } from "wagmi";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { ITank } from "./ITank";
 
@@ -22,20 +22,18 @@ export function HexBoard({
   const [selectedTank, setSelectedTank] = useState<typeof ITank | undefined>();
   const [selectedTile, setSelectedTile] = useState<Hex | undefined>();
   const [highlightedTiles, setHighlightedTiles] = useState<Hex[] | undefined>();
-  const { chain } = useNetwork();
+  const { address, chain } = useAccount();
+  // const { data: blockNumber } = useBlockNumber({watch: true });
   let tanks = useGameViewGetAllTanks({
-    watch: true,
     // @ts-ignore
     address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
     args: [gameAddress],
   });
   let hearts = useGameViewGetAllHearts({
-    watch: true,
     // @ts-ignore
     address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
     args: [gameAddress],
   });
-  const { address } = useAccount();
   let ownerTankId = useTankGamePlayers({
     args: [address!],
     // @ts-ignore

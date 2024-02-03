@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "./ui/button";
+import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { BaseError, getAddress, parseEther } from "viem";
-import { useAccount, useWaitForTransaction } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+import * as z from "zod";
 import {
   usePrepareTankGameFactoryCreateGame,
   useTankGameFactoryCreateGame,
 } from "../generated";
-import { useToast } from "./ui/use-toast";
+import { Button } from "./ui/button";
+import { Card, CardContent } from "./ui/card";
 import {
   Form,
   FormControl,
@@ -17,9 +18,8 @@ import {
   FormField,
   FormLabel,
 } from "./ui/form";
-import { useForm } from "react-hook-form";
 import { Input } from "./ui/input";
-import { Card, CardContent } from "./ui/card";
+import { useToast } from "./ui/use-toast";
 
 // Define your schema using Zod
 const formSchema = z.object({
@@ -61,7 +61,7 @@ export default function CreateGameForm({
       [event.target.name]: event.target.value,
     });
   };
-  let { config } = usePrepareTankGameFactoryCreateGame({
+  let { data: createConfig } = usePrepareTankGameFactoryCreateGame({
     args: [
       implAddress,
       {
@@ -78,27 +78,30 @@ export default function CreateGameForm({
       },
       deployerAddress!,
     ],
-    enabled: true,
   });
-  const { write: create, data } = useTankGameFactoryCreateGame(config);
-  useWaitForTransaction({
-    hash: data?.hash,
-    enabled: !!data,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: create, data: hash } = useTankGameFactoryCreateGame();
+  const { data: createReceipt, error: createFailure } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
+
+  useEffect(() => {
+    if (createReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: createReceipt.transactionHash,
       });
-    },
-  });
+    }
+    if (createFailure) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: createFailure.message,
+      });
+    }
+  }, [createReceipt, createFailure, toast]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -353,7 +356,7 @@ export default function CreateGameForm({
           className="w-full mt-5"
           type="submit"
           disabled={!create}
-          onClick={() => create?.()}
+          onClick={() => create?.(createConfig!.request)}
         >
           Submit
         </Button>

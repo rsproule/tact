@@ -1,9 +1,10 @@
 import { getPublicClient } from "wagmi/actions";
-import { tankGameABI, useTankGameSettings } from "../generated";
+import { tankGameAbi, useTankGameSettings } from "../generated";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { useTanks } from "./tankGame/EventsStream";
+import {config} from "@/src/wagmi";
 
 export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
   const [murderCount, setMurderCount] = useState(undefined);
@@ -11,14 +12,14 @@ export function LeaderBoard({ gameAddress }: { gameAddress: `0x${string}` }) {
   const [deathCount, setDeathCount] = useState(undefined);
   const [dripCount, setDripCount] = useState(undefined);
   const getLogs = async () => {
-    const publicClient = getPublicClient();
-    const filter = await publicClient.createContractEventFilter({
-      abi: tankGameABI,
+    const publicClient = getPublicClient(config);
+    const filter = await publicClient!.createContractEventFilter({
+      abi: tankGameAbi,
       strict: true,
       fromBlock: BigInt(0),
       address: gameAddress,
     });
-    return await publicClient.getFilterLogs({
+    return await publicClient!.getFilterLogs({
       filter,
     });
   };

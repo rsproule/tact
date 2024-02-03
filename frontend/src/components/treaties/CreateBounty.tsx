@@ -1,7 +1,7 @@
 import { usePrepareBountyCreate, useBountyCreate } from "@/src/generated";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { parseEther, BaseError, Address } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useWaitForTransactionReceipt } from "wagmi";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
@@ -17,35 +17,36 @@ export default function CreateBounty({
 }) {
   const [targetTank, setTargetTank] = useState<string | undefined>();
   const [bounty, setBounty] = useState<string | undefined>();
-  const { config: createBountyConfig } = usePrepareBountyCreate({
+  const { data: createBountyConfig } = usePrepareBountyCreate({
     address: hookAddress,
     args: [targetTank ? BigInt(targetTank) : BigInt(0)],
     value: bounty ? parseEther(bounty) : BigInt(0),
-    enabled: !!targetTank && !!bounty,
   });
 
-  const { write: create, data: createData } =
-    useBountyCreate(createBountyConfig);
-  useWaitForTransaction({
-    hash: createData?.hash,
-    enabled: !!createData,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: create, data: createData } =
+    useBountyCreate();
+  const { data: receipt, error } = useWaitForTransactionReceipt({
+    hash: createData
+  });
+
+  useEffect(() => {
+    if (receipt) {
       setTargetTank(undefined);
       setBounty(undefined);
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: receipt.transactionHash,
       });
-    },
-  });
+    }
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: (error as BaseError)?.shortMessage,
+      });
+    }
+  }, [receipt, error]);
   return (
     <Card>
       <CardHeader>Create Bounty:</CardHeader>
@@ -67,7 +68,7 @@ export default function CreateBounty({
             }}
             placeholder="Bounty in ETH"
           />
-          <Button disabled={!create} onClick={() => create?.()}>
+          <Button disabled={!create} onClick={() => create?.(createBountyConfig!.request)}>
             Create
           </Button>
         </div>

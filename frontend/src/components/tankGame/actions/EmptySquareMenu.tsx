@@ -1,10 +1,10 @@
 "use client";
 import { usePrepareTankGameMove, useTankGameMove } from "@/src/generated";
 import { Move } from "lucide-react";
-import { BaseError } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useEffect } from "react";
 import { DropdownMenuGroup, DropdownMenuItem } from "../../ui/dropdown-menu";
 import { useToast } from "../../ui/use-toast";
+import { useWaitForTransactionReceipt } from "wagmi";
 
 export default function EmptySquareMenu({
   ownersTank,
@@ -24,7 +24,7 @@ export default function EmptySquareMenu({
   gameAddress: `0x${string}`;
 }) {
   const { toast } = useToast();
-  let { config } = usePrepareTankGameMove({
+  let { data: moveConfig } = usePrepareTankGameMove({
     // @ts-ignore
     address: gameAddress,
     args: [
@@ -32,35 +32,39 @@ export default function EmptySquareMenu({
     ],
     enabled: open && !!ownersTank,
   });
-  const { write: move, data } = useTankGameMove(config);
-  useWaitForTransaction({
-    hash: data?.hash,
-    enabled: !!data,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: move, data: moveHash } = useTankGameMove();
+  const { data: moveReceipt, error: moveFailure } =
+    useWaitForTransactionReceipt({
+      hash: moveHash,
+    });
+  useEffect(() => {
+    if (moveReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: moveReceipt.transactionHash,
       });
-    },
-  });
+    }
+    if (moveFailure) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: moveFailure.message,
+      });
+    }
+  }, [moveReceipt, moveFailure, toast]);
+
   return (
-    // <DropdownMenuContent className="w-56">
     <DropdownMenuGroup>
-      <DropdownMenuItem disabled={!move} onSelect={() => move?.()}>
+      <DropdownMenuItem
+        disabled={!move}
+        onSelect={() => move?.(moveConfig!.request)}
+      >
         <Move className="mr-2 h-4 w-4" />
         <span>
           Move here ({y}, {x}, {z}) {distance ? `(costs ${distance} aps)` : ""}
         </span>
       </DropdownMenuItem>
     </DropdownMenuGroup>
-    // </DropdownMenuContent>
   );
 }

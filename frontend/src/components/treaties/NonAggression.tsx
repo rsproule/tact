@@ -1,24 +1,23 @@
 import {
-  useTankGamePlayers,
-  nonAggressionABI,
-  usePrepareNonAggressionAccept,
-  useNonAggressionAccept,
   gameViewAddress,
+  nonAggressionAbi,
   useGameViewGetGameEpoch,
-  usePrepareITreatyAccept,
+  useNonAggressionAccept,
+  usePrepareNonAggressionAccept,
+  useTankGamePlayers,
 } from "@/src/generated";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Address, BaseError } from "viem";
 import {
   useAccount,
   useBlockNumber,
-  useNetwork,
-  useWaitForTransaction,
+  useWaitForTransactionReceipt,
 } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import { useTankNameFromId } from "../tankGame/EventsStream";
-import { toast } from "../ui/use-toast";
 import { Card, CardContent, CardHeader } from "../ui/card";
+import { toast } from "../ui/use-toast";
+import { config } from "@/src/wagmi";
 
 export default function NonAggression({
   hookAddress,
@@ -40,7 +39,7 @@ export default function NonAggression({
     args: [address!],
     enabled: !!address,
   });
-  const { chain } = useNetwork();
+  const { chain } = useAccount({ config });
   const { data: epoch } = useGameViewGetGameEpoch({
     // @ts-ignore
     address: gameViewAddress[chain?.id as keyof typeof gameViewAddress],
@@ -51,14 +50,14 @@ export default function NonAggression({
   const [treaties, setTreaties] = useState<any>();
   useEffect(() => {
     const getLogs = async () => {
-      const publicClient = getPublicClient();
-      const filter = await publicClient.createContractEventFilter({
-        abi: nonAggressionABI,
+      const publicClient = getPublicClient(config);
+      const filter = await publicClient!.createContractEventFilter({
+        abi: nonAggressionAbi,
         strict: true,
         fromBlock: BigInt(0),
         address: hookAddress,
       });
-      const allLogs = await publicClient.getFilterLogs({
+      const allLogs = await publicClient!.getFilterLogs({
         filter,
       });
       const proposedTreaties = allLogs.filter(
@@ -96,30 +95,32 @@ export default function NonAggression({
   }, [hookAddress, blockNumber, epoch]);
 
   const tankName = useTankNameFromId(gameAddress, tankId);
-  const { config: acceptConfig } = usePrepareNonAggressionAccept({
+  const { data: acceptConfig } = usePrepareNonAggressionAccept({
     args: [tankId, hookAddress], // the information for the treaty we want to accept
     address: ownerHookAddress, // MY hook address
   });
-  const { write: accept, data: acceptData } =
-    useNonAggressionAccept(acceptConfig);
-  useWaitForTransaction({
-    hash: acceptData?.hash,
-    enabled: !!acceptData,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  const { writeContract: accept, data: acceptData } = useNonAggressionAccept();
+  const { data: acceptReceipt, error: acceptFailure } =
+    useWaitForTransactionReceipt({
+      hash: acceptData,
+    });
+
+  useEffect(() => {
+    if (acceptReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: acceptReceipt.transactionHash,
       });
-    },
-  });
+    }
+    if (acceptFailure) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: acceptFailure.message,
+      });
+    }
+  }, [acceptReceipt, acceptFailure]);
 
   return (
     <div className="">
@@ -154,7 +155,7 @@ export default function NonAggression({
                     bounty={bounty}
                     gameAddress={gameAddress}
                     ownerTank={ownerTank}
-                    accept={accept}
+                    accept={() => accept?.(acceptConfig!.request)}
                   />
                 ))}
             </CardContent>

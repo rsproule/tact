@@ -3,9 +3,9 @@ import {
   useTankGameDonate,
   useTankGamePrizePool,
 } from "@/src/generated";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BaseError, formatEther, parseEther } from "viem";
-import { useWaitForTransaction } from "wagmi";
+import { useWaitForTransactionReceipt } from "wagmi";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { useToast } from "../../ui/use-toast";
@@ -22,30 +22,33 @@ export default function Donate({
     address: gameAddress,
     watch: true,
   });
-  let { config } = usePrepareTankGameDonate({
+  let { data: donateConfig } = usePrepareTankGameDonate({
     // @ts-ignore
     address: gameAddress,
     value: parseEther(amount as `${number}`),
     enabled: !!amount,
   });
-  let { write: donate, data } = useTankGameDonate(config);
-  useWaitForTransaction({
-    hash: data?.hash,
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed.",
-        description: (error as BaseError)?.shortMessage,
-      });
-    },
-    onSuccess: (s) => {
+  let { writeContract: donate, data: donateHash } = useTankGameDonate();
+  const { data: donateReceipt, error: donateFailure } =
+    useWaitForTransactionReceipt({
+      hash: donateHash,
+    });
+  useEffect(() => {
+    if (donateReceipt) {
       toast({
         variant: "success",
         title: "Transaction Confirmed.",
-        description: s.transactionHash,
+        description: donateReceipt.transactionHash,
       });
-    },
-  });
+    }
+    if (donateFailure) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Failed.",
+        description: donateFailure.message,
+      });
+    }
+  }, [donateReceipt, donateFailure, toast]);
   return (
     <div className="flex justify-center pb-3">
       <div className="block justify-center pb-3">
@@ -62,7 +65,7 @@ export default function Donate({
           <Button
             disabled={!donate}
             onClick={() => {
-              donate?.();
+              donate?.(donateConfig!.request);
             }}
           >
             Donate ETH
