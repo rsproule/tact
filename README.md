@@ -54,4 +54,4 @@ The advent of blockchain technology, equipped with smart contracts, offers a sol
 - Dead players can be revived by someone who sends them a heart (they do not accumulate APs during the time they are dead)
 - once a day a heart spawns randomly on the field, whoever goes to that square earns a heart
 - Dead players form a "cursing jury" who can vote on who to curse (take ap) once per epoch
-- 
+
