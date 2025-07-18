@@ -2,8 +2,8 @@
 [licence-url]: https://github.com/rsproule/tanks/blob/master/LICENSE
 [actions-badge]: https://github.com/rsproule/tanks/actions/workflows/test.yml/badge.svg
 [actions-url]: https://github.com/rsproule/tanks/actions/workflows/test.yml
-[twitter-badge]: https://img.shields.io/twitter/follow/sproule_
-[twitter-url]: https://twitter.com/sproule_
+[twitter-badge]: https://img.shields.io/twitter/follow/ryanfsproule
+[twitter-url]: https://twitter.com/ryanfsproule
 
 # Tact - an onchain strategy game
 
