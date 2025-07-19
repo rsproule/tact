@@ -11,7 +11,7 @@ import {
   useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { GameId, GameState, GameRules, HexUtils } from '@tact/game-logic';
+import { GameId, GameState, GameRules } from '@tact/game-logic';
 import { useAllTanks, useAllHearts, useCurrentUser, useGameInfo, usePlayers, useMovePlayer, useShootPlayer, useUpgradePlayer, useGiveToPlayer, useClaimableAPs } from '@tact/providers';
 import { HexTileNode } from './HexTileNode.js';
 import { ActivityLog } from './ActivityLog.js';
@@ -84,7 +84,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
   const { fitView } = useReactFlow();
   
   const { data: tanksData, isLoading: tanksLoading, refetch: refetchTanks } = useAllTanks(gameId, { watch: true });
-  const { data: heartsData, isLoading: heartsLoading, refetch: refetchHearts } = useAllHearts(gameId, { watch: true });
+  const { data: heartsData, isLoading: heartsLoading } = useAllHearts(gameId, { watch: true });
   const { data: currentUser } = useCurrentUser();
   const { data: gameInfo, refetch: refetchGameInfo } = useGameInfo(gameId, { watch: true });
   const { data: players, refetch: refetchPlayers } = usePlayers(gameId, { watch: true });
@@ -147,9 +147,6 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
       return ownerTank?.aps || 0; // Return current APs if game not started
     }
 
-    const currentEpoch = epochInfo.currentEpoch;
-    const maxApsPerEpoch = gameInfo.settings.epochMaxActionPoints || 3;
-    const totalApsEarned = (currentEpoch + 1) * maxApsPerEpoch; // +1 because epochs start at 0
     const currentStoredAps = ownerTank.aps;
     
     // The tank's stored APs represent how many they have left to use

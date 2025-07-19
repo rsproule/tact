@@ -19,6 +19,7 @@ interface ActivityLogProps {
 }
 
 export function ActivityLog({ gameId, currentUser, gameState, className = '' }: ActivityLogProps) {
+  // currentUser is used in formatEventToActivity for message formatting
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -35,14 +36,14 @@ export function ActivityLog({ gameId, currentUser, gameState, className = '' }: 
       if (!response.ok) return;
       
       const events = await response.json();
-      const formattedActivities = events.map((event: any) => formatEventToActivity(event));
+      const formattedActivities = events.map((event: any) => formatEventToActivity(event, currentUser));
       
       setActivities(formattedActivities);
       
       // Calculate unread count if log is closed
       if (!isOpen && lastReadTimestamp) {
         const newItems = formattedActivities.filter(
-          activity => new Date(activity.timestamp) > new Date(lastReadTimestamp)
+          (activity: ActivityItem) => new Date(activity.timestamp) > new Date(lastReadTimestamp)
         );
         setUnreadCount(newItems.length);
       }
@@ -54,7 +55,7 @@ export function ActivityLog({ gameId, currentUser, gameState, className = '' }: 
   }, [gameId, isOpen, lastReadTimestamp]);
 
   // Format game event to activity item
-  const formatEventToActivity = (event: any): ActivityItem => {
+  const formatEventToActivity = (event: any, _userId?: string): ActivityItem => {
     const timestamp = event.timestamp || event.createdAt;
     const playerName = event.data?.playerName || event.player?.substring(0, 8) || 'Unknown';
     
