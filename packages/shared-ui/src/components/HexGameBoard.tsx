@@ -715,7 +715,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                         ? 'Claiming...' 
                         : claimableAPs > 0 
                           ? `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}` 
-                          : (claimReason || 'No APs to claim')
+                          : 'Claim APs'
                       }
                     </button>
                   )}
@@ -753,7 +753,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                       ? 'Claiming...' 
                       : claimableAPs > 0 
                         ? `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}` 
-                        : (claimReason || 'No APs to claim')
+                        : 'Claim APs'
                     }
                   </button>
                 </div>
