@@ -61,20 +61,24 @@ export class GameRules {
     targetPosition: HexPosition,
     boardSize: number,
     occupiedPositions: HexPosition[]
-  ): { valid: boolean; reason?: string } {
-    // Check if tank has enough APs
-    if (tank.aps < GAME_RULES.MOVE_COST) {
-      return { valid: false, reason: 'Not enough action points' };
+  ): { valid: boolean; reason?: string; cost?: number } {
+    // Calculate distance and cost
+    const distance = HexUtils.distance(tank.position, targetPosition);
+    const cost = distance * GAME_RULES.MOVE_COST;
+
+    // Check if tank has enough APs for the move
+    if (tank.aps < cost) {
+      return { valid: false, reason: `Not enough action points (need ${cost}, have ${tank.aps})`, cost };
     }
 
-    // Check if target position is adjacent
-    if (!HexUtils.isAdjacent(tank.position, targetPosition)) {
-      return { valid: false, reason: 'Target position must be adjacent' };
+    // Check if trying to move to same position
+    if (distance === 0) {
+      return { valid: false, reason: 'Cannot move to current position', cost };
     }
 
     // Check if target position is valid on board
     if (!HexUtils.isValidPosition(targetPosition, boardSize)) {
-      return { valid: false, reason: 'Target position is outside board' };
+      return { valid: false, reason: 'Target position is outside board', cost };
     }
 
     // Check if target position is occupied
@@ -82,10 +86,10 @@ export class GameRules {
       pos => pos.x === targetPosition.x && pos.y === targetPosition.y && pos.z === targetPosition.z
     );
     if (isOccupied) {
-      return { valid: false, reason: 'Target position is occupied' };
+      return { valid: false, reason: 'Target position is occupied', cost };
     }
 
-    return { valid: true };
+    return { valid: true, cost };
   }
 
   static canShoot(

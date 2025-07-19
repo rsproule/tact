@@ -77,6 +77,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
   const [showSettings, setShowSettings] = useState(false);
   const [newEpochSeconds, setNewEpochSeconds] = useState<number>(0);
   const [settingsLoading, setSettingsLoading] = useState(false);
+  const [claimApLoading, setClaimApLoading] = useState(false);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { fitView } = useReactFlow();
   
@@ -138,12 +139,52 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
 
   const epochInfo = getEpochInfo();
 
+  // Calculate available APs based on epoch system
+  const getAvailableAPs = useCallback(() => {
+    if (!gameInfo || !ownerTank || gameInfo.state !== GameState.Started) {
+      return ownerTank?.aps || 0; // Return current APs if game not started
+    }
+
+    const currentEpoch = epochInfo.currentEpoch;
+    const maxApsPerEpoch = gameInfo.settings.epochMaxActionPoints || 3;
+    const totalApsEarned = (currentEpoch + 1) * maxApsPerEpoch; // +1 because epochs start at 0
+    const currentStoredAps = ownerTank.aps;
+    
+    // The tank's stored APs represent how many they have left to use
+    // We don't need to subtract "used" APs because the database already tracks remaining APs
+    return Math.max(0, currentStoredAps);
+  }, [gameInfo, ownerTank, epochInfo.currentEpoch]);
+
+  // Calculate claimable APs
+  const getClaimableAPs = useCallback(() => {
+    if (!gameInfo || !ownerTank || gameInfo.state !== GameState.Started) {
+      return 0;
+    }
+
+    const currentEpoch = epochInfo.currentEpoch;
+    const maxApsPerEpoch = gameInfo.settings.epochMaxActionPoints || 3;
+    const totalApsEarned = (currentEpoch + 1) * maxApsPerEpoch; // +1 because epochs start at 0
+    const maxApsAllowed = Math.min(totalApsEarned, maxApsPerEpoch * 10); // Cap at 10 epochs worth
+    
+    return Math.max(0, maxApsAllowed - ownerTank.aps);
+  }, [gameInfo, ownerTank, epochInfo.currentEpoch]);
+
+  const availableAPs = getAvailableAPs();
+  const moveRange = availableAPs; // Use full available APs for movement range
+  const claimableAPs = getClaimableAPs();
+
   // Debug logging
   console.log('HexGameBoard Debug:', { 
     tanksCount: tanks.length, 
     heartsCount: hearts.length, 
     currentUser,
-    tanks: tanks.map(t => ({ id: t.tankId, owner: t.owner, position: t.position }))
+    availableAPs,
+    moveRange,
+    claimableAPs,
+    currentEpoch: epochInfo.currentEpoch,
+    epochMaxAPs: gameInfo?.settings?.epochMaxActionPoints,
+    ownerTankAPs: ownerTank?.aps,
+    tanks: tanks.map(t => ({ id: t.tankId, owner: t.owner, position: t.position, aps: t.aps }))
   });
 
   const handleTileClick = useCallback((nodeId: string, q: number, r: number, s: number, tank: any, heartsOnTile: number, distance?: number) => {
@@ -299,6 +340,46 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
     }
   }, [currentUser, gameInfo, newEpochSeconds, gameId, onToast, refetchGameInfo]);
 
+  // Claim AP handler
+  const handleClaimAPs = useCallback(async () => {
+    if (!currentUser) return;
+    
+    setClaimApLoading(true);
+    try {
+      const response = await fetch(`/api/games/${gameId}/claim-aps`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playerId: currentUser }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        onToast?.({ 
+          type: 'success', 
+          title: 'APs Claimed!', 
+          description: `Claimed ${data.apsClaimed} AP${data.apsClaimed !== 1 ? 's' : ''} (Total: ${data.newTotal})` 
+        });
+        refetchTanks();
+        refetchGameInfo();
+      } else {
+        const error = await response.json();
+        onToast?.({ 
+          type: 'error', 
+          title: 'Claim failed', 
+          description: error.error || 'Unknown error' 
+        });
+      }
+    } catch (err) {
+      onToast?.({ 
+        type: 'error', 
+        title: 'Claim failed', 
+        description: err instanceof Error ? err.message : 'Network error' 
+      });
+    } finally {
+      setClaimApLoading(false);
+    }
+  }, [currentUser, gameId, onToast, refetchTanks, refetchGameInfo]);
+
   // Initialize epoch seconds when settings panel opens
   useEffect(() => {
     if (showSettings && gameInfo) {
@@ -351,7 +432,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
         // Determine tile state
         const selected = selectedTileId === nodeId;
         const isShootRange = ownerTank && distance !== undefined && distance <= ownerTank.range && distance > 0;
-        const isMoveRange = ownerTank && distance === 1;
+        const isMoveRange = ownerTank && distance !== undefined && distance <= moveRange && distance > 0;
         
         nodes.push({
           id: nodeId,
@@ -369,9 +450,11 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
             ownerTank,
             distance,
             selected,
+            highlighted: false,
             isShootRange,
             isMoveRange,
             onTileClick: () => handleTileClick(nodeId, q, r, s, tank, heartsOnTile ? 1 : 0, distance),
+            onTileContextClick: () => handleTileClick(nodeId, q, r, s, tank, heartsOnTile ? 1 : 0, distance),
           },
           draggable: false,
           selectable: true,
@@ -380,7 +463,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
     }
     
     return nodes;
-  }, [tanks, hearts, ownerTank, selectedTileId, boardSize, gameId, handleTileClick]);
+  }, [tanks, hearts, ownerTank, selectedTileId, boardSize, gameId, handleTileClick, moveRange]);
 
   // Force fitView after nodes are loaded to ensure proper centering
   useEffect(() => {
@@ -444,6 +527,8 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={true}
+        proOptions={{ hideAttribution: true }}
+        disableKeyboardA11y={true}
         panOnDrag={[1, 2]}
         zoomOnScroll={true}
         zoomOnPinch={true}
@@ -582,27 +667,91 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
           </div>
         </Panel>
 
-        {/* Player Tank Info Panel - Top Right */}
-        {ownerTank && (
+        {/* Tank Info Panel - Top Right - only show if no tile selected OR selected tile is your own tank */}
+        {ownerTank && (!selectedTileData || (selectedTileData.tank && selectedTileData.tank === selectedTileData.ownerTank)) && (
           <Panel position="top-right" className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl p-4 m-4 min-w-64">
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-blue-400">🚗 Your Tank</h3>
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-blue-400">🚗 Your Tank</h3>
+                {selectedTileData && (
+                  <button
+                    onClick={() => {
+                      setSelectedTileId(undefined);
+                      setSelectedTileData(null);
+                    }}
+                    className="text-gray-400 hover:text-gray-200 transition-colors"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+              
               <div className="space-y-2 text-sm text-gray-300">
                 <div><strong className="text-white">Position:</strong> ({ownerTank.position.x}, {ownerTank.position.y}, {ownerTank.position.z})</div>
                 <div><strong className="text-white">Hearts:</strong> <span className="text-red-400">♥️ {ownerTank.hearts}</span></div>
                 <div><strong className="text-white">Action Points:</strong> <span className="text-blue-400">⚡ {ownerTank.aps}</span></div>
-                <div><strong className="text-white">Range:</strong> <span className="text-purple-400">🎯 {ownerTank.range}</span></div>
+                <div><strong className="text-white">Move Range:</strong> <span className="text-green-400">🦶 {moveRange}</span></div>
+                <div><strong className="text-white">Shoot Range:</strong> <span className="text-purple-400">🎯 {ownerTank.range}</span></div>
                 {ownerTank.hearts === 0 && (
                   <div className="text-red-400 font-medium">💀 Tank Destroyed</div>
                 )}
               </div>
+
+              {/* Tank Actions - only show when viewing your own tank */}
+              {selectedTileData && selectedTileData.tank === selectedTileData.ownerTank && ownerTank.hearts > 0 && (
+                <div className="border-t border-gray-600 pt-2 space-y-2">
+                  <h4 className="text-sm font-semibold text-white">Tank Actions</h4>
+                  
+                  {/* Claim APs Button */}
+                  {claimableAPs > 0 && (
+                    <button 
+                      className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 text-white rounded transition-colors text-sm"
+                      onClick={handleClaimAPs}
+                      disabled={claimApLoading}
+                    >
+                      {claimApLoading ? 'Claiming...' : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
+                    </button>
+                  )}
+                  
+                  {/* Upgrade Button */}
+                  {(() => {
+                    const upgradeCost = GameRules.getUpgradeCost(ownerTank.range);
+                    const canAfford = ownerTank.aps >= upgradeCost;
+                    const disabledReason = !canAfford ? `Need ${upgradeCost} AP to upgrade` : '';
+                    
+                    return (
+                      <button 
+                        className="w-full px-3 py-2 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                        onClick={handleUpgrade}
+                        disabled={upgradeLoading || !canAfford}
+                        title={disabledReason}
+                      >
+                        {upgradeLoading ? 'Upgrading...' : `Upgrade Tank (${upgradeCost} AP)`}
+                      </button>
+                    );
+                  })()}
+                </div>
+              )}
+
+              {/* General Tank Info - show claim button even when not selected */}
+              {!selectedTileData && claimableAPs > 0 && ownerTank.hearts > 0 && (
+                <div className="border-t border-gray-600 pt-2">
+                  <button 
+                    className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 text-white rounded transition-colors text-sm"
+                    onClick={handleClaimAPs}
+                    disabled={claimApLoading}
+                  >
+                    {claimApLoading ? 'Claiming...' : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
+                  </button>
+                </div>
+              )}
             </div>
           </Panel>
         )}
 
-        {/* Selected Tile Panel - Below Tank Panel */}
-        {selectedTileData && (
-          <Panel position="top-right" className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl p-4 m-4 min-w-64 max-w-80" style={{ top: ownerTank ? '180px' : '20px' }}>
+        {/* Selected Tile Panel - Only show for non-tank tiles or enemy tanks */}
+        {selectedTileData && (!selectedTileData.tank || selectedTileData.tank !== selectedTileData.ownerTank) && (
+          <Panel position="top-right" className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl p-4 m-4 min-w-64 max-w-80">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold text-white">Tile Information</h3>
@@ -655,9 +804,10 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
 
               {/* Action Buttons */}
               <div className="space-y-2 pt-2 border-t border-gray-600">
-                {!selectedTileData.tank && selectedTileData.distance === 1 && selectedTileData.ownerTank && selectedTileData.ownerTank.hearts > 0 && (() => {
-                  const canMove = selectedTileData.ownerTank.aps >= 1;
-                  const disabledReason = !canMove ? 'Need 1 AP to move' : '';
+                {!selectedTileData.tank && selectedTileData.distance !== undefined && selectedTileData.distance <= moveRange && selectedTileData.distance > 0 && selectedTileData.ownerTank && selectedTileData.ownerTank.hearts > 0 && (() => {
+                  const moveCost = selectedTileData.distance; // Cost is equal to distance
+                  const canMove = selectedTileData.ownerTank.aps >= moveCost;
+                  const disabledReason = !canMove ? `Need ${moveCost} AP${moveCost > 1 ? 's' : ''} to move` : '';
                   
                   return (
                     <button 
@@ -666,25 +816,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                       disabled={moveLoading || !canMove}
                       title={disabledReason}
                     >
-                      {moveLoading ? 'Moving...' : 'Move Here (1 AP)'}
-                    </button>
-                  );
-                })()}
-                
-                {selectedTileData.tank && selectedTileData.tank === selectedTileData.ownerTank && selectedTileData.ownerTank.hearts > 0 && (() => {
-                  // Use actual game rules for upgrade cost
-                  const upgradeCost = GameRules.getUpgradeCost(selectedTileData.ownerTank.range);
-                  const canAfford = selectedTileData.ownerTank.aps >= upgradeCost;
-                  const disabledReason = !canAfford ? `Need ${upgradeCost} AP to upgrade` : '';
-                  
-                  return (
-                    <button 
-                      className="w-full px-3 py-2 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
-                      onClick={handleUpgrade}
-                      disabled={upgradeLoading || !canAfford}
-                      title={disabledReason}
-                    >
-                      {upgradeLoading ? 'Upgrading...' : `Upgrade Tank (${upgradeCost} AP)`}
+                      {moveLoading ? 'Moving...' : `Move Here (${moveCost} AP${moveCost > 1 ? 's' : ''})`}
                     </button>
                   );
                 })()}

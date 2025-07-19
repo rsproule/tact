@@ -1,5 +1,6 @@
 import { Handle, Position } from '@xyflow/react';
 import { GameId } from '@tact/game-logic';
+import { memo } from 'react';
 
 interface HexTileData {
   gameId: GameId;
@@ -18,7 +19,7 @@ interface HexTileData {
   onTileContextClick: () => void;
 }
 
-export function HexTileNode({ data }: { data: HexTileData }) {
+export const HexTileNode = memo(function HexTileNode({ data }: { data: HexTileData }) {
   // Debug log when tank is present
   if (data.tank) {
     console.log('HexTileNode rendering tank:', { 
@@ -159,4 +160,4 @@ export function HexTileNode({ data }: { data: HexTileData }) {
       />
     </>
   );
-}
+});

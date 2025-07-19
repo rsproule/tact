@@ -178,13 +178,15 @@ export async function movePlayer(gameId: string, playerId: string, targetPositio
       return { success: false, error: canMove.reason };
     }
 
+    const moveCost = canMove.cost || 1;
+
     // Update tank position and APs
     await db.update(tanks)
       .set({ 
         positionQ: targetPosition.x,
         positionR: targetPosition.y,
         positionS: targetPosition.z,
-        aps: tank.aps - 1,
+        aps: tank.aps - moveCost,
       })
       .where(eq(tanks.id, tank.id));
 
@@ -197,7 +199,7 @@ export async function movePlayer(gameId: string, playerId: string, targetPositio
       data: { 
         from: currentPosition,
         to: targetPosition,
-        apsCost: 1,
+        apsCost: moveCost,
       },
     });
 
@@ -600,5 +602,77 @@ export async function updateGameSettings(
   } catch (error) {
     console.error('Error updating game settings:', error);
     return { success: false, error: 'Failed to update game settings' };
+  }
+}
+
+export async function claimActionPoints(gameId: string, playerId: string) {
+  try {
+    // Get player's tank
+    const tank = await db.query.tanks.findFirst({
+      where: and(eq(tanks.gameId, gameId), eq(tanks.owner, playerId)),
+    });
+
+    if (!tank) {
+      return { success: false, error: 'Tank not found' };
+    }
+
+    // Get game
+    const game = await db.query.games.findFirst({
+      where: eq(games.id, gameId),
+    });
+
+    if (!game || game.state !== GameState.Started) {
+      return { success: false, error: 'Game is not active' };
+    }
+
+    if (!game.epochStart) {
+      return { success: false, error: 'Game has not started properly' };
+    }
+
+    // Calculate available APs based on current epoch
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    const epochStart = Math.floor(new Date(game.epochStart).getTime() / 1000);
+    const epochDuration = game.epochSeconds;
+    const currentEpoch = Math.floor((nowSeconds - epochStart) / epochDuration);
+    const maxApsPerEpoch = game.epochMaxActionPoints;
+    
+    // Calculate total APs earned so far
+    const totalApsEarned = (currentEpoch + 1) * maxApsPerEpoch; // +1 because epochs start at 0
+    const maxApsAllowed = Math.min(totalApsEarned, maxApsPerEpoch * 10); // Cap at 10 epochs worth
+    
+    // If tank already has max or more APs, no need to claim
+    if (tank.aps >= maxApsAllowed) {
+      return { success: false, error: 'No additional action points available to claim' };
+    }
+
+    // Calculate how many APs to add
+    const apsToAdd = maxApsAllowed - tank.aps;
+    const newApTotal = tank.aps + apsToAdd;
+
+    // Update tank APs
+    await db.update(tanks)
+      .set({ aps: newApTotal })
+      .where(eq(tanks.id, tank.id));
+
+    // Create event
+    await db.insert(gameEvents).values({
+      id: uuidv4(),
+      gameId,
+      type: 'ClaimAPs',
+      player: playerId,
+      data: { 
+        previousAps: tank.aps,
+        newAps: newApTotal,
+        apsClaimed: apsToAdd,
+        currentEpoch,
+        maxApsPerEpoch
+      },
+    });
+
+    revalidatePath(`/games/${gameId}`);
+    return { success: true, apsClaimed: apsToAdd, newTotal: newApTotal };
+  } catch (error) {
+    console.error('Error claiming action points:', error);
+    return { success: false, error: 'Failed to claim action points' };
   }
 }
