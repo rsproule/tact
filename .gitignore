@@ -1,1 +1,216 @@
+# ==============================================================================
+# MONOREPO GITIGNORE - TACT
+# ==============================================================================
+
+# ==============================================================================
+# GENERAL
+# ==============================================================================
+
+# Operating System
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ==============================================================================
+# NODE.JS / JAVASCRIPT / TYPESCRIPT
+# ==============================================================================
+
+# Dependencies
+node_modules/
+jspm_packages/
+bower_components/
+
+# Package manager files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+.yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+.nyc_output
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# ESLint cache
+.eslintcache
+
+# Stylelint cache
+.stylelintcache
+
+# ==============================================================================
+# NEXT.JS
+# ==============================================================================
+
+# Next.js build output
+.next/
+out/
+
+# Next.js cache
+.next
+
+# ==============================================================================
+# REACT / BUILD TOOLS
+# ==============================================================================
+
+# Build outputs
+build/
+dist/
+.cache/
+.parcel-cache
+
+# Testing
+.nyc_output
+
+# ==============================================================================
+# TURBOREPO
+# ==============================================================================
+
+# Turborepo cache
+.turbo/
+
+# ==============================================================================
+# RUST / CARGO
+# ==============================================================================
+
+# Rust build artifacts
+target/
+Cargo.lock
+
+# ==============================================================================
+# SOLIDITY / FOUNDRY
+# ==============================================================================
+
+# Foundry/Forge artifacts
+cache/
+out/
+
+# Broadcast logs (keep structure but ignore content)
+/broadcast
+!/broadcast
+broadcast/*/31337/
+broadcast/**/dry-run/
+
+# ==============================================================================
+# ENVIRONMENT / SECRETS
+# ==============================================================================
+
+# Environment files
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+
+# Bot keys
+.botkeys.env
+mnemonic
+
+# ==============================================================================
+# DATABASES
+# ==============================================================================
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# ==============================================================================
+# DEPLOYMENT / SERVICES
+# ==============================================================================
+
+# Vercel
+.vercel
+
+# Serverless
+.serverless/
+
+# ==============================================================================
+# LOGS
+# ==============================================================================
+
+# Log files
+logs/
+*.log
+
+# ==============================================================================
+# TEMPORARY / CACHE FILES
+# ==============================================================================
+
+# Temporary directories
+.temp/
+.tmp/
+
+# Runtime data
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Optional caches
+.npm
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# ==============================================================================
+# DOCUMENTATION (auto-generated)
+# ==============================================================================
+
+docs/
+
+# ==============================================================================
+# MISC
+# ==============================================================================
+
+# Archive files
+*.tgz
+*.tar.gz
+*.zip
+
+# Certificate files
+*.pem
+
+# Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Object files
+*.o
+*.a
+
+# ==============================================================================
+# PROJECT SPECIFIC
+# ==============================================================================
+
+# Keep these patterns if you have specific needs
+# fundPoor.sh (from bot directory)
+fundPoor.sh

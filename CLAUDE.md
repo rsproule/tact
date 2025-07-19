@@ -4,35 +4,80 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Tact is an onchain strategy game built on Ethereum that demonstrates programmable trust and credible commitments. The project consists of:
+Tact is an onchain strategy game built on Ethereum that demonstrates programmable trust and credible commitments. The project has been refactored into a monorepo structure with:
 
 - **Smart Contracts** (Solidity/Foundry): Core game logic, hooks system, and factory patterns
-- **Frontend** (Next.js/React): Web interface using wagmi for blockchain interaction
+- **Frontend Apps**: Separate blockchain and database-backed versions with identical UIs
+- **Shared Packages**: Reusable components, game logic, and provider abstractions
 - **Bot** (Rust): Automated players for testing and gameplay
 - **Server** (TypeScript/Bun): API server for game data and events
 
+## Monorepo Structure
+
+### Apps (`/apps`)
+- **`blockchain-app/`**: Next.js app using wagmi for blockchain interaction
+- **`database-app/`**: Next.js app using database with server actions
+
+### Packages (`/packages`)
+- **`game-logic/`**: Core game rules, types, and validation logic
+- **`providers/`**: Abstraction layer for blockchain and database providers
+- **`shared-ui/`**: Reusable React components (HexGameBoard, Tile, actions)
+- **`utils/`**: Shared utilities (formatting, validation, constants)
+
+### Legacy Structure
+- **`frontend/`**: Original Next.js app (to be migrated)
+- **`contracts/`**: Smart contracts and deployment scripts
+- **`bot/`**: Rust-based automated players
+- **`server/`**: Express API server
+
 ## Architecture
 
-### Smart Contracts (`/contracts`)
-- **TankGame**: Core game implementation with modular hook system
-- **HexBoard**: Hexagonal board game mechanics
-- **Factories**: TankGameFactory and HookFactory for creating game instances
-- **Hooks**: Extensible game modification system (Bounty, NonAggression)
-- **Libraries**: Move, Join, Shoot, Give actions as separate libraries
+### Abstraction Layer
+The project uses a provider pattern to abstract blockchain vs database interactions:
 
-### Frontend (`/frontend`)
-- Built with Next.js 13+ App Router
-- Uses wagmi/viem for Ethereum integration
-- Radix UI components with Tailwind CSS
-- Real-time game state updates via blockchain events
-- Hexagonal grid rendering with react-hexgrid
+- **`ITactProvider`**: Unified interface for all game operations
+- **`BlockchainProvider`**: Wraps wagmi hooks for blockchain interaction
+- **`DatabaseProvider`**: Uses server actions for database operations
+- **Unified React Hooks**: Work with both providers transparently
 
-### Bot (`/bot`)
-- Rust-based automated players using ethers-rs
-- Supports fleet management for testing scenarios
-- Configurable strategies and behaviors
+### Game Logic Package
+Centralized game rules and validation that work across all implementations:
+- Hex grid utilities and distance calculations
+- Game rule validation (move, shoot, upgrade, give)
+- Game state management utilities
+- Type definitions shared across all apps
+
+### Shared UI Components
+Reusable React components that work with both providers:
+- `HexGameBoard`: Main game board with hex grid
+- `Tile`: Individual hex tiles with context menus
+- Action components: Move, shoot, upgrade, give menus
 
 ## Development Commands
+
+### Monorepo Management
+```bash
+# Install all dependencies
+bun install
+
+# Build all packages and apps
+bun run build
+
+# Run all apps in development mode
+bun run dev
+
+# Run tests across all packages
+bun run test
+
+# Type check all packages
+bun run type-check
+
+# Lint all packages
+bun run lint
+
+# Clean all build outputs
+bun run clean
+```
 
 ### Smart Contracts
 ```bash
@@ -45,15 +90,31 @@ make format          # Format Solidity code
 forge test           # Run contract tests
 ```
 
-### Frontend
+### Frontend Apps
 ```bash
-cd frontend
-npm run dev          # Start development server
+cd apps/blockchain-app
+npm run dev          # Start blockchain app
 npm run build        # Build for production
 npm run lint         # Run ESLint
+
+cd apps/database-app
+npm run dev          # Start database app
+npm run build        # Build for production
 ```
 
-### Bot
+### Packages
+```bash
+# Build individual packages
+cd packages/game-logic && bun run build
+cd packages/providers && bun run build
+cd packages/shared-ui && bun run build
+cd packages/utils && bun run build
+
+# Watch mode for development
+cd packages/game-logic && bun run dev
+```
+
+### Bot Testing
 ```bash
 cd bot
 cargo build          # Build Rust bot
@@ -75,31 +136,64 @@ bun run test         # Run integration tests
 
 ## Key Development Patterns
 
-### Game Hook System
-Games use a modular hook system where external contracts can modify game behavior:
+### Provider Pattern
+Both apps use the same interface but different backends:
+```typescript
+// Unified usage in components
+const { provider } = useTactProvider();
+const { data: tanks } = useAllTanks(gameId, { watch: true });
+const { movePlayer } = useMovePlayer();
+```
+
+### Shared Components
+UI components work with any provider:
+```typescript
+import { HexGameBoard } from '@tact/shared-ui';
+// Works with both blockchain and database providers
+<HexGameBoard gameId={gameId} boardSize={boardSize} />
+```
+
+### Game Rules
+Centralized validation logic:
+```typescript
+import { GameRules, HexUtils } from '@tact/game-logic';
+const canMove = GameRules.canMove(tank, targetPosition, boardSize, occupiedPositions);
+```
+
+### Hook System (Smart Contracts)
+Games use a modular hook system for extending functionality:
 - Hooks implement `IHooks` interface
 - Factory pattern for deploying hook instances
 - Examples: Bounty system, Non-aggression pacts
 
-### Blockchain Integration
-- Frontend uses wagmi with code generation from `wagmi.config.ts`
-- Deployments managed via `foundry.toml` and deployment scripts
-- Multi-chain support (Foundry local, Goerli testnet)
+## Migration Strategy
 
-### State Management
-- Game state stored on-chain in `TankGameV2Storage`
-- Frontend subscribes to blockchain events for real-time updates
-- Hexagonal coordinate system for board positioning
+The project supports both blockchain and database backends:
+
+1. **Blockchain Version**: Uses wagmi, connects to Ethereum, requires wallet
+2. **Database Version**: Uses server actions, instant gameplay, no blockchain dependencies
+
+Both versions share:
+- Identical UI components and game experience
+- Same game rules and validation logic
+- Compatible data structures and types
 
 ## Testing Strategy
 
-- **Unit Tests**: Foundry tests for smart contracts
+- **Unit Tests**: Foundry tests for smart contracts, package-level tests
 - **Integration Tests**: Full stack testing with `integ-test.sh`
 - **Bot Testing**: Automated gameplay scenarios with Rust bots
-- **Frontend Testing**: React component testing (use existing patterns)
+- **E2E Tests**: Cross-app compatibility testing
 
-## Code Generation
+## Package Dependencies
 
-- Run `npm run merkle` in contracts to generate merkle trees
-- Frontend types auto-generated from contracts via wagmi CLI
-- Ensure contract changes trigger frontend type updates
+```
+apps/blockchain-app -> @tact/shared-ui, @tact/providers, @tact/game-logic, @tact/utils
+apps/database-app   -> @tact/shared-ui, @tact/providers, @tact/game-logic, @tact/utils
+@tact/shared-ui     -> @tact/providers, @tact/game-logic
+@tact/providers     -> @tact/game-logic
+@tact/utils         -> (no internal dependencies)
+@tact/game-logic    -> (no internal dependencies)
+```
+
+This architecture enables rapid prototyping with the database version while maintaining full blockchain compatibility.
