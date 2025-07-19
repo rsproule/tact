@@ -58,7 +58,7 @@ export function ActivityLog({ gameId, currentUser, gameState, className = '' }: 
   // Format game event to activity item
   const formatEventToActivity = (event: any, _userId?: string): ActivityItem => {
     const timestamp = event.timestamp || event.createdAt;
-    const playerName = event.data?.playerName || event.player?.substring(0, 8) || 'Unknown';
+    const playerName = event.playerName || event.data?.playerName || (event.player ? `Player ${event.player.substring(0, 6)}` : 'Unknown');
     
     let message = '';
     switch (event.type) {
@@ -87,7 +87,7 @@ export function ActivityLog({ gameId, currentUser, gameState, className = '' }: 
       case 'Give':
         const hearts = event.data?.hearts || 0;
         const aps = event.data?.aps || 0;
-        const receiverName = event.data?.receiver?.substring(0, 8) || 'Unknown';
+        const receiverName = event.data?.receiverName || (event.data?.receiver ? `Player ${event.data.receiver.substring(0, 6)}` : 'Unknown');
         message = `${playerName} gave ${hearts > 0 ? `${hearts} heart${hearts !== 1 ? 's' : ''}` : ''}${hearts > 0 && aps > 0 ? ' and ' : ''}${aps > 0 ? `${aps} AP${aps !== 1 ? 's' : ''}` : ''} to ${receiverName}`;
         break;
       case 'ClaimAPs':
