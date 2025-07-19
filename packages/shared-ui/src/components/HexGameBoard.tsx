@@ -665,6 +665,41 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
               {gameInfo?.epochStart && gameInfo?.state === GameState.Started && (
                 <div><strong className="text-white">Started:</strong> {new Date(gameInfo.epochStart * 1000).toLocaleTimeString()}</div>
               )}
+              
+              {/* Collapsible Players List */}
+              {players && players.length > 0 && (
+                <div className="border-t border-gray-600 pt-3 mt-3">
+                  <button 
+                    onClick={() => setShowPlayers(!showPlayers)}
+                    className="flex items-center justify-between w-full text-sm font-semibold text-white mb-2 hover:text-gray-300 transition-colors"
+                  >
+                    <span>Players ({players.length})</span>
+                    <span className={`transform transition-transform ${showPlayers ? 'rotate-90' : ''}`}>▶</span>
+                  </button>
+                  {showPlayers && (
+                    <div className="space-y-2 max-h-32 overflow-y-auto">
+                      {players.map((player) => {
+                        const playerTank = tanks.find(t => t.owner === player.address);
+                        return (
+                          <div key={player.address} className="flex justify-between items-center text-xs p-2 bg-gray-800/60 rounded border border-gray-600">
+                            <div className="flex-1">
+                              <div className="font-medium text-white">{player.name}</div>
+                            </div>
+                            {playerTank && (
+                              <div className="flex space-x-1 text-xs">
+                                <span className="text-red-400">♥️{playerTank.hearts}</span>
+                                <span className="text-blue-400">⚡{playerTank.aps}</span>
+                                <span className="text-purple-400">🎯{playerTank.range}</span>
+                                {playerTank.hearts === 0 && <span>💀</span>}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </Panel>
