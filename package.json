@@ -1,13 +1,38 @@
 {
-  "name": "",
+  "name": "tact-monorepo",
+  "version": "1.0.0",
+  "private": true,
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "clean": "turbo clean",
+    "server": "bun run server/index.ts",
+    "contracts:build": "cd contracts && make build",
+    "contracts:test": "cd contracts && forge test",
+    "contracts:deploy": "cd contracts && make deploy-anvil",
+    "bot:build": "cd bot && cargo build",
+    "bot:test": "cd bot && make run-test-fleet",
+    "integ-test": "./integ-test.sh"
+  },
   "devDependencies": {
+    "turbo": "^2.5.5",
+    "typescript": "^5.0.0",
     "bun-types": "^1.0.4-canary.20231003T140149"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "scripts": {
-    "server": "bun run index.ts"
+  "packageManager": "bun@1.2.18",
+  "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/auth-helpers-react": "^0.5.0",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.52.0"
   }
 }
