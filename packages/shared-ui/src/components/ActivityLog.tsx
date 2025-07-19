@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { GameId } from '@tact/game-logic';
+import { Clipboard } from 'lucide-react';
 
 interface ActivityItem {
   id: string;
@@ -154,8 +155,8 @@ export function ActivityLog({ gameId, currentUser, gameState, className = '' }: 
         className="relative bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-lg p-3 shadow-xl hover:bg-gray-700 transition-colors"
         title={isOpen ? 'Close Activity Log' : 'Open Activity Log'}
       >
-        <div className="w-6 h-6 text-white">
-          📋
+        <div className="w-6 h-6 text-white flex items-center justify-center">
+          <Clipboard className="h-4 w-4" />
         </div>
         {/* Notification Badge */}
         {!isOpen && unreadCount > 0 && (

@@ -133,13 +133,13 @@ export default function GamePage() {
 
   // Show join UI for players who haven't joined yet
   return (
-    <div className="flex items-center justify-center h-screen w-screen bg-gray-100">
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mx-4">
-        <h1 className="text-2xl font-bold mb-4 text-center">Join Game</h1>
-        <p className="text-center text-gray-600 mb-6">
+    <div className="flex items-center justify-center h-screen w-screen bg-background">
+      <div className="bg-card border border-border rounded-lg shadow-lg p-8 max-w-md w-full mx-4">
+        <h1 className="text-2xl font-bold mb-4 text-center text-foreground">Join Game</h1>
+        <p className="text-center text-muted-foreground mb-6">
           Game ID: {gameId.substring(0, 8)}
         </p>
-        <p className="text-center text-sm text-gray-600 mb-6">
+        <p className="text-center text-sm text-muted-foreground mb-6">
           Players: {players.length}/{game.settings.maxPlayers}
         </p>
         

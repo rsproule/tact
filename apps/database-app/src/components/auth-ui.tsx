@@ -68,11 +68,11 @@ export function AuthUI() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center min-h-screen bg-background">
+      <Card className="w-full max-w-md bg-card border-border">
         <CardHeader>
-          <CardTitle>{isSignUp ? 'Create Account' : 'Sign In'}</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-foreground">{isSignUp ? 'Create Account' : 'Sign In'}</CardTitle>
+          <CardDescription className="text-muted-foreground">
             {isSignUp 
               ? 'Create a new account to play Tact' 
               : 'Sign in to your account'
@@ -82,8 +82,8 @@ export function AuthUI() {
         <CardContent className="space-y-4">
           {/* Instructions for testing */}
           <div className="space-y-2">
-            <div className="text-sm font-medium">For Testing Multiple Users:</div>
-            <div className="text-xs text-gray-600 space-y-1">
+            <div className="text-sm font-medium text-card-foreground">For Testing Multiple Users:</div>
+            <div className="text-xs text-muted-foreground space-y-1">
               <p>1. Create accounts with different emails you can access</p>
               <p>2. Verify each email address</p>
               <p>3. Use different browser tabs/incognito windows</p>
@@ -93,16 +93,16 @@ export function AuthUI() {
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-muted-foreground">Or</span>
+              <span className="bg-card px-2 text-muted-foreground">Or</span>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-foreground">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -110,11 +110,12 @@ export function AuthUI() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={authLoading}
+                className="bg-input border-border text-input-foreground placeholder-muted-foreground focus:border-primary"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-foreground">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -123,33 +124,35 @@ export function AuthUI() {
                 required
                 disabled={authLoading}
                 minLength={6}
+                className="bg-input border-border text-input-foreground placeholder-muted-foreground focus:border-primary"
               />
             </div>
 
             {isSignUp && (
               <div className="space-y-2">
-                <Label htmlFor="displayName">Display Name (optional)</Label>
+                <Label htmlFor="displayName" className="text-foreground">Display Name (optional)</Label>
                 <Input
                   id="displayName"
                   type="text"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   disabled={authLoading}
+                  className="bg-input border-border text-input-foreground placeholder-muted-foreground focus:border-primary"
                 />
               </div>
             )}
 
             {error && (
-              <Card className="border-red-200 bg-red-50">
+              <Card className="border-destructive bg-destructive/20">
                 <CardContent className="pt-6">
-                  <p className="text-red-800 text-sm">{error}</p>
+                  <p className="text-destructive text-sm">{error}</p>
                 </CardContent>
               </Card>
             )}
 
             <Button 
               type="submit" 
-              className="w-full"
+              className="w-full bg-primary hover:bg-primary/80 text-primary-foreground"
               disabled={authLoading}
             >
               {authLoading ? 'Loading...' : (isSignUp ? 'Create Account' : 'Sign In')}
@@ -158,7 +161,7 @@ export function AuthUI() {
             <Button
               type="button"
               variant="ghost"
-              className="w-full"
+              className="w-full text-muted-foreground hover:text-foreground hover:bg-muted"
               onClick={() => {
                 setIsSignUp(!isSignUp);
                 setError(null);
