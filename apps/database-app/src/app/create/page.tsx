@@ -74,10 +74,9 @@ export default function CreateGamePage() {
     if (
       !formData.epochMinutes ||
       isNaN(epochMinutes) ||
-      epochMinutes < 1 ||
-      epochMinutes > 120
+      epochMinutes < 1
     ) {
-      errors.epochMinutes = "Must be a number between 1 and 120 minutes";
+      errors.epochMinutes = "Must be a positive number";
     }
 
     // Init Hearts validation
@@ -315,7 +314,6 @@ export default function CreateGamePage() {
                     }
                     onBlur={validateFields}
                     min="1"
-                    max="120"
                     placeholder="Enter duration in minutes"
                     className={`bg-gray-700 border-gray-600 text-white placeholder-gray-400 ${
                       fieldErrors.epochMinutes ? "border-red-500" : ""

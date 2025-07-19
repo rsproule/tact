@@ -636,7 +636,6 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                             value={newEpochSeconds}
                             onChange={(e) => setNewEpochSeconds(parseInt(e.target.value) || 0)}
                             min="60"
-                            max="86400"
                             className="flex-1 px-2 py-1 text-xs bg-gray-700 border border-gray-600 rounded text-white"
                           />
                           <button
