@@ -78,6 +78,27 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
   const [showSettings, setShowSettings] = useState(false);
   const [newEpochSeconds, setNewEpochSeconds] = useState<number>(0);
   const [settingsLoading, setSettingsLoading] = useState(false);
+  
+  // Panel minimize states - auto-minimize on narrow screens
+  const [gameStatusMinimized, setGameStatusMinimized] = useState(false);
+  const [tankInfoMinimized, setTankInfoMinimized] = useState(false);
+  const [selectedTileMinimized, setSelectedTileMinimized] = useState(false);
+  
+  // Auto-minimize panels on narrow screens
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const isNarrow = window.innerWidth < 1024; // lg breakpoint
+      if (isNarrow) {
+        setGameStatusMinimized(true);
+        setTankInfoMinimized(true);
+        setSelectedTileMinimized(true);
+      }
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
   const [showPlayers, setShowPlayers] = useState(true);
   const [claimApLoading, setClaimApLoading] = useState(false);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -562,10 +583,20 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
         />
         
         {/* Game Info Panel - Top Left */}
-        <Panel position="top-left" className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl p-4 m-4 min-w-64">
+        <Panel position="top-left" className={`bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl m-4 ${gameStatusMinimized ? 'p-2' : 'p-4 min-w-64'}`}>
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white">Game Status</h3>
-            <div className="space-y-2 text-sm text-gray-300">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-white">Game Status</h3>
+              <button
+                onClick={() => setGameStatusMinimized(!gameStatusMinimized)}
+                className="text-gray-400 hover:text-gray-200 transition-colors text-sm ml-2"
+                title={gameStatusMinimized ? 'Expand Panel' : 'Minimize Panel'}
+              >
+                {gameStatusMinimized ? '📋' : '−'}
+              </button>
+            </div>
+            {!gameStatusMinimized && (
+              <div className="space-y-2 text-sm text-gray-300">
               <div><strong className="text-white">State:</strong> {gameInfo?.state === 0 ? 'Waiting' : gameInfo?.state === 1 ? 'Started' : 'Ended'}</div>
               <div><strong className="text-white">Players:</strong> {players?.length || 0} / {gameInfo?.settings?.maxPlayers || 0}</div>
               <div><strong className="text-white">Board Size:</strong> {gameInfo?.settings?.boardSize || boardSize}</div>
@@ -697,17 +728,129 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                   )}
                 </div>
               )}
-            </div>
+              </div>
+            )}
           </div>
         </Panel>
 
         {/* Tank Info Panel - Top Right - only show if no tile selected OR selected tile is your own tank */}
         {ownerTank && (!selectedTileData || (selectedTileData.tank && selectedTileData.tank === selectedTileData.ownerTank)) && (
-          <Panel position="top-right" className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl p-4 m-4 min-w-64">
+          <Panel position="top-right" className={`bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl m-4 ${tankInfoMinimized ? 'p-2' : 'p-4 min-w-64'}`}>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold text-blue-400">🚗 Your Tank</h3>
-                {selectedTileData && (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setTankInfoMinimized(!tankInfoMinimized)}
+                    className="text-gray-400 hover:text-gray-200 transition-colors text-sm"
+                    title={tankInfoMinimized ? 'Expand Panel' : 'Minimize Panel'}
+                  >
+                    {tankInfoMinimized ? '🚗' : '−'}
+                  </button>
+                  {selectedTileData && (
+                    <button
+                      onClick={() => {
+                        setSelectedTileId(undefined);
+                        setSelectedTileData(null);
+                      }}
+                      className="text-gray-400 hover:text-gray-200 transition-colors"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              </div>
+              {!tankInfoMinimized && (
+                <div className="space-y-2 text-sm text-gray-300">
+                  <div><strong className="text-white">Position:</strong> ({ownerTank.position.x}, {ownerTank.position.y}, {ownerTank.position.z})</div>
+                  <div><strong className="text-white">Hearts:</strong> <span className="text-red-400">♥️ {ownerTank.hearts}</span></div>
+                  <div><strong className="text-white">Action Points:</strong> <span className="text-blue-400">⚡ {ownerTank.aps}</span></div>
+                  <div><strong className="text-white">Move Range:</strong> <span className="text-green-400">🦶 {moveRange}</span></div>
+                  <div><strong className="text-white">Shoot Range:</strong> <span className="text-purple-400">🎯 {ownerTank.range}</span></div>
+                  {ownerTank.hearts === 0 && (
+                    <div className="text-red-400 font-medium">💀 Tank Destroyed</div>
+                  )}
+
+                  {/* Tank Actions - only show when viewing your own tank */}
+                  {selectedTileData && selectedTileData.tank === selectedTileData.ownerTank && ownerTank.hearts > 0 && (
+                    <div className="border-t border-gray-600 pt-2 space-y-2">
+                      <h4 className="text-sm font-semibold text-white">Tank Actions</h4>
+                      
+                      {/* Claim APs Button */}
+                      {gameInfo?.state === GameState.Started && (
+                        <button 
+                          className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                          onClick={handleClaimAPs}
+                          disabled={claimApLoading || claimableAPs <= 0}
+                          title={claimableAPs <= 0 ? claimReason : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
+                        >
+                          {claimApLoading 
+                            ? 'Claiming...' 
+                            : claimableAPs > 0 
+                              ? `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}` 
+                              : 'Claim APs'
+                          }
+                        </button>
+                      )}
+                      
+                      {/* Upgrade Button */}
+                      {(() => {
+                        const upgradeCost = GameRules.getUpgradeCost(ownerTank.range);
+                        const canAfford = ownerTank.aps >= upgradeCost;
+                        const disabledReason = !canAfford ? `Need ${upgradeCost} AP to upgrade` : '';
+                        
+                        return (
+                          <button 
+                            className="w-full px-3 py-2 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                            onClick={handleUpgrade}
+                            disabled={upgradeLoading || !canAfford}
+                            title={disabledReason}
+                          >
+                            {upgradeLoading ? 'Upgrading...' : `Upgrade Tank (${upgradeCost} AP)`}
+                          </button>
+                        );
+                      })()}
+                    </div>
+                  )}
+
+                  {/* General Tank Info - show claim button even when not selected */}
+                  {!selectedTileData && gameInfo?.state === GameState.Started && ownerTank.hearts > 0 && (
+                    <div className="border-t border-gray-600 pt-2">
+                      <button 
+                        className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                        onClick={handleClaimAPs}
+                        disabled={claimApLoading || claimableAPs <= 0}
+                        title={claimableAPs <= 0 ? claimReason : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
+                      >
+                        {claimApLoading 
+                          ? 'Claiming...' 
+                          : claimableAPs > 0 
+                            ? `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}` 
+                            : 'Claim APs'
+                        }
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </Panel>
+        )}
+
+        {/* Selected Tile Panel - Only show for non-tank tiles or enemy tanks */}
+        {selectedTileData && (!selectedTileData.tank || selectedTileData.tank !== selectedTileData.ownerTank) && (
+          <Panel position="top-right" className={`bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl m-4 ${selectedTileMinimized ? 'p-2' : 'p-4 min-w-64 max-w-80'}`}>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-white">Tile Information</h3>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setSelectedTileMinimized(!selectedTileMinimized)}
+                    className="text-gray-400 hover:text-gray-200 transition-colors text-sm"
+                    title={selectedTileMinimized ? 'Expand Panel' : 'Minimize Panel'}
+                  >
+                    {selectedTileMinimized ? '🎯' : '−'}
+                  </button>
                   <button
                     onClick={() => {
                       setSelectedTileId(undefined);
@@ -717,199 +860,108 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                   >
                     ✕
                   </button>
-                )}
-              </div>
-              
-              <div className="space-y-2 text-sm text-gray-300">
-                <div><strong className="text-white">Position:</strong> ({ownerTank.position.x}, {ownerTank.position.y}, {ownerTank.position.z})</div>
-                <div><strong className="text-white">Hearts:</strong> <span className="text-red-400">♥️ {ownerTank.hearts}</span></div>
-                <div><strong className="text-white">Action Points:</strong> <span className="text-blue-400">⚡ {ownerTank.aps}</span></div>
-                <div><strong className="text-white">Move Range:</strong> <span className="text-green-400">🦶 {moveRange}</span></div>
-                <div><strong className="text-white">Shoot Range:</strong> <span className="text-purple-400">🎯 {ownerTank.range}</span></div>
-                {ownerTank.hearts === 0 && (
-                  <div className="text-red-400 font-medium">💀 Tank Destroyed</div>
-                )}
-              </div>
-
-              {/* Tank Actions - only show when viewing your own tank */}
-              {selectedTileData && selectedTileData.tank === selectedTileData.ownerTank && ownerTank.hearts > 0 && (
-                <div className="border-t border-gray-600 pt-2 space-y-2">
-                  <h4 className="text-sm font-semibold text-white">Tank Actions</h4>
-                  
-                  {/* Claim APs Button */}
-                  {gameInfo?.state === GameState.Started && (
-                    <button 
-                      className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
-                      onClick={handleClaimAPs}
-                      disabled={claimApLoading || claimableAPs <= 0}
-                      title={claimableAPs <= 0 ? claimReason : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
-                    >
-                      {claimApLoading 
-                        ? 'Claiming...' 
-                        : claimableAPs > 0 
-                          ? `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}` 
-                          : 'Claim APs'
-                      }
-                    </button>
-                  )}
-                  
-                  {/* Upgrade Button */}
-                  {(() => {
-                    const upgradeCost = GameRules.getUpgradeCost(ownerTank.range);
-                    const canAfford = ownerTank.aps >= upgradeCost;
-                    const disabledReason = !canAfford ? `Need ${upgradeCost} AP to upgrade` : '';
-                    
-                    return (
-                      <button 
-                        className="w-full px-3 py-2 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
-                        onClick={handleUpgrade}
-                        disabled={upgradeLoading || !canAfford}
-                        title={disabledReason}
-                      >
-                        {upgradeLoading ? 'Upgrading...' : `Upgrade Tank (${upgradeCost} AP)`}
-                      </button>
-                    );
-                  })()}
                 </div>
-              )}
-
-              {/* General Tank Info - show claim button even when not selected */}
-              {!selectedTileData && gameInfo?.state === GameState.Started && ownerTank.hearts > 0 && (
-                <div className="border-t border-gray-600 pt-2">
-                  <button 
-                    className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
-                    onClick={handleClaimAPs}
-                    disabled={claimApLoading || claimableAPs <= 0}
-                    title={claimableAPs <= 0 ? claimReason : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
-                  >
-                    {claimApLoading 
-                      ? 'Claiming...' 
-                      : claimableAPs > 0 
-                        ? `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}` 
-                        : 'Claim APs'
-                    }
-                  </button>
-                </div>
-              )}
-            </div>
-          </Panel>
-        )}
-
-        {/* Selected Tile Panel - Only show for non-tank tiles or enemy tanks */}
-        {selectedTileData && (!selectedTileData.tank || selectedTileData.tank !== selectedTileData.ownerTank) && (
-          <Panel position="top-right" className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl p-4 m-4 min-w-64 max-w-80">
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold text-white">Tile Information</h3>
-                <button
-                  onClick={() => {
-                    setSelectedTileId(undefined);
-                    setSelectedTileData(null);
-                  }}
-                  className="text-gray-400 hover:text-gray-200 transition-colors"
-                >
-                  ✕
-                </button>
               </div>
-              
-              <div className="space-y-2 text-sm text-gray-300">
-                <div>
-                  <strong className="text-white">Position:</strong> ({selectedTileData.q}, {selectedTileData.r}, {selectedTileData.s})
-                </div>
-                
-                {selectedTileData.distance !== undefined && (
+              {!selectedTileMinimized && (
+                <div className="space-y-2 text-sm text-gray-300">
                   <div>
-                    <strong className="text-white">Distance:</strong> {selectedTileData.distance}
+                    <strong className="text-white">Position:</strong> ({selectedTileData.q}, {selectedTileData.r}, {selectedTileData.s})
                   </div>
-                )}
-
-                {selectedTileData.tank ? (
-                  <div className="space-y-2">
-                    <div className="text-base font-medium text-white">
-                      {selectedTileData.tank === selectedTileData.ownerTank || 
-                       selectedTileData.tank.owner === selectedTileData.ownerTank?.owner ? '🚗 Your Tank' : '🚗 Enemy Tank'}
+                  
+                  {selectedTileData.distance !== undefined && (
+                    <div>
+                      <strong className="text-white">Distance:</strong> {selectedTileData.distance}
                     </div>
-                    <div><strong className="text-white">Player:</strong> {selectedTileData.tank.playerName || 'Unknown'}</div>
-                    <div><strong className="text-white">Tank Position:</strong> ({selectedTileData.tank.position.x}, {selectedTileData.tank.position.y}, {selectedTileData.tank.position.z})</div>
-                    <div><strong className="text-white">Hearts:</strong> <span className="text-red-400">{selectedTileData.tank.hearts}</span></div>
-                    <div><strong className="text-white">APs:</strong> <span className="text-blue-400">{selectedTileData.tank.aps}</span></div>
-                    <div><strong className="text-white">Range:</strong> <span className="text-purple-400">{selectedTileData.tank.range}</span></div>
-                    {selectedTileData.tank.hearts === 0 && (
-                      <div className="text-red-400 font-medium">💀 Tank Destroyed</div>
-                    )}
-                  </div>
-                ) : selectedTileData.heartsOnTile > 0 ? (
-                  <div className="space-y-2">
-                    <div className="text-base font-medium text-green-400">♥️ Heart Power-up</div>
-                    <div className="text-gray-300">Collect to gain health!</div>
-                  </div>
-                ) : (
-                  <div className="text-gray-400">Empty tile</div>
-                )}
-              </div>
+                  )}
 
-              {/* Action Buttons */}
-              <div className="space-y-2 pt-2 border-t border-gray-600">
-                {!selectedTileData.tank && selectedTileData.distance !== undefined && selectedTileData.distance <= moveRange && selectedTileData.distance > 0 && selectedTileData.ownerTank && selectedTileData.ownerTank.hearts > 0 && (() => {
-                  const moveCost = selectedTileData.distance; // Cost is equal to distance
-                  const canMove = selectedTileData.ownerTank.aps >= moveCost;
-                  const disabledReason = !canMove ? `Need ${moveCost} AP${moveCost > 1 ? 's' : ''} to move` : '';
-                  
-                  return (
-                    <button 
-                      className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
-                      onClick={() => handleMove(selectedTileData.q, selectedTileData.r, selectedTileData.s)}
-                      disabled={moveLoading || !canMove}
-                      title={disabledReason}
-                    >
-                      {moveLoading ? 'Moving...' : `Move Here (${moveCost} AP${moveCost > 1 ? 's' : ''})`}
-                    </button>
-                  );
-                })()}
-                
-                {selectedTileData.tank && selectedTileData.tank !== selectedTileData.ownerTank && selectedTileData.tank.hearts > 0 && selectedTileData.ownerTank?.hearts > 0 && (() => {
-                  const inShootRange = selectedTileData.distance !== undefined && 
-                                      selectedTileData.distance <= selectedTileData.ownerTank.range && 
-                                      selectedTileData.distance > 0;
-                  const inGiveRange = selectedTileData.distance !== undefined && 
-                                     selectedTileData.distance <= selectedTileData.ownerTank.range;
-                  const hasApsToShoot = selectedTileData.ownerTank.aps >= 1;
-                  const hasHeartsToGive = selectedTileData.ownerTank.hearts >= 1;
-                  
-                  const shootDisabledReason = !inShootRange ? `Out of range (${selectedTileData.distance}/${selectedTileData.ownerTank.range})` :
-                                             !hasApsToShoot ? 'Need 1 AP to shoot' : '';
-                  const giveDisabledReason = !inGiveRange ? `Out of range (${selectedTileData.distance}/${selectedTileData.ownerTank.range})` :
-                                            !hasHeartsToGive ? 'Need 1 heart to give' : '';
-                  
-                  return (
-                    <div className="space-y-1">
-                      <button 
-                        className="w-full px-3 py-2 bg-red-600 hover:bg-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
-                        onClick={() => handleShoot(selectedTileData.tank)}
-                        disabled={shootLoading || !hasApsToShoot || !inShootRange}
-                        title={shootDisabledReason}
-                      >
-                        {shootLoading ? 'Shooting...' : 'Shoot Tank (1 AP)'}
-                      </button>
-                      <button 
-                        className="w-full px-3 py-2 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
-                        onClick={() => handleGive(selectedTileData.tank)}
-                        disabled={giveLoading || !hasHeartsToGive || !inGiveRange}
-                        title={giveDisabledReason}
-                      >
-                        {giveLoading ? 'Giving...' : 'Give 1 Heart'}
-                      </button>
+                  {selectedTileData.tank ? (
+                    <div className="space-y-2">
+                      <div className="text-base font-medium text-white">
+                        {selectedTileData.tank === selectedTileData.ownerTank || 
+                         selectedTileData.tank.owner === selectedTileData.ownerTank?.owner ? '🚗 Your Tank' : '🚗 Enemy Tank'}
+                      </div>
+                      <div><strong className="text-white">Player:</strong> {selectedTileData.tank.playerName || 'Unknown'}</div>
+                      <div><strong className="text-white">Tank Position:</strong> ({selectedTileData.tank.position.x}, {selectedTileData.tank.position.y}, {selectedTileData.tank.position.z})</div>
+                      <div><strong className="text-white">Hearts:</strong> <span className="text-red-400">{selectedTileData.tank.hearts}</span></div>
+                      <div><strong className="text-white">APs:</strong> <span className="text-blue-400">{selectedTileData.tank.aps}</span></div>
+                      <div><strong className="text-white">Range:</strong> <span className="text-purple-400">{selectedTileData.tank.range}</span></div>
+                      {selectedTileData.tank.hearts === 0 && (
+                        <div className="text-red-400 font-medium">💀 Tank Destroyed</div>
+                      )}
                     </div>
-                  );
-                })()}
-                
-                {/* Dead tank message */}
-                {selectedTileData.tank && selectedTileData.tank === selectedTileData.ownerTank && selectedTileData.ownerTank.hearts === 0 && (
-                  <div className="text-center text-red-400 text-sm py-2">
-                    💀 Your tank has been destroyed
+                  ) : selectedTileData.heartsOnTile > 0 ? (
+                    <div className="space-y-2">
+                      <div className="text-base font-medium text-green-400">♥️ Heart Power-up</div>
+                      <div className="text-gray-300">Collect to gain health!</div>
+                    </div>
+                  ) : (
+                    <div className="text-gray-400">Empty tile</div>
+                  )}
+
+                  {/* Action Buttons */}
+                    <div className="space-y-2 pt-2 border-t border-gray-600">
+                      {!selectedTileData.tank && selectedTileData.distance !== undefined && selectedTileData.distance <= moveRange && selectedTileData.distance > 0 && selectedTileData.ownerTank && selectedTileData.ownerTank.hearts > 0 && (() => {
+                        const moveCost = selectedTileData.distance; // Cost is equal to distance
+                        const canMove = selectedTileData.ownerTank.aps >= moveCost;
+                        const disabledReason = !canMove ? `Need ${moveCost} AP${moveCost > 1 ? 's' : ''} to move` : '';
+                        
+                        return (
+                          <button 
+                            className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                            onClick={() => handleMove(selectedTileData.q, selectedTileData.r, selectedTileData.s)}
+                            disabled={moveLoading || !canMove}
+                            title={disabledReason}
+                          >
+                            {moveLoading ? 'Moving...' : `Move Here (${moveCost} AP${moveCost > 1 ? 's' : ''})`}
+                          </button>
+                        );
+                      })()}
+                      
+                      {selectedTileData.tank && selectedTileData.tank !== selectedTileData.ownerTank && selectedTileData.tank.hearts > 0 && selectedTileData.ownerTank?.hearts > 0 && (() => {
+                        const inShootRange = selectedTileData.distance !== undefined && 
+                                            selectedTileData.distance <= selectedTileData.ownerTank.range && 
+                                            selectedTileData.distance > 0;
+                        const inGiveRange = selectedTileData.distance !== undefined && 
+                                           selectedTileData.distance <= selectedTileData.ownerTank.range;
+                        const hasApsToShoot = selectedTileData.ownerTank.aps >= 1;
+                        const hasHeartsToGive = selectedTileData.ownerTank.hearts >= 1;
+                        
+                        const shootDisabledReason = !inShootRange ? `Out of range (${selectedTileData.distance}/${selectedTileData.ownerTank.range})` :
+                                                   !hasApsToShoot ? 'Need 1 AP to shoot' : '';
+                        const giveDisabledReason = !inGiveRange ? `Out of range (${selectedTileData.distance}/${selectedTileData.ownerTank.range})` :
+                                                  !hasHeartsToGive ? 'Need 1 heart to give' : '';
+                        
+                        return (
+                          <div className="space-y-1">
+                            <button 
+                              className="w-full px-3 py-2 bg-red-600 hover:bg-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                              onClick={() => handleShoot(selectedTileData.tank)}
+                              disabled={shootLoading || !hasApsToShoot || !inShootRange}
+                              title={shootDisabledReason}
+                            >
+                              {shootLoading ? 'Shooting...' : 'Shoot Tank (1 AP)'}
+                            </button>
+                            <button 
+                              className="w-full px-3 py-2 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                              onClick={() => handleGive(selectedTileData.tank)}
+                              disabled={giveLoading || !hasHeartsToGive || !inGiveRange}
+                              title={giveDisabledReason}
+                            >
+                              {giveLoading ? 'Giving...' : 'Give 1 Heart'}
+                            </button>
+                          </div>
+                        );
+                      })()}
+                      
+                      {/* Dead tank message */}
+                      {selectedTileData.tank && selectedTileData.tank === selectedTileData.ownerTank && selectedTileData.ownerTank.hearts === 0 && (
+                        <div className="text-center text-red-400 text-sm py-2">
+                          💀 Your tank has been destroyed
+                        </div>
+                      )}
+                    </div>
                   </div>
-                )}
-              </div>
+              )}
             </div>
           </Panel>
         )}

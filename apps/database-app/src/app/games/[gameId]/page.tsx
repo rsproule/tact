@@ -97,11 +97,7 @@ export default function GamePage() {
   };
 
   if (!userId) {
-    return (
-      <div className="flex items-center justify-center h-screen w-screen">
-        <p className="text-lg">Please sign in to play</p>
-      </div>
-    );
+    return null;
   }
 
   if (error) {

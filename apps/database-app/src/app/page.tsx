@@ -38,11 +38,7 @@ export default function Home() {
   }, [userId]);
 
   if (!userId) {
-    return (
-      <div className="pt-16 container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
-        <p className="text-lg text-white">Loading user...</p>
-      </div>
-    );
+    return null;
   }
 
   if (loading) {
