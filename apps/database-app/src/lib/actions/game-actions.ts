@@ -629,25 +629,47 @@ export async function claimActionPoints(gameId: string, playerId: string) {
       return { success: false, error: 'Game has not started properly' };
     }
 
-    // Calculate available APs based on current epoch
+    // Get the last time this player claimed APs
+    const lastClaimEvent = await db.query.gameEvents.findFirst({
+      where: and(
+        eq(gameEvents.gameId, gameId),
+        eq(gameEvents.type, 'ClaimAPs'),
+        eq(gameEvents.player, playerId)
+      ),
+      orderBy: [desc(gameEvents.timestamp)],
+    });
+
+    // Calculate current epoch and timing
     const nowSeconds = Math.floor(Date.now() / 1000);
     const epochStart = Math.floor(new Date(game.epochStart).getTime() / 1000);
     const epochDuration = game.epochSeconds;
     const currentEpoch = Math.floor((nowSeconds - epochStart) / epochDuration);
     const maxApsPerEpoch = game.epochMaxActionPoints;
     
-    // Calculate total APs earned so far
-    const totalApsEarned = (currentEpoch + 1) * maxApsPerEpoch; // +1 because epochs start at 0
-    const maxApsAllowed = Math.min(totalApsEarned, maxApsPerEpoch * 10); // Cap at 10 epochs worth
-    
-    // If tank already has max or more APs, no need to claim
-    if (tank.aps >= maxApsAllowed) {
-      return { success: false, error: 'No additional action points available to claim' };
+    // Determine last claim time - either from last claim event or game start
+    let lastClaimTime = epochStart; // Default to game start
+    if (lastClaimEvent) {
+      lastClaimTime = Math.floor(new Date(lastClaimEvent.timestamp).getTime() / 1000);
     }
-
-    // Calculate how many APs to add
-    const apsToAdd = maxApsAllowed - tank.aps;
-    const newApTotal = tank.aps + apsToAdd;
+    
+    // Calculate epochs that have passed since last claim
+    const epochsSinceLastClaim = Math.floor((nowSeconds - lastClaimTime) / epochDuration);
+    
+    // Only allow claiming if at least one epoch has passed since last claim
+    if (epochsSinceLastClaim < 1) {
+      return { success: false, error: 'Must wait for next epoch to claim more APs' };
+    }
+    
+    // Calculate APs to add based on epochs since last claim (1 AP per epoch)
+    const apsToAdd = epochsSinceLastClaim; // 1 AP per epoch
+    const maxApsAllowed = Math.max(200, maxApsPerEpoch * 10); // Cap total APs at 200 or 10x epoch max (whichever is higher)
+    const newApTotal = Math.min(tank.aps + apsToAdd, maxApsAllowed);
+    const actualApsToAdd = newApTotal - tank.aps;
+    
+    // If no APs to add (already at max), return error
+    if (actualApsToAdd <= 0) {
+      return { success: false, error: 'Already at maximum action points' };
+    }
 
     // Update tank APs
     await db.update(tanks)
@@ -663,14 +685,17 @@ export async function claimActionPoints(gameId: string, playerId: string) {
       data: { 
         previousAps: tank.aps,
         newAps: newApTotal,
-        apsClaimed: apsToAdd,
+        apsClaimed: actualApsToAdd,
         currentEpoch,
-        maxApsPerEpoch
+        epochsSinceLastClaim,
+        apsPerEpoch: 1, // Now giving 1 AP per epoch
+        maxApsPerEpoch,
+        lastClaimTime
       },
     });
 
     revalidatePath(`/games/${gameId}`);
-    return { success: true, apsClaimed: apsToAdd, newTotal: newApTotal };
+    return { success: true, apsClaimed: actualApsToAdd, newTotal: newApTotal };
   } catch (error) {
     console.error('Error claiming action points:', error);
     return { success: false, error: 'Failed to claim action points' };

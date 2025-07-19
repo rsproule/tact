@@ -404,3 +404,17 @@ export function useUpdateGameSettings() {
 
   return { updateGameSettings, isLoading, error };
 }
+
+export function useClaimableAPs(gameId: GameId, playerId: PlayerId, options: { watch?: boolean } = {}) {
+  return useQuery(
+    `claimable-aps-${gameId}-${playerId}`,
+    async () => {
+      const response = await fetch(`/api/games/${gameId}/claimable-aps?playerId=${playerId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch claimable APs');
+      }
+      return response.json();
+    },
+    { enabled: !!gameId && !!playerId, watch: options.watch }
+  );
+}

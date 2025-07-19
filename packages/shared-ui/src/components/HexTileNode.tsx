@@ -82,7 +82,8 @@ export const HexTileNode = memo(function HexTileNode({ data }: { data: HexTileDa
         style={{ 
           cursor: 'pointer', 
           overflow: 'visible',
-          pointerEvents: 'all'
+          pointerEvents: 'all',
+          willChange: 'transform'
         }}
         onClick={handleClick}
         onContextMenu={handleContextMenu}

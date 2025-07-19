@@ -1,16 +1,16 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { UserProvider } from '@/components/user-context';
-import { AuthUI } from '@/components/auth-ui';
-import { Navbar } from '@/components/navbar';
-import { ToastProvider } from '@/components/ui/toast';
+import { AuthUI } from "@/components/auth-ui";
+import { Navbar } from "@/components/navbar";
+import { ToastProvider } from "@/components/ui/toast";
+import { UserProvider } from "@/components/user-context";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Tact - Database Mode',
-  description: 'An onchain strategy game - Database version for rapid prototyping',
+  title: "Tact",
+  description: "An onchain strategy game",
 };
 
 export default function RootLayout({

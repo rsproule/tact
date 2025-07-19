@@ -12,7 +12,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { GameId, GameState, GameRules, HexUtils } from '@tact/game-logic';
-import { useAllTanks, useAllHearts, useCurrentUser, useGameInfo, usePlayers, useMovePlayer, useShootPlayer, useUpgradePlayer, useGiveToPlayer } from '@tact/providers';
+import { useAllTanks, useAllHearts, useCurrentUser, useGameInfo, usePlayers, useMovePlayer, useShootPlayer, useUpgradePlayer, useGiveToPlayer, useClaimableAPs } from '@tact/providers';
 import { HexTileNode } from './HexTileNode.js';
 
 // Dark mode styles for ReactFlow
@@ -155,23 +155,17 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
     return Math.max(0, currentStoredAps);
   }, [gameInfo, ownerTank, epochInfo.currentEpoch]);
 
-  // Calculate claimable APs
-  const getClaimableAPs = useCallback(() => {
-    if (!gameInfo || !ownerTank || gameInfo.state !== GameState.Started) {
-      return 0;
-    }
-
-    const currentEpoch = epochInfo.currentEpoch;
-    const maxApsPerEpoch = gameInfo.settings.epochMaxActionPoints || 3;
-    const totalApsEarned = (currentEpoch + 1) * maxApsPerEpoch; // +1 because epochs start at 0
-    const maxApsAllowed = Math.min(totalApsEarned, maxApsPerEpoch * 10); // Cap at 10 epochs worth
-    
-    return Math.max(0, maxApsAllowed - ownerTank.aps);
-  }, [gameInfo, ownerTank, epochInfo.currentEpoch]);
+  // Fetch claimable APs from backend
+  const { data: claimableData, refetch: refetchClaimableAPs } = useClaimableAPs(
+    gameId, 
+    currentUser || '', 
+    { watch: true }
+  );
+  const claimableAPs = claimableData?.claimableAPs || 0;
+  const claimReason = claimableData?.reason;
 
   const availableAPs = getAvailableAPs();
   const moveRange = availableAPs; // Use full available APs for movement range
-  const claimableAPs = getClaimableAPs();
 
   // Debug logging
   console.log('HexGameBoard Debug:', { 
@@ -181,6 +175,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
     availableAPs,
     moveRange,
     claimableAPs,
+    claimReason,
     currentEpoch: epochInfo.currentEpoch,
     epochMaxAPs: gameInfo?.settings?.epochMaxActionPoints,
     ownerTankAPs: ownerTank?.aps,
@@ -361,6 +356,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
         });
         refetchTanks();
         refetchGameInfo();
+        refetchClaimableAPs();
       } else {
         const error = await response.json();
         onToast?.({ 
@@ -378,7 +374,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
     } finally {
       setClaimApLoading(false);
     }
-  }, [currentUser, gameId, onToast, refetchTanks, refetchGameInfo]);
+  }, [currentUser, gameId, onToast, refetchTanks, refetchGameInfo, refetchClaimableAPs]);
 
   // Initialize epoch seconds when settings panel opens
   useEffect(() => {
@@ -507,7 +503,13 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
   }
 
   return (
-    <div ref={reactFlowWrapper} className={`${className}`} style={{ height: 'calc(100vh - 40px)', width: '100vw', marginTop: '40px' }}>
+    <div ref={reactFlowWrapper} className={`${className}`} style={{ 
+      height: 'calc(100vh - 40px)', 
+      width: '100vw', 
+      marginTop: '40px',
+      willChange: 'transform',
+      transform: 'translateZ(0)' // Force GPU acceleration
+    }}>
       <ReactFlow
         nodes={hexNodes}
         edges={edges}
@@ -533,7 +535,6 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
         zoomOnScroll={true}
         zoomOnPinch={true}
         zoomOnDoubleClick={false}
-        preventScrolling={true}
         selectNodesOnDrag={false}
       >
         <Background 
@@ -703,13 +704,19 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                   <h4 className="text-sm font-semibold text-white">Tank Actions</h4>
                   
                   {/* Claim APs Button */}
-                  {claimableAPs > 0 && (
+                  {gameInfo?.state === GameState.Started && (
                     <button 
-                      className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 text-white rounded transition-colors text-sm"
+                      className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
                       onClick={handleClaimAPs}
-                      disabled={claimApLoading}
+                      disabled={claimApLoading || claimableAPs <= 0}
+                      title={claimableAPs <= 0 ? claimReason : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
                     >
-                      {claimApLoading ? 'Claiming...' : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
+                      {claimApLoading 
+                        ? 'Claiming...' 
+                        : claimableAPs > 0 
+                          ? `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}` 
+                          : (claimReason || 'No APs to claim')
+                      }
                     </button>
                   )}
                   
@@ -734,14 +741,20 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
               )}
 
               {/* General Tank Info - show claim button even when not selected */}
-              {!selectedTileData && claimableAPs > 0 && ownerTank.hearts > 0 && (
+              {!selectedTileData && gameInfo?.state === GameState.Started && ownerTank.hearts > 0 && (
                 <div className="border-t border-gray-600 pt-2">
                   <button 
-                    className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 text-white rounded transition-colors text-sm"
+                    className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
                     onClick={handleClaimAPs}
-                    disabled={claimApLoading}
+                    disabled={claimApLoading || claimableAPs <= 0}
+                    title={claimableAPs <= 0 ? claimReason : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
                   >
-                    {claimApLoading ? 'Claiming...' : `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}`}
+                    {claimApLoading 
+                      ? 'Claiming...' 
+                      : claimableAPs > 0 
+                        ? `Claim ${claimableAPs} AP${claimableAPs !== 1 ? 's' : ''}` 
+                        : (claimReason || 'No APs to claim')
+                    }
                   </button>
                 </div>
               )}
