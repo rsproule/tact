@@ -8,6 +8,7 @@ import {
   Panel,
   useEdgesState,
   ReactFlowProvider,
+  useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { GameId, GameState } from '@tact/game-logic';
@@ -74,6 +75,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '' }: HexGameBoardPr
   const [selectedTileData, setSelectedTileData] = useState<any>(null);
   const [currentTime, setCurrentTime] = useState(Date.now());
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  const { fitView } = useReactFlow();
   
   const { data: tanksData, isLoading: tanksLoading } = useAllTanks(gameId, { watch: true });
   const { data: heartsData, isLoading: heartsLoading } = useAllHearts(gameId, { watch: true });
@@ -240,6 +242,16 @@ function HexGameBoardInner({ gameId, boardSize, className = '' }: HexGameBoardPr
     
     return nodes;
   }, [tanks, hearts, ownerTank, selectedTileId, highlightedTiles, boardSize, gameId, handleTileClick, handleTileContextClick]);
+
+  // Force fitView after nodes are loaded to ensure proper centering
+  useEffect(() => {
+    if (hexNodes.length > 0 && !tanksLoading && !heartsLoading) {
+      const timer = setTimeout(() => {
+        fitView({ padding: 0.1, includeHiddenNodes: false });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [hexNodes.length, tanksLoading, heartsLoading, fitView]);
 
   const [edges] = useEdgesState([]);
 
@@ -528,4 +540,12 @@ function getHexDistance(
   b: { q: number; r: number; s: number }
 ): number {
   return (Math.abs(a.q - b.q) + Math.abs(a.q + a.r - b.q - b.r) + Math.abs(a.r - b.r)) / 2;
+}
+
+export function HexGameBoard(props: HexGameBoardProps) {
+  return (
+    <ReactFlowProvider>
+      <HexGameBoardInner {...props} />
+    </ReactFlowProvider>
+  );
 }
