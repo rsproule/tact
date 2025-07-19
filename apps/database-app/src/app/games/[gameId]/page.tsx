@@ -96,23 +96,28 @@ export default function GamePage() {
     }
   };
 
-  if (!userId || loading) {
+  if (!userId) {
     return (
       <div className="flex items-center justify-center h-screen w-screen">
-        <p className="text-lg">Loading...</p>
+        <p className="text-lg">Please sign in to play</p>
       </div>
     );
   }
 
-  if (error || !game) {
+  if (error) {
     return (
       <div className="flex flex-col items-center justify-center h-screen w-screen">
-        <p className="text-lg text-red-600 mb-4">Error: {error || 'Game not found'}</p>
+        <p className="text-lg text-red-600 mb-4">Error: {error}</p>
         <Button asChild>
           <a href="/games">Back to Games</a>
         </Button>
       </div>
     );
+  }
+
+  // Don't render anything until we have the game data to avoid showing wrong board
+  if (!game) {
+    return null;
   }
 
   const isPlayerInGame = players.some(player => player.address === userId);

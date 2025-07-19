@@ -493,14 +493,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
     }
   }, []);
 
-  // Only show loading on initial load, not during background refetches
-  if ((tanksLoading || heartsLoading) && (!tanksData || !heartsData)) {
-    return (
-      <div className={`flex justify-center items-center h-screen w-screen ${className}`}>
-        <div>Loading game board...</div>
-      </div>
-    );
-  }
+  // Remove loading state - let component mount immediately and load data in background
 
   return (
     <div ref={reactFlowWrapper} className={`${className}`} style={{ 
