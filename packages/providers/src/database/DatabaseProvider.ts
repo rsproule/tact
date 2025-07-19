@@ -451,6 +451,23 @@ export class DatabaseProvider implements ITactProvider {
     }
     this.eventSubscriptions.clear();
   }
+
+  async updateGameSettings(
+    gameId: GameId, 
+    updaterId: PlayerId,
+    newSettings: Partial<{ epochSeconds: number }>
+  ): Promise<void> {
+    const response = await fetch(`/api/games/${gameId}/settings`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ updaterId, ...newSettings }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || `HTTP error! status: ${response.status}`);
+    }
+  }
 }
 
 /**

@@ -70,7 +70,7 @@ function useQuery<T>(
     return () => clearInterval(interval);
   }, [watch, enabled, refetchInterval, fetchData]);
 
-  return { data, isLoading, error, refetch: () => fetchData(true) };
+  return { data, isLoading, error, refetch: () => fetchData(false) };
 }
 
 // Game Management Hooks
@@ -375,4 +375,32 @@ export function useCurrentUser() {
     () => provider.getCurrentUser(),
     { watch: true }
   );
+}
+
+export function useUpdateGameSettings() {
+  const { provider } = useTactProvider();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const updateGameSettings = async (
+    gameId: GameId, 
+    updaterId: PlayerId,
+    newSettings: Partial<{ epochSeconds: number }>
+  ): Promise<ActionResult> => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      await provider.updateGameSettings(gameId, updaterId, newSettings);
+      return { success: true };
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update game settings';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { updateGameSettings, isLoading, error };
 }

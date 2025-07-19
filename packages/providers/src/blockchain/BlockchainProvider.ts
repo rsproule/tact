@@ -60,6 +60,11 @@ export class BlockchainProvider implements ITactProvider {
     throw new Error('BlockchainProvider.getGameInfo not implemented');
   }
 
+  async updateGameSettings(gameId: GameId, updaterId: PlayerId, newSettings: Partial<{ epochSeconds: number }>): Promise<void> {
+    // This would call the contract's updateSettings function
+    throw new Error('BlockchainProvider.updateGameSettings not implemented');
+  }
+
   // Game State
   async getGameState(gameId: GameId): Promise<GameState> {
     // This would call game contract's state() function

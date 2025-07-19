@@ -74,6 +74,9 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
   const [selectedTileId, setSelectedTileId] = useState<string | undefined>();
   const [selectedTileData, setSelectedTileData] = useState<any>(null);
   const [currentTime, setCurrentTime] = useState(Date.now());
+  const [showSettings, setShowSettings] = useState(false);
+  const [newEpochSeconds, setNewEpochSeconds] = useState<number>(0);
+  const [settingsLoading, setSettingsLoading] = useState(false);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { fitView } = useReactFlow();
   
@@ -256,6 +259,53 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
     }
   }, [currentUser, giveToPlayer, gameId, onToast, refetchTanks, refetchGameInfo]);
 
+  // Settings handler
+  const handleUpdateSettings = useCallback(async () => {
+    if (!currentUser || !gameInfo || newEpochSeconds <= 0) return;
+    
+    setSettingsLoading(true);
+    try {
+      const response = await fetch(`/api/games/${gameId}/settings`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updaterId: currentUser, epochSeconds: newEpochSeconds }),
+      });
+
+      if (response.ok) {
+        onToast?.({ 
+          type: 'success', 
+          title: 'Settings updated!', 
+          description: `Epoch length changed to ${newEpochSeconds} seconds` 
+        });
+        refetchGameInfo();
+        setShowSettings(false);
+        setNewEpochSeconds(0);
+      } else {
+        const error = await response.json();
+        onToast?.({ 
+          type: 'error', 
+          title: 'Settings update failed', 
+          description: error.error || 'Unknown error' 
+        });
+      }
+    } catch (err) {
+      onToast?.({ 
+        type: 'error', 
+        title: 'Settings update failed', 
+        description: err instanceof Error ? err.message : 'Network error' 
+      });
+    } finally {
+      setSettingsLoading(false);
+    }
+  }, [currentUser, gameInfo, newEpochSeconds, gameId, onToast, refetchGameInfo]);
+
+  // Initialize epoch seconds when settings panel opens
+  useEffect(() => {
+    if (showSettings && gameInfo) {
+      setNewEpochSeconds(gameInfo.settings.epochSeconds);
+    }
+  }, [showSettings, gameInfo]);
+
   // Generate hex grid nodes
   const hexNodes = useMemo(() => {
     const nodes: Node[] = [];
@@ -364,7 +414,8 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
     }
   }, []);
 
-  if (tanksLoading || heartsLoading) {
+  // Only show loading on initial load, not during background refetches
+  if ((tanksLoading || heartsLoading) && (!tanksData || !heartsData)) {
     return (
       <div className={`flex justify-center items-center h-screen w-screen ${className}`}>
         <div>Loading game board...</div>
@@ -452,6 +503,49 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                   >
                     Start Game
                   </button>
+                </div>
+              )}
+
+              {/* Settings Button - only show for game owner */}
+              {gameInfo?.owner === currentUser && (
+                <div className="border-t border-gray-600 pt-2 mt-3">
+                  <button 
+                    className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors text-sm font-medium"
+                    onClick={() => setShowSettings(!showSettings)}
+                  >
+                    {showSettings ? 'Hide Settings' : 'Game Settings'}
+                  </button>
+                  
+                  {/* Settings Panel */}
+                  {showSettings && (
+                    <div className="mt-3 space-y-3 p-3 bg-gray-800/60 rounded border border-gray-600">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-300 mb-1">
+                          Epoch Length (seconds)
+                        </label>
+                        <div className="flex space-x-2">
+                          <input
+                            type="number"
+                            value={newEpochSeconds}
+                            onChange={(e) => setNewEpochSeconds(parseInt(e.target.value) || 0)}
+                            min="60"
+                            max="86400"
+                            className="flex-1 px-2 py-1 text-xs bg-gray-700 border border-gray-600 rounded text-white"
+                          />
+                          <button
+                            onClick={handleUpdateSettings}
+                            disabled={settingsLoading || newEpochSeconds <= 0 || newEpochSeconds === gameInfo?.settings?.epochSeconds}
+                            className="px-2 py-1 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 text-white rounded text-xs"
+                          >
+                            {settingsLoading ? 'Saving...' : 'Save'}
+                          </button>
+                        </div>
+                        <div className="text-xs text-gray-400 mt-1">
+                          Current: {gameInfo?.settings?.epochSeconds}s ({Math.round((gameInfo?.settings?.epochSeconds || 0) / 60)}min)
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
               

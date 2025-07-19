@@ -22,6 +22,7 @@ export interface ITactProvider {
   createGame(settings: GameSettings): Promise<GameId>;
   listGames(): Promise<GameInfo[]>;
   getGameInfo(gameId: GameId): Promise<GameInfo | null>;
+  updateGameSettings(gameId: GameId, updaterId: PlayerId, newSettings: Partial<{ epochSeconds: number }>): Promise<void>;
   
   // Game State
   getGameState(gameId: GameId): Promise<GameState>;

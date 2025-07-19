@@ -542,3 +542,63 @@ export async function giveToPlayer(
     return { success: false, error: 'Failed to give to player' };
   }
 }
+
+export async function updateGameSettings(
+  gameId: string, 
+  updaterId: string,
+  newSettings: Partial<{ epochSeconds: number }>
+) {
+  try {
+    // Get game
+    const game = await db.query.games.findFirst({
+      where: eq(games.id, gameId),
+    });
+
+    if (!game) {
+      return { success: false, error: 'Game not found' };
+    }
+
+    // Only game owner can update settings
+    if (game.owner !== updaterId) {
+      return { success: false, error: 'Only game owner can update settings' };
+    }
+
+    // Validate new settings
+    if (newSettings.epochSeconds !== undefined) {
+      if (newSettings.epochSeconds < 60) {
+        return { success: false, error: 'Epoch length must be at least 60 seconds' };
+      }
+      if (newSettings.epochSeconds > 24 * 60 * 60) {
+        return { success: false, error: 'Epoch length cannot exceed 24 hours' };
+      }
+    }
+
+    // Update game settings
+    const updateData: any = {};
+    if (newSettings.epochSeconds !== undefined) {
+      updateData.epochSeconds = newSettings.epochSeconds;
+    }
+
+    await db.update(games)
+      .set(updateData)
+      .where(eq(games.id, gameId));
+
+    // Create event
+    await db.insert(gameEvents).values({
+      id: uuidv4(),
+      gameId,
+      type: 'SettingsUpdated',
+      player: updaterId,
+      data: { 
+        updatedSettings: newSettings,
+        timestamp: Date.now()
+      },
+    });
+
+    revalidatePath(`/games/${gameId}`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating game settings:', error);
+    return { success: false, error: 'Failed to update game settings' };
+  }
+}
