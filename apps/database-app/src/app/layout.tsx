@@ -4,6 +4,7 @@ import './globals.css';
 import { UserProvider } from '@/components/user-context';
 import { AuthUI } from '@/components/auth-ui';
 import { Navbar } from '@/components/navbar';
+import { ToastProvider } from '@/components/ui/toast';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,9 +22,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <UserProvider>
-          <Navbar />
-          <AuthUI />
-          {children}
+          <ToastProvider>
+            <Navbar />
+            <AuthUI />
+            {children}
+          </ToastProvider>
         </UserProvider>
       </body>
     </html>

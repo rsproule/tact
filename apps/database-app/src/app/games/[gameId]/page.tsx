@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useUser } from '@/components/user-context';
+import { useToast } from '@/components/ui/toast';
 import { GameInfo, GameState } from '@tact/game-logic';
 import { joinGame, startGame } from '@/lib/actions/game-actions';
 import { HexGameBoard } from '@tact/shared-ui';
@@ -15,6 +16,7 @@ export default function GamePage() {
   const params = useParams();
   const gameId = params.gameId as string;
   const { userId } = useUser();
+  const { toast } = useToast();
   
   const [game, setGame] = useState<GameInfo | null>(null);
   const [players, setPlayers] = useState<any[]>([]);
@@ -122,6 +124,7 @@ export default function GamePage() {
         <HexGameBoard
           gameId={gameId}
           boardSize={game.settings.boardSize}
+          onToast={toast}
         />
       </TactProvider>
     );

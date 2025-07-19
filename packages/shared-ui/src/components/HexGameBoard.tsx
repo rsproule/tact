@@ -11,8 +11,8 @@ import {
   useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { GameId, GameState } from '@tact/game-logic';
-import { useAllTanks, useAllHearts, useCurrentUser, useGameInfo, usePlayers } from '@tact/providers';
+import { GameId, GameState, GameRules, HexUtils } from '@tact/game-logic';
+import { useAllTanks, useAllHearts, useCurrentUser, useGameInfo, usePlayers, useMovePlayer, useShootPlayer, useUpgradePlayer, useGiveToPlayer } from '@tact/providers';
 import { HexTileNode } from './HexTileNode.js';
 
 // Dark mode styles for ReactFlow
@@ -62,6 +62,7 @@ interface HexGameBoardProps {
   gameId: GameId;
   boardSize: number;
   className?: string;
+  onToast?: (toast: { type: 'success' | 'error' | 'info'; title: string; description?: string }) => void;
 }
 
 // Custom node types
@@ -69,19 +70,24 @@ const nodeTypes = {
   hexTile: HexTileNode,
 };
 
-function HexGameBoardInner({ gameId, boardSize, className = '' }: HexGameBoardProps) {
+function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGameBoardProps) {
   const [selectedTileId, setSelectedTileId] = useState<string | undefined>();
-  const [highlightedTiles, setHighlightedTiles] = useState<string[]>([]);
   const [selectedTileData, setSelectedTileData] = useState<any>(null);
   const [currentTime, setCurrentTime] = useState(Date.now());
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { fitView } = useReactFlow();
   
-  const { data: tanksData, isLoading: tanksLoading } = useAllTanks(gameId, { watch: true });
-  const { data: heartsData, isLoading: heartsLoading } = useAllHearts(gameId, { watch: true });
+  const { data: tanksData, isLoading: tanksLoading, refetch: refetchTanks } = useAllTanks(gameId, { watch: true });
+  const { data: heartsData, isLoading: heartsLoading, refetch: refetchHearts } = useAllHearts(gameId, { watch: true });
   const { data: currentUser } = useCurrentUser();
-  const { data: gameInfo } = useGameInfo(gameId, { watch: true });
-  const { data: players } = usePlayers(gameId, { watch: true });
+  const { data: gameInfo, refetch: refetchGameInfo } = useGameInfo(gameId, { watch: true });
+  const { data: players, refetch: refetchPlayers } = usePlayers(gameId, { watch: true });
+
+  // Action hooks
+  const { movePlayer, isLoading: moveLoading } = useMovePlayer();
+  const { shootPlayer, isLoading: shootLoading } = useShootPlayer();
+  const { upgradePlayer, isLoading: upgradeLoading } = useUpgradePlayer();
+  const { giveToPlayer, isLoading: giveLoading } = useGiveToPlayer();
 
   // Update current time every second for live clock
   useEffect(() => {
@@ -151,18 +157,104 @@ function HexGameBoardInner({ gameId, boardSize, className = '' }: HexGameBoardPr
     console.log('selectedTileData:', { nodeId, q, r, s, tank, heartsOnTile, distance, ownerTank });
   }, [ownerTank]);
 
-  const handleTileContextClick = useCallback((nodeId: string) => {
-    // Toggle highlighting like the old behavior
-    setHighlightedTiles(prev => {
-      if (prev.includes(nodeId)) {
-        return prev.filter(id => id !== nodeId);
-      } else {
-        return [...prev, nodeId];
-      }
-    });
+  // Action handlers
+  const handleMove = useCallback(async (targetQ: number, targetR: number, targetS: number) => {
+    if (!currentUser || !ownerTank) return;
     
-    // Right-click behavior - just toggle highlighting for now
-  }, []);
+    const result = await movePlayer(gameId, currentUser, { x: targetQ, y: targetR, z: targetS });
+    if (result.success) {
+      onToast?.({ 
+        type: 'success', 
+        title: 'Moved!', 
+        description: `Moved to (${targetQ}, ${targetR}, ${targetS})` 
+      });
+      // Immediately refetch game state
+      refetchTanks();
+      refetchGameInfo();
+      setSelectedTileId(undefined);
+      setSelectedTileData(null);
+    } else {
+      onToast?.({ 
+        type: 'error', 
+        title: 'Move failed', 
+        description: result.error || 'Unknown error' 
+      });
+    }
+  }, [currentUser, ownerTank, movePlayer, gameId, onToast, refetchTanks, refetchGameInfo]);
+
+  const handleShoot = useCallback(async (targetTank: any) => {
+    if (!currentUser || !targetTank) return;
+    
+    const result = await shootPlayer(gameId, currentUser, targetTank.owner);
+    if (result.success) {
+      onToast?.({ 
+        type: 'success', 
+        title: 'Shot fired!', 
+        description: `Attacked ${targetTank.playerName || 'enemy tank'}` 
+      });
+      // Immediately refetch game state
+      refetchTanks();
+      refetchPlayers();
+      refetchGameInfo();
+      setSelectedTileId(undefined);
+      setSelectedTileData(null);
+    } else {
+      onToast?.({ 
+        type: 'error', 
+        title: 'Attack failed', 
+        description: result.error || 'Unknown error' 
+      });
+    }
+  }, [currentUser, shootPlayer, gameId, onToast, refetchTanks, refetchPlayers, refetchGameInfo]);
+
+  const handleUpgrade = useCallback(async () => {
+    if (!currentUser) return;
+    
+    const result = await upgradePlayer(gameId, currentUser);
+    if (result.success) {
+      onToast?.({ 
+        type: 'success', 
+        title: 'Tank upgraded!', 
+        description: 'Range increased by 1' 
+      });
+      // Immediately refetch game state
+      refetchTanks();
+      refetchGameInfo();
+      setSelectedTileId(undefined);
+      setSelectedTileData(null);
+    } else {
+      onToast?.({ 
+        type: 'error', 
+        title: 'Upgrade failed', 
+        description: result.error || 'Unknown error' 
+      });
+    }
+  }, [currentUser, upgradePlayer, gameId, onToast, refetchTanks, refetchGameInfo]);
+
+  const handleGive = useCallback(async (targetTank: any) => {
+    if (!currentUser || !targetTank) return;
+    
+    // For now, give 1 heart - could be made configurable
+    const result = await giveToPlayer(gameId, currentUser, targetTank.owner, 1, 0);
+    if (result.success) {
+      onToast?.({ 
+        type: 'success', 
+        title: 'Resources given!', 
+        description: `Gave 1 heart to ${targetTank.playerName || 'player'}` 
+      });
+      // Immediately refetch game state
+      refetchTanks();
+      refetchGameInfo();
+      setSelectedTileId(undefined);
+      setSelectedTileData(null);
+    } else {
+      onToast?.({ 
+        type: 'error', 
+        title: 'Gift failed', 
+        description: result.error || 'Unknown error' 
+      });
+    }
+  }, [currentUser, giveToPlayer, gameId, onToast, refetchTanks, refetchGameInfo]);
 
   // Generate hex grid nodes
   const hexNodes = useMemo(() => {
@@ -208,7 +300,6 @@ function HexGameBoardInner({ gameId, boardSize, className = '' }: HexGameBoardPr
         
         // Determine tile state
         const selected = selectedTileId === nodeId;
-        const highlighted = highlightedTiles.includes(nodeId);
         const isShootRange = ownerTank && distance !== undefined && distance <= ownerTank.range && distance > 0;
         const isMoveRange = ownerTank && distance === 1;
         
@@ -228,11 +319,9 @@ function HexGameBoardInner({ gameId, boardSize, className = '' }: HexGameBoardPr
             ownerTank,
             distance,
             selected,
-            highlighted,
             isShootRange,
             isMoveRange,
             onTileClick: () => handleTileClick(nodeId, q, r, s, tank, heartsOnTile ? 1 : 0, distance),
-            onTileContextClick: () => handleTileContextClick(nodeId),
           },
           draggable: false,
           selectable: true,
@@ -241,7 +330,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '' }: HexGameBoardPr
     }
     
     return nodes;
-  }, [tanks, hearts, ownerTank, selectedTileId, highlightedTiles, boardSize, gameId, handleTileClick, handleTileContextClick]);
+  }, [tanks, hearts, ownerTank, selectedTileId, boardSize, gameId, handleTileClick]);
 
   // Force fitView after nodes are loaded to ensure proper centering
   useEffect(() => {
@@ -472,26 +561,80 @@ function HexGameBoardInner({ gameId, boardSize, className = '' }: HexGameBoardPr
 
               {/* Action Buttons */}
               <div className="space-y-2 pt-2 border-t border-gray-600">
-                {!selectedTileData.tank && selectedTileData.distance === 1 && selectedTileData.ownerTank && (
-                  <button className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors text-sm">
-                    Move Here (1 AP)
-                  </button>
-                )}
-                
-                {selectedTileData.tank && selectedTileData.tank === selectedTileData.ownerTank && (
-                  <button className="w-full px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded transition-colors text-sm">
-                    Upgrade Tank
-                  </button>
-                )}
-                
-                {selectedTileData.tank && selectedTileData.tank !== selectedTileData.ownerTank && selectedTileData.tank.hearts > 0 && (
-                  <div className="space-y-1">
-                    <button className="w-full px-3 py-2 bg-red-600 hover:bg-red-500 text-white rounded transition-colors text-sm">
-                      Shoot Tank
+                {!selectedTileData.tank && selectedTileData.distance === 1 && selectedTileData.ownerTank && selectedTileData.ownerTank.hearts > 0 && (() => {
+                  const canMove = selectedTileData.ownerTank.aps >= 1;
+                  const disabledReason = !canMove ? 'Need 1 AP to move' : '';
+                  
+                  return (
+                    <button 
+                      className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                      onClick={() => handleMove(selectedTileData.q, selectedTileData.r, selectedTileData.s)}
+                      disabled={moveLoading || !canMove}
+                      title={disabledReason}
+                    >
+                      {moveLoading ? 'Moving...' : 'Move Here (1 AP)'}
                     </button>
-                    <button className="w-full px-3 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded transition-colors text-sm">
-                      Give Resources
+                  );
+                })()}
+                
+                {selectedTileData.tank && selectedTileData.tank === selectedTileData.ownerTank && selectedTileData.ownerTank.hearts > 0 && (() => {
+                  // Use actual game rules for upgrade cost
+                  const upgradeCost = GameRules.getUpgradeCost(selectedTileData.ownerTank.range);
+                  const canAfford = selectedTileData.ownerTank.aps >= upgradeCost;
+                  const disabledReason = !canAfford ? `Need ${upgradeCost} AP to upgrade` : '';
+                  
+                  return (
+                    <button 
+                      className="w-full px-3 py-2 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                      onClick={handleUpgrade}
+                      disabled={upgradeLoading || !canAfford}
+                      title={disabledReason}
+                    >
+                      {upgradeLoading ? 'Upgrading...' : `Upgrade Tank (${upgradeCost} AP)`}
                     </button>
+                  );
+                })()}
+                
+                {selectedTileData.tank && selectedTileData.tank !== selectedTileData.ownerTank && selectedTileData.tank.hearts > 0 && selectedTileData.ownerTank?.hearts > 0 && (() => {
+                  const inShootRange = selectedTileData.distance !== undefined && 
+                                      selectedTileData.distance <= selectedTileData.ownerTank.range && 
+                                      selectedTileData.distance > 0;
+                  const inGiveRange = selectedTileData.distance !== undefined && 
+                                     selectedTileData.distance <= selectedTileData.ownerTank.range;
+                  const hasApsToShoot = selectedTileData.ownerTank.aps >= 1;
+                  const hasHeartsToGive = selectedTileData.ownerTank.hearts >= 1;
+                  
+                  const shootDisabledReason = !inShootRange ? `Out of range (${selectedTileData.distance}/${selectedTileData.ownerTank.range})` :
+                                             !hasApsToShoot ? 'Need 1 AP to shoot' : '';
+                  const giveDisabledReason = !inGiveRange ? `Out of range (${selectedTileData.distance}/${selectedTileData.ownerTank.range})` :
+                                            !hasHeartsToGive ? 'Need 1 heart to give' : '';
+                  
+                  return (
+                    <div className="space-y-1">
+                      <button 
+                        className="w-full px-3 py-2 bg-red-600 hover:bg-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                        onClick={() => handleShoot(selectedTileData.tank)}
+                        disabled={shootLoading || !hasApsToShoot || !inShootRange}
+                        title={shootDisabledReason}
+                      >
+                        {shootLoading ? 'Shooting...' : 'Shoot Tank (1 AP)'}
+                      </button>
+                      <button 
+                        className="w-full px-3 py-2 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded transition-colors text-sm"
+                        onClick={() => handleGive(selectedTileData.tank)}
+                        disabled={giveLoading || !hasHeartsToGive || !inGiveRange}
+                        title={giveDisabledReason}
+                      >
+                        {giveLoading ? 'Giving...' : 'Give 1 Heart'}
+                      </button>
+                    </div>
+                  );
+                })()}
+                
+                {/* Dead tank message */}
+                {selectedTileData.tank && selectedTileData.tank === selectedTileData.ownerTank && selectedTileData.ownerTank.hearts === 0 && (
+                  <div className="text-center text-red-400 text-sm py-2">
+                    💀 Your tank has been destroyed
                   </div>
                 )}
               </div>

@@ -29,7 +29,7 @@ function useQuery<T>(
   const [error, setError] = useState<string | null>(null);
   const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false);
 
-  const { enabled = true, watch = false, refetchInterval = 3000 } = options;
+  const { enabled = true, watch = false, refetchInterval = 10000 } = options;
 
   // Use ref to store the latest query function without causing re-renders
   const queryFnRef = useRef(queryFn);
@@ -57,7 +57,7 @@ function useQuery<T>(
         setIsLoading(false);
       }
     }
-  }, [enabled, hasInitiallyLoaded]);
+  }, [enabled]);
 
   useEffect(() => {
     fetchData(true); // Mark initial fetch

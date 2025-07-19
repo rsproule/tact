@@ -448,3 +448,97 @@ export async function startGame(gameId: string) {
     return { success: false, error: 'Failed to start game' };
   }
 }
+
+export async function giveToPlayer(
+  gameId: string, 
+  giverId: string, 
+  receiverId: string, 
+  hearts?: number, 
+  aps?: number
+) {
+  try {
+    // Get both tanks
+    const giverTank = await db.query.tanks.findFirst({
+      where: and(eq(tanks.gameId, gameId), eq(tanks.owner, giverId)),
+    });
+
+    const receiverTank = await db.query.tanks.findFirst({
+      where: and(eq(tanks.gameId, gameId), eq(tanks.owner, receiverId)),
+    });
+
+    if (!giverTank || !receiverTank) {
+      return { success: false, error: 'Tank not found' };
+    }
+
+    // Get game
+    const game = await db.query.games.findFirst({
+      where: eq(games.id, gameId),
+    });
+
+    if (!game || game.state !== GameState.Started) {
+      return { success: false, error: 'Game is not active' };
+    }
+
+    // Validate give
+    const canGive = GameRules.canGive(
+      {
+        tankId: giverTank.tankId,
+        owner: giverTank.owner,
+        hearts: giverTank.hearts,
+        aps: giverTank.aps,
+        range: giverTank.range,
+        position: { x: giverTank.positionQ, y: giverTank.positionR, z: giverTank.positionS },
+        playerName: giverTank.playerName || undefined,
+      },
+      {
+        tankId: receiverTank.tankId,
+        owner: receiverTank.owner,
+        hearts: receiverTank.hearts,
+        aps: receiverTank.aps,
+        range: receiverTank.range,
+        position: { x: receiverTank.positionQ, y: receiverTank.positionR, z: receiverTank.positionS },
+        playerName: receiverTank.playerName || undefined,
+      },
+      hearts || 0,
+      aps || 0
+    );
+
+    if (!canGive.valid) {
+      return { success: false, error: canGive.reason };
+    }
+
+    // Update both tanks
+    const newGiverHearts = giverTank.hearts - (hearts || 0);
+    const newGiverAps = giverTank.aps - (aps || 0);
+    const newReceiverHearts = receiverTank.hearts + (hearts || 0);
+    const newReceiverAps = receiverTank.aps + (aps || 0);
+
+    await db.update(tanks)
+      .set({ hearts: newGiverHearts, aps: newGiverAps })
+      .where(eq(tanks.id, giverTank.id));
+
+    await db.update(tanks)
+      .set({ hearts: newReceiverHearts, aps: newReceiverAps })
+      .where(eq(tanks.id, receiverTank.id));
+
+    // Create event
+    await db.insert(gameEvents).values({
+      id: uuidv4(),
+      gameId,
+      type: 'Give',
+      player: giverId,
+      data: { 
+        giver: giverId,
+        receiver: receiverId,
+        hearts: hearts || 0,
+        aps: aps || 0,
+      },
+    });
+
+    revalidatePath(`/games/${gameId}`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error giving to player:', error);
+    return { success: false, error: 'Failed to give to player' };
+  }
+}
