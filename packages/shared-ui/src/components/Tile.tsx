@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, MouseEvent } from "react";
 import { Hexagon } from "react-hexgrid";
 import { GameId } from '@tact/game-logic';
 import { TankInfo } from './TankInfo.js';
@@ -96,15 +96,15 @@ export function Tile(props: TileProps) {
         />
       )}
       <Hexagon
-        onClick={(e) => {
+        onClick={(e: React.MouseEvent<SVGGElement, MouseEvent>) => {
           props.onClick();
           handleClick(e);
         }}
-        onContextMenu={(e) => {
+        onContextMenu={(e: React.MouseEvent<SVGGElement, MouseEvent>) => {
           e.preventDefault();
           handleContextMenu();
         }}
-        onDoubleClick={(e) => {
+        onDoubleClick={(e: React.MouseEvent<SVGGElement, MouseEvent>) => {
           e.preventDefault();
           handleContextMenu();
         }}
