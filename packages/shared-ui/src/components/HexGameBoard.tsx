@@ -741,6 +741,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                   )}
                 </div>
               )}
+              </div>
             </div>
           )}
         </Panel>

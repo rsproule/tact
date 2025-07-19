@@ -18,9 +18,9 @@ export async function GET(
     });
 
     if (since) {
-      const sinceTimestamp = Math.floor(parseInt(since) / 1000);
+      const sinceDate = new Date(parseInt(since));
       query = db.query.gameEvents.findMany({
-        where: gte(gameEvents.timestamp, sinceTimestamp),
+        where: gte(gameEvents.timestamp, sinceDate),
         orderBy: [desc(gameEvents.timestamp)],
         limit: 100,
       });

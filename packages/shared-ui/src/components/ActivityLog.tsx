@@ -152,10 +152,10 @@ export function ActivityLog({ gameId, currentUser, gameState, className = '' }: 
       {/* Toggle Button */}
       <button
         onClick={handleToggle}
-        className="relative bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-lg p-3 shadow-xl hover:bg-gray-700 transition-colors"
+        className="relative bg-card/95 backdrop-blur-sm border border-border rounded-lg p-3 shadow-xl hover:bg-muted/20 transition-colors"
         title={isOpen ? 'Close Activity Log' : 'Open Activity Log'}
       >
-        <div className="w-6 h-6 text-white flex items-center justify-center">
+        <div className="w-6 h-6 text-foreground flex items-center justify-center">
           <Clipboard className="h-4 w-4" />
         </div>
         {/* Notification Badge */}
@@ -168,9 +168,9 @@ export function ActivityLog({ gameId, currentUser, gameState, className = '' }: 
 
       {/* Activity Panel */}
       {isOpen && (
-        <div className="absolute bottom-full mb-2 w-80 max-h-96 bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl overflow-hidden">
-          <div className="p-3 border-b border-gray-700">
-            <h3 className="text-white font-semibold flex items-center justify-between">
+        <div className="absolute bottom-full mb-2 w-80 max-h-96 bg-card/95 backdrop-blur-sm border border-border rounded-lg shadow-xl overflow-hidden">
+          <div className="p-3 border-b border-border">
+            <h3 className="text-foreground font-semibold flex items-center justify-between">
               Activity Log
               {loading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
             </h3>
@@ -178,7 +178,7 @@ export function ActivityLog({ gameId, currentUser, gameState, className = '' }: 
           
           <div className="max-h-80 overflow-y-auto">
             {activities.length === 0 ? (
-              <div className="p-4 text-gray-400 text-center">
+              <div className="p-4 text-muted-foreground text-center">
                 No activities yet
               </div>
             ) : (
@@ -186,10 +186,10 @@ export function ActivityLog({ gameId, currentUser, gameState, className = '' }: 
                 {activities.map((activity) => (
                   <div
                     key={activity.id}
-                    className="p-2 rounded text-sm bg-gray-800/50 border-l-2 border-blue-500/30"
+                    className="p-2 rounded text-sm bg-muted/50 border-l-2 border-primary/30"
                   >
-                    <div className="text-gray-200">{activity.message}</div>
-                    <div className="text-gray-400 text-xs mt-1">
+                    <div className="text-card-foreground">{activity.message}</div>
+                    <div className="text-muted-foreground text-xs mt-1">
                       {getTimeAgo(activity.timestamp)}
                     </div>
                   </div>
