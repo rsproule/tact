@@ -14,6 +14,7 @@ import '@xyflow/react/dist/style.css';
 import { GameId, GameState, GameRules, HexUtils } from '@tact/game-logic';
 import { useAllTanks, useAllHearts, useCurrentUser, useGameInfo, usePlayers, useMovePlayer, useShootPlayer, useUpgradePlayer, useGiveToPlayer, useClaimableAPs } from '@tact/providers';
 import { HexTileNode } from './HexTileNode.js';
+import { ActivityLog } from './ActivityLog.js';
 
 // Dark mode styles for ReactFlow
 const darkModeStyles = `
@@ -77,6 +78,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
   const [showSettings, setShowSettings] = useState(false);
   const [newEpochSeconds, setNewEpochSeconds] = useState<number>(0);
   const [settingsLoading, setSettingsLoading] = useState(false);
+  const [showPlayers, setShowPlayers] = useState(true);
   const [claimApLoading, setClaimApLoading] = useState(false);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { fitView } = useReactFlow();
@@ -530,6 +532,12 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
         zoomOnDoubleClick={false}
         selectNodesOnDrag={false}
       >
+        {/* Activity Log */}
+        <ActivityLog 
+          gameId={gameId} 
+          currentUser={currentUser || undefined}
+          gameState={gameInfo?.state}
+        />
         <Background 
           color="#4b5563" 
           gap={16} 
@@ -874,35 +882,6 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
           </Panel>
         )}
 
-        {/* Players List Panel - Bottom Left */}
-        {players && players.length > 0 && (
-          <Panel position="bottom-left" className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl p-4 m-4 min-w-64 max-w-80">
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-white">Players ({players.length})</h3>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {players.map((player) => {
-                  const playerTank = tanks.find(t => t.owner === player.address);
-                  return (
-                    <div key={player.address} className="flex justify-between items-center text-sm p-2 bg-gray-800/60 rounded border border-gray-600">
-                      <div className="flex-1">
-                        <div className="font-medium text-white">{player.name}</div>
-                        <div className="text-gray-400 text-xs">{player.address.slice(0, 8)}...</div>
-                      </div>
-                      {playerTank && (
-                        <div className="flex space-x-2 text-xs">
-                          <span className="text-red-400">♥️{playerTank.hearts}</span>
-                          <span className="text-blue-400">⚡{playerTank.aps}</span>
-                          <span className="text-purple-400">🎯{playerTank.range}</span>
-                          {playerTank.hearts === 0 && <span>💀</span>}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </Panel>
-        )}
         
       </ReactFlow>
     </div>

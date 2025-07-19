@@ -3,6 +3,7 @@ export * from './components/HexGameBoard.js';
 export * from './components/HexTileNode.js';
 export * from './components/Tile.js';
 export * from './components/TankInfo.js';
+export * from './components/ActivityLog.js';
 export * from './components/actions/ActionButton.js';
 export * from './components/actions/ContextMenu.js';
 export * from './components/actions/EmptySquareMenu.js';
