@@ -6,11 +6,11 @@ import { config } from 'dotenv';
 // Load environment variables
 config({ path: '.env.local' });
 
-if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL environment variable is required');
+if (!process.env.POSTGRES_URL) {
+  throw new Error('POSTGRES_URL environment variable is required');
 }
 
-const client = postgres(process.env.DATABASE_URL, { max: 1 });
+const client = postgres(process.env.POSTGRES_URL, { max: 1 });
 const db = drizzle(client);
 
 async function runMigrations() {
