@@ -188,20 +188,6 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
   const availableAPs = getAvailableAPs();
   const moveRange = availableAPs; // Use full available APs for movement range
 
-  // Debug logging
-  console.log('HexGameBoard Debug:', { 
-    tanksCount: tanks.length, 
-    heartsCount: hearts.length, 
-    currentUser,
-    availableAPs,
-    moveRange,
-    claimableAPs,
-    claimReason,
-    currentEpoch: epochInfo.currentEpoch,
-    epochMaxAPs: gameInfo?.settings?.epochMaxActionPoints,
-    ownerTankAPs: ownerTank?.aps,
-    tanks: tanks.map(t => ({ id: t.tankId, owner: t.owner, position: t.position, aps: t.aps }))
-  });
 
   const handleTileClick = useCallback((nodeId: string, q: number, r: number, s: number, tank: any, heartsOnTile: number, distance?: number) => {
     setSelectedTileId(nodeId);
@@ -213,8 +199,6 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
       distance,
       ownerTank
     });
-    console.log(`Clicked tile at (${q}, ${r}, ${s})`, tank);
-    console.log('selectedTileData:', { nodeId, q, r, s, tank, heartsOnTile, distance, ownerTank });
   }, [ownerTank]);
 
   // Action handlers
@@ -429,11 +413,6 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
           tank.position.x === q && tank.position.y === r && tank.position.z === s
         );
 
-        // Debug log for tanks found at any position
-        if (tank) {
-          console.log('Tank found at position:', { q, r, s, tank: { id: tank.tankId, owner: tank.owner, hearts: tank.hearts } });
-          console.log('Passing tank data to node:', { nodeId, hasTank: !!tank, tankData: tank });
-        }
         
         // Find hearts at this position
         const heartsOnTile = hearts.find(heart => 
@@ -624,7 +603,7 @@ function HexGameBoardInner({ gameId, boardSize, className = '', onToast }: HexGa
                         if (!response.ok) throw new Error('Failed to start game');
                         // Game will refresh via polling
                       } catch (err) {
-                        console.error('Failed to start game:', err);
+                        onToast?.({ type: 'error', title: 'Failed to start game', description: err instanceof Error ? err.message : 'Unknown error' });
                       }
                     }}
                   >

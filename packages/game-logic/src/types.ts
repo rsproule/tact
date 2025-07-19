@@ -51,6 +51,12 @@ export interface GameInfo {
   epochStart: number;
   owner: string;
   createdAt: number;
+  
+  // Final game state (when ended)
+  winner?: string;
+  winnerName?: string;
+  endedAt?: number;
+  endReason?: string;
 }
 
 export interface Player {

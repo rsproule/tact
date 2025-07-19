@@ -299,6 +299,40 @@ export async function shootPlayer(gameId: string, shooterId: string, targetId: s
       await db.update(players)
         .set({ isAlive: false })
         .where(and(eq(players.gameId, gameId), eq(players.address, targetId)));
+
+      // Check if only one player remains alive (game over condition)
+      const alivePlayers = await db.query.players.findMany({
+        where: and(eq(players.gameId, gameId), eq(players.isAlive, true)),
+      });
+
+      if (alivePlayers.length <= 1) {
+        // End the game and store winner info
+        await db.update(games)
+          .set({ 
+            state: GameState.Ended,
+            winner: alivePlayers[0]?.address || null,
+            winnerName: alivePlayers[0]?.name || null,
+            endedAt: new Date(),
+            endReason: 'Last player remaining',
+          })
+          .where(eq(games.id, gameId));
+
+        // Create GameEnded event
+        await db.insert(gameEvents).values({
+          id: uuidv4(),
+          gameId,
+          type: 'GameEnded',
+          player: alivePlayers[0]?.address || null,
+          data: {
+            winner: alivePlayers[0]?.address || null,
+            winnerName: alivePlayers[0]?.name || null,
+            reason: 'Last player remaining',
+            finalPlayerCount: alivePlayers.length,
+            killedBy: shooterId,
+            lastVictim: targetId,
+          },
+        });
+      }
     }
 
     // Create event
@@ -522,6 +556,47 @@ export async function giveToPlayer(
     await db.update(tanks)
       .set({ hearts: newReceiverHearts, aps: newReceiverAps })
       .where(eq(tanks.id, receiverTank.id));
+
+    // Check if giver died from giving away hearts
+    if (newGiverHearts === 0) {
+      await db.update(players)
+        .set({ isAlive: false })
+        .where(and(eq(players.gameId, gameId), eq(players.address, giverId)));
+
+      // Check if only one player remains alive (game over condition)
+      const alivePlayers = await db.query.players.findMany({
+        where: and(eq(players.gameId, gameId), eq(players.isAlive, true)),
+      });
+
+      if (alivePlayers.length <= 1) {
+        // End the game and store winner info
+        await db.update(games)
+          .set({ 
+            state: GameState.Ended,
+            winner: alivePlayers[0]?.address || null,
+            winnerName: alivePlayers[0]?.name || null,
+            endedAt: new Date(),
+            endReason: 'Last player remaining (self-sacrifice)',
+          })
+          .where(eq(games.id, gameId));
+
+        // Create GameEnded event
+        await db.insert(gameEvents).values({
+          id: uuidv4(),
+          gameId,
+          type: 'GameEnded',
+          player: alivePlayers[0]?.address || null,
+          data: {
+            winner: alivePlayers[0]?.address || null,
+            winnerName: alivePlayers[0]?.name || null,
+            reason: 'Last player remaining',
+            finalPlayerCount: alivePlayers.length,
+            killedBy: 'self-sacrifice',
+            lastVictim: giverId,
+          },
+        });
+      }
+    }
 
     // Create event
     await db.insert(gameEvents).values({

@@ -22,9 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider
-          defaultTheme="dark"
-        >
+        <ThemeProvider defaultTheme="dark">
           <UserProvider>
             <ToastProvider>
               <Navbar />

@@ -105,6 +105,12 @@ export default function Home() {
                           <CardDescription className="mt-2 text-gray-400">
                             <div className="space-y-1">
                               <p>Status: <span className="font-medium text-gray-300">{formatGameState(game.state)}</span></p>
+                              {game.state === 2 && game.winnerName && (
+                                <p>Winner: <span className="font-medium text-green-400">🏆 {game.winnerName}</span></p>
+                              )}
+                              {game.state === 2 && game.endedAt && (
+                                <p>Ended: <span className="font-medium text-gray-300">{new Date(game.endedAt * 1000).toLocaleDateString()}</span></p>
+                              )}
                               <p>Players: <span className="font-medium text-gray-300">{formatPlayerCount(game.playersCount, game.settings.maxPlayers)}</span></p>
                               <p>Board Size: <span className="font-medium text-gray-300">{game.settings.boardSize}</span></p>
                               <p>Created: <span className="font-medium text-gray-300">{new Date(game.createdAt * 1000).toLocaleDateString()}</span></p>
@@ -152,6 +158,7 @@ export default function Home() {
                     <tr>
                       <th className="text-left py-3 px-4 font-semibold text-white text-sm">Game ID</th>
                       <th className="text-left py-3 px-4 font-semibold text-white text-sm">Status</th>
+                      <th className="text-left py-3 px-4 font-semibold text-white text-sm">Winner</th>
                       <th className="text-left py-3 px-4 font-semibold text-white text-sm">Players</th>
                       <th className="text-left py-3 px-4 font-semibold text-white text-sm">Board</th>
                       <th className="text-left py-3 px-4 font-semibold text-white text-sm">Hearts</th>
@@ -176,6 +183,13 @@ export default function Home() {
                           }`}>
                             {formatGameState(game.state)}
                           </span>
+                        </td>
+                        <td className="py-2 px-4 text-gray-300 text-sm">
+                          {game.state === 2 && game.winnerName ? (
+                            <span className="text-green-400 font-medium">🏆 {game.winnerName}</span>
+                          ) : (
+                            <span className="text-gray-500">-</span>
+                          )}
                         </td>
                         <td className="py-2 px-4 text-gray-300 text-sm">
                           {formatPlayerCount(game.playersCount, game.settings.maxPlayers)}

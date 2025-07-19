@@ -20,14 +20,6 @@ interface HexTileData {
 }
 
 export const HexTileNode = memo(function HexTileNode({ data }: { data: HexTileData }) {
-  // Debug log when tank is present
-  if (data.tank) {
-    console.log('HexTileNode rendering tank:', { 
-      position: `(${data.q}, ${data.r}, ${data.s})`, 
-      tank: { id: data.tank.tankId, hearts: data.tank.hearts },
-      color: data.tank.hearts === 0 ? 'gray' : (data.tank === data.ownerTank ? 'blue' : 'red')
-    });
-  }
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();

@@ -27,6 +27,12 @@ export const games = pgTable('games', {
   playersCount: integer('players_count').notNull().default(0),
   prizePool: text('prize_pool').notNull().default('0'),
   lastHeartSpawn: integer('last_heart_spawn').notNull().default(0),
+  
+  // Final game state (when ended)
+  winner: text('winner'),
+  winnerName: text('winner_name'),
+  endedAt: timestamp('ended_at'),
+  endReason: text('end_reason'),
 });
 
 // Players table

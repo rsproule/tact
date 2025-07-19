@@ -31,6 +31,12 @@ export async function GET() {
       epochStart: game.epochStart ? Math.floor(game.epochStart.getTime() / 1000) : 0,
       owner: game.owner,
       createdAt: Math.floor(game.createdAt.getTime() / 1000),
+      
+      // Final game state (when ended)
+      winner: game.winner,
+      winnerName: game.winnerName,
+      endedAt: game.endedAt ? Math.floor(game.endedAt.getTime() / 1000) : undefined,
+      endReason: game.endReason,
     }));
 
     return NextResponse.json(gameInfos);
