@@ -37,7 +37,8 @@ export function isPaymentConfigured(): boolean {
   return Boolean(
     process.env.DATABASE_URL &&
       process.env.MPP_SECRET_KEY &&
-      process.env.MPP_RECIPIENT,
+      process.env.MPP_RECIPIENT &&
+      process.env.MPP_REALM,
   );
 }
 
@@ -110,6 +111,7 @@ function getGateway(): ReturnType<typeof createGateway> {
 function createGateway() {
   const secretKey = process.env.MPP_SECRET_KEY;
   const recipient = process.env.MPP_RECIPIENT;
+  const realm = process.env.MPP_REALM?.trim();
   const network = getMppNetwork();
   const currency = getMppCurrency();
 
@@ -119,6 +121,22 @@ function createGateway() {
 
   if (!recipient || !/^0x[0-9a-fA-F]{40}$/.test(recipient)) {
     throw new PaymentConfigurationError("MPP_RECIPIENT must be an EVM address");
+  }
+
+  if (!realm) {
+    throw new PaymentConfigurationError("MPP_REALM must be the public origin hostname");
+  }
+
+  let realmHostname: string;
+  try {
+    realmHostname = new URL(`https://${realm}`).hostname;
+  } catch {
+    throw new PaymentConfigurationError("MPP_REALM must be a valid hostname");
+  }
+  if (realmHostname !== realm.toLowerCase()) {
+    throw new PaymentConfigurationError(
+      "MPP_REALM must contain a hostname only, without a scheme, port, or path",
+    );
   }
 
   if (!/^0x[0-9a-fA-F]{40}$/.test(currency)) {
@@ -135,7 +153,7 @@ function createGateway() {
         testnet: network === "testnet",
       }),
     ],
-    realm: process.env.MPP_REALM,
+    realm: realmHostname,
     secretKey,
   });
 }
