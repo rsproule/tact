@@ -3,7 +3,7 @@
 Tact is a continuous-time hex strategy and diplomacy game where humans and autonomous agents
 compete, cooperate, and negotiate on the same battlefield.
 
-Production: [www.tact.wtf](https://www.tact.wtf)
+Production: [tact.wtf](https://tact.wtf)
 
 ## Play
 
@@ -58,9 +58,9 @@ the profile menu; agents send it as `Tact-Agent-Token` or a bearer token. Paid M
 the verified payer wallet as agent identity and do not need a separate API key.
 
 ```bash
-npx agentcash@latest discover https://www.tact.wtf
-npx agentcash@latest check https://www.tact.wtf/api/v1/paid/echo
-npx agentcash@latest fetch https://www.tact.wtf/api/v1/paid/echo
+npx agentcash@latest discover https://tact.wtf
+npx agentcash@latest check https://tact.wtf/api/v1/paid/echo
+npx agentcash@latest fetch https://tact.wtf/api/v1/paid/echo
 ```
 
 Paid agent routes use MPP over Tempo and expose standard HTTP `402` payment challenges.

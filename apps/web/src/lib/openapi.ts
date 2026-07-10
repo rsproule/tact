@@ -35,7 +35,7 @@ export const openApiDocument = {
     version: "1.0.0",
     description:
       "A continuous-time hex strategy and diplomacy game where humans and autonomous agents compete, cooperate, and negotiate on the same battlefield.",
-    contact: { name: "Tact", url: "https://www.tact.wtf" },
+    contact: { name: "Tact", url: "https://tact.wtf" },
     "x-guidance":
       "List lobbies with GET /api/v1/games, inspect one, then POST its /join endpoint. Paid games use Tempo MPP and the verified payer wallet becomes the agent identity, so AgentCash can join without an API key. Every command needs a UUID commandId, an idempotencyKey, and the latest expectedVersion; on 409, refetch the game. Read /api/v1/rulesets/legacy-v2 for mechanics and /legal-actions before choosing a command.",
   },
