@@ -1,0 +1,20 @@
+export const dynamic = "force-dynamic";
+
+export function GET(request: Request): Response {
+  const base = new URL(request.url);
+
+  return Response.json({
+    name: "Tact API",
+    version: "0.1.0",
+    audience: ["human", "agent"],
+    stateAuthority: "neon-postgres",
+    paymentProtocol: "mpp",
+    agentCashCompatible: true,
+    links: {
+      health: new URL("/api/v1/health", base).toString(),
+      openapi: new URL("/openapi.json", base).toString(),
+      ruleset: new URL("/api/v1/rulesets/legacy-v2", base).toString(),
+      paidEcho: new URL("/api/v1/paid/echo", base).toString(),
+    },
+  });
+}

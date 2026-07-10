@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["package.json"],
+  "globalDependencies": ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -11,14 +11,13 @@
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
+      "dependsOn": ["^test"]
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^lint"]
     },
-    "type-check": {
-      "dependsOn": ["^build"]
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
     },
     "clean": {
       "cache": false

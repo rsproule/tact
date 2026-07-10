@@ -1,0 +1,13 @@
+packages:
+  - apps/web
+  - packages/db
+  - packages/game-engine
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+
+# Match the repository's supply-chain policy: do not install releases younger
+# than seven days unless explicitly excluded after review.
+minimumReleaseAge: 10080

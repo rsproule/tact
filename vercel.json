@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "buildCommand": "turbo build --filter=database-app",
-  "outputDirectory": "apps/database-app/.next",
-  "installCommand": "bun install",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "pnpm install --frozen-lockfile",
   "framework": "nextjs",
   "crons": []
 }
