@@ -3,6 +3,10 @@ packages:
   - packages/db
   - packages/game-engine
 
+overrides:
+  postcss: 8.5.16
+  ws: 8.21.0
+
 allowBuilds:
   esbuild: true
   sharp: true
