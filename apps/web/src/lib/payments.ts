@@ -55,9 +55,9 @@ export async function withMppCharge(
     if (error instanceof PaymentConfigurationError) {
       return problem(
         503,
-        "Payment service unavailable",
-        "MPP is not configured for this deployment.",
-        "payment_not_configured",
+        "Payments unavailable",
+        "Paid requests are temporarily unavailable.",
+        "payments_unavailable",
       );
     }
     throw error;
@@ -91,7 +91,7 @@ export async function withMppCharge(
       return problem(
         502,
         "Payment verification failed",
-        "The payment provider did not return a verified receipt.",
+        "The payment could not be verified.",
         "payment_receipt_missing",
       );
     }

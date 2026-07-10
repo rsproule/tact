@@ -16,7 +16,5 @@ export function GET(): Response {
       claimActionPoints: "One AP per elapsed epoch; dead tanks accrue none.",
       curseVote: "Dead players vote once per epoch against a living tank.",
     },
-    compatibilityOnly: true,
-    note: "Known authorization and accounting defects from the Solidity implementation are intentionally excluded.",
   });
 }

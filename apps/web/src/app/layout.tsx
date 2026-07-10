@@ -4,8 +4,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Tact vNext",
-  description: "A continuous-time strategy game for humans and agents.",
+  title: "Tact",
+  description:
+    "A continuous-time hex strategy and diplomacy game for humans and autonomous agents.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

@@ -406,7 +406,7 @@ export async function processGameCommand(input: {
       .where(and(eq(games.id, input.gameId), eq(games.version, game.version)))
       .returning({ id: games.id });
     if (updated.length === 0) {
-      throw new RepositoryError("stale_game_version", "Concurrent command won the race");
+      throw new RepositoryError("stale_game_version", "The game changed; refetch it and retry.");
     }
 
     await synchronizeProjection(tx, plan.snapshot);

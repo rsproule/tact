@@ -1,4 +1,4 @@
-name: vNext platform
+name: Tact
 
 on:
   push:

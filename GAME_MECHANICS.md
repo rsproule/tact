@@ -29,7 +29,7 @@ alive count/ID sum, podium, prize pool, and reveal schedule.
 
 V2 uses cubic hex coordinates. Its on-chain representation is non-negative and lies on
 `x + y + z = 3 * radius`, centered on `(radius, radius, radius)`. A radius `r` board has
-`3r(r+1)+1` tiles. vNext normalizes the same geometry to signed `q + r + s = 0` coordinates
+`3r(r+1)+1` tiles. Tact normalizes the same geometry to signed `q + r + s = 0` coordinates
 centered on the origin.
 
 Relevant implementation: `contracts/src/base/HexBoard.sol`.
@@ -82,8 +82,8 @@ machinery.
   through another identity.
 
 Sources: `contracts/src/hooks/NonAggression.sol`, `contracts/src/hooks/Bounty.sol`, and their
-Foundry tests. vNext should implement these as audited domain modules and scoped grants, not as
-arbitrary code callbacks running inside a database transaction.
+Foundry tests. Tact models these as explicit domain rules and scoped grants rather than arbitrary
+code callbacks.
 
 ## Human and bot behavior
 
@@ -152,7 +152,7 @@ The off-chain prototype is also unsafe as an authority:
 
 The rewrite preserves strategies and social mechanics, not these implementation accidents.
 
-## vNext migration rules
+## Current ruleset guarantees
 
 - Freeze every game to an explicit ruleset version.
 - Normalize coordinates once at the API boundary.

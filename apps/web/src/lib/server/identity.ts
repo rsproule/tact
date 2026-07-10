@@ -205,9 +205,9 @@ async function hmac(value: string): Promise<string> {
   if (!secret || secret.length < 32) {
     throw new ApiError(
       503,
-      "session_not_configured",
-      "Session service unavailable",
-      "TACT_SESSION_SECRET must contain at least 32 characters.",
+      "sign_in_unavailable",
+      "Sign-in unavailable",
+      "Players cannot sign in right now.",
     );
   }
   const key = await crypto.subtle.importKey(

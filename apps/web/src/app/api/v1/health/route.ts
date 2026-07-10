@@ -10,10 +10,10 @@ export async function GET(): Promise<Response> {
 
   return Response.json({
     status: database.status === "ready" ? "ready" : "degraded",
-    service: "tact-web",
+    service: "tact",
     checks: {
-      database,
-      mpp: { status: isPaymentConfigured() ? "configured" : "not_configured" },
+      gameplay: database,
+      payments: { status: isPaymentConfigured() ? "ready" : "unavailable" },
     },
     timestamp: new Date().toISOString(),
   });

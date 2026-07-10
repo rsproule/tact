@@ -9,14 +9,14 @@ export async function GET(request: Request): Promise<Response> {
     request,
     {
       amount: getMppDemoPrice(),
-      description: "Tact MPP integration check",
+      description: "Tact MPP payment check",
       scope: "/api/v1/paid/echo",
     },
     () =>
       Response.json({
         ok: true,
         protocol: "mpp",
-        message: "Payment credential verified.",
+        message: "Payment accepted.",
         requestId: crypto.randomUUID(),
       }),
   );

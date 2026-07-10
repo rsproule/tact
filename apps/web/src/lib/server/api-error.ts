@@ -39,9 +39,9 @@ export function normalizeApiError(error: unknown): ApiError {
   if (error instanceof DatabaseConfigurationError) {
     return new ApiError(
       503,
-      "database_not_configured",
-      "Database unavailable",
-      "The game database is not configured for this deployment.",
+      "service_unavailable",
+      "Tact unavailable",
+      "Tact is temporarily unavailable.",
     );
   }
   if (error instanceof RepositoryError) {
@@ -51,7 +51,13 @@ export function normalizeApiError(error: unknown): ApiError {
         : error.code === "command_in_progress"
           ? 425
           : 409;
-    return new ApiError(status, error.code, "Game command conflict", error.message, error.details);
+    const message =
+      error.code === "game_not_found"
+        ? "No match exists with that id."
+        : error.code === "command_in_progress"
+          ? "That move is still being processed."
+          : "The game changed; refetch it and retry.";
+    return new ApiError(status, error.code, "Game command conflict", message, error.details);
   }
 
   // Rule errors are structural to avoid importing unstable engine internals here.
@@ -74,8 +80,8 @@ export function normalizeApiError(error: unknown): ApiError {
   return new ApiError(
     500,
     "internal_error",
-    "Internal server error",
-    "The request could not be completed.",
+    "Tact error",
+    "Tact could not complete the request.",
   );
 }
 

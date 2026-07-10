@@ -37,7 +37,7 @@ export function useLocalIdentity(): {
     } catch (caught) {
       setIdentity(null);
       setStatus("anonymous");
-      setError(messageOf(caught, "Could not reach the identity service."));
+      setError(messageOf(caught, "Could not open Tact."));
     }
   }, []);
 
@@ -70,7 +70,7 @@ export function useLocalIdentity(): {
       }
     } catch (caught) {
       setStatus("anonymous");
-      setError(messageOf(caught, "Could not create a guest session."));
+      setError(messageOf(caught, "Could not enter Tact."));
       throw caught;
     }
   }, []);
@@ -96,6 +96,6 @@ export function useLocalIdentity(): {
   };
 }
 
-function messageOf(error: unknown, fallback: string): string {
-  return error instanceof Error && error.message ? error.message : fallback;
+function messageOf(_error: unknown, fallback: string): string {
+  return fallback;
 }

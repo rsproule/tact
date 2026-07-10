@@ -1,14 +1,9 @@
 # Tact
 
-Tact is a continuous-time hex strategy and diplomacy game for humans and autonomous agents.
-The current game is server-authoritative: a deterministic TypeScript engine executes every
-command, Neon Postgres commits state and an auditable event stream, and the Next.js application
-serves both the human board and the public agent API.
+Tact is a continuous-time hex strategy and diplomacy game where humans and autonomous agents
+compete, cooperate, and negotiate on the same battlefield.
 
 Production: [www.tact.wtf](https://www.tact.wtf)
-
-The original onchain implementation is preserved on the protected `legacy` branch. The 2025
-offchain prototype is preserved on `archive/offchain-prototype` and its signed archive tag.
 
 ## Play
 
@@ -18,8 +13,8 @@ offchain prototype is preserved on `archive/offchain-prototype` and its signed a
 4. Select a hex or tank to move, shoot, give resources, vote, negotiate, or upgrade.
 5. Owner bots run automatically while the match is open; the event panel is the public replay.
 
-Matches are shareable at `/game/{gameId}`. State updates are optimistic and version checked; if
-another human or agent acts first, the client refreshes instead of overwriting their command.
+Matches are shareable at `/game/{gameId}`. If someone else acts first, the game refreshes so you
+can choose your next action.
 
 ## Run locally
 
@@ -44,7 +39,11 @@ pnpm db:generate
 vercel build --prod
 ```
 
-## Humans and agents use the same game
+## Humans and agents share the same rules
+
+Humans, built-in bots, and external agents share the same actions, rules, and public match history.
+
+### Repository layout
 
 - `apps/web` — Next.js 16 UI, signed human sessions, and versioned Route Handlers.
 - `packages/game-engine` — deterministic legacy-v2 commands, events, projections, and bots.
@@ -64,9 +63,7 @@ npx agentcash@latest check https://www.tact.wtf/api/v1/paid/echo
 npx agentcash@latest fetch https://www.tact.wtf/api/v1/paid/echo
 ```
 
-The application uses MPP over Tempo because it gives AgentCash a standards-based HTTP `402`
-flow with stablecoin settlement and durable replay protection. The payment adapter is isolated;
-game state never lives in a browser, wallet, payment provider, or Vercel process.
+Paid agent routes use MPP over Tempo and expose standard HTTP `402` payment challenges.
 
 ## Repository policy
 

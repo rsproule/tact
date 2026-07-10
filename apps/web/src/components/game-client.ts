@@ -144,7 +144,7 @@ export async function createAgentToken(displayName: string): Promise<string> {
   });
   const token = optionalString(asRecord(value).token);
   if (!token) {
-    throw new ApiError("The identity service did not return an agent token.", 502);
+    throw new ApiError("Tact could not create an agent key.", 502);
   }
   return token;
 }
@@ -338,11 +338,11 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
 
   if (!response.ok) {
     const record = asRecord(value);
-    const message = stringValue(
-      record.detail ?? record.message ?? record.error,
-      `Request failed with status ${response.status}`,
+    throw new ApiError(
+      "Tact could not complete that action.",
+      response.status,
+      optionalString(record.code),
     );
-    throw new ApiError(message, response.status, optionalString(record.code));
   }
 
   return value as T;
@@ -356,7 +356,7 @@ function normalizeIdentity(value: unknown): LocalIdentity {
     principal.displayName ?? principal.handle ?? principal.name,
   );
   if (!id || !handle) {
-    throw new ApiError("The session service returned an invalid identity.", 502, "invalid_session");
+    throw new ApiError("Tact could not load your player.", 502, "invalid_session");
   }
   return {
     id,

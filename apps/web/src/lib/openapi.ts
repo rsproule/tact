@@ -34,12 +34,12 @@ export const openApiDocument = {
     title: "Tact Game API",
     version: "1.0.0",
     description:
-      "A server-authoritative, continuous-time hex strategy game for humans and autonomous agents.",
+      "A continuous-time hex strategy and diplomacy game where humans and autonomous agents compete, cooperate, and negotiate on the same battlefield.",
     contact: { name: "Tact", url: "https://www.tact.wtf" },
     "x-guidance":
       "List lobbies with GET /api/v1/games, inspect one, then POST its /join endpoint. Paid games use Tempo MPP and the verified payer wallet becomes the agent identity, so AgentCash can join without an API key. Every command needs a UUID commandId, an idempotencyKey, and the latest expectedVersion; on 409, refetch the game. Read /api/v1/rulesets/legacy-v2 for mechanics and /legal-actions before choosing a command.",
   },
-  servers: [{ url: "/", description: "Current deployment" }],
+  servers: [{ url: "/", description: "Tact" }],
   tags: [
     { name: "Discovery" },
     { name: "Identity" },
@@ -61,7 +61,7 @@ export const openApiDocument = {
       get: {
         tags: ["Discovery"],
         operationId: "getHealth",
-        summary: "Inspect database and payment readiness",
+        summary: "Inspect Tact readiness",
         security: [],
         responses: {
           "200": {
@@ -75,11 +75,11 @@ export const openApiDocument = {
       get: {
         tags: ["Discovery"],
         operationId: "getLegacyV2Ruleset",
-        summary: "Read the executed legacy-v2 ruleset",
+        summary: "Read the legacy-v2 game rules",
         security: [],
         responses: {
           "200": {
-            description: "Versioned game mechanics",
+            description: "Game rules and mechanics",
             content: json({ type: "object", additionalProperties: true }),
           },
         },
@@ -99,7 +99,7 @@ export const openApiDocument = {
       post: {
         tags: ["Identity"],
         operationId: "createSession",
-        summary: "Create or refresh a signed human browser session",
+        summary: "Enter Tact as a human player",
         security: [],
         requestBody: {
           required: true,
@@ -115,7 +115,7 @@ export const openApiDocument = {
           },
         },
         responses: {
-          "201": { description: "Signed HttpOnly session created", content: json({ $ref: "#/components/schemas/Session" }) },
+          "201": { description: "Player session created", content: json({ $ref: "#/components/schemas/Session" }) },
           "400": problem,
           "429": problem,
         },
@@ -178,7 +178,7 @@ export const openApiDocument = {
         ],
         responses: {
           "200": {
-            description: "Projected games",
+            description: "Games",
             content: json({
               type: "object",
               required: ["games", "nextCursor"],
@@ -194,7 +194,7 @@ export const openApiDocument = {
       post: {
         tags: ["Games"],
         operationId: "createGame",
-        summary: "Create a versioned legacy-v2 game",
+        summary: "Create a Tact match",
         security: agentAuth,
         requestBody: {
           required: true,
@@ -231,11 +231,11 @@ export const openApiDocument = {
       get: {
         tags: ["Games"],
         operationId: "getGame",
-        summary: "Read a public game projection scoped to the viewer",
+        summary: "Read the game state visible to the current viewer",
         security: [],
         parameters: [gameIdParameter],
         responses: {
-          "200": { description: "Game projection", content: json({ $ref: "#/components/schemas/GameResult" }) },
+          "200": { description: "Viewer-visible game state", content: json({ $ref: "#/components/schemas/GameResult" }) },
           "404": problem,
         },
       },
@@ -246,7 +246,7 @@ export const openApiDocument = {
         operationId: "joinGame",
         summary: "Join a game; paid lobbies settle a Tempo MPP charge",
         description:
-          "Free games require a session or agent token. In a paid game, the verified MPP payer DID is sufficient agent identity and the receipt is atomically consumed as a match-entry entitlement.",
+          "Free games require a player or agent identity. For paid games, a verified MPP payer DID can be used as the agent identity.",
         parameters: [gameIdParameter],
         "x-payment-info": {
           price: { mode: "dynamic", currency: "USD", min: "0", max: maxEntryPrice },
@@ -286,7 +286,7 @@ export const openApiDocument = {
         parameters: [gameIdParameter],
         responses: {
           "200": {
-            description: "Legal action projection",
+            description: "Legal actions available to the current viewer",
             content: json({
               type: "object",
               required: ["gameId", "version", "actions"],
@@ -341,7 +341,7 @@ export const openApiDocument = {
       get: {
         tags: ["Games"],
         operationId: "listGameEvents",
-        summary: "Read the ordered, hash-chained event stream",
+        summary: "Read the match event history",
         security: [],
         parameters: [
           gameIdParameter,
@@ -369,7 +369,7 @@ export const openApiDocument = {
       post: {
         tags: ["Commands"],
         operationId: "addBots",
-        summary: "Owner-only: add deterministic projected-state bots to a free lobby",
+        summary: "Owner-only: add bots to a free lobby",
         parameters: [gameIdParameter],
         security: agentAuth,
         requestBody: {
@@ -429,7 +429,7 @@ export const openApiDocument = {
       get: {
         tags: ["Payments"],
         operationId: "getPaidEcho",
-        summary: "Exercise the production MPP boundary",
+        summary: "Test an MPP payment",
         "x-payment-info": {
           price: { mode: "fixed", currency: "USD", amount: demoPrice },
           protocols: [{ mpp: { method: "tempo", intent: "charge", currency } }],

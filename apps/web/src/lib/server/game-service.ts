@@ -146,7 +146,7 @@ export async function joinGame(input: {
 
   if (minimumBuyIn !== "0") {
     if (!input.payment) {
-      throw new ApiError(402, "payment_required", "Payment required", "This game requires a paid entry entitlement.");
+      throw new ApiError(402, "payment_required", "Payment required", "This game requires payment.");
     }
     if (
       input.payment.amount !== entryPriceUsd ||
@@ -219,7 +219,7 @@ export async function submitGameCommand(input: {
       parsed.data.command.type,
     )
   ) {
-    throw new ApiError(501, "paid_command_not_available", "Not implemented", "This economic command needs a dedicated paid entitlement flow.");
+    throw new ApiError(501, "paid_command_not_available", "Command unavailable", "This command is not currently available.");
   }
   const game = await requireGame(input.gameId);
   if (parsed.data.command.type === "start" && game.ownerPrincipalId !== input.principal.id) {

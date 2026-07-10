@@ -19,14 +19,14 @@ export function EventLog({ events, players, loading = false }: EventLogProps) {
           <h2 id="event-log-title">Match events</h2>
         </div>
         <span className={`live-indicator ${loading ? "is-loading" : ""}`}>
-          <i /> {loading ? "SYNCING" : "LIVE"}
+          <i /> {loading ? "UPDATING" : "LIVE"}
         </span>
       </header>
       <ol className="event-list" aria-live="polite">
         {events.length === 0 ? (
           <li className="event-empty">
             <span className="event-glyph">···</span>
-            <div><strong>Nothing on the wire yet</strong><p>Commands and game changes will appear here.</p></div>
+            <div><strong>No moves yet</strong><p>Moves and battlefield events will appear here.</p></div>
           </li>
         ) : (
           [...events].reverse().map((event) => {
@@ -40,7 +40,6 @@ export function EventLog({ events, players, loading = false }: EventLogProps) {
                 </div>
                 <div className="event-meta">
                   <time dateTime={event.occurredAt}>{relativeTime(event.occurredAt)}</time>
-                  <span>#{event.sequence}</span>
                 </div>
               </li>
             );
@@ -89,7 +88,7 @@ function describeEvent(
     return { glyph: "↗", tone: "info", title: `${actor} repositioned`, detail: coordinate ? `Moved to ${coordinate}.` : "Tank position changed." };
   }
   if (type.includes("shoot") || type.includes("damage")) {
-    return { glyph: "×", tone: "danger", title: `${actor} fired on ${target}`, detail: `${number(payload.shots ?? payload.damage, 1)} shot${number(payload.shots ?? payload.damage, 1) === 1 ? "" : "s"} resolved.` };
+    return { glyph: "×", tone: "danger", title: `${actor} fired on ${target}`, detail: `${number(payload.shots ?? payload.damage, 1)} shot${number(payload.shots ?? payload.damage, 1) === 1 ? "" : "s"} fired.` };
   }
   if (type.includes("death") || type.includes("destroy")) {
     return { glyph: "†", tone: "danger", title: `${target} was destroyed`, detail: actor === "A player" ? "A tank joined the cursing jury." : `${actor} landed the final shot.` };
@@ -109,13 +108,13 @@ function describeEvent(
     return { glyph: "+", tone: "good", title: `${actor} claimed AP`, detail: `${number(payload.amount ?? payload.actionPoints, 1)} action point${number(payload.amount ?? payload.actionPoints, 1) === 1 ? "" : "s"} added.` };
   }
   if (type.includes("cursed")) {
-    return { glyph: "!", tone: "warning", title: `${target} was cursed`, detail: payload.effect === "delay_drip" ? "Their next AP drip was delayed." : "The dead jury removed an action point." };
+    return { glyph: "!", tone: "warning", title: `${target} was cursed`, detail: payload.effect === "delay_drip" ? "Their next AP gain was delayed." : "The dead jury removed an action point." };
   }
   if (type.includes("vote") || type.includes("curse")) {
     return { glyph: "!", tone: "warning", title: `${actor} voted to curse ${target}`, detail: "A jury vote was recorded for this epoch." };
   }
   if (type.includes("spawn")) {
-    return { glyph: "♥", tone: "good", title: "A heart appeared", detail: asCoordinate(payload.position) ? `Spawned at ${asCoordinate(payload.position)}.` : "A board resource is available." };
+    return { glyph: "♥", tone: "good", title: "A heart appeared", detail: asCoordinate(payload.position) ? `Waiting at ${asCoordinate(payload.position)}.` : "A heart is waiting on the battlefield." };
   }
   if (type.includes("start")) {
     return { glyph: "▶", tone: "good", title: "The match is live", detail: "Continuous-time play has begun." };
@@ -124,17 +123,17 @@ function describeEvent(
     return { glyph: "◆", tone: "warning", title: "Match complete", detail: `${target} holds the field.` };
   }
   if (type.includes("treaty") || type.includes("non_aggression")) {
-    return { glyph: "◇", tone: "info", title: "Treaty state changed", detail: `${actor} and ${target} updated their pact.` };
+    return { glyph: "◇", tone: "info", title: "Treaty updated", detail: `${actor} and ${target} updated their pact.` };
   }
   if (type.includes("bounty")) {
-    return { glyph: "$", tone: "warning", title: "Bounty state changed", detail: `${target} is part of a bounty action.` };
+    return { glyph: "$", tone: "warning", title: "Bounty updated", detail: `${target} is part of a bounty action.` };
   }
 
   return {
     glyph: "·",
     tone: "muted",
-    title: humanize(event.type),
-    detail: actor === "A player" ? "Game state updated." : `Submitted by ${actor}.`,
+    title: "Battlefield updated",
+    detail: actor === "A player" ? "The battlefield changed." : `${actor} made a move.`,
   };
 }
 
@@ -161,13 +160,6 @@ function asCoordinate(value: unknown): string | null {
 
 function number(value: unknown, fallback = 0): number {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
-}
-
-function humanize(value: string): string {
-  return value
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/[_-]/g, " ")
-    .replace(/^./, (first) => first.toUpperCase());
 }
 
 function relativeTime(value: string): string {

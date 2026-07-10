@@ -1,6 +1,6 @@
-# Tact vNext architecture
+# Tact architecture
 
-Status: implemented production architecture. The playable vertical slice, deterministic engine,
+Status: production. The complete game, deterministic engine,
 transactional Neon layer, human/agent identity, bot runtime, and MPP paid-entry boundary are live
 in `apps/web`, `packages/game-engine`, and `packages/db`.
 

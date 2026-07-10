@@ -7,7 +7,6 @@ export function GET(request: Request): Response {
     name: "Tact API",
     version: "1.0.0",
     audience: ["human", "agent"],
-    stateAuthority: "neon-postgres",
     paymentProtocol: "mpp",
     agentCashCompatible: true,
     links: {
