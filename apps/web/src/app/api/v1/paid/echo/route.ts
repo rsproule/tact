@@ -9,7 +9,7 @@ export async function GET(request: Request): Promise<Response> {
     request,
     {
       amount: getMppDemoPrice(),
-      description: "Tact MPP payment check",
+      description: "Tact access check",
       scope: "/api/v1/paid/echo",
     },
     () =>
