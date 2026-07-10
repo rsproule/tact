@@ -1,6 +1,11 @@
-import { getMppCurrency, getMppDemoPrice } from "./payment-config";
+import {
+  getMppCurrency,
+  getMppDemoPrice,
+  getMppMaxEntryPrice,
+} from "./payment-config";
 
 const demoPrice = getMppDemoPrice();
+const maxEntryPrice = getMppMaxEntryPrice();
 const currency = getMppCurrency();
 
 const json = (schema: Record<string, unknown>) => ({
@@ -30,6 +35,7 @@ export const openApiDocument = {
     version: "1.0.0",
     description:
       "A server-authoritative, continuous-time hex strategy game for humans and autonomous agents.",
+    contact: { name: "Tact", url: "https://www.tact.wtf" },
     "x-guidance":
       "List lobbies with GET /api/v1/games, inspect one, then POST its /join endpoint. Paid games use Tempo MPP and the verified payer wallet becomes the agent identity, so AgentCash can join without an API key. Every command needs a UUID commandId, an idempotencyKey, and the latest expectedVersion; on 409, refetch the game. Read /api/v1/rulesets/legacy-v2 for mechanics and /legal-actions before choosing a command.",
   },
@@ -47,6 +53,7 @@ export const openApiDocument = {
         tags: ["Discovery"],
         operationId: "getCapabilities",
         summary: "Discover service capabilities and canonical links",
+        security: [],
         responses: { "200": { description: "Capabilities", content: json({ type: "object" }) } },
       },
     },
@@ -55,6 +62,7 @@ export const openApiDocument = {
         tags: ["Discovery"],
         operationId: "getHealth",
         summary: "Inspect database and payment readiness",
+        security: [],
         responses: {
           "200": {
             description: "Readiness checks",
@@ -68,6 +76,7 @@ export const openApiDocument = {
         tags: ["Discovery"],
         operationId: "getLegacyV2Ruleset",
         summary: "Read the executed legacy-v2 ruleset",
+        security: [],
         responses: {
           "200": {
             description: "Versioned game mechanics",
@@ -91,6 +100,7 @@ export const openApiDocument = {
         tags: ["Identity"],
         operationId: "createSession",
         summary: "Create or refresh a signed human browser session",
+        security: [],
         requestBody: {
           required: true,
           content: {
@@ -160,6 +170,7 @@ export const openApiDocument = {
         tags: ["Games"],
         operationId: "listGames",
         summary: "List public lobby, active, and completed games",
+        security: [],
         parameters: [
           { name: "status", in: "query", schema: { type: "string", enum: ["lobby", "active", "ended", "cancelled"] } },
           { name: "limit", in: "query", schema: { type: "integer", minimum: 1, maximum: 50, default: 20 } },
@@ -221,6 +232,7 @@ export const openApiDocument = {
         tags: ["Games"],
         operationId: "getGame",
         summary: "Read a public game projection scoped to the viewer",
+        security: [],
         parameters: [gameIdParameter],
         responses: {
           "200": { description: "Game projection", content: json({ $ref: "#/components/schemas/GameResult" }) },
@@ -237,7 +249,7 @@ export const openApiDocument = {
           "Free games require a session or agent token. In a paid game, the verified MPP payer DID is sufficient agent identity and the receipt is atomically consumed as a match-entry entitlement.",
         parameters: [gameIdParameter],
         "x-payment-info": {
-          price: { mode: "dynamic", currency: "USD" },
+          price: { mode: "dynamic", currency: "USD", min: "0", max: maxEntryPrice },
           protocols: [{ mpp: { method: "tempo", intent: "charge", currency } }],
         },
         security: [{ Payment: [] }],
@@ -270,6 +282,7 @@ export const openApiDocument = {
         tags: ["Commands"],
         operationId: "getLegalActions",
         summary: "List viewer-scoped legal actions and concrete targets",
+        security: [],
         parameters: [gameIdParameter],
         responses: {
           "200": {
@@ -329,6 +342,7 @@ export const openApiDocument = {
         tags: ["Games"],
         operationId: "listGameEvents",
         summary: "Read the ordered, hash-chained event stream",
+        security: [],
         parameters: [
           gameIdParameter,
           { name: "after", in: "query", schema: { type: "integer", minimum: 0, default: 0 } },
@@ -420,6 +434,15 @@ export const openApiDocument = {
           price: { mode: "fixed", currency: "USD", amount: demoPrice },
           protocols: [{ mpp: { method: "tempo", intent: "charge", currency } }],
         },
+        parameters: [
+          {
+            name: "nonce",
+            in: "query",
+            required: false,
+            description: "Optional caller correlation value; ignored by the service.",
+            schema: { type: "string", maxLength: 128 },
+          },
+        ],
         security: [{ Payment: [] }],
         responses: {
           "200": { description: "Paid response with Payment-Receipt", content: json({ $ref: "#/components/schemas/PaidEcho" }) },

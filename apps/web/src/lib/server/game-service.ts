@@ -26,7 +26,7 @@ import {
 } from "@tact/db";
 
 import type { VerifiedPayment } from "@/lib/payments";
-import { getMppCurrency } from "@/lib/payment-config";
+import { getMppCurrency, getMppMaxEntryPrice } from "@/lib/payment-config";
 
 import { ApiError } from "./api-error";
 import { requireInteger, requireString, requireUuid } from "./request";
@@ -588,6 +588,15 @@ function parseUsd(value: unknown): string {
   const text = requireString(value, "config.entryPriceUsd", { min: 1, max: 32 });
   if (!/^(0|[1-9]\d*)(\.\d{1,6})?$/.test(text)) {
     throw new ApiError(400, "invalid_price", "Invalid entry price", "entryPriceUsd must be a canonical decimal string with at most six decimal places.");
+  }
+  const maximum = getMppMaxEntryPrice();
+  if (BigInt(usdToAtomic(text)) > BigInt(usdToAtomic(maximum))) {
+    throw new ApiError(
+      400,
+      "entry_price_too_high",
+      "Entry price exceeds the production limit",
+      `entryPriceUsd must be no greater than ${maximum} USD.`,
+    );
   }
   return text;
 }

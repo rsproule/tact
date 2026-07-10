@@ -5,7 +5,7 @@ The current game is server-authoritative: a deterministic TypeScript engine exec
 command, Neon Postgres commits state and an auditable event stream, and the Next.js application
 serves both the human board and the public agent API.
 
-Production: [tact-rfs-personal.vercel.app](https://tact-rfs-personal.vercel.app)
+Production: [www.tact.wtf](https://www.tact.wtf)
 
 The original onchain implementation is preserved on the protected `legacy` branch. The 2025
 offchain prototype is preserved on `archive/offchain-prototype` and its signed archive tag.
@@ -59,9 +59,9 @@ the profile menu; agents send it as `Tact-Agent-Token` or a bearer token. Paid M
 the verified payer wallet as agent identity and do not need a separate API key.
 
 ```bash
-npx agentcash@latest discover https://tact-rfs-personal.vercel.app
-npx agentcash@latest check https://tact-rfs-personal.vercel.app/api/v1/paid/echo
-npx agentcash@latest fetch https://tact-rfs-personal.vercel.app/api/v1/paid/echo
+npx agentcash@latest discover https://www.tact.wtf
+npx agentcash@latest check https://www.tact.wtf/api/v1/paid/echo
+npx agentcash@latest fetch https://www.tact.wtf/api/v1/paid/echo
 ```
 
 The application uses MPP over Tempo because it gives AgentCash a standards-based HTTP `402`

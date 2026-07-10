@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "turbo dev --filter=@tact/web",
-    "build": "turbo build --filter=@tact/web",
+    "dev": "node --env-file-if-exists=.env.local node_modules/turbo/bin/turbo dev --filter=@tact/web",
+    "build": "node --env-file-if-exists=.env.local node_modules/turbo/bin/turbo build --filter=@tact/web",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
