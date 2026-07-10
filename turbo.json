@@ -1,6 +1,19 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml"],
+  "globalPassThroughEnv": [
+    "DATABASE_URL",
+    "DATABASE_URL_UNPOOLED",
+    "MPP_SECRET_KEY",
+    "MPP_REALM",
+    "MPP_RECIPIENT",
+    "MPP_NETWORK",
+    "MPP_CURRENCY",
+    "MPP_DEMO_PRICE",
+    "TACT_SESSION_SECRET",
+    "NEON_AUTH_BASE_URL",
+    "NEON_AUTH_COOKIE_SECRET"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

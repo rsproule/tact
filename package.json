@@ -11,9 +11,7 @@
     "test": "turbo test",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "db:generate": "pnpm --filter @tact/db db:generate",
-    "db:migrate": "pnpm --filter @tact/db db:migrate",
-    "legacy:contracts:build": "cd contracts && make build",
-    "legacy:contracts:test": "cd contracts && forge test"
+    "db:migrate": "pnpm --filter @tact/db db:migrate"
   },
   "devDependencies": {
     "turbo": "2.10.2",

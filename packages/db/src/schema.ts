@@ -16,13 +16,12 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-import type { CommandEnvelope } from "@tact/game-engine";
-
 export const principalKind = pgEnum("principal_kind", ["human", "agent"]);
 export const identityKind = pgEnum("identity_kind", [
   "neon_auth",
   "agent_token",
   "wallet",
+  "anonymous_session",
 ]);
 export const gameStatus = pgEnum("game_status", [
   "lobby",
@@ -101,6 +100,8 @@ export const games = pgTable(
       .notNull()
       .default(sql`'{}'::jsonb`),
     stateHash: text("state_hash"),
+    creationIdempotencyKey: text("creation_idempotency_key"),
+    creationRequestHash: text("creation_request_hash"),
     epochStartedAt: timestamp("epoch_started_at", { withTimezone: true }),
     winnerPlayerId: uuid("winner_player_id"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -111,6 +112,9 @@ export const games = pgTable(
   (table) => [
     index("games_status_created_idx").on(table.status, table.createdAt),
     index("games_owner_idx").on(table.ownerPrincipalId),
+    uniqueIndex("games_owner_creation_idempotency_uq")
+      .on(table.ownerPrincipalId, table.creationIdempotencyKey)
+      .where(sql`${table.creationIdempotencyKey} IS NOT NULL`),
     check("games_version_nonnegative", sql`${table.version} >= 0`),
   ],
 );
@@ -173,6 +177,27 @@ export const tanks = pgTable(
       "tanks_resources_nonnegative",
       sql`${table.hearts} >= 0 AND ${table.actionPoints} >= 0 AND ${table.range} >= 0`,
     ),
+  ],
+);
+
+export const gameBots = pgTable(
+  "game_bots",
+  {
+    playerId: uuid("player_id")
+      .primaryKey()
+      .references(() => gamePlayers.id, { onDelete: "cascade" }),
+    gameId: uuid("game_id")
+      .notNull()
+      .references(() => games.id, { onDelete: "cascade" }),
+    principalId: uuid("principal_id")
+      .notNull()
+      .references(() => principals.id, { onDelete: "cascade" }),
+    strategy: text("strategy").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("game_bots_game_principal_uq").on(table.gameId, table.principalId),
+    index("game_bots_game_idx").on(table.gameId),
   ],
 );
 
@@ -273,7 +298,7 @@ export const gameCommands = pgTable(
     expectedVersion: bigint("expected_version", { mode: "number" }).notNull(),
     requestHash: text("request_hash").notNull(),
     type: text("type").notNull(),
-    envelope: jsonb("envelope").$type<CommandEnvelope>().notNull(),
+    envelope: jsonb("envelope").$type<Record<string, unknown>>().notNull(),
     status: commandStatus("status").notNull().default("received"),
     result: jsonb("result").$type<Record<string, unknown>>(),
     errorCode: text("error_code"),
@@ -300,6 +325,7 @@ export const gameEvents = pgTable(
       .notNull()
       .references(() => games.id, { onDelete: "cascade" }),
     gameVersion: bigint("game_version", { mode: "number" }).notNull(),
+    eventIndex: smallint("event_index").notNull().default(0),
     commandId: uuid("command_id").references(() => gameCommands.id),
     principalId: uuid("principal_id").references(() => principals.id),
     type: text("type").notNull(),
@@ -310,8 +336,42 @@ export const gameEvents = pgTable(
   },
   (table) => [
     uniqueIndex("game_events_id_uq").on(table.id),
-    uniqueIndex("game_events_game_version_uq").on(table.gameId, table.gameVersion),
+    uniqueIndex("game_events_game_version_index_uq").on(
+      table.gameId,
+      table.gameVersion,
+      table.eventIndex,
+    ),
     index("game_events_game_sequence_idx").on(table.gameId, table.sequence),
+    check("game_events_event_index_nonnegative", sql`${table.eventIndex} >= 0`),
+  ],
+);
+
+/** Durable replay/session state for mppx's AtomicStore contract. */
+export const mppStore = pgTable("mpp_store", {
+  key: text("key").primaryKey(),
+  value: jsonb("value").$type<unknown>(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Fixed-window limits used at public mutation boundaries. */
+export const rateLimits = pgTable(
+  "rate_limits",
+  {
+    scope: text("scope").notNull(),
+    subject: text("subject").notNull(),
+    windowStartedAt: timestamp("window_started_at", { withTimezone: true }).notNull(),
+    count: integer("count").notNull().default(1),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("rate_limits_scope_subject_window_uq").on(
+      table.scope,
+      table.subject,
+      table.windowStartedAt,
+    ),
+    index("rate_limits_updated_idx").on(table.updatedAt),
+    check("rate_limits_count_positive", sql`${table.count} > 0`),
   ],
 );
 

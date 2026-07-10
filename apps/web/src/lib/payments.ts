@@ -1,9 +1,26 @@
+import { createMppAtomicStore } from "@tact/db";
 import { Mppx, tempo } from "mppx/nextjs";
 
 import { problem } from "./http";
 import { getMppCurrency, getMppNetwork } from "./payment-config";
 
-type RouteHandler = (request: Request) => Promise<Response> | Response;
+export type VerifiedPayment = Readonly<{
+  challengeId: string;
+  method: string;
+  reference: string;
+  status: "success";
+  timestamp: string;
+  amount: string;
+  atomicAmount: string;
+  currency: string;
+  externalId?: string;
+  payer?: string;
+}>;
+
+type RouteHandler = (
+  request: Request,
+  payment: VerifiedPayment,
+) => Promise<Response> | Response;
 
 export type ChargeOffer = Readonly<{
   amount: string;
@@ -16,10 +33,12 @@ class PaymentConfigurationError extends Error {
   override name = "PaymentConfigurationError";
 }
 
-let gateway: ReturnType<typeof createGateway> | undefined;
-
 export function isPaymentConfigured(): boolean {
-  return Boolean(process.env.MPP_SECRET_KEY && process.env.MPP_RECIPIENT);
+  return Boolean(
+    process.env.DATABASE_URL &&
+      process.env.MPP_SECRET_KEY &&
+      process.env.MPP_RECIPIENT,
+  );
 }
 
 export async function withMppCharge(
@@ -43,17 +62,49 @@ export async function withMppCharge(
     throw error;
   }
 
+  let verifiedPayment: VerifiedPayment | undefined;
+  paymentGateway.onPaymentSuccess((context) => {
+    verifiedPayment = {
+      challengeId: context.challenge.id,
+      method: context.receipt.method,
+      reference: context.receipt.reference,
+      status: context.receipt.status,
+      timestamp: context.receipt.timestamp,
+      amount: offer.amount,
+      atomicAmount: String(context.request.amount),
+      currency: String(context.request.currency),
+      ...(context.receipt.externalId
+        ? { externalId: context.receipt.externalId }
+        : {}),
+      ...(context.credential?.source
+        ? { payer: context.credential.source }
+        : {}),
+    };
+  });
+
   const paidHandler = paymentGateway.tempo.charge({
     ...offer,
     currency: getMppCurrency(),
-  })(handler);
+  })((paidRequest) => {
+    if (!verifiedPayment) {
+      return problem(
+        502,
+        "Payment verification failed",
+        "The payment provider did not return a verified receipt.",
+        "payment_receipt_missing",
+      );
+    }
+    return handler(paidRequest, verifiedPayment);
+  });
 
   return paidHandler(request);
 }
 
 function getGateway(): ReturnType<typeof createGateway> {
-  gateway ??= createGateway();
-  return gateway;
+  // Event callbacks carry request-specific receipt data. A fresh lightweight
+  // wrapper avoids cross-request listener state while the replay store remains
+  // shared and durable in Neon.
+  return createGateway();
 }
 
 function createGateway() {
@@ -80,6 +131,7 @@ function createGateway() {
         currency,
         html: true,
         recipient: recipient as `0x${string}`,
+        store: createMppAtomicStore(),
         testnet: network === "testnet",
       }),
     ],

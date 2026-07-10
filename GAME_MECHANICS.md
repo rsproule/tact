@@ -8,6 +8,9 @@ This is the migration specification for the original Tact game. Source priority 
 4. README prose;
 5. the incomplete 2025 database prototype.
 
+The cited contracts, beta logs, frontend, and Rust bot are preserved on the protected `legacy`
+branch; production `master` contains the migrated engine and application only.
+
 That order matters: the prose is stale in several balance-critical places.
 
 ## Game identity

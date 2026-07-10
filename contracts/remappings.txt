@@ -1,2 +1,0 @@
-@openzeppelin=lib/openzeppelin-contracts
-src/=src/

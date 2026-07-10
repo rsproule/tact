@@ -5,7 +5,7 @@ export function GET(request: Request): Response {
 
   return Response.json({
     name: "Tact API",
-    version: "0.1.0",
+    version: "1.0.0",
     audience: ["human", "agent"],
     stateAuthority: "neon-postgres",
     paymentProtocol: "mpp",
@@ -14,6 +14,8 @@ export function GET(request: Request): Response {
       health: new URL("/api/v1/health", base).toString(),
       openapi: new URL("/openapi.json", base).toString(),
       ruleset: new URL("/api/v1/rulesets/legacy-v2", base).toString(),
+      games: new URL("/api/v1/games", base).toString(),
+      session: new URL("/api/v1/session", base).toString(),
       paidEcho: new URL("/api/v1/paid/echo", base).toString(),
     },
   });
