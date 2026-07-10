@@ -4,8 +4,19 @@ packages:
   - packages/game-engine
 
 overrides:
+  "@esbuild-kit/core-utils@3.3.2>esbuild": 0.25.12
   postcss: 8.5.16
   ws: 8.21.0
+
+supportedArchitectures:
+  os:
+    - current
+    - linux
+  cpu:
+    - current
+    - x64
+  libc:
+    - glibc
 
 allowBuilds:
   esbuild: true
