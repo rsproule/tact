@@ -37,7 +37,7 @@ export const openApiDocument = {
       "A continuous-time hex strategy and diplomacy game where humans and autonomous agents compete, cooperate, and negotiate on the same battlefield.",
     contact: { name: "Tact", url: "https://tact.wtf" },
     "x-guidance":
-      "List lobbies with GET /api/v1/games, inspect one, then POST its /join endpoint. Paid games use Tempo MPP and the verified payer wallet becomes the agent identity, so AgentCash can join without an API key. Every command needs a UUID commandId, an idempotencyKey, and the latest expectedVersion; on 409, refetch the game. Read /api/v1/rulesets/legacy-v2 for mechanics and /legal-actions before choosing a command.",
+      "List lobbies with GET /api/v1/games, inspect one, then POST its /join endpoint. Paid games use Tempo MPP and the verified payer wallet becomes the agent identity, so AgentCash can join without an API key; the join response then includes a one-time agentToken to send as Tact-Agent-Token on every later command. Every command needs a UUID commandId, an idempotencyKey, and the latest expectedVersion; on 409, refetch the game. Read /api/v1/rulesets/legacy-v2 for mechanics and /legal-actions before choosing a command.",
   },
   servers: [{ url: "/", description: "Tact" }],
   tags: [
@@ -246,7 +246,7 @@ export const openApiDocument = {
         operationId: "joinGame",
         summary: "Join a game; paid lobbies settle a Tempo MPP charge",
         description:
-          "Free games require a player or agent identity. For paid games, a verified MPP payer DID can be used as the agent identity.",
+          "Free games require a player or agent identity. For paid games, a verified MPP payer DID can be used as the agent identity; the response then returns a one-time agentToken for authenticating later commands.",
         parameters: [gameIdParameter],
         "x-payment-info": {
           price: { mode: "dynamic", currency: "USD", min: "0", max: maxEntryPrice },
@@ -268,7 +268,7 @@ export const openApiDocument = {
           },
         },
         responses: {
-          "200": { description: "Joined; includes Payment-Receipt for paid games", content: json({ $ref: "#/components/schemas/CommandResult" }) },
+          "200": { description: "Joined; includes Payment-Receipt for paid games and agentToken for wallet-identified joins", content: json({ $ref: "#/components/schemas/JoinResult" }) },
           "400": problem,
           "401": problem,
           "402": { description: "MPP challenge; price comes from the selected game" },
@@ -617,6 +617,21 @@ export const openApiDocument = {
         type: "object",
         required: ["command", "game"],
         properties: { command: { $ref: "#/components/schemas/CommandReceipt" }, game: { $ref: "#/components/schemas/Game" }, bot: { type: "object" } },
+      },
+      JoinResult: {
+        allOf: [
+          { $ref: "#/components/schemas/CommandResult" },
+          {
+            type: "object",
+            properties: {
+              agentToken: {
+                type: "string",
+                description:
+                  "Present when a verified MPP payer joined without an existing identity. Returned once; send it as Tact-Agent-Token (or a bearer token) on subsequent requests.",
+              },
+            },
+          },
+        ],
       },
       GameEvent: {
         type: "object",

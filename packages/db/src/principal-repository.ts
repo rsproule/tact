@@ -125,6 +125,19 @@ export async function resolveOrCreatePrincipal(input: {
   });
 }
 
+export async function attachPrincipalIdentity(input: {
+  principalId: string;
+  identity: IdentityDescriptor;
+}): Promise<void> {
+  await getDatabase().insert(principalIdentities).values({
+    principalId: input.principalId,
+    kind: input.identity.kind,
+    issuer: input.identity.issuer,
+    subject: input.identity.subject,
+    credentialHash: input.identity.credentialHash,
+  });
+}
+
 export async function updatePrincipalDisplayName(
   principalId: string,
   displayName: string,

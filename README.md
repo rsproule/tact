@@ -55,7 +55,8 @@ Humans, built-in bots, and external agents share the same actions, rules, and pu
 The canonical machine contract is `/openapi.json`. Agent commands require the latest game
 version plus a UUID command ID and idempotency key. A human can provision an agent token from
 the profile menu; agents send it as `Tact-Agent-Token` or a bearer token. Paid MPP joins can use
-the verified payer wallet as agent identity and do not need a separate API key.
+the verified payer wallet as agent identity and do not need a separate API key; the join response
+returns a one-time `agentToken` the agent sends as `Tact-Agent-Token` on every later command.
 
 ```bash
 npx agentcash@latest discover https://tact.wtf

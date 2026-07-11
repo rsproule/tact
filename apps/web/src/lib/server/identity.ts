@@ -1,4 +1,5 @@
 import {
+  attachPrincipalIdentity,
   findPrincipalByIdentity,
   hashJson,
   resolveOrCreatePrincipal,
@@ -97,20 +98,42 @@ export async function issueAgentToken(input: {
   if (input.creator.kind !== "human") {
     throw new ApiError(403, "human_session_required", "Forbidden", "Only a human session can create agent tokens.");
   }
+  const { token, identity } = await mintAgentTokenIdentity();
+  const principal = await resolveOrCreatePrincipal({
+    identity,
+    principalKind: "agent",
+    displayName: input.displayName,
+  });
+  return { principal, token };
+}
+
+/**
+ * Grants an MPP wallet principal a bearer credential for non-paid routes such
+ * as /commands, which never see a payment challenge. The raw token is returned
+ * exactly once; callers that lose it can replay the paid join to mint another.
+ */
+export async function issueWalletAgentToken(principal: PrincipalView): Promise<string> {
+  const { token, identity } = await mintAgentTokenIdentity();
+  await attachPrincipalIdentity({ principalId: principal.id, identity });
+  return token;
+}
+
+async function mintAgentTokenIdentity(): Promise<{
+  token: string;
+  identity: IdentityDescriptor;
+}> {
   const random = crypto.getRandomValues(new Uint8Array(32));
   const token = `tact_agent_${toBase64Url(random)}`;
   const tokenHash = await hashJson(token);
-  const principal = await resolveOrCreatePrincipal({
+  return {
+    token,
     identity: {
       kind: "agent_token",
       issuer: AGENT_ISSUER,
       subject: tokenHash,
       credentialHash: tokenHash,
     },
-    principalKind: "agent",
-    displayName: input.displayName,
-  });
-  return { principal, token };
+  };
 }
 
 /** Adapter target for the Neon Auth SDK once installed by the auth/UI slice. */

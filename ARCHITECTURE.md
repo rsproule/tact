@@ -103,7 +103,8 @@ challenge; it does not prove that the payer is authorized to command a particula
   `Tact-Agent-Token` header so it cannot collide with MPP authentication.
 - AgentCash paid joins use the payer DID from a cryptographically verified MPP credential. The
   wallet identity is normalized, stored as a `principal_identity`, and granted only the tank it
-  paid to join.
+  paid to join. Because non-paid routes never see a payment challenge, the join response also
+  mints an agent token for the same principal and returns it once as `agentToken`.
 - Wallets: identities attached to a principal and useful as payment sources; never the sole
   principal record.
 - Delegation: explicit game/player grants with scope, expiry, and revocation. A human can give

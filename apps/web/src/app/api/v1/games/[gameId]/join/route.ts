@@ -4,6 +4,7 @@ import { withMppCharge } from "@/lib/payments";
 import { ApiError, commandRejectionResponse, problemResponse } from "@/lib/server/api-error";
 import { getGame, joinGame } from "@/lib/server/game-service";
 import {
+  issueWalletAgentToken,
   requireRequestPrincipal,
   resolveRequestPrincipal,
   resolveVerifiedMppWalletPrincipal,
@@ -51,7 +52,17 @@ export async function POST(
             if (result.command.status === "rejected") {
               return commandRejectionResponse(result.command);
             }
-            return Response.json(result, { headers: { "cache-control": "no-store" } });
+            // Wallet payers have no other credential for /commands, so hand
+            // them a bearer token bound to the same principal. Replays mint a
+            // fresh token because the original is only ever returned once.
+            const agentToken =
+              !existingPrincipal && payment.payer
+                ? await issueWalletAgentToken(authenticated)
+                : undefined;
+            return Response.json(
+              agentToken ? { ...result, agentToken } : result,
+              { headers: { "cache-control": "no-store" } },
+            );
           } catch (error) {
             return problemResponse(error);
           }
