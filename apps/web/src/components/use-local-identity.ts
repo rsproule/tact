@@ -13,7 +13,10 @@ const DISPLAY_NAME_KEY = "tact.last-display-name.v1";
 
 export type SessionStatus = "loading" | "anonymous" | "authenticated";
 
-export function useLocalIdentity(): {
+export function useLocalIdentity(
+  initialIdentity?: LocalIdentity | null,
+  initialError: string | null = null,
+): {
   identity: LocalIdentity | null;
   status: SessionStatus;
   error: string | null;
@@ -22,9 +25,16 @@ export function useLocalIdentity(): {
   signOut: () => Promise<void>;
   retry: () => Promise<void>;
 } {
-  const [identity, setIdentity] = useState<LocalIdentity | null>(null);
-  const [status, setStatus] = useState<SessionStatus>("loading");
-  const [error, setError] = useState<string | null>(null);
+  const hasServerSession = initialIdentity !== undefined;
+  const [identity, setIdentity] = useState<LocalIdentity | null>(initialIdentity ?? null);
+  const [status, setStatus] = useState<SessionStatus>(
+    hasServerSession
+      ? initialIdentity
+        ? "authenticated"
+        : "anonymous"
+      : "loading",
+  );
+  const [error, setError] = useState<string | null>(initialError);
   const [suggestedDisplayName, setSuggestedDisplayName] = useState("");
 
   const load = useCallback(async () => {
@@ -48,15 +58,14 @@ export function useLocalIdentity(): {
       } catch {
         // The signed session cookie remains authoritative when storage is unavailable.
       }
-      void load();
+      if (!hasServerSession) void load();
     }, 0);
     return () => window.clearTimeout(initial);
-  }, [load]);
+  }, [hasServerSession, load]);
 
   const signIn = useCallback(async (displayName: string) => {
     const clean = displayName.trim().replace(/\s+/g, " ").slice(0, 28);
     if (!clean) throw new Error("Choose a display name first.");
-    setStatus("loading");
     setError(null);
     try {
       const session = await createSession(clean);
@@ -79,9 +88,11 @@ export function useLocalIdentity(): {
     setError(null);
     try {
       await deleteSession();
-    } finally {
       setIdentity(null);
       setStatus("anonymous");
+    } catch (caught) {
+      setError(messageOf(caught, "Could not change players."));
+      throw caught;
     }
   }, []);
 

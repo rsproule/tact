@@ -31,11 +31,27 @@ import {
 import { HexBoard, hexDistance, type BoardSelection } from "./hex-board";
 import { useLocalIdentity } from "./use-local-identity";
 
-type TactGameAppProps = Readonly<{ gameId?: string }>;
+type TactGameAppProps = Readonly<{
+  gameId?: string;
+  initialIdentity?: LocalIdentity | null;
+  initialSessionError?: string | null;
+  initialGames?: readonly GameSummary[];
+  initialGame?: GameView | null;
+  initialEvents?: readonly GameEvent[];
+  initialDataError?: string | null;
+}>;
 
-export function TactGameApp({ gameId }: TactGameAppProps) {
+export function TactGameApp({
+  gameId,
+  initialIdentity,
+  initialSessionError,
+  initialGames,
+  initialGame,
+  initialEvents,
+  initialDataError,
+}: TactGameAppProps) {
   const router = useRouter();
-  const session = useLocalIdentity();
+  const session = useLocalIdentity(initialIdentity, initialSessionError);
 
   if (session.status === "loading" && !session.identity) {
     return <SessionLoading />;
@@ -47,7 +63,10 @@ export function TactGameApp({ gameId }: TactGameAppProps) {
         error={session.error}
         suggestedDisplayName={session.suggestedDisplayName}
         onRetry={session.retry}
-        onSignIn={session.signIn}
+        onSignIn={async (displayName) => {
+          await session.signIn(displayName);
+          router.refresh();
+        }}
       />
     );
   }
@@ -58,13 +77,24 @@ export function TactGameApp({ gameId }: TactGameAppProps) {
         <MatchView
           gameId={gameId}
           identity={session.identity}
-          onSignOut={session.signOut}
+          initialGame={initialGame}
+          initialEvents={initialEvents}
+          initialError={initialDataError}
+          onSignOut={async () => {
+            await session.signOut();
+            router.refresh();
+          }}
           onExit={() => router.push("/")}
         />
       ) : (
         <Lobby
           identity={session.identity}
-          onSignOut={session.signOut}
+          initialGames={initialGames}
+          initialError={initialDataError}
+          onSignOut={async () => {
+            await session.signOut();
+            router.refresh();
+          }}
           onOpenGame={(id) => router.push(`/game/${id}` as Route)}
         />
       )}
@@ -102,6 +132,16 @@ function SessionGate({
   const [displayName, setDisplayName] = useState(suggestedDisplayName);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!suggestedDisplayName) return;
+
+    const timeout = window.setTimeout(() => {
+      setDisplayName((current) => current || suggestedDisplayName);
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+  }, [suggestedDisplayName]);
 
   const submit = async () => {
     setSubmitting(true);
@@ -160,12 +200,19 @@ function SessionGate({
 
 function Lobby({
   identity,
+  initialGames,
+  initialError,
   onSignOut,
   onOpenGame,
-}: IdentityProps & Readonly<{ onOpenGame: (id: string) => void }>) {
-  const [games, setGames] = useState<GameSummary[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+}: IdentityProps & Readonly<{
+  initialGames?: readonly GameSummary[];
+  initialError?: string | null;
+  onOpenGame: (id: string) => void;
+}>) {
+  const hasInitialGames = initialGames !== undefined;
+  const [games, setGames] = useState<GameSummary[]>(() => [...(initialGames ?? [])]);
+  const [loading, setLoading] = useState(!hasInitialGames);
+  const [error, setError] = useState<string | null>(initialError ?? null);
   const [showCreate, setShowCreate] = useState(false);
   const [creating, setCreating] = useState(false);
 
@@ -182,13 +229,13 @@ function Lobby({
   }, []);
 
   useEffect(() => {
-    const initial = window.setTimeout(() => void refresh(), 0);
+    const initial = window.setTimeout(() => void refresh(hasInitialGames), 0);
     const interval = window.setInterval(() => void refresh(true), 8000);
     return () => {
       window.clearTimeout(initial);
       window.clearInterval(interval);
     };
-  }, [refresh]);
+  }, [hasInitialGames, refresh]);
 
   const handleCreate = async (config: GameConfig) => {
     if (!identity) return;
@@ -320,6 +367,15 @@ function TopBar({
     }
   };
 
+  const changePlayer = async () => {
+    setProfileError(null);
+    try {
+      await onSignOut();
+    } catch {
+      setProfileError("Could not change players. Try again.");
+    }
+  };
+
   return (
     <nav className="top-bar" aria-label="Tact navigation">
       <button className="brand" type="button" onClick={onExit} disabled={!onExit}>
@@ -363,7 +419,7 @@ function TopBar({
                 </div>
               ) : null}
               {profileError ? <p className="profile-error" role="alert">{profileError}</p> : null}
-              <button className="profile-logout" type="button" onClick={() => void onSignOut()}>Change player</button>
+              <button className="profile-logout" type="button" onClick={() => void changePlayer()}>Change player</button>
             </div>
           ) : null}
         </div>
@@ -447,26 +503,49 @@ function CreateMatchDialog({
 function MatchView({
   gameId,
   identity,
+  initialGame,
+  initialEvents,
+  initialError,
   onSignOut,
   onExit,
-}: IdentityProps & Readonly<{ gameId: string; onExit: () => void }>) {
-  const [game, setGame] = useState<GameView | null>(null);
-  const [events, setEvents] = useState<GameEvent[]>([]);
-  const cursorRef = useRef(0);
-  const [legalActions, setLegalActions] = useState<LegalAction[]>([]);
+}: IdentityProps & Readonly<{
+  gameId: string;
+  initialGame?: GameView | null;
+  initialEvents?: readonly GameEvent[];
+  initialError?: string | null;
+  onExit: () => void;
+}>) {
+  const hasInitialGame = initialGame !== undefined;
+  const hasInitialEvents = initialEvents !== undefined;
+  const [game, setGame] = useState<GameView | null>(initialGame ?? null);
+  const [events, setEvents] = useState<GameEvent[]>(() => [...(initialEvents ?? [])]);
+  const cursorRef = useRef(initialEvents?.at(-1)?.sequence ?? 0);
+  const gameVersionRef = useRef(initialGame?.version ?? -1);
+  const [legalActions, setLegalActions] = useState<LegalAction[]>(
+    () => [...(initialGame?.legalActions ?? [])],
+  );
+  const [renderNow, setRenderNow] = useState<number | null>(() =>
+    parseObservedAt(initialGame?.observedAt),
+  );
   const [selected, setSelected] = useState<BoardSelection | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [eventsLoading, setEventsLoading] = useState(false);
+  const [loading, setLoading] = useState(!hasInitialGame);
   const [joining, setJoining] = useState(false);
   const [commandPending, setCommandPending] = useState<string | null>(null);
   const [ownerPending, setOwnerPending] = useState<"bots" | "start" | "tick" | "fill" | null>(null);
   const [ownerHint, setOwnerHint] = useState(false);
   const [autoBots, setAutoBots] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(initialError ?? null);
   const [notice, setNotice] = useState<string | null>(null);
   const refreshInFlightRef = useRef(false);
   const mutationInFlightRef = useRef(false);
   const autoTickInFlightRef = useRef(false);
+
+  const applyGame = useCallback((nextGame: GameView): boolean => {
+    if (nextGame.version < gameVersionRef.current) return false;
+    gameVersionRef.current = nextGame.version;
+    setGame(nextGame);
+    return true;
+  }, []);
 
   const refreshGame = useCallback(async (background = false) => {
     refreshInFlightRef.current = true;
@@ -476,9 +555,10 @@ function MatchView({
         getGame(gameId),
         getLegalActions(gameId).catch(() => []),
       ]);
-      setGame(nextGame);
+      if (!applyGame(nextGame)) return;
       const resolvedActions = nextActions.length ? nextActions : nextGame.legalActions;
       setLegalActions(resolvedActions);
+      setRenderNow(parseObservedAt(nextGame.observedAt) ?? Date.now());
       const startAction = resolvedActions.find((action) => action.type === "start");
       if (
         startAction &&
@@ -493,29 +573,27 @@ function MatchView({
       setError(errorMessage(caught, "Could not load this match."));
     } finally {
       refreshInFlightRef.current = false;
-      setLoading(false);
+      if (!background) setLoading(false);
     }
-  }, [gameId]);
+  }, [applyGame, gameId]);
 
   const refreshEvents = useCallback(async () => {
-    setEventsLoading(true);
     try {
       const result = await getEvents(gameId, cursorRef.current);
       if (result.events.length) {
         setEvents((current) => mergeEvents(current, result.events));
       }
       cursorRef.current = result.cursor;
+      setRenderNow(Date.now());
     } catch {
       // Match polling remains the primary state channel; event feed recovers on its next pass.
-    } finally {
-      setEventsLoading(false);
     }
   }, [gameId]);
 
   useEffect(() => {
     const initial = window.setTimeout(() => {
-      void refreshGame();
-      void refreshEvents();
+      if (!hasInitialGame) void refreshGame();
+      if (!hasInitialEvents) void refreshEvents();
     }, 0);
     const gameInterval = window.setInterval(() => void refreshGame(true), 3000);
     const eventInterval = window.setInterval(() => void refreshEvents(), 2200);
@@ -524,7 +602,7 @@ function MatchView({
       window.clearInterval(gameInterval);
       window.clearInterval(eventInterval);
     };
-  }, [identity, refreshEvents, refreshGame]);
+  }, [hasInitialEvents, hasInitialGame, identity, refreshEvents, refreshGame]);
 
   useEffect(() => {
     if (!notice) return;
@@ -564,7 +642,7 @@ function MatchView({
       setOwnerPending("tick");
       void runBotTick(autoGameId, autoGameVersion)
         .then(async (updated) => {
-          setGame(updated);
+          applyGame(updated);
           await refreshEvents();
         })
         .catch(async (caught: unknown) => {
@@ -583,7 +661,7 @@ function MatchView({
         });
     }, 3400);
     return () => window.clearInterval(interval);
-  }, [autoBots, autoGameId, autoGameStatus, autoGameVersion, canManageBots, refreshEvents, refreshGame]);
+  }, [applyGame, autoBots, autoGameId, autoGameStatus, autoGameVersion, canManageBots, refreshEvents, refreshGame]);
 
   const selfPlayer = useMemo(
     () => game?.players.find((player) => player.ownedByViewer) ?? game?.players.find((player) => player.controllableByViewer),
@@ -615,7 +693,7 @@ function MatchView({
     setError(null);
     try {
       const updated = await submitCommand(game.id, game.version, command);
-      if (updated) setGame(updated);
+      if (updated) applyGame(updated);
       setSelected(null);
       setNotice(successMessage);
       await refreshGame(true);
@@ -640,7 +718,7 @@ function MatchView({
     setError(null);
     try {
       const updated = await addBots(game.id, game.version, strategy, count);
-      setGame(updated);
+      applyGame(updated);
       setNotice(`${count} ${strategy} bot${count === 1 ? "" : "s"} joined the lobby.`);
       await refreshGame(true);
       await refreshEvents();
@@ -659,7 +737,7 @@ function MatchView({
     setError(null);
     try {
       const updated = await submitCommand(game.id, game.version, { type: "start" });
-      if (updated) setGame(updated);
+      if (updated) applyGame(updated);
       setNotice("The battle is live.");
       await refreshGame(true);
       await refreshEvents();
@@ -689,7 +767,7 @@ function MatchView({
       }
       const started = await submitCommand(current.id, current.version, { type: "start" });
       if (started) current = started;
-      setGame(current);
+      applyGame(current);
       setNotice("Seats filled with bots. Match started.");
       await refreshGame(true);
       await refreshEvents();
@@ -708,7 +786,7 @@ function MatchView({
     setError(null);
     try {
       const updated = await runBotTick(game.id, game.version);
-      setGame(updated);
+      applyGame(updated);
       setNotice("A bot made its move.");
       await refreshGame(true);
       await refreshEvents();
@@ -767,6 +845,7 @@ function MatchView({
         <aside className="match-sidebar left-sidebar">
           <MatchOverview
             game={game}
+            now={renderNow}
             mode={mode}
             joining={joining}
             legalActions={legalActions}
@@ -798,7 +877,7 @@ function MatchView({
             claimable={claimable}
             onCommand={handleCommand}
           />
-          <EventLog events={events} players={game.players} loading={eventsLoading} />
+          <EventLog events={events} players={game.players} now={renderNow} />
         </aside>
       </div>
     </>
@@ -807,6 +886,7 @@ function MatchView({
 
 function MatchOverview({
   game,
+  now,
   mode,
   joining,
   legalActions,
@@ -821,6 +901,7 @@ function MatchOverview({
   onToggleAutoBots,
 }: Readonly<{
   game: GameView;
+  now: number | null;
   mode: "player" | "jury" | "spectator";
   joining: boolean;
   legalActions: LegalAction[];
@@ -855,7 +936,7 @@ function MatchOverview({
         <div><dt>Round</dt><dd>{game.currentEpoch}</dd></div>
         <div><dt>AP timing</dt><dd>{formatDuration(game.config.epochSeconds)}</dd></div>
       </dl>
-      <div className="epoch-track"><i style={{ width: `${epochProgress(game)}%` }} /></div>
+      <div className="epoch-track"><i style={{ width: `${epochProgress(game, now)}%` }} /></div>
       {mode === "spectator" && game.status === "lobby" ? <button className="button button-primary join-button" type="button" disabled={joining || game.playersCount >= game.config.maxPlayers} onClick={onJoin}>{joining ? "Securing seat…" : "Join this match →"}</button> : null}
       {isOwner && game.status === "lobby" ? (
         <div className="owner-controls">
@@ -1098,9 +1179,15 @@ function formatDuration(seconds: number): string {
   return `${Math.round(seconds / 3600)}h`;
 }
 
-function epochProgress(game: GameView): number {
-  if (!game.nextEpochAt) return 0;
-  const remaining = new Date(game.nextEpochAt).getTime() - Date.now();
+function parseObservedAt(value: string | undefined): number | null {
+  if (!value) return null;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function epochProgress(game: GameView, now: number | null): number {
+  if (!game.nextEpochAt || now === null) return 0;
+  const remaining = new Date(game.nextEpochAt).getTime() - now;
   const total = game.config.epochSeconds * 1000;
   return Math.max(0, Math.min(100, ((total - remaining) / total) * 100));
 }

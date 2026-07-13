@@ -1038,8 +1038,6 @@ input::placeholder { color: var(--quiet); }
 .action-empty { padding: 24px 18px; color: var(--muted); text-align: center; }
 .action-empty p { margin: 0; font-size: 10px; line-height: 1.5; }
 .event-log { min-height: 180px; display: flex; flex: 1; flex-direction: column; }
-.live-indicator { color: var(--quiet); font-size: 9px; }
-.live-indicator.is-loading { color: var(--muted); }
 .event-list { min-height: 0; overflow: auto; margin: 0; padding: 0; list-style: none; }
 
 .event-item,

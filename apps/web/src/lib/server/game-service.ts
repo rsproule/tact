@@ -470,6 +470,7 @@ function executeCommand(input: {
 }
 
 function projectGame(game: GameView, principal: PrincipalView | null): Record<string, unknown> {
+  const context = projectionContext(principal);
   return {
     id: game.id,
     ownerPrincipalId: game.ownerPrincipalId,
@@ -481,14 +482,19 @@ function projectGame(game: GameView, principal: PrincipalView | null): Record<st
     stateHash: game.stateHash,
     createdAt: game.createdAt,
     updatedAt: game.updatedAt,
-    projection: clientProjection(game, principal),
+    observedAt: new Date(context.nowMs).toISOString(),
+    projection: clientProjection(game, principal, context),
   };
 }
 
-function clientProjection(game: GameView, principal: PrincipalView | null) {
+function clientProjection(
+  game: GameView,
+  principal: PrincipalView | null,
+  context = projectionContext(principal),
+) {
   const projection = projectLegacyV2Game(
     game.snapshot,
-    projectionContext(principal),
+    context,
   );
   return {
     ...projection,

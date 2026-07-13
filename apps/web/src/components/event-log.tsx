@@ -5,10 +5,10 @@ import type { GameEvent, PlayerView } from "./game-client";
 type EventLogProps = Readonly<{
   events: GameEvent[];
   players: PlayerView[];
-  loading?: boolean;
+  now: number | null;
 }>;
 
-export function EventLog({ events, players, loading = false }: EventLogProps) {
+export function EventLog({ events, players, now }: EventLogProps) {
   const playersById = new Map(players.map((player) => [player.id, player]));
 
   return (
@@ -17,9 +17,6 @@ export function EventLog({ events, players, loading = false }: EventLogProps) {
         <div>
           <h2 id="event-log-title">Activity</h2>
         </div>
-        <span className={`live-indicator ${loading ? "is-loading" : ""}`}>
-          {loading ? "Updating…" : "Live"}
-        </span>
       </header>
       <ol className="event-list" aria-live="polite">
         {events.length === 0 ? (
@@ -38,7 +35,7 @@ export function EventLog({ events, players, loading = false }: EventLogProps) {
                   <p>{presentation.detail}</p>
                 </div>
                 <div className="event-meta">
-                  <time dateTime={event.occurredAt}>{relativeTime(event.occurredAt)}</time>
+                  <time dateTime={event.occurredAt}>{relativeTime(event.occurredAt, now)}</time>
                 </div>
               </li>
             );
@@ -160,8 +157,9 @@ function number(value: unknown, fallback = 0): number {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
 }
 
-function relativeTime(value: string): string {
-  const elapsed = Date.now() - new Date(value).getTime();
+function relativeTime(value: string, now: number | null): string {
+  if (now === null) return "now";
+  const elapsed = now - new Date(value).getTime();
   if (!Number.isFinite(elapsed) || elapsed < 0) return "now";
   const seconds = Math.floor(elapsed / 1000);
   if (seconds < 10) return "now";

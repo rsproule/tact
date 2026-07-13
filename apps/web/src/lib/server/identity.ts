@@ -1,3 +1,5 @@
+import "server-only";
+
 import {
   findPrincipalByIdentity,
   hashJson,
@@ -25,7 +27,13 @@ export async function resolveRequestPrincipal(request: Request): Promise<Princip
   const agentToken = readAgentToken(request);
   if (agentToken) return resolveAgentToken(agentToken, request.headers.get("tact-agent-name"));
 
-  const session = readCookie(request, SESSION_COOKIE);
+  return resolveBrowserSessionPrincipal(request.headers.get("cookie"));
+}
+
+export async function resolveBrowserSessionPrincipal(
+  cookieHeader: string | null,
+): Promise<PrincipalView | null> {
+  const session = readCookieHeader(cookieHeader, SESSION_COOKIE);
   if (!session) return null;
   const verified = await verifySessionToken(session);
   if (!verified) return null;
@@ -221,7 +229,10 @@ async function hmac(value: string): Promise<string> {
 }
 
 function readCookie(request: Request, name: string): string | null {
-  const header = request.headers.get("cookie");
+  return readCookieHeader(request.headers.get("cookie"), name);
+}
+
+function readCookieHeader(header: string | null, name: string): string | null {
   if (!header) return null;
   for (const entry of header.split(";")) {
     const separator = entry.indexOf("=");

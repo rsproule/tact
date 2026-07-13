@@ -75,6 +75,7 @@ export type GameView = GameSummary &
     legalActions: LegalAction[];
     currentEpoch: number;
     nextEpochAt?: string;
+    observedAt?: string;
   }>;
 
 export type GameEvent = Readonly<{
@@ -298,7 +299,7 @@ export async function getEvents(
     { signal },
   );
   const record = asRecord(value);
-  const events = (Array.isArray(value) ? value : asArray(record.events)).map(normalizeEvent);
+  const events = (Array.isArray(value) ? value : asArray(record.events)).map(normalizeGameEvent);
   const lastSequence = events.at(-1)?.sequence ?? after;
   return {
     events,
@@ -366,7 +367,7 @@ function normalizeIdentity(value: unknown): LocalIdentity {
   };
 }
 
-function normalizeGameSummary(value: unknown): GameSummary {
+export function normalizeGameSummary(value: unknown): GameSummary {
   const record = asRecord(value);
   const snapshot = asRecord(
     record.projection ?? record.stateSnapshot ?? record.snapshot ?? record.state,
@@ -396,7 +397,7 @@ function normalizeGameSummary(value: unknown): GameSummary {
   };
 }
 
-function normalizeGameView(value: unknown): GameView {
+export function normalizeGameView(value: unknown): GameView {
   const record = asRecord(value);
   const summary = normalizeGameSummary(record);
   const snapshot = asRecord(
@@ -421,6 +422,7 @@ function normalizeGameView(value: unknown): GameView {
       calculateEpoch(snapshot),
     ),
     nextEpochAt: optionalString(record.nextEpochAt ?? snapshot.nextEpochAt),
+    observedAt: optionalString(record.observedAt),
   };
 }
 
@@ -495,7 +497,7 @@ function normalizeLegalAction(value: unknown): LegalAction {
   };
 }
 
-function normalizeEvent(value: unknown): GameEvent {
+export function normalizeGameEvent(value: unknown): GameEvent {
   const record = asRecord(value);
   return {
     id: stringValue(record.id, `event-${stringValue(record.sequence)}`),
