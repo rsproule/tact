@@ -165,22 +165,19 @@ function Lobby({
 }: IdentityProps & Readonly<{ onOpenGame: (id: string) => void }>) {
   const [games, setGames] = useState<GameSummary[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [creating, setCreating] = useState(false);
 
   const refresh = useCallback(async (background = false) => {
-    if (background) setRefreshing(true);
-    else setLoading(true);
+    if (!background) setLoading(true);
     try {
       setGames(await listGames());
       setError(null);
     } catch (caught) {
       setError(errorMessage(caught, "Could not load the matches."));
     } finally {
-      setLoading(false);
-      setRefreshing(false);
+      if (!background) setLoading(false);
     }
   }, []);
 
@@ -236,11 +233,6 @@ function Lobby({
           <Stat label="Open" value={lobbyGames.length} />
           <Stat label="Live" value={activeGames.length} />
           <Stat label="Finished" value={finishedGames.length} />
-          <div className="network-sync">
-            <button type="button" onClick={() => void refresh(true)} disabled={refreshing}>
-              {refreshing ? "Refreshing…" : "Refresh"}
-            </button>
-          </div>
         </section>
 
         {error ? <ErrorBanner message={error} onRetry={() => void refresh()} /> : null}

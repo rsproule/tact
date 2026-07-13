@@ -410,7 +410,7 @@ input::placeholder { color: var(--quiet); }
 
 .network-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr) auto;
+  grid-template-columns: repeat(3, 1fr);
   margin: 36px 0 44px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -423,6 +423,8 @@ input::placeholder { color: var(--quiet); }
   padding: 15px 18px;
 }
 
+.network-stat:last-child { border-right: 0; }
+
 .network-stat > span {
   display: block;
   color: var(--muted);
@@ -434,21 +436,6 @@ input::placeholder { color: var(--quiet); }
   margin-top: 7px;
   font-size: 25px;
   line-height: 1;
-}
-
-.network-sync {
-  display: grid;
-  place-items: center;
-  padding: 14px 18px;
-}
-
-.network-sync button {
-  border: 0;
-  background: none;
-  color: var(--muted);
-  font-size: 12px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .section-title-row {
@@ -1107,8 +1094,6 @@ input::placeholder { color: var(--quiet); }
   .left-sidebar { grid-area: left; display: grid; grid-template-columns: 1fr 1fr; overflow: visible; }
   .right-sidebar { grid-area: right; position: sticky; top: 68px; max-height: calc(100vh - 76px); }
   .roster-panel { max-height: 340px; }
-  .network-stats { grid-template-columns: repeat(3, 1fr); }
-  .network-sync { grid-column: 1 / -1; border-top: 1px solid var(--line); }
   .game-card { grid-template-columns: 98px 1fr 100px 80px; }
   .game-card .game-metric:nth-of-type(4) { display: none; }
 }
@@ -1157,7 +1142,6 @@ input::placeholder { color: var(--quiet); }
   .session-card-copy { padding: 26px 20px; }
   .lobby-header h1 { font-size: 36px; }
   .network-stat > span { font-size: 10px; }
-  .network-sync { padding: 11px; }
   .game-card { grid-template-columns: 76px 1fr; padding-block: 11px; }
   .game-open-button { grid-column: 2; grid-row: 2; justify-self: start; padding-left: 0; }
   .game-main-column p { line-height: 1.45; }
