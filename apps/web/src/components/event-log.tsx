@@ -15,11 +15,10 @@ export function EventLog({ events, players, loading = false }: EventLogProps) {
     <section className="event-log panel-card" aria-labelledby="event-log-title">
       <header className="panel-heading">
         <div>
-          <span className="eyebrow">LIVE FEED</span>
-          <h2 id="event-log-title">Match events</h2>
+          <h2 id="event-log-title">Activity</h2>
         </div>
         <span className={`live-indicator ${loading ? "is-loading" : ""}`}>
-          <i /> {loading ? "UPDATING" : "LIVE"}
+          {loading ? "Updating…" : "Live"}
         </span>
       </header>
       <ol className="event-list" aria-live="polite">
@@ -33,7 +32,7 @@ export function EventLog({ events, players, loading = false }: EventLogProps) {
             const presentation = describeEvent(event, playersById);
             return (
               <li key={`${event.sequence}-${event.id}`} className="event-item">
-                <span className={`event-glyph ${presentation.tone}`}>{presentation.glyph}</span>
+                <span className="event-glyph">{presentation.glyph}</span>
                 <div className="event-copy">
                   <strong>{presentation.title}</strong>
                   <p>{presentation.detail}</p>
@@ -53,7 +52,7 @@ export function EventLog({ events, players, loading = false }: EventLogProps) {
 function describeEvent(
   event: GameEvent,
   players: Map<string, PlayerView>,
-): { glyph: string; tone: string; title: string; detail: string } {
+): { glyph: string; title: string; detail: string } {
   const payload = event.payload;
   const joinedPlayer = asRecord(payload.player);
   const actor = playerName(
@@ -81,57 +80,56 @@ function describeEvent(
   const type = event.type.toLowerCase();
 
   if (type.includes("join")) {
-    return { glyph: "+", tone: "good", title: `${actor} entered the match`, detail: "A new tank is online." };
+    return { glyph: "+", title: `${actor} entered the match`, detail: "A new tank is online." };
   }
   if (type.includes("move")) {
     const coordinate = asCoordinate(payload.to ?? payload.target ?? payload.position);
-    return { glyph: "↗", tone: "info", title: `${actor} repositioned`, detail: coordinate ? `Moved to ${coordinate}.` : "Tank position changed." };
+    return { glyph: "↗", title: `${actor} repositioned`, detail: coordinate ? `Moved to ${coordinate}.` : "Tank position changed." };
   }
   if (type.includes("shoot") || type.includes("damage")) {
-    return { glyph: "×", tone: "danger", title: `${actor} fired on ${target}`, detail: `${number(payload.shots ?? payload.damage, 1)} shot${number(payload.shots ?? payload.damage, 1) === 1 ? "" : "s"} fired.` };
+    return { glyph: "×", title: `${actor} fired on ${target}`, detail: `${number(payload.shots ?? payload.damage, 1)} shot${number(payload.shots ?? payload.damage, 1) === 1 ? "" : "s"} fired.` };
   }
   if (type.includes("death") || type.includes("destroy")) {
-    return { glyph: "†", tone: "danger", title: `${target} was destroyed`, detail: actor === "A player" ? "A tank joined the cursing jury." : `${actor} landed the final shot.` };
+    return { glyph: "†", title: `${target} was destroyed`, detail: actor === "A player" ? "A tank joined the cursing jury." : `${actor} landed the final shot.` };
   }
   if (type.includes("revive")) {
-    return { glyph: "♥", tone: "good", title: `${target} is back online`, detail: `${actor} supplied a heart.` };
+    return { glyph: "♥", title: `${target} is back online`, detail: `${actor} supplied a heart.` };
   }
   if (type.includes("give") || type.includes("gift")) {
     const hearts = number(payload.hearts);
     const actionPoints = number(payload.actionPoints ?? payload.aps);
-    return { glyph: "⇄", tone: "good", title: `${actor} supplied ${target}`, detail: `${hearts ? `${hearts} heart${hearts === 1 ? "" : "s"}` : ""}${hearts && actionPoints ? " and " : ""}${actionPoints ? `${actionPoints} AP` : ""}.` };
+    return { glyph: "⇄", title: `${actor} supplied ${target}`, detail: `${hearts ? `${hearts} heart${hearts === 1 ? "" : "s"}` : ""}${hearts && actionPoints ? " and " : ""}${actionPoints ? `${actionPoints} AP` : ""}.` };
   }
   if (type.includes("upgrade")) {
-    return { glyph: "↑", tone: "info", title: `${actor} upgraded range`, detail: payload.newRange ?? payload.range ? `Range is now ${String(payload.newRange ?? payload.range)}.` : "Attack range increased." };
+    return { glyph: "↑", title: `${actor} upgraded range`, detail: payload.newRange ?? payload.range ? `Range is now ${String(payload.newRange ?? payload.range)}.` : "Attack range increased." };
   }
   if (type.includes("claim") || type.includes("drip")) {
-    return { glyph: "+", tone: "good", title: `${actor} claimed AP`, detail: `${number(payload.amount ?? payload.actionPoints, 1)} action point${number(payload.amount ?? payload.actionPoints, 1) === 1 ? "" : "s"} added.` };
+    return { glyph: "+", title: `${actor} claimed AP`, detail: `${number(payload.amount ?? payload.actionPoints, 1)} action point${number(payload.amount ?? payload.actionPoints, 1) === 1 ? "" : "s"} added.` };
   }
   if (type.includes("cursed")) {
-    return { glyph: "!", tone: "warning", title: `${target} was cursed`, detail: payload.effect === "delay_drip" ? "Their next AP gain was delayed." : "The dead jury removed an action point." };
+    return { glyph: "!", title: `${target} was cursed`, detail: payload.effect === "delay_drip" ? "Their next AP gain was delayed." : "The dead jury removed an action point." };
   }
   if (type.includes("vote") || type.includes("curse")) {
-    return { glyph: "!", tone: "warning", title: `${actor} voted to curse ${target}`, detail: "A jury vote was recorded for this epoch." };
+    return { glyph: "!", title: `${actor} voted to curse ${target}`, detail: "A jury vote was recorded for this epoch." };
   }
   if (type.includes("spawn")) {
-    return { glyph: "♥", tone: "good", title: "A heart appeared", detail: asCoordinate(payload.position) ? `Waiting at ${asCoordinate(payload.position)}.` : "A heart is waiting on the battlefield." };
+    return { glyph: "♥", title: "A heart appeared", detail: asCoordinate(payload.position) ? `Waiting at ${asCoordinate(payload.position)}.` : "A heart is waiting on the battlefield." };
   }
   if (type.includes("start")) {
-    return { glyph: "▶", tone: "good", title: "The match is live", detail: "Continuous-time play has begun." };
+    return { glyph: "▶", title: "The match is live", detail: "Continuous-time play has begun." };
   }
   if (type.includes("end") || type.includes("win")) {
-    return { glyph: "◆", tone: "warning", title: "Match complete", detail: `${target} holds the field.` };
+    return { glyph: "◆", title: "Match complete", detail: `${target} holds the field.` };
   }
   if (type.includes("treaty") || type.includes("non_aggression")) {
-    return { glyph: "◇", tone: "info", title: "Treaty updated", detail: `${actor} and ${target} updated their pact.` };
+    return { glyph: "◇", title: "Treaty updated", detail: `${actor} and ${target} updated their pact.` };
   }
   if (type.includes("bounty")) {
-    return { glyph: "$", tone: "warning", title: "Bounty updated", detail: `${target} is part of a bounty action.` };
+    return { glyph: "$", title: "Bounty updated", detail: `${target} is part of a bounty action.` };
   }
 
   return {
     glyph: "·",
-    tone: "muted",
     title: "Battlefield updated",
     detail: actor === "A player" ? "The battlefield changed." : `${actor} made a move.`,
   };

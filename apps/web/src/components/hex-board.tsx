@@ -68,15 +68,6 @@ export function HexBoard({ game, selfPlayer, selected, onSelect }: HexBoardProps
         role="grid"
         aria-label={`Hex board, radius ${game.config.boardSize}`}
       >
-        <defs>
-          <filter id="tank-glow" x="-80%" y="-80%" width="260%" height="260%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-          <pattern id="micro-grid" width="8" height="8" patternUnits="userSpaceOnUse">
-            <path d="M 8 0 L 0 0 0 8" fill="none" stroke="currentColor" strokeWidth=".25" />
-          </pattern>
-        </defs>
         {pixelCells.map(({ coordinate, x, y }) => {
           const player = playerByCell.get(hexKey(coordinate));
           const resource = resourceByCell.get(hexKey(coordinate));
@@ -126,7 +117,6 @@ export function HexBoard({ game, selfPlayer, selected, onSelect }: HexBoardProps
             >
               <polygon className="hex-hit" points={hexPoints(HEX_SIZE)} />
               <polygon className="hex-face" points={hexPoints(HEX_SIZE - 2)} />
-              <polygon className="hex-texture" points={hexPoints(HEX_SIZE - 3)} fill="url(#micro-grid)" />
 
               {resource && !player ? (
                 <g className="resource-marker" aria-hidden="true">
@@ -142,7 +132,6 @@ export function HexBoard({ game, selfPlayer, selected, onSelect }: HexBoardProps
                     player.state === "dead" ? "is-dead" : ""
                   }`}
                   aria-hidden="true"
-                  filter={isSelf ? "url(#tank-glow)" : undefined}
                 >
                   <circle className="tank-ring" r="20" />
                   <path className="tank-body" d="M-13 8V-7H13V8ZM-7-8V-15H7V-8ZM0-15V-25" />
@@ -162,9 +151,6 @@ export function HexBoard({ game, selfPlayer, selected, onSelect }: HexBoardProps
         <span><i className="legend-swatch target" /> Range</span>
         <span><i className="legend-swatch selected" /> Selected</span>
       </div>
-      {game.config.boardSize > radius ? (
-        <p className="board-clipped">Large-board preview showing radius {radius} of {game.config.boardSize}.</p>
-      ) : null}
     </div>
   );
 }

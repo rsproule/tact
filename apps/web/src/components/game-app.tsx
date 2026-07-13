@@ -80,12 +80,9 @@ type IdentityProps = Readonly<{
 function SessionLoading() {
   return (
     <main className="session-shell">
-      <div className="session-scan" aria-hidden="true" />
       <section className="session-card session-loading" aria-live="polite">
-        <div className="session-brand"><span>T</span><strong>TACT</strong></div>
-        <div className="radar-loader"><i /><i /><span /></div>
-        <p className="eyebrow">SCOUTING THE BATTLEFIELD</p>
-        <h1>Opening the game…</h1>
+        <div className="session-brand"><strong>Tact</strong></div>
+        <p>Loading Tact…</p>
       </section>
     </main>
   );
@@ -120,13 +117,11 @@ function SessionGate({
 
   return (
     <main className="session-shell">
-      <div className="session-scan" aria-hidden="true" />
       <section className="session-card" aria-labelledby="session-title">
         <div className="session-card-copy">
-          <div className="session-brand"><span>T</span><strong>TACT</strong><small>HUMANS × AGENTS</small></div>
-          <p className="eyebrow"><i className="pulse-dot" /> CHOOSE YOUR CALLSIGN</p>
-          <h1 id="session-title">Enter the battlefield.</h1>
-          <p className="session-intro">Choose the name other players will see. No wallet or account required.</p>
+          <div className="session-brand"><strong>Tact</strong></div>
+          <h1 id="session-title">Choose a name</h1>
+          <p className="session-intro">This is how other players will see you.</p>
           <form
             className="session-form"
             onSubmit={(event) => {
@@ -146,7 +141,7 @@ function SessionGate({
                 onChange={(event) => setDisplayName(event.target.value)}
               />
               <button className="button button-primary" type="submit" disabled={submitting || !displayName.trim()}>
-                {submitting ? "Creating…" : "Continue →"}
+                {submitting ? "Starting…" : "Continue"}
               </button>
             </div>
           </form>
@@ -156,20 +151,8 @@ function SessionGate({
               {error && !formError ? <button type="button" onClick={() => void onRetry()}>Try again</button> : null}
             </div>
           ) : null}
-          <p className="session-fine-print">Create a match, challenge other players, or fill empty seats with autonomous bots.</p>
+          <p className="session-fine-print">No account or wallet required.</p>
         </div>
-        <aside className="session-side" aria-label="Game summary">
-          <span className="session-side-index">TACT</span>
-          <div className="mini-hex-field" aria-hidden="true">
-            {Array.from({ length: 19 }, (_, index) => <i key={index} />)}
-            <b>T</b><b>A</b><b>×</b>
-          </div>
-          <dl>
-            <div><dt>WORLD</dt><dd>Continuous time</dd></div>
-            <div><dt>VICTORY</dt><dd>Last tank standing</dd></div>
-            <div><dt>PLAYERS</dt><dd>Humans and agents</dd></div>
-          </dl>
-        </aside>
       </section>
     </main>
   );
@@ -236,9 +219,8 @@ function Lobby({
       <div className="lobby-content">
         <header className="lobby-header">
           <div>
-            <span className="eyebrow"><i className="pulse-dot" /> LIVE MATCHES</span>
-            <h1>Choose your battlefield.</h1>
-            <p>Create a room, join a seat, or watch humans and agents negotiate in real time.</p>
+            <h1>Matches</h1>
+            <p>Create a match, join an open one, or watch a game in progress.</p>
           </div>
           <button
             className="button button-primary create-button"
@@ -246,19 +228,17 @@ function Lobby({
             disabled={!identity}
             onClick={() => setShowCreate(true)}
           >
-            <span className="button-icon">＋</span> Create match
+            Create match
           </button>
         </header>
 
         <section className="network-stats" aria-label="Match overview">
-          <Stat label="Open lobbies" value={lobbyGames.length} accent="lime" />
-          <Stat label="Battles live" value={activeGames.length} accent="red" />
-          <Stat label="Completed" value={finishedGames.length} accent="blue" />
+          <Stat label="Open" value={lobbyGames.length} />
+          <Stat label="Live" value={activeGames.length} />
+          <Stat label="Finished" value={finishedGames.length} />
           <div className="network-sync">
-            <span>MATCH FEED</span>
-            <strong>LIVE BATTLEFIELDS</strong>
             <button type="button" onClick={() => void refresh(true)} disabled={refreshing}>
-              {refreshing ? "UPDATING…" : "REFRESH ↻"}
+              {refreshing ? "Refreshing…" : "Refresh"}
             </button>
           </div>
         </section>
@@ -268,8 +248,7 @@ function Lobby({
         <section className="match-browser" aria-labelledby="match-browser-title">
           <header className="section-title-row">
             <div>
-              <span className="eyebrow">MATCH DIRECTORY</span>
-              <h2 id="match-browser-title">Open rooms and live games</h2>
+              <h2 id="match-browser-title">All matches</h2>
             </div>
             <div className="status-key" aria-label="Status legend">
               <span><i className="status-dot lobby" /> Lobby</span>
@@ -352,18 +331,15 @@ function TopBar({
   return (
     <nav className="top-bar" aria-label="Tact navigation">
       <button className="brand" type="button" onClick={onExit} disabled={!onExit}>
-        <span className="brand-mark">T</span>
-        <span><strong>TACT</strong><small>HUMANS × AGENTS</small></span>
+        <strong>Tact</strong>
       </button>
       {game ? (
         <div className="match-breadcrumb">
           <span>/</span>
-          <strong>MATCH {shortId(game.id)}</strong>
+          <strong>Match {shortId(game.id)}</strong>
           <StatusBadge status={game.status} />
         </div>
-      ) : (
-        <div className="top-system-state"><i className="pulse-dot" /> READY FOR BATTLE</div>
-      )}
+      ) : null}
       <div className="top-actions">
         {onShare ? <button className="icon-button" type="button" onClick={onShare} title="Copy match link">↗ <span>Share</span></button> : null}
         <div className="profile-control">
@@ -374,12 +350,12 @@ function TopBar({
             onClick={() => setProfileOpen((current) => !current)}
           >
             <span className="avatar">{initials(identity.handle)}</span>
-            <span><small>GUEST PILOT</small><strong>{identity.handle}</strong></span>
+            <span><small>Player</small><strong>{identity.handle}</strong></span>
             <i>{profileOpen ? "⌃" : "⌄"}</i>
           </button>
           {profileOpen ? (
             <div className="profile-menu">
-              <div><small>CALLSIGN</small><code>{identity.handle}</code></div>
+              <div><small>Player</small><code>{identity.handle}</code></div>
               <button type="button" onClick={() => setAgentFormOpen((current) => !current)}>Connect an agent</button>
               {agentFormOpen ? (
                 <form className="agent-token-form" onSubmit={(event) => { event.preventDefault(); void issueAgent(); }}>
@@ -415,11 +391,11 @@ function GameCard({ game, onOpen }: Readonly<{ game: GameSummary; onOpen: () => 
       </div>
       <div className="game-main-column">
         <h3>{game.status === "lobby" ? "Open match" : game.status === "active" ? "Battle in progress" : "Finished battle"}</h3>
-        <p>Board radius {game.config.boardSize} · AP every {formatDuration(game.config.epochSeconds)}</p>
+        <p>Board size {game.config.boardSize} · action points every {formatDuration(game.config.epochSeconds)}</p>
         <div className="occupancy-track"><i style={{ width: `${occupancy}%` }} /></div>
       </div>
-      <div className="game-metric"><span>PLAYERS</span><strong>{game.playersCount}<small>/{game.config.maxPlayers}</small></strong></div>
-      <div className="game-metric"><span>START LOADOUT</span><strong>{game.config.initHearts}♥ <small>{game.config.initActionPoints}AP</small></strong></div>
+      <div className="game-metric"><span>Players</span><strong>{game.playersCount}<small>/{game.config.maxPlayers}</small></strong></div>
+      <div className="game-metric"><span>Starting</span><strong>{game.config.initHearts}♥ <small>{game.config.initActionPoints} AP</small></strong></div>
       <button className="game-open-button" type="button" onClick={onOpen}>{game.status === "lobby" ? "Join" : "Watch"} <span>→</span></button>
     </article>
   );
@@ -454,22 +430,22 @@ function CreateMatchDialog({
     <div className="dialog-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <section className="dialog create-dialog" role="dialog" aria-modal="true" aria-labelledby="create-title">
         <header>
-          <div><span className="eyebrow">NEW BATTLEFIELD</span><h2 id="create-title">Configure match</h2></div>
+          <div><h2 id="create-title">Create match</h2></div>
           <button className="dialog-close" type="button" onClick={onClose} aria-label="Close">×</button>
         </header>
         <p className="dialog-intro">You will own the room as <strong>{identity.handle}</strong>. Settings lock when the match begins.</p>
         <div className="form-grid">
           <NumberField label="Players" detail="Seats in the room" min={2} max={12} value={config.maxPlayers} onChange={(value) => updateNumber("maxPlayers", value)} />
-          <NumberField label="Board radius" detail="How far the battlefield extends" min={2} max={14} value={config.boardSize} onChange={(value) => updateNumber("boardSize", value)} />
-          <NumberField label="AP interval" detail="Seconds between AP gains" min={30} max={86400} value={config.epochSeconds} onChange={(value) => updateNumber("epochSeconds", value)} />
+          <NumberField label="Board size" detail="How far the board extends" min={2} max={14} value={config.boardSize} onChange={(value) => updateNumber("boardSize", value)} />
+          <NumberField label="Action point timing" detail="Seconds between gains" min={30} max={86400} value={config.epochSeconds} onChange={(value) => updateNumber("epochSeconds", value)} />
           <NumberField label="Starting hearts" detail="Tank durability" min={1} max={12} value={config.initHearts} onChange={(value) => updateNumber("initHearts", value)} />
           <NumberField label="Starting AP" detail="Opening mobility" min={1} max={30} value={config.initActionPoints} onChange={(value) => updateNumber("initActionPoints", value)} />
           <NumberField label="Starting range" detail="Attack and gift radius" min={1} max={10} value={config.initRange} onChange={(value) => updateNumber("initRange", value)} />
         </div>
-        <div className="ruleset-callout"><span>RULES</span><strong>CLASSIC TACT</strong><p>Continuous time · last tank standing · dead jury enabled</p></div>
+        <div className="ruleset-callout"><strong>Classic Tact</strong><p>Continuous time · last tank standing · dead jury enabled</p></div>
         <footer>
           <button className="button button-ghost" type="button" onClick={onClose}>Cancel</button>
-          <button className="button button-primary" type="button" disabled={creating} onClick={() => void onCreate(config)}>{creating ? "Creating…" : "Create & enter →"}</button>
+          <button className="button button-primary" type="button" disabled={creating} onClick={() => void onCreate(config)}>{creating ? "Creating…" : "Create match"}</button>
         </footer>
       </section>
     </div>
@@ -657,7 +633,7 @@ function MatchView({
         await refreshGame(true);
         setError("The battlefield changed. Review the board and try again.");
       } else {
-        setError(errorMessage(caught, "Command rejected."));
+        setError(errorMessage(caught, "Could not complete that move."));
       }
     } finally {
       mutationInFlightRef.current = false;
@@ -770,7 +746,7 @@ function MatchView({
     return (
       <>
         <TopBar identity={identity} onSignOut={onSignOut} onExit={onExit} />
-        <div className="fatal-state"><span>404 / LOST BATTLEFIELD</span><h1>Match unavailable.</h1><p>{error ?? "This battlefield does not exist or is unavailable."}</p><button className="button button-primary" onClick={onExit}>Return to lobby</button></div>
+        <div className="fatal-state"><h1>Match unavailable</h1><p>{error ?? "This match does not exist or is unavailable."}</p><button className="button button-primary" onClick={onExit}>Return to matches</button></div>
       </>
     );
   }
@@ -880,18 +856,18 @@ function MatchOverview({
 
   return (
     <section className="panel-card match-overview">
-      <header className="panel-heading"><div><span className="eyebrow">MATCH CONTROL</span><h2>#{shortId(game.id)}</h2></div><StatusBadge status={game.status} /></header>
+      <header className="panel-heading"><div><h2>Match #{shortId(game.id)}</h2></div><StatusBadge status={game.status} /></header>
       <dl className="match-facts">
-        <div><dt>MODE</dt><dd>{mode.toUpperCase()}</dd></div>
-        <div><dt>PLAYERS</dt><dd>{game.playersCount}/{game.config.maxPlayers}</dd></div>
-        <div><dt>EPOCH</dt><dd>{game.currentEpoch}</dd></div>
-        <div><dt>AP INTERVAL</dt><dd>{formatDuration(game.config.epochSeconds)}</dd></div>
+        <div><dt>Role</dt><dd>{mode}</dd></div>
+        <div><dt>Players</dt><dd>{game.playersCount}/{game.config.maxPlayers}</dd></div>
+        <div><dt>Round</dt><dd>{game.currentEpoch}</dd></div>
+        <div><dt>AP timing</dt><dd>{formatDuration(game.config.epochSeconds)}</dd></div>
       </dl>
       <div className="epoch-track"><i style={{ width: `${epochProgress(game)}%` }} /></div>
       {mode === "spectator" && game.status === "lobby" ? <button className="button button-primary join-button" type="button" disabled={joining || game.playersCount >= game.config.maxPlayers} onClick={onJoin}>{joining ? "Securing seat…" : "Join this match →"}</button> : null}
       {isOwner && game.status === "lobby" ? (
         <div className="owner-controls">
-          <div className="owner-label"><span>OWNER CONTROLS</span><b>{missingSeats} OPEN</b></div>
+          <div className="owner-label"><span>Owner controls</span><b>{missingSeats} open</b></div>
           {missingSeats > 0 ? (
             <div className="bot-config">
               <select aria-label="Bot strategy" value={strategy} onChange={(event) => setStrategy(event.target.value as BotStrategy)}>
@@ -913,7 +889,7 @@ function MatchOverview({
       ) : null}
       {isOwner && game.status === "active" ? (
         <div className="owner-controls bot-tick-control">
-          <div className="owner-label"><span>BOT TURNS</span><b>{autoBots ? "AUTO" : "MANUAL"}</b></div>
+          <div className="owner-label"><span>Bot moves</span><b>{autoBots ? "Automatic" : "Manual"}</b></div>
           <label className="auto-bot-toggle"><input type="checkbox" checked={autoBots} onChange={(event) => onToggleAutoBots(event.target.checked)} /><span><i />Let bots play automatically</span></label>
           <button className="owner-primary" type="button" disabled={ownerPending !== null} onClick={() => void onTick()}>{ownerPending === "tick" ? "Moving…" : "Make a bot move →"}</button>
         </div>
@@ -926,13 +902,13 @@ function MatchOverview({
 function PlayerRoster({ players, selfPlayer, selectedPlayerId, onSelect }: Readonly<{ players: PlayerView[]; selfPlayer?: PlayerView; selectedPlayerId?: string; onSelect: (player: PlayerView) => void }>) {
   return (
     <section className="panel-card roster-panel">
-      <header className="panel-heading"><div><span className="eyebrow">FIELD UNITS</span><h2>Players</h2></div><span className="panel-count">{players.length}</span></header>
+      <header className="panel-heading"><div><h2>Players</h2></div><span className="panel-count">{players.length}</span></header>
       <div className="roster-list">
         {players.map((player) => (
           <button className={`roster-player ${selectedPlayerId === player.id ? "is-selected" : ""} ${player.state === "dead" ? "is-dead" : ""}`} type="button" key={player.id} onClick={() => onSelect(player)}>
             <span className="seat-number">{String(player.seat).padStart(2, "0")}</span>
-            <span className="roster-name"><strong>{player.handle}</strong><small>{selfPlayer?.id === player.id ? "YOU · " : ""}{player.state.toUpperCase()}</small></span>
-            <span className="roster-vitals"><b>{player.hearts}♥</b><b>{player.actionPoints}<small>AP</small></b><b>{player.range}<small>RNG</small></b></span>
+            <span className="roster-name"><strong>{player.handle}</strong><small>{selfPlayer?.id === player.id ? "You · " : ""}{player.state}</small></span>
+            <span className="roster-vitals"><b>{player.hearts}♥</b><b>{player.actionPoints}<small>AP</small></b><b>{player.range}<small>range</small></b></span>
           </button>
         ))}
       </div>
@@ -943,17 +919,17 @@ function PlayerRoster({ players, selfPlayer, selectedPlayerId, onSelect }: Reado
 function PlayerHud({ player, currentEpoch, claimable }: Readonly<{ player: PlayerView; currentEpoch: number; claimable: number }>) {
   return (
     <section className={`player-hud ${player.state === "dead" ? "is-dead" : ""}`} aria-label="Your tank status">
-      <div className="hud-identity"><span className="hud-tank-icon">T{player.seat}</span><div><small>{player.state === "dead" ? "JURY CHANNEL" : "YOUR TANK"}</small><strong>{player.handle}</strong></div></div>
-      <HudStat label="HEARTS" value={player.hearts} suffix="♥" tone="red" />
-      <HudStat label="ACTION POINTS" value={player.actionPoints} suffix="AP" tone="lime" />
-      <HudStat label="RANGE" value={player.range} suffix="HEX" tone="blue" />
-      <HudStat label={`EPOCH ${currentEpoch}`} value={claimable} suffix="READY" tone="neutral" />
+      <div className="hud-identity"><span className="hud-tank-icon">T{player.seat}</span><div><small>{player.state === "dead" ? "Jury" : "Your tank"}</small><strong>{player.handle}</strong></div></div>
+      <HudStat label="Hearts" value={player.hearts} suffix="♥" />
+      <HudStat label="Action points" value={player.actionPoints} suffix="AP" />
+      <HudStat label="Range" value={player.range} suffix="hex" />
+      <HudStat label={`Round ${currentEpoch}`} value={claimable} suffix="ready" />
     </section>
   );
 }
 
 function SpectatorHud({ onJoin, joining }: Readonly<{ onJoin?: () => void; joining: boolean }>) {
-  return <section className="spectator-hud"><span>◉</span><div><small>WATCHING</small><strong>Spectator mode</strong></div>{onJoin ? <button type="button" disabled={joining} onClick={onJoin}>{joining ? "Joining…" : "Take a seat"}</button> : null}</section>;
+  return <section className="spectator-hud"><span>◉</span><div><small>Watching</small><strong>Spectator mode</strong></div>{onJoin ? <button type="button" disabled={joining} onClick={onJoin}>{joining ? "Joining…" : "Take a seat"}</button> : null}</section>;
 }
 
 function ActionPanel({
@@ -1009,46 +985,45 @@ function ActionPanel({
   const upgradeCost = selfPlayer ? Math.max(0, 6 * selfPlayer.range - 6) : 0;
 
   if (!selfPlayer) {
-    return <section className="panel-card action-panel"><header className="panel-heading"><div><span className="eyebrow">ACTIONS</span><h2>Spectating</h2></div></header><div className="action-empty"><span>◉</span><p>Join an open match to play. You can still watch the battle unfold.</p></div></section>;
+    return <section className="panel-card action-panel"><header className="panel-heading"><div><h2>Actions</h2></div></header><div className="action-empty"><p>Join an open match to play. You can still watch the game.</p></div></section>;
   }
 
   return (
     <section className="panel-card action-panel" aria-labelledby="commands-title">
-      <header className="panel-heading"><div><span className="eyebrow">YOUR TURN</span><h2 id="commands-title">Available moves</h2></div></header>
+      <header className="panel-heading"><div><h2 id="commands-title">Actions</h2></div></header>
       {selection ? (
         <div className="selected-target">
-          <span className="target-coordinate">{selection.coordinate.q},{selection.coordinate.r},{selection.coordinate.s}</span>
-          <div><small>SELECTED HEX</small><strong>{target ? target.handle : selection.resource ? `${selection.resource.kind} ×${selection.resource.quantity}` : "Empty ground"}</strong></div>
-          {distance !== undefined ? <b>{distance}<small>DIST</small></b> : null}
+          <div><small>Selected</small><strong>{target ? target.handle : selection.resource ? `${selection.resource.kind} ×${selection.resource.quantity}` : "Empty ground"}</strong></div>
+          {distance !== undefined ? <b>{distance}<small>away</small></b> : null}
         </div>
       ) : <p className="selection-prompt">Select a hex or player for your next move.</p>}
 
       <div className="command-stack">
-        {selection && !target ? <CommandButton label={`Move here · ${moveCost} AP`} detail={canMove ? "Reposition and collect any resource." : moveCost === 0 ? "Already here." : "Destination unavailable or too expensive."} glyph="↗" tone="blue" disabled={!canMove || pending !== null} busy={pending === "move"} onClick={() => void onCommand({ type: "move", target: selection.coordinate }, "Tank moved.")} /> : null}
+        {selection && !target ? <CommandButton label={`Move here · ${moveCost} AP`} detail={canMove ? "Reposition and collect any resource." : moveCost === 0 ? "Already here." : "Destination unavailable or too expensive."} glyph="↗" disabled={!canMove || pending !== null} busy={pending === "move"} onClick={() => void onCommand({ type: "move", target: selection.coordinate }, "Tank moved.")} /> : null}
 
         {isEnemy && selfPlayer.state === "alive" ? (
           <div className="command-group">
             <div className="command-input-row"><label>Shots<input type="number" min={1} max={Math.max(1, Math.min(target?.hearts ?? 1, selfPlayer.actionPoints))} value={shots} onChange={(event) => setShots(clampNumber(event.target.value, 1, 99))} /></label><span>{shots} AP / {shots} damage</span></div>
-            <CommandButton label={`Fire on ${target?.handle ?? "target"}`} detail={canShoot ? `In range at ${distance} hexes.` : `Needs AP and range ${distance ?? "—"}/${selfPlayer.range}.`} glyph="×" tone="red" disabled={!canShoot || pending !== null} busy={pending === "shoot"} onClick={() => void onCommand({ type: "shoot", targetPlayerId: target!.id, shots }, "Shots fired.")} />
+            <CommandButton label={`Fire on ${target?.handle ?? "target"}`} detail={canShoot ? `In range at ${distance} hexes.` : `Needs AP and range ${distance ?? "—"}/${selfPlayer.range}.`} glyph="×" disabled={!canShoot || pending !== null} busy={pending === "shoot"} onClick={() => void onCommand({ type: "shoot", targetPlayerId: target!.id, shots }, "Shots fired.")} />
             <div className="command-input-row split"><label>Hearts<input type="number" min={0} max={selfPlayer.hearts} value={giftHearts} onChange={(event) => setGiftHearts(clampNumber(event.target.value, 0, 99))} /></label><label>AP<input type="number" min={0} max={selfPlayer.actionPoints} value={giftAp} onChange={(event) => setGiftAp(clampNumber(event.target.value, 0, 999))} /></label></div>
-            <CommandButton label={`Supply ${target?.handle ?? "target"}`} detail={target?.state === "dead" && giftHearts > 0 ? "A heart can revive this tank." : "Transfer resources inside your range."} glyph="⇄" tone="purple" disabled={!canGive || pending !== null} busy={pending === "give"} onClick={() => void onCommand({ type: "give", targetPlayerId: target!.id, hearts: giftHearts, actionPoints: giftAp }, "Supplies delivered.")} />
+            <CommandButton label={`Supply ${target?.handle ?? "target"}`} detail={target?.state === "dead" && giftHearts > 0 ? "A heart can revive this tank." : "Transfer resources inside your range."} glyph="⇄" disabled={!canGive || pending !== null} busy={pending === "give"} onClick={() => void onCommand({ type: "give", targetPlayerId: target!.id, hearts: giftHearts, actionPoints: giftAp }, "Supplies delivered.")} />
           </div>
         ) : null}
 
-        {canVote ? <CommandButton label={`Vote to curse ${target?.handle ?? "target"}`} detail="Dead players vote once per epoch." glyph="!" tone="amber" disabled={pending !== null} busy={pending === "curse_vote"} onClick={() => void onCommand({ type: "curse_vote", targetPlayerId: target!.id }, "Your vote is in.")} /> : null}
+        {canVote ? <CommandButton label={`Vote to curse ${target?.handle ?? "target"}`} detail="Dead players vote once per epoch." glyph="!" disabled={pending !== null} busy={pending === "curse_vote"} onClick={() => void onCommand({ type: "curse_vote", targetPlayerId: target!.id }, "Your vote is in.")} /> : null}
 
         {selfPlayer.state === "alive" ? (
           <>
-            <CommandButton label={`Claim ${claimable || "available"} AP`} detail={claimable > 0 ? `Catch up through epoch ${game.currentEpoch}.` : "No AP available right now."} glyph="+" tone="lime" disabled={pending !== null || !allowed("claim_action_points")} busy={pending === "claim_action_points"} onClick={() => void onCommand({ type: "claim_action_points" }, "Action points claimed.")} />
-            <CommandButton label={`Upgrade range · ${upgradeCost} AP`} detail={`Increase range ${selfPlayer.range} → ${selfPlayer.range + 1}.`} glyph="↑" tone="blue" disabled={pending !== null || selfPlayer.actionPoints < upgradeCost || !allowed("upgrade")} busy={pending === "upgrade"} onClick={() => void onCommand({ type: "upgrade" }, "Range upgraded.")} />
+            <CommandButton label={`Claim ${claimable || "available"} AP`} detail={claimable > 0 ? `Catch up through epoch ${game.currentEpoch}.` : "No AP available right now."} glyph="+" disabled={pending !== null || !allowed("claim_action_points")} busy={pending === "claim_action_points"} onClick={() => void onCommand({ type: "claim_action_points" }, "Action points claimed.")} />
+            <CommandButton label={`Upgrade range · ${upgradeCost} AP`} detail={`Increase range ${selfPlayer.range} → ${selfPlayer.range + 1}.`} glyph="↑" disabled={pending !== null || selfPlayer.actionPoints < upgradeCost || !allowed("upgrade")} busy={pending === "upgrade"} onClick={() => void onCommand({ type: "upgrade" }, "Range upgraded.")} />
           </>
         ) : null}
 
-        {hasAction("poke_heart_spawn") ? <CommandButton label="Reveal next heart" detail="Bring the next heart onto the board when it is ready." glyph="♥" tone="lime" disabled={pending !== null} busy={pending === "poke_heart_spawn"} onClick={() => void onCommand({ type: "poke_heart_spawn" }, "Heart revealed.")} /> : null}
+        {hasAction("poke_heart_spawn") ? <CommandButton label="Reveal next heart" detail="Bring the next heart onto the board when it is ready." glyph="♥" disabled={pending !== null} busy={pending === "poke_heart_spawn"} onClick={() => void onCommand({ type: "poke_heart_spawn" }, "Heart revealed.")} /> : null}
 
-        {isEnemy && hasAction("propose_non_aggression") && actionAllowsPlayer(treatyAction, target!.id, "targetPlayerIds") ? <div className="command-group optional-command"><div className="command-input-row"><label>Epochs<input type="number" min={1} max={99} value={treatyEpochs} onChange={(event) => setTreatyEpochs(clampNumber(event.target.value, 1, 99))} /></label></div><CommandButton label="Propose non-aggression pact" detail={`Lasts through epoch ${game.currentEpoch + treatyEpochs}.`} glyph="◇" tone="blue" disabled={pending !== null} busy={pending === "propose_non_aggression"} onClick={() => void onCommand({ type: "propose_non_aggression", targetPlayerId: target!.id, expiresEpoch: game.currentEpoch + treatyEpochs }, "Treaty proposal sent.")} /></div> : null}
+        {isEnemy && hasAction("propose_non_aggression") && actionAllowsPlayer(treatyAction, target!.id, "targetPlayerIds") ? <div className="command-group optional-command"><div className="command-input-row"><label>Epochs<input type="number" min={1} max={99} value={treatyEpochs} onChange={(event) => setTreatyEpochs(clampNumber(event.target.value, 1, 99))} /></label></div><CommandButton label="Propose non-aggression pact" detail={`Lasts through epoch ${game.currentEpoch + treatyEpochs}.`} glyph="◇" disabled={pending !== null} busy={pending === "propose_non_aggression"} onClick={() => void onCommand({ type: "propose_non_aggression", targetPlayerId: target!.id, expiresEpoch: game.currentEpoch + treatyEpochs }, "Treaty proposal sent.")} /></div> : null}
 
-        {isEnemy && hasAction("post_bounty") && actionAllowsPlayer(bountyAction, target!.id, "targetPlayerIds") ? <div className="command-group optional-command"><div className="command-input-row"><label>Bounty<input type="number" min="1" step="1" value={bountyAmount} onChange={(event) => setBountyAmount(event.target.value.replace(/\D/g, ""))} /></label><span>reward</span></div><CommandButton label="Post bounty" detail="Payment confirmation may be required." glyph="$" tone="amber" disabled={pending !== null || !/^\d+$/.test(bountyAmount) || Number(bountyAmount) <= 0} busy={pending === "post_bounty"} onClick={() => void onCommand({ type: "post_bounty", bountyId: crypto.randomUUID(), targetPlayerId: target!.id, amount: bountyAmount }, "Bounty offer created.")} /></div> : null}
+        {isEnemy && hasAction("post_bounty") && actionAllowsPlayer(bountyAction, target!.id, "targetPlayerIds") ? <div className="command-group optional-command"><div className="command-input-row"><label>Bounty<input type="number" min="1" step="1" value={bountyAmount} onChange={(event) => setBountyAmount(event.target.value.replace(/\D/g, ""))} /></label><span>reward</span></div><CommandButton label="Post bounty" detail="Payment confirmation may be required." glyph="$" disabled={pending !== null || !/^\d+$/.test(bountyAmount) || Number(bountyAmount) <= 0} busy={pending === "post_bounty"} onClick={() => void onCommand({ type: "post_bounty", bountyId: crypto.randomUUID(), targetPlayerId: target!.id, amount: bountyAmount }, "Bounty offer created.")} /></div> : null}
       </div>
 
       {game.status !== "active" ? <p className="command-lock">Commands unlock when this match becomes active.</p> : null}
@@ -1056,24 +1031,24 @@ function ActionPanel({
   );
 }
 
-function CommandButton({ label, detail, glyph, tone, disabled, busy, onClick }: Readonly<{ label: string; detail: string; glyph: string; tone: string; disabled: boolean; busy: boolean; onClick: () => void }>) {
-  return <button className={`command-button tone-${tone}`} type="button" disabled={disabled} onClick={onClick}><span className="command-glyph">{busy ? "·" : glyph}</span><span><strong>{busy ? "Making your move…" : label}</strong><small>{detail}</small></span><i>→</i></button>;
+function CommandButton({ label, detail, glyph, disabled, busy, onClick }: Readonly<{ label: string; detail: string; glyph: string; disabled: boolean; busy: boolean; onClick: () => void }>) {
+  return <button className="command-button" type="button" disabled={disabled} onClick={onClick}><span className="command-glyph">{busy ? "·" : glyph}</span><span><strong>{busy ? "Making your move…" : label}</strong><small>{detail}</small></span><i>→</i></button>;
 }
 
 function MatchLoading({ identity, onSignOut, onExit }: IdentityProps & Readonly<{ onExit: () => void }>) {
-  return <><TopBar identity={identity} onSignOut={onSignOut} onExit={onExit} /><div className="match-loading"><div className="radar-loader"><i /><i /><span /></div><span>OPENING MATCH</span><h1>Preparing the battlefield…</h1><p>Loading the board, players, and available moves.</p></div></>;
+  return <><TopBar identity={identity} onSignOut={onSignOut} onExit={onExit} /><div className="match-loading"><h1>Loading match…</h1></div></>;
 }
 
-function Stat({ label, value, accent }: Readonly<{ label: string; value: number; accent: string }>) {
-  return <div className={`network-stat accent-${accent}`}><span>{label}</span><strong>{String(value).padStart(2, "0")}</strong></div>;
+function Stat({ label, value }: Readonly<{ label: string; value: number }>) {
+  return <div className="network-stat"><span>{label}</span><strong>{value}</strong></div>;
 }
 
 function StatusBadge({ status }: Readonly<{ status: GameSummary["status"] }>) {
-  return <span className={`status-badge ${status}`}><i />{status === "lobby" ? "LOBBY" : status === "active" ? "LIVE" : status.toUpperCase()}</span>;
+  return <span className={`status-badge ${status}`}><i />{status === "lobby" ? "Lobby" : status === "active" ? "Live" : "Ended"}</span>;
 }
 
-function HudStat({ label, value, suffix, tone }: Readonly<{ label: string; value: number; suffix: string; tone: string }>) {
-  return <div className={`hud-stat tone-${tone}`}><small>{label}</small><strong>{value}<span>{suffix}</span></strong></div>;
+function HudStat({ label, value, suffix }: Readonly<{ label: string; value: number; suffix: string }>) {
+  return <div className="hud-stat"><small>{label}</small><strong>{value}<span>{suffix}</span></strong></div>;
 }
 
 function NumberField({ label, detail, min, max, value, onChange }: Readonly<{ label: string; detail: string; min: number; max: number; value: number; onChange: (value: string) => void }>) {
@@ -1085,7 +1060,7 @@ function ErrorBanner({ message, onRetry, onDismiss }: Readonly<{ message: string
 }
 
 function EmptyLobby({ onCreate }: Readonly<{ onCreate: () => void }>) {
-  return <div className="empty-lobby"><div className="empty-board-mark"><i /><i /><i /><i /><i /><i /><i /></div><span>NO OPEN MATCHES</span><h3>The battlefield is quiet.</h3><p>Start a room and share the match link with humans or agents.</p><button className="button button-primary" onClick={onCreate}>Create the first match</button></div>;
+  return <div className="empty-lobby"><h3>No matches yet</h3><p>Create one and share the link with humans or agents.</p><button className="button button-primary" onClick={onCreate}>Create a match</button></div>;
 }
 
 function GameListSkeleton() {
@@ -1097,7 +1072,7 @@ function errorMessage(error: unknown, fallback: string): string {
   if (error.code === "game_full") return "This match is full.";
   if (error.code === "game_not_found") return "This match is no longer available.";
   if (error.status === 401) return "You were signed out. Enter your callsign again to continue.";
-  if (error.status === 402) return "Paid actions are not available here yet.";
+  if (error.status === 402) return "This paid action could not be completed.";
   if (error.status === 403) return "You cannot do that in this match.";
   if (error.status === 404) return "This match is no longer available.";
   if (error.status === 409) return "Another move happened first. Review the battlefield and try again.";
